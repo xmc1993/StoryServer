@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Properties>
+		<Property name="LOG_DIR">/var/lib/tomcat7/logs/sinture</Property>
+		<Property name="ARCHIVE">${LOG_DIR}/archive</Property>
+		<Property name="PATTERN">%-5level %d [%t] %c:%M(%L): %m%n</Property>
+	</Properties>
+	<Appenders>
+		<Console name="Console">
+			<PatternLayout pattern="${PATTERN}" />
+		</Console>
+
+		<RollingFile name="RollingFile" fileName="${LOG_DIR}/sinture.log"
+			filePattern="${ARCHIVE}/sinture.log.%d{yyyy-MM-dd}.gz">
+			<MarkerFilter marker="STATISTICS" onMatch="ACCEPT"
+				onMismatch="DENY" />
+			<PatternLayout pattern="%d: %m%n" />
+			<TimeBasedTriggeringPolicy />
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Root level="trace">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="RollingFile" />
+		</Root>
+		<logger name="org.springframework" level="error" />
+		<logger name="org.mybatis" level="debug" />
+		<!-- 上线配置成info -->
+		<logger name="cn.edu" level="debug" additivity="false">
+			<AppenderRef ref="ProductLog" />
+			<AppenderRef ref="Console" />
+		</logger>
+		<Root level="debug" includeLocation="true">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="RollingFile" />
+		</Root>
+	</Loggers>
+</Configuration>

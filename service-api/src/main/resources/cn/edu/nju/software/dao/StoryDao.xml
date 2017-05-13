@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.StoryDao">
+
+    <sql id="fields">
+        id,
+        parentId,
+        content,
+        createTime,
+        updateTime,
+        valid
+    </sql>
+
+    <resultMap id="storyTag" type="cn.edu.nju.software.entity.StoryTag">
+        <id column="id" property="id" />
+        <id column="parentId" property="parentId" />
+        <id column="content" property="content" />
+        <id column="createTime" property="createTime" />
+        <id column="updateTime" property="updateTime" />
+        <id column="valid" property="valid" />
+    </resultMap>
+
+    <insert id="saveStoryTag" parameterType="cn.edu.nju.software.entity.StoryTag">
+        insert into story_tag(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{parentId},
+        #{content},
+        #{createTime},
+        #{updateTime},
+        #{valid}
+        )
+    </insert>
+
+    <update id="updateStoryTag" parameterType="cn.edu.nju.software.entity.StoryTag">
+		update story_tag
+		set
+		content=#{content}
+		where
+		id=#{id}
+	</update>
+
+
+    <select id="getStoryTagById" resultType="cn.edu.nju.software.entity.StoryTag">
+        select
+        <include refid="fields"></include>
+        from story_tag
+        where id = #{0}
+    </select>
+
+    <select id="getStoryTagListByParentId" resultType="cn.edu.nju.software.entity.StoryTag">
+        select
+        <include refid="fields"></include>
+        from story_tag
+        where parentId = #{0}
+    </select>
+
+    <select id="getAllStoryTags" resultType="cn.edu.nju.software.entity.StoryTag">
+        select
+        <include refid="fields"></include>
+        from story_tag
+    </select>
+
+
+</mapper>

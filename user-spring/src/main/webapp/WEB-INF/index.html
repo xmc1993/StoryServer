@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试上传</title>
+</head>
+<body>
+<h2>上传多个文件 实例</h2>
+
+
+<form action="/user/uploadFile" method="post"
+      enctype="multipart/form-data">
+    <p>
+        选择文件:<input type="file" name="uploadFile">
+    </p>
+
+    <p>
+        手机号:<input type="text" name="mobile">
+    </p>
+
+    <p>
+        盐:<input type="text" name="timestamp">
+    </p>
+    <input type="submit" value="提交">
+</form>
+</body>
+</html>

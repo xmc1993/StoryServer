@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.FollowRelationDao">
+
+    <sql id="fields">
+        id,
+        followerId,
+        followeeId,
+        createTime,
+        updateTime
+    </sql>
+
+    <resultMap id="storyTag" type="cn.edu.nju.software.entity.StoryTag">
+        <id column="id" property="id" />
+        <id column="followerId" property="followerId" />
+        <id column="followeeId" property="followeeId" />
+        <id column="createTime" property="createTime" />
+        <id column="updateTime" property="updateTime" />
+    </resultMap>
+
+    <insert id="saveFollowRelation" parameterType="cn.edu.nju.software.entity.FollowRelation">
+        insert into follow_relation(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{followerId},
+        #{followeeId},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <delete id="deleteFollowRelationById">
+        delete from
+        follow_relation
+        where
+        id = #{0}
+    </delete>
+
+    <delete id="deleteFollowRelation">
+        delete from
+        follow_relation
+        where
+        followerId = #{0} and followeeId = #{1}
+    </delete>
+
+
+
+
+</mapper>

@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.UserBrowseDao">
+    <sql id="fields">
+        id,
+        statTime,
+        statType,
+        statId,
+        statSize,
+        userId,
+        businessId
+    </sql>
+    <sql id="fieldsStats">
+        id,
+        statTime,
+        statType,
+        statId,
+        sum(statSize) as statSize,
+        userId,
+        businessId
+    </sql>
+
+    <resultMap id="browse" type="cn.edu.nju.software.entity.UserBrowse">
+        <id column="id" property="id" />
+        <result column="statTime" property="statTime" />
+        <result column="statType" property="statType" />
+        <result column="statId" property="statId" />
+        <result column="statSize" property="statSize" />
+        <result column="userId" property="userId" />
+        <result column="businessId" property="businessId" />
+    </resultMap>
+
+    <insert id="save" parameterType="cn.edu.nju.software.entity.UserBrowse" useGeneratedKeys="true">
+        insert into user_browse_#{businessId} (<include refid="fields" />) values
+        (
+        #{id},
+        #{statTime},
+        #{statType},
+        #{statId},
+        #{statSize},
+        #{userId},
+        #{businessId}
+        )
+    </insert>
+
+    <update id="update" parameterType="cn.edu.nju.software.entity.UserBrowse">
+        update user_browse_#{businessId}
+        set
+        statTime=#{statTime},
+        statType=#{statType},
+        statId=#{statId},
+        statSize=#{statSize},
+        userId=#{userId},
+        businessId=#{businessId}
+        where id=#{id}
+    </update>
+
+    <select id="findByTypeAndStatId" resultType="cn.edu.nju.software.entity.UserBrowse">
+        select id,statTime,statType,statId,sum(statSize) as statSize,userId,businessId from user_browse_#{0} where statType=#{1} and statId=#{2}
+    </select>
+
+    <select id="findByTypeAndUserId" resultType="cn.edu.nju.software.entity.UserBrowse">
+        select id,statTime,statType,statId,sum(statSize) as statSize,userId,businessId from user_browse_#{0} where statType=#{1} and userId=#{2}
+    </select>
+    
+    <select id="findByTypeAndUserIdAndStatId" resultType="cn.edu.nju.software.entity.UserBrowse">
+      select id,statTime,statType,statId,sum(statSize) as statSize,userId,businessId from user_browse_#{0} where statType=#{1} and userId=#{2} and statId=#{3}
+    </select>
+
+	<select id="findByTypeAndStatIdSum" parameterType="cn.edu.nju.software.vo.request.StatQueryBean"
+            resultType="cn.edu.nju.software.entity.UserBrowse">
+            select <include refid="fieldsStats"></include> from user_browse_#{businessId}
+        where statType=#{type} and statId=#{statId}
+        <if test="startTime != null and startTime != ''">
+           and  statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and #{endTime} >= statTime
+        </if>
+        limit 1
+    </select>
+
+    <select id="findByTypeAndStatIdList" parameterType="cn.edu.nju.software.vo.request.UserBrowseQueryBean"
+            resultType="cn.edu.nju.software.entity.UserBrowse">
+        select <include refid="fields"></include> from user_browse_#{businessId}
+        where statType=#{type} and statId=#{statId}
+        <if test="startTime != null and startTime != ''">
+           and  statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and #{endTime} >= statTime
+        </if>
+        order by statTime desc limit #{offset},#{num}
+    </select>
+    
+    <select id="getActivityStatsByUserByActivityEverytime" parameterType="cn.edu.nju.software.vo.request.StatQueryBean"  resultType="cn.edu.nju.software.entity.UserBrowse">
+      	select <include refid="fields"></include> from user_browse_#{businessId} where statType='activity' and userId=#{userId} and statId=#{activityId}
+        <if test="startTime != null and startTime != ''">
+            and statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and #{endTime} >= statTime
+        </if>
+        order by statTime desc limit #{offset},#{num}	
+    </select>
+    <select id="getActivityStatsByUserByActivityEverytimeCount" parameterType="cn.edu.nju.software.vo.request.StatQueryBean" resultType="java.lang.Integer">
+     	select count(id) from user_browse_#{businessId} where statType='activity' and userId=#{userId} and statId=#{activityId}
+        <if test="startTime != null and startTime != ''">
+            and statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and #{endTime} >= statTime
+        </if>
+    </select>
+    
+    <select id="getActivityStatsByUserToActivityEverytime" parameterType="cn.edu.nju.software.vo.request.StatQueryBean"  resultType="cn.edu.nju.software.entity.UserBrowse">
+     	select <include refid="fieldsStats"></include> from user_browse_#{businessId} where statType='activity' and userId=#{userId}
+        <if test="startTime != null and startTime != ''">
+            and statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+           and  #{endTime} >= statTime
+        </if>
+        group by statId order by statTime desc limit #{offset},#{num}
+    </select>
+    <select id="getActivityStatsByUserToActivityEverytimeCount" parameterType="cn.edu.nju.software.vo.request.StatQueryBean" resultType="java.lang.Integer">
+    	select count(id) from user_browse_#{businessId} where statType='activity' and userId=#{userId} and statId is not null and statId!=0 
+        <if test="startTime != null and startTime != ''">
+           and  statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and #{endTime} >= statTime
+        </if>
+    	and id in (select id from user_browse_#{businessId} where statType='activity' and userId=#{userId} group by statId)
+    </select>
+    
+    <select id="getActivityStatsByUserByArticleEverytime" parameterType="cn.edu.nju.software.vo.request.StatQueryBean"  resultType="cn.edu.nju.software.entity.UserBrowse">
+    	select <include refid="fields"></include> from user_browse_#{businessId} where statType='article' and userId=#{userId} and statId=#{articleId}
+        <if test="startTime != null and startTime != ''">
+            and statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and #{endTime} >= statTime
+        </if>
+        order by statTime desc limit #{offset},#{num}
+    </select>
+    <select id="getActivityStatsByUserByArticleEverytimeCount" parameterType="cn.edu.nju.software.vo.request.StatQueryBean" resultType="java.lang.Integer">
+    	select count(id) from user_browse_#{businessId} where statType='article' and userId=#{userId} and statId=#{articleId}
+        <if test="startTime != null and startTime != ''">
+            and statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and #{endTime} >= statTime
+        </if>
+    </select>
+    
+    <select id="getActivityStatsByUserToArticleEverytime" parameterType="cn.edu.nju.software.vo.request.StatQueryBean"  resultType="cn.edu.nju.software.entity.UserBrowse">
+    	select <include refid="fieldsStats"></include> from user_browse_#{businessId} where statType='article' and userId=#{userId}
+        <if test="startTime != null and startTime != ''">
+           and  statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+           and  #{endTime} >= statTime
+        </if>
+        group by statId order by statTime desc limit #{offset},#{num}
+    </select>
+    <select id="getActivityStatsByUserToArticleEverytimeCount" parameterType="cn.edu.nju.software.vo.request.StatQueryBean" resultType="java.lang.Integer">
+    	select count(id) from user_browse_#{businessId} where statType='article' and userId=#{userId} and statId is not null and statId!=0 
+        <if test="startTime != null and startTime != ''">
+           and  statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+           and  #{endTime} >= statTime
+        </if>
+    	and id in (select id from user_browse_#{businessId} where statType='article' and userId=#{userId} group by statId)
+    </select>
+    
+	<select id="getActivityStatsByArticleToUserEverytime" parameterType="cn.edu.nju.software.vo.request.StatQueryBean"  resultType="cn.edu.nju.software.entity.UserBrowse">
+		select <include refid="fieldsStats"></include> from user_browse_#{businessId} where statType='article' and statId=#{articleId}
+        <if test="startTime != null and startTime != ''">
+           and  statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+           and  #{endTime} >= statTime
+        </if>
+        group by userId order by statTime desc limit #{offset},#{num}
+	</select>
+	<select id="getActivityStatsByArticleToUserEverytimeCount" parameterType="cn.edu.nju.software.vo.request.StatQueryBean" resultType="java.lang.Integer">
+		select count(id) from user_browse_#{businessId} where statType='article' and statId=#{articleId} and userId is not null and userId!=0 
+        <if test="startTime != null and startTime != ''">
+           and  statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+           and  #{endTime} >= statTime
+        </if>
+    	and id in (select id from user_browse_#{businessId} where statType='article' and statId=#{articleId} group by userId)
+	</select>
+	
+	<select id="getActivityStatsByActivityToUserEverytime" parameterType="cn.edu.nju.software.vo.request.StatQueryBean"  resultType="cn.edu.nju.software.entity.UserBrowse">
+		select <include refid="fieldsStats"></include> from user_browse_#{businessId} where statType='activity' and statId=#{activityId}
+        <if test="startTime != null and startTime != ''">
+           and  statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+           and  #{endTime} >= statTime
+        </if>
+        group by userId order by statTime desc limit #{offset},#{num}
+	</select>
+	<select id="getActivityStatsByActivityToUserEverytimeCount" parameterType="cn.edu.nju.software.vo.request.StatQueryBean" resultType="java.lang.Integer">
+		select count(id) from user_browse_#{businessId} where statType='activity' and statId=#{activityId} and userId is not null and userId!=0 
+        <if test="startTime != null and startTime != ''">
+            and statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and #{endTime} >= statTime
+        </if>
+    	and id in (select id from user_browse_#{businessId} where statType='activity' and statId=#{activityId} group by userId)
+	</select>
+	
+	<select id="getByUserAndType" resultType="cn.edu.nju.software.entity.UserBrowse">
+		select <include refid="fieldsStats"></include> from user_browse_#{0} where statType=#{2} and userId=#{1}
+	</select>
+	
+	<select id="getByType" resultType="cn.edu.nju.software.entity.UserBrowse">
+		select <include refid="fieldsStats"></include> from user_browse_#{0} where statType=#{1}
+	</select>
+
+    <select id="getActivityStatsByUserByArticleEverytimeExport" parameterType="cn.edu.nju.software.vo.request.StatQueryBean"  resultType="cn.edu.nju.software.entity.UserBrowse">
+    	select <include refid="fields"></include> from user_browse_#{businessId} where statType='article' and userId=#{userId} and statId=#{articleId}
+        <if test="startTime != null and startTime != ''">
+            and statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and #{endTime} >= statTime
+        </if>
+        order by statTime desc
+    </select>
+    <select id="getActivityStatsByUserToArticleEverytimeExport" parameterType="cn.edu.nju.software.vo.request.StatQueryBean"  resultType="cn.edu.nju.software.entity.UserBrowse">
+    	select <include refid="fieldsStats"></include> from user_browse_#{businessId} where statType='article' and userId=#{userId}
+        <if test="startTime != null and startTime != ''">
+           and  statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+           and  #{endTime} >= statTime
+        </if>
+        group by statId order by statTime desc
+    </select>
+    <select id="getActivityStatsByUserByActivityEverytimeExport" parameterType="cn.edu.nju.software.vo.request.StatQueryBean"  resultType="cn.edu.nju.software.entity.UserBrowse">
+      	select <include refid="fields"></include> from user_browse_#{businessId} where statType='activity' and userId=#{userId} and statId=#{activityId}
+        <if test="startTime != null and startTime != ''">
+            and statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and #{endTime} >= statTime
+        </if>
+        order by statTime desc
+    </select>
+    <select id="getActivityStatsByUserToActivityEverytimeExport" parameterType="cn.edu.nju.software.vo.request.StatQueryBean"  resultType="cn.edu.nju.software.entity.UserBrowse">
+     	select <include refid="fieldsStats"></include> from user_browse_#{businessId} where statType='activity' and userId=#{userId}
+        <if test="startTime != null and startTime != ''">
+            and statTime >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+           and  #{endTime} >= statTime
+        </if>
+        group by statId order by statTime desc
+    </select>
+</mapper>

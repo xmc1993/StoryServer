@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.edu.nju.software.dao.user.UserBusinessDao">
+
+	<resultMap id="business" type="cn.edu.nju.software.entity.Business">
+		<id column="id" property="id" />
+		<result column="username" property="username" />
+		<result column="realname" property="realname" />
+		<result column="password" property="password" />
+		<result column="appId" property="appId" />
+		<result column="appName" property="appName" />
+		<result column="mobile" property="mobile" />
+		<result column="telephone" property="telephone" />
+		<result column="location" property="location" />
+		<result column="logo" property="logo" />
+		<result column="token" property="token" />
+		<result column="accessKey" property="accessKey" />
+		<result column="secretKey" property="secretKey" />
+		<result column="imageBucket" property="imageBucket" />
+		<result column="videoBucket" property="videoBucket" />
+		<result column="pdfBucket" property="pdfBucket" />
+		<result column="messageUsername" property="messageUsername" />
+        <result column="messageSecret" property="messageSecret" />
+		<result column="landingPage" property="landingPage" />
+		<result column="imageDomain" property="imageDomain" />
+		<result column="videoDomain" property="videoDomain" />
+		<result column="pdfDomain" property="pdfDomain" />
+		<result column="validation" property="validation" />
+		<result column="isActive" property="isActive" />
+		<result column="website" property="website"/>
+		<result column="txAppCenterUrl" property="txAppCenterUrl"/>
+		<result column="appStoreUrl" property="appStoreUrl"/>
+
+		<result column="linkman" property="linkman"/>
+		<result column="startTime" property="startTime"/>
+		<result column="deadline" property="deadline"/>
+		
+		<result column="rongCloudAppKey" property="rongCloudAppKey"/>
+		<result column="rongCloudAppppSecret" property="rongCloudAppppSecret"/>
+		
+		<result column="liveDomain" property="liveDomain"/>
+		<result column="liveBucket" property="liveBucket"/>
+		
+		<result column="audioBucket" property="audioBucket"/>
+		<result column="audioDomain" property="audioDomain"/>
+
+		<result column="messagePassword" property="messagePassword"/>
+		<result column="iosAppkey" property="iosAppkey"/>
+		<result column="iosAppMasterSecret" property="iosAppMasterSecret"/>
+		<result column="androidAppkey" property="androidAppkey"/>
+		<result column="androidAppMasterSecret" property="androidAppMasterSecret"/>
+
+		<result column="weChatAppId" property="weChatAppId"/>
+		<result column="weChatSecret" property="weChatSecret"/>
+		<result column="wxAppletAppId" property="wxAppletAppId"/>
+		<result column="wxAppletSecret" property="wxAppletSecret"/>
+		<result column="mchId" property="mchId"/>
+		<result column="mchKey" property="mchKey"/>
+	</resultMap>
+
+	<sql id="fields">
+		id,
+		username,
+		realname,
+		password,
+		appId,
+		appName,
+		mobile,
+		telephone,
+		location,
+		logo,
+		token,
+		accessKey,
+		secretKey,
+		imageBucket,
+		videoBucket,
+		messageUsername,
+		messageSecret,
+		landingPage,
+		imageDomain,
+		videoDomain,
+		validation,
+		isActive,
+		website,
+		txAppCenterUrl,
+		appStoreUrl,
+		linkman,
+		startTime,
+		deadline,
+		pdfDomain,
+		pdfBucket,
+		rongCloudAppKey,
+		rongCloudAppppSecret,
+		liveBucket,
+		liveDomain,
+		audioBucket,
+		audioDomain,
+		messagePassword,
+		iosAppkey,
+		iosAppMasterSecret,
+		androidAppkey,
+		androidAppMasterSecret,
+		weChatAppId,
+		weChatSecret,
+		wxAppletAppId,
+		wxAppletSecret,
+		mchId,
+		mchKey
+	</sql>
+	<!-- 自动递增的主键 -->
+	<insert id="saveBusiness" parameterType="cn.edu.nju.software.entity.Business" useGeneratedKeys="true">
+		insert into business(
+		<include refid="fields"></include>
+		)values
+		(
+		#{id},
+		#{username},
+		#{realname},
+		#{password},
+		#{appId},
+		#{appName},
+		#{mobile},
+		#{telephone},
+		#{location},
+		#{logo},
+		#{token},
+		#{accessKey},
+		#{secretKey},
+		#{imageBucket},
+		#{videoBucket},
+        #{messageUsername},
+        #{messageSecret},
+		#{landingPage},
+		#{imageDomain},
+		#{videoDomain},
+		#{validation},
+		#{isActive},
+		#{website},
+		#{txAppCenterUrl},
+		#{appStoreUrl},
+		#{linkman},
+		#{startTime},
+		#{deadline},
+		#{pdfDomain},
+		#{pdfBucket},
+		#{rongCloudAppKey},
+		#{rongCloudAppppSecret},
+		#{liveBucket},
+		#{liveDomain},
+		#{audioBucket},
+		#{audioDomain},
+		#{messagePassword},
+		#{iosAppkey},
+		#{iosAppMasterSecret},
+		#{androidAppkey},
+		#{androidAppMasterSecret},
+		#{weChatAppId},
+		#{weChatSecret},
+		#{wxAppletAppId},
+		#{wxAppletSecret},
+		#{mchId},
+		#{mchKey}
+		)
+	</insert>
+
+	<select id="getBusinessById" parameterType="int" resultType="cn.edu.nju.software.entity.Business">
+		select
+		<include refid="fields" />
+		from business where id = #{id}
+	</select>
+
+	<select id="getBusinessByAppId" parameterType="java.lang.String" resultType="cn.edu.nju.software.entity.Business">
+		select
+		<include refid="fields" />
+		from business where appId = #{appId}
+	</select>
+
+	<select id="getBusinessByMobile" parameterType="java.lang.String" resultType="cn.edu.nju.software.entity.Business">
+		select
+		<include refid="fields" />
+		from business where mobile = #{mobile}
+	</select>
+
+</mapper>

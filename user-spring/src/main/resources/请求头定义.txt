@@ -1,0 +1,14 @@
+用户唯标识 Sin-Mobile 手机号
+应用包名  Sin-App-Id  xinzhu.sinture.com 
+登录返回的标识 Sin-Access-Token
+设备类型  Sin-Client-Type   "1"安卓 ，"2"iOS，3网站，4微信小程序
+语言+国家 Sin-Language
+设备id标识  Sin-Device-Id   例如"9475a1af-b49a-4e49-b72f-98adf74c0836"
+客户端版本号 Sin-Client-Version    例如"2"
+操作系统版本 Sin-System-Version    例如"5.1.1"，
+渠道标识 Sin-App-Channel-Id    例如"yingyongbao
+
+这些都是请求头里面存放的参数（能拿到值得赋值后传到后台，拿不到值得就可以不用传）
+
+注：Sin-App-Id，Sin-Access-Token 这两个个是必传，这两个是用来判断用户登录的，
+如果用户没有登录 Sin-Access-Token传空字符串

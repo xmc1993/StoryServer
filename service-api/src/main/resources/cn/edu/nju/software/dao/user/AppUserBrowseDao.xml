@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.user.AppUserBrowseDao">
+    <sql id="fields">
+        id,
+        statTime,
+        statType,
+        statId,
+        statSize,
+        userId,
+        businessId
+    </sql>
+    <sql id="fieldsStats">
+        id,
+        statTime,
+        statType,
+        statId,
+        sum(statSize) as statSize,
+        userId,
+        businessId
+    </sql>
+
+    <resultMap id="browse" type="cn.edu.nju.software.entity.UserBrowse">
+        <id column="id" property="id" />
+        <result column="statTime" property="statTime" />
+        <result column="statType" property="statType" />
+        <result column="statId" property="statId" />
+        <result column="statSize" property="statSize" />
+        <result column="userId" property="userId" />
+        <result column="businessId" property="businessId" />
+    </resultMap>
+
+    <insert id="save" parameterType="cn.edu.nju.software.entity.UserBrowse" useGeneratedKeys="true">
+        insert into user_browse_#{businessId} (<include refid="fields" />) values
+        (
+        #{id},
+        #{statTime},
+        #{statType},
+        #{statId},
+        #{statSize},
+        #{userId},
+        #{businessId}
+        )
+    </insert>
+
+    <update id="update" parameterType="cn.edu.nju.software.entity.UserBrowse">
+        update user_browse_#{businessId}
+        set
+        statTime=#{statTime},
+        statType=#{statType},
+        statId=#{statId},
+        statSize=#{statSize},
+        userId=#{userId},
+        businessId=#{businessId}
+        where id=#{id}
+    </update>
+
+</mapper>
