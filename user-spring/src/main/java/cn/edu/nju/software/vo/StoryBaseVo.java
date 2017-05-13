@@ -1,20 +1,18 @@
-package cn.edu.nju.software.entity;
+package cn.edu.nju.software.vo;
 
 /**
- * Created by xmc1993 on 2017/5/12.
+ * Created by xmc1993 on 2017/5/14.
  */
-public class Story {
+public class StoryBaseVo {
     private String id;
     private String title;
     private String author;
-    private String content;
     private String press;//出版社
     private String guide;//阅读指导
     private String coverUrl;
     private String preCoverUrl;
     private String backgroundUrl;//录制背景图url
     private String price;
-    private String valid;//用于软删除
 
     public String getId() {
         return id;
@@ -38,14 +36,6 @@ public class Story {
 
     public void setAuthor(String author) {
         this.author = author;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public String getPress() {
@@ -96,11 +86,4 @@ public class Story {
         this.price = price;
     }
 
-    public String getValid() {
-        return valid;
-    }
-
-    public void setValid(String valid) {
-        this.valid = valid;
-    }
 }
