@@ -57,13 +57,13 @@
     <update id="updateStory" parameterType="cn.edu.nju.software.entity.Story">
 		update story
 		set
-		title=#{title}
-		author=#{author}
-		content=#{content}
-		press=#{press}
-		coverUrl=#{coverUrl}
-		preCoverUrl=#{preCoverUrl}
-		backgroundUrl=#{backgroundUrl}
+		title=#{title},
+		author=#{author},
+		content=#{content},
+		press=#{press},
+		coverUrl=#{coverUrl},
+		preCoverUrl=#{preCoverUrl},
+		backgroundUrl=#{backgroundUrl},
 		updateTime=#{updateTime}
 		where
 		id=#{id}
@@ -72,7 +72,7 @@
     <update id="deleteStoryById">
         update story
         set
-        vaild=0
+        valid=0
         where
         id=#{0}
     </update>
@@ -81,7 +81,7 @@
         select
         <include refid="fields"></include>
         from story
-        where id = #{0} and valid = 1
+        where id = #{0}
     </select>
 
     <select id="getAllStories" resultType="cn.edu.nju.software.entity.Story">
