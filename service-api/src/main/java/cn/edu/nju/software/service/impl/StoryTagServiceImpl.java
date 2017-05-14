@@ -29,7 +29,7 @@ public class StoryTagServiceImpl implements StoryTagService {
 
     @Override
     public boolean deleteStoryTag(int tagId) {
-        return storyTagDao.deleteStoryTag(tagId);
+        return storyTagDao.deleteStoryTagById(tagId);
     }
 
     @Override

@@ -16,7 +16,7 @@ public interface StoryTagDao {
 
     boolean updateStoryTag(StoryTag storyTag);
 
-    boolean deleteStoryTag(int tagId);
+    boolean deleteStoryTagById(int tagId);
 
     StoryTag getStoryTagById(int tagId);
 
@@ -29,5 +29,6 @@ public interface StoryTagDao {
 
     List<StoryTag> getAllStoryTags();
 
+    boolean deleteHard(int id);
 
 }

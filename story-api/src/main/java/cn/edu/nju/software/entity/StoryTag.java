@@ -11,7 +11,7 @@ public class StoryTag {
     private String content;//标签的名字
     private Date createTime;
     private Date updateTime;
-    private int valid;//用于软删除
+    private int valid = 1;//用于软删除
 
     public Integer getId() {
         return id;
