@@ -11,7 +11,7 @@ import cn.edu.nju.software.service.user.UserWeChatLoginService;
 import cn.edu.nju.software.util.*;
 import cn.edu.nju.software.vo.WeChatOAuthVo;
 import cn.edu.nju.software.vo.WeChatUserInfoVo;
-import cn.edu.nju.software.vo.response.WxLoginResponseVo;
+import cn.edu.nju.software.vo.response.LoginResponseVo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -74,7 +74,7 @@ public class UserUserController extends BaseController {
     @ApiOperation(value = "用户登录", notes = "用户登录")
     @RequestMapping(value = "/user/loginByWeChat", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public ResponseData<WxLoginResponseVo> loginByWeChat(@ApiParam("appId") @RequestParam("appId") String appId,
+    public ResponseData<LoginResponseVo> loginByWeChat(@ApiParam("appId") @RequestParam("appId") String appId,
                                               @ApiParam("code 授权码") @RequestParam("code") String code,
                                               HttpServletRequest request, HttpServletResponse response) throws Exception {
         ResponseData responseData = new ResponseData();
@@ -127,15 +127,15 @@ public class UserUserController extends BaseController {
             return responseData;
         }
         //获取到用户信息
-        WxLoginResponseVo wxLoginResponseVo = new WxLoginResponseVo();
-        wxLoginResponseVo.setAccessToken(user.getAccessToken());
-        wxLoginResponseVo.setId(user.getId());
+        LoginResponseVo loginResponseVo = new LoginResponseVo();
+        loginResponseVo.setAccessToken(user.getAccessToken());
+        loginResponseVo.setId(user.getId());
 
         //登录信息写入缓存
         JedisUtil.getJedis().set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
         JedisUtil.getJedis().expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);//缓存用户信息30天
 
-        responseData.jsonFill(1, null, wxLoginResponseVo);
+        responseData.jsonFill(1, null, loginResponseVo);
         return responseData;
     }
 
