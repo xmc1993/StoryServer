@@ -16,7 +16,7 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd">
 
-    <context:component-scan base-package="cn.edu.nju.software.action">
+    <context:component-scan base-package="cn.edu.nju.software.controller">
         <context:include-filter type="annotation"
                                 expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>

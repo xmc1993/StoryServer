@@ -1,4 +1,4 @@
-package cn.edu.nju.software.action;
+package cn.edu.nju.software.controller;
 
 import cn.edu.nju.software.entity.Business;
 import cn.edu.nju.software.entity.User;

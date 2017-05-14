@@ -1,6 +1,6 @@
-package cn.edu.nju.software.action.user;
+package cn.edu.nju.software.controller.user;
 
-import cn.edu.nju.software.action.BaseController;
+import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.ResponseData;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -24,7 +24,6 @@ import java.io.OutputStream;
 @Controller
 public class DownloadFileController extends BaseController {
 
-    private static final long serialVersionUID = 4475596889474804743L;
     private static final Logger logger = LoggerFactory.getLogger(DownloadFileController.class);
 
     @ApiOperation(value = "下载图片", notes = "下载图片")

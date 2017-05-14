@@ -1,4 +1,4 @@
-package cn.edu.nju.software.action;
+package cn.edu.nju.software.controller;
 
 import java.sql.SQLException;
 import java.util.List;

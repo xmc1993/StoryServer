@@ -30,7 +30,7 @@
 
 ## 工程主体结构java 源码：
 
-	cn.edu.nju.software.action
+	cn.edu.nju.software.controller
 	cn.edu.nju.software.aop					
 	cn.edu.nju.software.dao					
 	cn.edu.nju.software.exception			    
@@ -50,6 +50,6 @@
 
 ## 直播工程为：streaming-server
 
-	cn.edu.nju.software.action.live.business  直播管理端action
-	cn.edu.nju.software.action.live.user	  直播App接口端action
-	cn.edu.nju.software.action.live.web	      直播web端action
+	cn.edu.nju.software.controller.live.business  直播管理端action
+	cn.edu.nju.software.controller.live.user	  直播App接口端action
+	cn.edu.nju.software.controller.live.web	      直播web端action

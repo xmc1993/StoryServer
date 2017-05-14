@@ -1,6 +1,6 @@
-package cn.edu.nju.software.action.user;
+package cn.edu.nju.software.controller.user;
 
-import cn.edu.nju.software.action.BaseController;
+import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.Business;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.User;
