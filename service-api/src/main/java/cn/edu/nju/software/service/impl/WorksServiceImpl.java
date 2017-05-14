@@ -6,6 +6,7 @@ import cn.edu.nju.software.service.WorksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,6 +25,7 @@ public class WorksServiceImpl implements WorksService {
 
     @Override
     public boolean updateWorks(Works works) {
+        works.setUpdateTime(new Date());
         return worksDao.updateWorks(works);
     }
 

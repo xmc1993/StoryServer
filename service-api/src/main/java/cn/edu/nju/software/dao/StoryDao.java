@@ -27,5 +27,6 @@ public interface StoryDao {
 
     boolean updateStory(Story story);
 
+    boolean deleteHard(int id);
 
 }

@@ -6,6 +6,7 @@ import cn.edu.nju.software.service.StoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,6 +40,7 @@ public class StoryServiceImpl implements StoryService {
 
     @Override
     public boolean updateStory(Story story) {
+        story.setUpdateTime(new Date());
         return storyDao.updateStory(story);
     }
 }

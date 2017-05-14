@@ -6,7 +6,7 @@ import java.util.Date;
  * Created by xmc1993 on 2017/5/12.
  */
 public class Story {
-    private String id;
+    private Integer id;
     private String title;
     private String author;
     private String content;
@@ -20,11 +20,11 @@ public class Story {
     private Date updateTime;
     private Integer valid = 1;//用于软删除
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

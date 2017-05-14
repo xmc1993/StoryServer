@@ -6,6 +6,7 @@ import cn.edu.nju.software.service.SoundEffectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,6 +29,7 @@ public class SoundEffectServiceTest implements SoundEffectService {
 
     @Override
     public boolean updateSoundEffect(SoundEffect soundEffect) {
+        soundEffect.setUpdateTime(new Date());
         return soundEffectDao.updateSoundEffect(soundEffect);
     }
 

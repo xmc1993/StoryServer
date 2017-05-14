@@ -91,5 +91,9 @@
         where valid = 1
     </select>
 
+    <delete id="deleteHard">
+        DELETE FROM story
+        WHERE id = #{0}
+    </delete>
 
 </mapper>

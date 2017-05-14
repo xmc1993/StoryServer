@@ -6,6 +6,7 @@ import cn.edu.nju.software.service.StoryTagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,6 +25,7 @@ public class StoryTagServiceImpl implements StoryTagService {
 
     @Override
     public boolean updateStoryTag(StoryTag storyTag) {
+        storyTag.setUpdateTime(new Date());
         return storyTagDao.updateStoryTag(storyTag);
     }
 
