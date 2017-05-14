@@ -2,14 +2,11 @@ package cn.edu.nju.software.filter;
 
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.exception.LoginException;
-import cn.edu.nju.software.service.user.AppUserService;
-import cn.edu.nju.software.service.user.UserBusinessService;
 import cn.edu.nju.software.util.JedisUtil;
 import cn.edu.nju.software.util.ObjectAndByte;
 import cn.edu.nju.software.util.TokenConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,11 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 public class AccessTokenValidationInterceptor extends HandlerInterceptorAdapter {
 
     private static Logger logger = LoggerFactory.getLogger(AccessTokenValidationInterceptor.class);
-
-    @Autowired
-    private AppUserService userService;
-    @Autowired
-    private UserBusinessService businessService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)

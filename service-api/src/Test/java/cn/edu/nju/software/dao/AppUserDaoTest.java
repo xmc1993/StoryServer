@@ -16,7 +16,7 @@ import java.util.Date;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath*:/config/spring-test.xml"})
+@ContextConfiguration(locations = {"classpath*:/test/context/config/spring-test.xml"})
 public class AppUserDaoTest {
 
     @Autowired
