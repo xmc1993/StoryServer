@@ -3,6 +3,8 @@ package cn.edu.nju.software.dao;
 import cn.edu.nju.software.entity.Agree;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by xmc1993 on 2017/5/12.
  */
@@ -15,6 +17,6 @@ public interface AgreeDao {
 
     boolean deleteAgreeById(int id);
 
-    boolean getAgreeUserIdListByWorksId(int worksId);
+    List<Integer> getAgreeUserIdListByWorksId(int worksId);
 
 }

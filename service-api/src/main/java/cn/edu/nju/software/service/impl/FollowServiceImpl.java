@@ -3,9 +3,12 @@ package cn.edu.nju.software.service.impl;
 import cn.edu.nju.software.dao.FollowRelationDao;
 import cn.edu.nju.software.dao.user.AppUserDao;
 import cn.edu.nju.software.entity.FollowRelation;
+import cn.edu.nju.software.entity.UserBase;
 import cn.edu.nju.software.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by xmc1993 on 2017/5/12.
@@ -41,5 +44,19 @@ public class FollowServiceImpl implements FollowService {
     @Override
     public boolean deleteFollowRelationById(int id) {
         return followRelationDao.deleteFollowRelationById(id);
+    }
+
+    @Override
+    public List<UserBase> getUserFollowerList(int userId) {
+        List<Integer> followerIdList = followRelationDao.getFollowerIdListByUserId(userId);
+        followerIdList.add(-1);//防止查询出错
+        return appUserDao.getUserBaseListByUserIdList(followerIdList);
+    }
+
+    @Override
+    public List<UserBase> getUserFolloweeList(int userId) {
+        List<Integer> followeeIdList = followRelationDao.getFolloweeIdListByUserId(userId);
+        followeeIdList.add(-1);//防止查询出错
+        return appUserDao.getUserBaseListByUserIdList(followeeIdList);
     }
 }

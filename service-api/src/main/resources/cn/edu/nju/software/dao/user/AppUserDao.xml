@@ -25,6 +25,26 @@
 		workCount
 	</sql>
 
+    <sql id="baseFields">
+		id,
+		nickname,
+		sex,
+		headImgUrl,
+		followerCount,
+		followeeCount,
+		workCount
+	</sql>
+
+    <resultMap id="userBase" type="cn.edu.nju.software.entity.UserBase">
+        <id column="id" property="id"/>
+        <id column="nickname" property="nickname"/>
+        <id column="sex" property="sex"/>
+        <id column="headImgUrl" property="headImgUrl"/>
+        <id column="followerCount" property="followerCount"/>
+        <id column="followeeCount" property="followeeCount"/>
+        <id column="workCount" property="workCount"/>
+    </resultMap>
+
     <resultMap id="user" type="cn.edu.nju.software.entity.User">
         <id column="id" property="id"/>
         <id column="nickname" property="nickname"/>
@@ -113,6 +133,13 @@
         where id = #{0}
     </select>
 
+    <select id="getUserBaseById" resultType="cn.edu.nju.software.entity.UserBase">
+        select
+        <include refid="baseFields"></include>
+        from user
+        where id = #{0}
+    </select>
+
     <select id="getUserByMobile" resultType="cn.edu.nju.software.entity.User">
         select
         <include refid="fields"></include>
@@ -132,6 +159,16 @@
         <include refid="fields"></include>
         from user
         where wxUnionId = #{0}
+    </select>
+
+    <select id="getUserBaseListByUserIdList" resultType="cn.edu.nju.software.entity.UserBase">
+        select
+        <include refid="baseFields"></include>
+        from user
+        where id in
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </select>
 
     <select id="getNewestId" resultType="java.lang.Integer">

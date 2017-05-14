@@ -1,10 +1,11 @@
 package cn.edu.nju.software.dao.user;
 
-import java.util.List;
-
+import cn.edu.nju.software.entity.User;
+import cn.edu.nju.software.entity.UserBase;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import cn.edu.nju.software.entity.User;
+import java.util.List;
 
 /**
  * 所有的传参顺序第一个都是businessId
@@ -40,5 +41,7 @@ public interface AppUserDao {
 
     boolean removeWork(int id);
 
+    List<UserBase> getUserBaseListByUserIdList(@Param("idList") List<Integer> idList);
 
+    UserBase getUserBaseById(int id);
 }
