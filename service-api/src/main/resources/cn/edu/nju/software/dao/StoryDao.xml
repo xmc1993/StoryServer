@@ -4,64 +4,91 @@
 
     <sql id="fields">
         id,
-        parentId,
+        title,
+        author,
         content,
+        press,
+        guide,
+        coverUrl,
+        preCoverUrl,
+        backgroundUrl,
         createTime,
         updateTime,
         valid
     </sql>
 
-    <resultMap id="storyTag" type="cn.edu.nju.software.entity.StoryTag">
-        <id column="id" property="id" />
-        <id column="parentId" property="parentId" />
-        <id column="content" property="content" />
-        <id column="createTime" property="createTime" />
-        <id column="updateTime" property="updateTime" />
-        <id column="valid" property="valid" />
+
+    <resultMap id="story" type="cn.edu.nju.software.entity.Story">
+        <id column="id" property="id"/>
+        <id column="title" property="title"/>
+        <id column="author" property="author"/>
+        <id column="content" property="content"/>
+        <id column="press" property="press"/>
+        <id column="guide" property="guide"/>
+        <id column="coverUrl" property="coverUrl"/>
+        <id column="preCoverUrl" property="preCoverUrl"/>
+        <id column="backgroundUrl" property="backgroundUrl"/>
+        <id column="createTime" property="createTime"/>
+        <id column="updateTime" property="updateTime"/>
+        <id column="valid" property="valid"/>
     </resultMap>
 
-    <insert id="saveStoryTag" parameterType="cn.edu.nju.software.entity.StoryTag">
-        insert into story_tag(
+    <insert id="saveStory" parameterType="cn.edu.nju.software.entity.Story">
+        insert into story(
         <include refid="fields"></include>
         )
         VALUES
         (
         #{id},
-        #{parentId},
+        #{title},
+        #{author},
         #{content},
+        #{press},
+        #{guide},
+        #{coverUrl},
+        #{preCoverUrl},
+        #{backgroundUrl},
         #{createTime},
         #{updateTime},
         #{valid}
         )
     </insert>
 
-    <update id="updateStoryTag" parameterType="cn.edu.nju.software.entity.StoryTag">
-		update story_tag
+    <update id="updateStory" parameterType="cn.edu.nju.software.entity.Story">
+		update story
 		set
+		title=#{title}
+		author=#{author}
 		content=#{content}
+		press=#{press}
+		coverUrl=#{coverUrl}
+		preCoverUrl=#{preCoverUrl}
+		backgroundUrl=#{backgroundUrl}
+		updateTime=#{updateTime}
 		where
 		id=#{id}
 	</update>
 
+    <update id="deleteStoryById">
+        update story
+        set
+        vaild=0
+        where
+        id=#{0}
+    </update>
 
-    <select id="getStoryTagById" resultType="cn.edu.nju.software.entity.StoryTag">
+    <select id="getStoryById" resultType="cn.edu.nju.software.entity.Story">
         select
         <include refid="fields"></include>
-        from story_tag
-        where id = #{0}
+        from story
+        where id = #{0} and valid = 1
     </select>
 
-    <select id="getStoryTagListByParentId" resultType="cn.edu.nju.software.entity.StoryTag">
+    <select id="getAllStories" resultType="cn.edu.nju.software.entity.Story">
         select
         <include refid="fields"></include>
-        from story_tag
-        where parentId = #{0}
-    </select>
-
-    <select id="getAllStoryTags" resultType="cn.edu.nju.software.entity.StoryTag">
-        select
-        <include refid="fields"></include>
-        from story_tag
+        from story
+        where valid = 1
     </select>
 
 

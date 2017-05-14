@@ -1,6 +1,7 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.TagRelation;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,6 +23,6 @@ public interface TagRelationDao {
 
     List<Integer> getTagIdListByStoryId(int storyId);
 
-    List<Integer> getStoryIdListByTagIdList(List<Integer> tagIds);
+    List<Integer> getStoryIdListByTagIdList(@Param("idList") List<Integer> idList);
 
 }

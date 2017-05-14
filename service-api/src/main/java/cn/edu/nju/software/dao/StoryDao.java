@@ -1,7 +1,6 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.Story;
-import cn.edu.nju.software.entity.StoryTag;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,6 +14,11 @@ public interface StoryDao {
 
     boolean saveStory(Story story);
 
+    /**
+     * 软删除
+     * @param id
+     * @return
+     */
     boolean deleteStoryById(int id);
 
     Story getStoryById(int id);

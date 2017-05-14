@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.AgreeDao">
+
+    <sql id="fields">
+        id,
+        worksId,
+        userId,
+        createTime,
+        updateTime
+    </sql>
+
+    <resultMap id="agree" type="cn.edu.nju.software.entity.Agree">
+        <id column="id" property="id"/>
+        <id column="worksId" property="worksId"/>
+        <id column="userId" property="userId"/>
+        <id column="createTime" property="createTime"/>
+        <id column="updateTime" property="updateTime"/>
+    </resultMap>
+
+    <insert id="saveAgree" parameterType="cn.edu.nju.software.entity.Agree">
+        insert into agree(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{worksId},
+        #{userId},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <delete id="deleteAgreeById">
+        DELETE FROM agree
+        WHERE id = #{0}
+    </delete>
+
+    <delete id="deleteAgree">
+        DELETE FROM agree
+        WHERE worksId = #{0} and userId = #{1}
+    </delete>
+
+
+    <select id="getAgreeUserIdListByWorksId" resultType="java.lang.Integer">
+        select
+        userId
+        from agree
+        where worksId = #{0}
+    </select>
+
+
+</mapper>

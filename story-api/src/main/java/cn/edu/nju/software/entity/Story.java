@@ -1,5 +1,7 @@
 package cn.edu.nju.software.entity;
 
+import java.util.Date;
+
 /**
  * Created by xmc1993 on 2017/5/12.
  */
@@ -14,7 +16,9 @@ public class Story {
     private String preCoverUrl;
     private String backgroundUrl;//录制背景图url
     private String price;
-    private String valid;//用于软删除
+    private Date createTime;
+    private Date updateTime;
+    private Integer valid = 1;//用于软删除
 
     public String getId() {
         return id;
@@ -96,11 +100,27 @@ public class Story {
         this.price = price;
     }
 
-    public String getValid() {
+    public Integer getValid() {
         return valid;
     }
 
-    public void setValid(String valid) {
+    public void setValid(Integer valid) {
         this.valid = valid;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 }

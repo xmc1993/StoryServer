@@ -4,64 +4,74 @@
 
     <sql id="fields">
         id,
-        parentId,
-        content,
+        storyId,
+        tagId,
         createTime,
-        updateTime,
-        valid
+        updateTime
     </sql>
 
-    <resultMap id="storyTag" type="cn.edu.nju.software.entity.StoryTag">
-        <id column="id" property="id" />
-        <id column="parentId" property="parentId" />
-        <id column="content" property="content" />
-        <id column="createTime" property="createTime" />
-        <id column="updateTime" property="updateTime" />
-        <id column="valid" property="valid" />
+    <resultMap id="tagRelation" type="cn.edu.nju.software.entity.TagRelation">
+        <id column="id" property="id"/>
+        <id column="storyId" property="storyId"/>
+        <id column="tagId" property="tagId"/>
+        <id column="createTime" property="createTime"/>
+        <id column="updateTime" property="updateTime"/>
     </resultMap>
 
-    <insert id="saveStoryTag" parameterType="cn.edu.nju.software.entity.StoryTag">
-        insert into story_tag(
+    <insert id="saveTagRelation" parameterType="cn.edu.nju.software.entity.TagRelation">
+        insert into tag_relation(
         <include refid="fields"></include>
         )
         VALUES
         (
         #{id},
-        #{parentId},
-        #{content},
+        #{storyId},
+        #{tagId},
         #{createTime},
-        #{updateTime},
-        #{valid}
+        #{updateTime}
         )
     </insert>
 
-    <update id="updateStoryTag" parameterType="cn.edu.nju.software.entity.StoryTag">
-		update story_tag
-		set
-		content=#{content}
-		where
-		id=#{id}
-	</update>
+    <delete id="deleteTagRelationById">
+        DELETE FROM tag_relation
+        WHERE id = #{0}
+    </delete>
+
+    <delete id="deleteTagRelationByStoryIdAndTagId">
+        DELETE FROM tag_relation
+        WHERE storyId = #{0} and tagId = #{1}
+    </delete>
 
 
-    <select id="getStoryTagById" resultType="cn.edu.nju.software.entity.StoryTag">
+    <select id="getStoryTagById" resultType="cn.edu.nju.software.entity.TagRelation">
         select
         <include refid="fields"></include>
-        from story_tag
+        from tag_relation
         where id = #{0}
     </select>
 
-    <select id="getStoryTagListByParentId" resultType="cn.edu.nju.software.entity.StoryTag">
-        select
-        <include refid="fields"></include>
-        from story_tag
-        where parentId = #{0}
+    <select id="getStoryIdListByTagId" resultType="java.lang.Integer">
+        select distinct
+        storyId
+        from tag_relation
+        where tagId = #{0}
     </select>
 
-    <select id="getAllStoryTags" resultType="cn.edu.nju.software.entity.StoryTag">
-        select
-        <include refid="fields"></include>
-        from story_tag
+    <select id="getTagIdListByStoryId" resultType="java.lang.Integer">
+        select distinct
+        tagId
+        from tag_relation
+        where storyId = #{0}
+    </select>
+
+    <select id="getStoryIdListByTagIdList" resultType="java.lang.Integer">
+        select distinct
+        storyId
+        from tag_relation
+        where tagId in
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </select>
 
 

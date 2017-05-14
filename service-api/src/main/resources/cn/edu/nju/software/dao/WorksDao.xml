@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.WorksDao">
+
+    <sql id="fields">
+        id,
+        storyId,
+        storyTitle,
+        userId,
+        useName,
+        url,
+        likeCount,
+        createTime,
+        updateTime,
+        valid
+    </sql>
+
+
+    <resultMap id="works" type="cn.edu.nju.software.entity.Works">
+        <id column="id" property="id"/>
+        <id column="storyId" property="storyId"/>
+        <id column="storyTitle" property="storyTitle"/>
+        <id column="userId" property="userId"/>
+        <id column="useName" property="useName"/>
+        <id column="url" property="url"/>
+        <id column="likeCount" property="likeCount"/>
+        <id column="createTime" property="createTime"/>
+        <id column="updateTime" property="updateTime"/>
+        <id column="valid" property="valid"/>
+    </resultMap>
+
+    <insert id="saveTagRelation" parameterType="cn.edu.nju.software.entity.TagRelation">
+        insert into works(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{storyId},
+        #{storyTitle},
+        #{userId},
+        #{useName},
+        #{url},
+        #{likeCount},
+        #{createTime},
+        #{updateTime},
+        #{valid}
+        )
+    </insert>
+
+    <update id="deleteWorksById">
+        update works
+        set
+        vaild=0
+        where
+        id=#{0}
+    </update>
+
+    <update id="updateWorks">
+        update works
+        set
+        url=#{url}
+        updateTime=#{updateTime}
+        where
+        id = #{id} and valid = 1
+    </update>
+
+    <select id="getStoryTagById" resultType="cn.edu.nju.software.entity.Works">
+        select
+        <include refid="fields"></include>
+        from works
+        where id = #{0}
+    </select>
+
+    <select id="getWorksById" resultType="cn.edu.nju.software.entity.Works">
+        select
+        <include refid="fields"></include>
+        from works
+        where id = #{0} and valid = 1
+    </select>
+
+    <select id="getWorksListByStoryId" resultType="cn.edu.nju.software.entity.Works">
+        select
+        <include refid="fields"></include>
+        from works
+        where storyId = #{0} and valid = 1
+        order by likeCount desc
+    </select>
+
+    <select id="getWorksListByUserId" resultType="cn.edu.nju.software.entity.Works">
+        select
+        <include refid="fields"></include>
+        from works
+        where userId = #{0} and valid = 1
+    </select>
+
+</mapper>
