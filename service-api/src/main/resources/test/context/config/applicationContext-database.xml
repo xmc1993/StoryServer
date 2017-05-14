@@ -19,7 +19,7 @@
         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
 	<aop:aspectj-autoproxy proxy-target-class="true" />
-	<context:property-placeholder location="classpath:/config/datasource.properties" />
+	<context:property-placeholder location="classpath:/test/context/config/datasource.properties" />
 	<!-- 设置扫描位置 -->
 
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" p:driverClassName="${jdbc.driverClassName}"
@@ -30,11 +30,8 @@
 		<property name="mapperLocations">
 			<list>
 
-				<value>classpath*:cn/edu/nju/software/dao/UserDao.xml</value>
-				<value>classpath*:cn/edu/nju/software/dao/UserBrowseDao.xml</value>
-				<value>classpath*:cn/edu/nju/software/dao/user/UserBusinessDao.xml</value>
-				<value>classpath*:cn/edu/nju/software/dao/user/AppUserDao.xml</value>
-				<value>classpath*:cn/edu/nju/software/dao/user/AppUserBrowseDao.xml</value>
+				<value>classpath*:cn/edu/nju/software/dao/*Dao.xml</value>
+				<value>classpath*:cn/edu/nju/software/dao/user/*Dao.xml</value>
 
 			</list>
 		</property>

@@ -23,4 +23,8 @@ public interface WorksDao {
 
     boolean deleteWorksById(int id);
 
+    boolean updateUseName(int userId, int userName);
+
+    boolean updateStoryTile(int userId, int userName);
+
 }

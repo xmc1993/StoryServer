@@ -11,6 +11,7 @@ public class SoundEffect {//音效
     private String url;
     private Date createTime;
     private Date updateTime;
+    private Integer valid = 1;//用于软删除
 
     public String getUrl() {
         return url;
@@ -50,5 +51,13 @@ public class SoundEffect {//音效
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getValid() {
+        return valid;
+    }
+
+    public void setValid(Integer valid) {
+        this.valid = valid;
     }
 }

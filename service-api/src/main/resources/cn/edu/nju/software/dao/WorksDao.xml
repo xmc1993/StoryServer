@@ -59,7 +59,7 @@
     <update id="updateWorks">
         update works
         set
-        url=#{url}
+        url=#{url},
         updateTime=#{updateTime}
         where
         id = #{id} and valid = 1
@@ -93,5 +93,24 @@
         from works
         where userId = #{0} and valid = 1
     </select>
+
+    <update id="updateUseName">
+        update works
+        set
+        useName=#{useName},
+        updateTime=#{updateTime}
+        where
+        userId = #{userId} and valid = 1
+    </update>
+
+
+    <update id="updateStoryTile">
+        update works
+        set
+        storyTitle=#{storyTitle},
+        updateTime=#{updateTime}
+        where
+        storyId = #{storyId} and valid = 1
+    </update>
 
 </mapper>
