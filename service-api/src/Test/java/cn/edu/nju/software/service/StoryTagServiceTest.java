@@ -46,6 +46,7 @@ public class StoryTagServiceTest {
     @Test
     public void test2Get() {
         assert storyTagService.getStoryTagById(99999).getContent().equals("测试标签");
+        assert storyTagService.getStoryTagListByParentId(0).size() == 1;
     }
 
     @Test
