@@ -11,8 +11,11 @@ import java.io.IOException;
  * Created by xmc1993 on 2017/5/12.
  */
 public final class UploadFileUtil {
-
     private static final Logger logger = LoggerFactory.getLogger(UploadFileUtil.class);
+
+    //资源服务器的base url
+    public static final String SOURCE_BASE_URL = "http://120.27.219.173/source";
+
 
     private UploadFileUtil() {
     }
@@ -28,11 +31,12 @@ public final class UploadFileUtil {
 
     /**
      * 获取文件的后缀
+     *
      * @param fileName
      * @return
      */
-    public static  String getSuffix(String fileName){
-        if (StringUtil.isEmpty(fileName)){
+    public static String getSuffix(String fileName) {
+        if (StringUtil.isEmpty(fileName)) {
             return null;
         }
         String res = fileName.substring(fileName.lastIndexOf(".") + 1);
