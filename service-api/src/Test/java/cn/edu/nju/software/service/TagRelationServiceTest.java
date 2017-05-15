@@ -51,8 +51,8 @@ public class TagRelationServiceTest {
 
     @Test
     public void test2Get() {
-        assert tagRelationService.getStoryIdsByTagId(77777).get(0) == 88888;
-        assert tagRelationService.getTagIdsByStoryId(88888).get(0) == 77777;
+        assert tagRelationService.getStoryIdListByTagId(77777).get(0) == 88888;
+        assert tagRelationService.getTagIdListByStoryId(88888).get(0) == 77777;
         ArrayList<Integer> idList = new ArrayList<>();
         idList.add(1);
         idList.add(2);

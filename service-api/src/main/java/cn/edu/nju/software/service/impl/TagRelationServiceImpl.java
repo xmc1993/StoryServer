@@ -38,12 +38,12 @@ public class TagRelationServiceImpl implements TagRelationService {
     }
 
     @Override
-    public List<Integer> getStoryIdsByTagId(int tagId) {
+    public List<Integer> getStoryIdListByTagId(int tagId) {
         return tagRelationDao.getStoryIdListByTagId(tagId);
     }
 
     @Override
-    public List<Integer> getTagIdsByStoryId(int storyId) {
+    public List<Integer> getTagIdListByStoryId(int storyId) {
         return tagRelationDao.getTagIdListByStoryId(storyId);
     }
 

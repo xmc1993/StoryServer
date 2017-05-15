@@ -21,6 +21,8 @@ public interface SoundEffectDao {
 
     SoundEffect getSoundEffectById(int id);
 
+    SoundEffect getValidSoundEffectById(int id);
+
     boolean deleteHard(int id);
 
 }

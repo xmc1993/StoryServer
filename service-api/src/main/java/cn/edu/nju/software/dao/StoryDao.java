@@ -23,6 +23,8 @@ public interface StoryDao {
 
     Story getStoryById(int id);
 
+    Story getValidStoryById(int id);
+
     List<Story> getAllStories();
 
     boolean updateStory(Story story);

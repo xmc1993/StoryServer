@@ -1,6 +1,7 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.StoryTag;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,6 +29,8 @@ public interface StoryTagDao {
     List<StoryTag> getStoryTagListByParentId(int parentId);
 
     List<StoryTag> getAllStoryTags();
+
+    List<StoryTag> getTagListByIdList(@Param("idList") List<Integer> idList);
 
     boolean deleteHard(int id);
 

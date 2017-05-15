@@ -84,11 +84,26 @@
         where id = #{0}
     </select>
 
+    <select id="getValidStoryById" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="fields"></include>
+        from story
+        where id = #{0} and valid = 1
+    </select>
+
     <select id="getAllStories" resultType="cn.edu.nju.software.entity.Story">
         select
         <include refid="fields"></include>
         from story
         where valid = 1
+    </select>
+
+    <select id="getTagListByIdList" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="fields"></include>
+        from story
+        where
+        and valid = 1
     </select>
 
     <delete id="deleteHard">

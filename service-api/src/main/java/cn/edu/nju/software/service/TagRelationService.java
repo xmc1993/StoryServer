@@ -1,7 +1,5 @@
 package cn.edu.nju.software.service;
 
-import cn.edu.nju.software.entity.Story;
-import cn.edu.nju.software.entity.StoryTag;
 import cn.edu.nju.software.entity.TagRelation;
 
 import java.util.List;
@@ -17,9 +15,9 @@ public interface TagRelationService {
 
     boolean deleteTagRelationByStoryIdAndTagId(int storyId, int tagId);
 
-    List<Integer> getStoryIdsByTagId(int tagId);
+    List<Integer> getStoryIdListByTagId(int tagId);
 
-    List<Integer> getTagIdsByStoryId(int storyId);
+    List<Integer> getTagIdListByStoryId(int storyId);
 
     List<Integer> getStoryIdListByTagIdList(List<Integer> tagIds);
 
