@@ -39,7 +39,7 @@ public class TagRelationController {
 
 
     @ApiOperation(value = "添加标签", notes = "")
-    @RequestMapping(value = "/manage/publishSoundEffect", method = {RequestMethod.GET})
+    @RequestMapping(value = "/manage/addTagToStory", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<Boolean> addTagToStory(
             @ApiParam("故事ID") @RequestParam("storyId") Integer storyId,

@@ -13,4 +13,6 @@ public interface AdminDao {
 
     Admin getAdminByAccessToken(String accessToken);
 
+    boolean updateToken(Admin admin);
+
 }

@@ -45,18 +45,18 @@
     <bean id="jsonUtil" class="cn.edu.nju.software.util.JsonUtil"/>
 
     <!--<mvc:annotation-driven>-->
-        <!--<mvc:message-converters register-defaults="false">-->
-            <!--&lt;!&ndash; 避免IE执行AJAX时,返回JSON出现下载文件 &ndash;&gt;-->
-            <!--<bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">-->
-                <!--<property name="supportedMediaTypes">-->
-                    <!--<list>-->
-                        <!--&lt;!&ndash; 这里顺序不能反，一定先写text/html,不然ie下出现下载提示 &ndash;&gt;-->
-                        <!--<value>text/html;charset=UTF-8</value>-->
-                        <!--<value>application/json;charset=UTF-8</value>-->
-                    <!--</list>-->
-                <!--</property>-->
-            <!--</bean>-->
-        <!--</mvc:message-converters>-->
+    <!--<mvc:message-converters register-defaults="false">-->
+    <!--&lt;!&ndash; 避免IE执行AJAX时,返回JSON出现下载文件 &ndash;&gt;-->
+    <!--<bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">-->
+    <!--<property name="supportedMediaTypes">-->
+    <!--<list>-->
+    <!--&lt;!&ndash; 这里顺序不能反，一定先写text/html,不然ie下出现下载提示 &ndash;&gt;-->
+    <!--<value>text/html;charset=UTF-8</value>-->
+    <!--<value>application/json;charset=UTF-8</value>-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--</bean>-->
+    <!--</mvc:message-converters>-->
     <!--</mvc:annotation-driven>-->
 
     <!-- <bean id="viewResolverOp" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
@@ -89,6 +89,18 @@
 
             <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
             <bean class="cn.edu.nju.software.filter.AccessTokenValidationInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/manage/*"/>
+            <!-- 不需要拦截的uri -->
+            <mvc:exclude-mapping path="/swagger/**"/>
+            <mvc:exclude-mapping path="/api-docs/**"/>
+            <!--只有登录接口不需要Auth验证-->
+            <mvc:exclude-mapping path="/manage/login"/>
+
+            <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
+            <bean class="cn.edu.nju.software.filter.AdminAccessTokenValidationInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 

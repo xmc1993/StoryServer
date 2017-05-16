@@ -38,5 +38,13 @@
         where accessToken = #{0}
     </select>
 
+    <update id="updateToken" parameterType="cn.edu.nju.software.entity.Admin">
+        UPDATE admin
+        SET
+        accessToken=#{accessToken},
+        expireTime=#{expireTime}
+        WHERE username = #{username}
+    </update>
+
 
 </mapper>

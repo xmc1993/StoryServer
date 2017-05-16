@@ -10,4 +10,6 @@ public interface AdminService {
     Admin getAdminByUsername(String username);
 
     Admin getAdminByAccessToken(String accessToken);
+
+    boolean updateAccessToken(Admin admin);
 }
