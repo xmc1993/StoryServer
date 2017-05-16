@@ -13,6 +13,7 @@
 
 
     <resultMap id="storyTag" type="cn.edu.nju.software.entity.StoryTag">
+
         <id column="id" property="id"/>
         <id column="parentId" property="parentId"/>
         <id column="content" property="content"/>
@@ -21,7 +22,7 @@
         <id column="valid" property="valid"/>
     </resultMap>
 
-    <insert id="saveStoryTag" parameterType="cn.edu.nju.software.entity.StoryTag">
+    <insert id="saveStoryTag" parameterType="cn.edu.nju.software.entity.StoryTag" keyProperty="id" useGeneratedKeys="true">
         insert into story_tag(
         <include refid="fields"></include>
         )

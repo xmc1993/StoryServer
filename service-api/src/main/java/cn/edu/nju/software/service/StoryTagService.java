@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface StoryTagService {
 
-    boolean saveStoryTag(StoryTag storyTag);
+    int saveStoryTag(StoryTag storyTag);
 
     boolean updateStoryTag(StoryTag storyTag);
 

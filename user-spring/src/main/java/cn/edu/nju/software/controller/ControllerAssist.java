@@ -1,12 +1,8 @@
 package cn.edu.nju.software.controller;
 
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-
 import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.exception.BusinessException;
+import cn.edu.nju.software.exception.LoginException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -19,15 +15,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
-import cn.edu.nju.software.exception.BusinessException;
-import cn.edu.nju.software.exception.LoginException;
+import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * <pre>
@@ -121,7 +115,7 @@ public class ControllerAssist {
 		logger.info("", exception);
 		ResponseData<?> result = new ResponseData<>();
 		result.jsonFill(2, exception.getMessage(), null);
-		return ResponseEntity.ok(result);
+		return ResponseEntity.status(404).body(result);
 	}
 	
 	/**

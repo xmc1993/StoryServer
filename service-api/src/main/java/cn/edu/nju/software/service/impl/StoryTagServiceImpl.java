@@ -19,7 +19,7 @@ public class StoryTagServiceImpl implements StoryTagService {
     private StoryTagDao storyTagDao;
 
     @Override
-    public boolean saveStoryTag(StoryTag storyTag) {
+    public int saveStoryTag(StoryTag storyTag) {
         return storyTagDao.saveStoryTag(storyTag);
     }
 

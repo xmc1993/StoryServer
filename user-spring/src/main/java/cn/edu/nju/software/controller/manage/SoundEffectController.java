@@ -28,7 +28,7 @@ import java.util.List;
  * Created by xmc1993 on 2017/5/15.
  */
 @Api(value = "Admin", description = "管理接口")
-@Controller
+@Controller()
 public class SoundEffectController {
     private static final Logger logger = LoggerFactory.getLogger(SoundEffectController.class);
     @Autowired
@@ -39,7 +39,7 @@ public class SoundEffectController {
     private static final String SOUND_EFFECT_ROOT = "/soundEffect/"; //头像的基础路径
 
     @ApiOperation(value = "增加音效", notes = "")
-    @RequestMapping(value = "/manage/publishSoundEffect", method = {RequestMethod.GET})
+    @RequestMapping(value = "/manage/publishSoundEffect", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> publishSoundEffect(
             @ApiParam("音效文件") @RequestParam("uploadFile") MultipartFile uploadFile,
@@ -47,6 +47,7 @@ public class SoundEffectController {
             HttpServletRequest request, HttpServletResponse response) {
 
         ResponseData<Boolean> responseData = new ResponseData<>();
+
         if (uploadFile == null) {
             responseData.jsonFill(2, "请选择文件上传", null);
             return responseData;

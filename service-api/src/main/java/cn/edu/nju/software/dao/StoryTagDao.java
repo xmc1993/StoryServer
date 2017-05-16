@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface StoryTagDao {
 
-    boolean saveStoryTag(StoryTag storyTag);
+    int saveStoryTag(StoryTag storyTag);
 
     boolean updateStoryTag(StoryTag storyTag);
 

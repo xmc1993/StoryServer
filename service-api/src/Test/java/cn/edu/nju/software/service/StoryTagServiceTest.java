@@ -40,7 +40,7 @@ public class StoryTagServiceTest {
 
     @Test
     public void test1Save() {
-        assert storyTagService.saveStoryTag(storyTag);
+        assert storyTagService.saveStoryTag(storyTag) > -1;
     }
 
     @Test
