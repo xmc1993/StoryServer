@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AdminDao {
 
+
     Admin getAdminByUsername(String username);
 
     Admin getAdminByAccessToken(String accessToken);

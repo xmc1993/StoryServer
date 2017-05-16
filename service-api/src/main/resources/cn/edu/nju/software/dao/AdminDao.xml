@@ -9,10 +9,10 @@
         accessToken,
         expireTime,
         createTime,
-        updateTime,
+        updateTime
     </sql>
 
-    <resultMap id="user" type="cn.edu.nju.software.entity.User">
+    <resultMap id="admin" type="cn.edu.nju.software.entity.Admin">
         <id column="id" property="id"/>
         <id column="username" property="username"/>
         <id column="password" property="password"/>
@@ -24,10 +24,10 @@
 
 
     <select id="getAdminByUsername" resultType="cn.edu.nju.software.entity.Admin">
-        select
+        SELECT
         <include refid="fields"></include>
-        from admin
-        where username = #{0}
+        FROM admin
+        WHERE username = #{0}
     </select>
 
 

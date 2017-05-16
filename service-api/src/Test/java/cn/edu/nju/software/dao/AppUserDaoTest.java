@@ -22,6 +22,9 @@ public class AppUserDaoTest {
     @Autowired
     private AppUserDao appUserDao;
 
+    @Autowired
+    private AdminDao adminDao;
+
     @Test
     public void testSaveUser(){
         User user = new User();
@@ -41,5 +44,10 @@ public class AppUserDaoTest {
     @Test
     public void testDeleteUser(){
         Assert.assertTrue(appUserDao.deleteUser(923));
+    }
+
+    @Test
+    public void testGetAdmin(){
+        adminDao.getAdminByUsername("admin");
     }
 }

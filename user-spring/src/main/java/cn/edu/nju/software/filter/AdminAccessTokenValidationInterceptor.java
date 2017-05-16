@@ -50,12 +50,12 @@ public class AdminAccessTokenValidationInterceptor extends HandlerInterceptorAda
             byte[] bytes = jedis.get(AccessToken.getBytes());
             if (bytes == null) {
                 response.setStatus(401);
-                throw new LoginException("登录失效");
+                throw new LoginException("session invalid");
             } else {
                 Admin admin = (Admin) ObjectAndByte.toObject(bytes);
                 if (admin == null) {
                     response.setStatus(401);
-                    throw new LoginException("登录失效");
+                    throw new LoginException("session invalid");
                 } else {
                     request.setAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME, admin);
                     //刷新token的时间
@@ -66,7 +66,7 @@ public class AdminAccessTokenValidationInterceptor extends HandlerInterceptorAda
 
         } catch (Exception e) {
             response.setStatus(401);
-            throw new LoginException("登录失效");
+            throw new LoginException("login fail");
         }finally {
             jedis.close();
         }

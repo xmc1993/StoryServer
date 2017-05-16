@@ -1,11 +1,13 @@
 package cn.edu.nju.software.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by xmc1993 on 2017/5/16.
  */
-public class Admin {
+public class Admin implements Serializable{
+    private static final long serialVersionUID = -2837545145321233714L;
     private Integer id;
     private String username;//用户名
     private String password;//密码
