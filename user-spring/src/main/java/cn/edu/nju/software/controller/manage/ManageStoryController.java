@@ -8,5 +8,5 @@ import org.springframework.stereotype.Controller;
  */
 @Api(value = "/story", description = "和故事有关的接口")
 @Controller
-public class StoryController {
+public class ManageStoryController {
 }

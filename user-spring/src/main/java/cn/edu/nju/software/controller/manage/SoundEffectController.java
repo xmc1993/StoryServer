@@ -100,8 +100,10 @@ public class SoundEffectController {
             return responseData;
         }
         SoundEffect soundEffect = soundEffectService.getSoundEffectById(id);
-        String data = soundEffect.getUrl();
-        //TODO 删除老的音效文件
+        String oldUrl = soundEffect.getUrl();
+        //TODO 删除老的音效文件 TODO 原子性的问题
+
+
         soundEffect.setDescription(description);
         String url = UploadFileUtil.SOURCE_BASE_URL + SOUND_EFFECT_ROOT + fileName;//拼接音频文件的地址
         soundEffect.setUrl(url);
@@ -134,8 +136,7 @@ public class SoundEffectController {
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<SoundEffect>> responseData = new ResponseData<>();
         List<SoundEffect> soundEffectList = soundEffectService.getAllSoundEffect();
-        responseData.jsonFill(1, null, soundEffectList);
-        //todo 是否要分页
+        responseData.jsonFill(1, null, soundEffectList); //todo 是否要分页
         return responseData;
     }
 

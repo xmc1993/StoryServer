@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.AdminDao">
+
+    <sql id="fields">
+        id,
+        username,
+        password,
+        accessToken,
+        expireTime,
+        createTime,
+        updateTime,
+    </sql>
+
+    <resultMap id="user" type="cn.edu.nju.software.entity.User">
+        <id column="id" property="id"/>
+        <id column="username" property="username"/>
+        <id column="password" property="password"/>
+        <id column="accessToken" property="accessToken"/>
+        <id column="expireTime" property="expireTime"/>
+        <id column="createTime" property="createTime"/>
+        <id column="updateTime" property="updateTime"/>
+    </resultMap>
+
+
+    <select id="getAdminByUsername" resultType="cn.edu.nju.software.entity.Admin">
+        select
+        <include refid="fields"></include>
+        from admin
+        where username = #{0}
+    </select>
+
+
+    <select id="getAdminByAccessToken" resultType="cn.edu.nju.software.entity.Admin">
+        select
+        <include refid="fields"></include>
+        from admin
+        where accessToken = #{0}
+    </select>
+
+
+</mapper>
