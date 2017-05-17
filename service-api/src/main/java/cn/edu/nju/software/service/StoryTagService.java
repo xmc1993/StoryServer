@@ -11,7 +11,7 @@ public interface StoryTagService {
 
     int saveStoryTag(StoryTag storyTag);
 
-    boolean updateStoryTag(StoryTag storyTag);
+    StoryTag updateStoryTag(StoryTag storyTag);
 
     boolean deleteStoryTag(int tagId);
 
@@ -26,4 +26,7 @@ public interface StoryTagService {
     List<StoryTag> getStoryTagListByParentId(int parentId);
 
     List<StoryTag> getAllStoryTags();
+
+    StoryTag getStoryTagByIdHard(int tagId);
+
 }

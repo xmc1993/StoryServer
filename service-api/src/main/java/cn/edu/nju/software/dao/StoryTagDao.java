@@ -21,6 +21,8 @@ public interface StoryTagDao {
 
     StoryTag getStoryTagById(int tagId);
 
+    StoryTag getStoryTagByIdHard(int tagId);
+
     /**
      * 根据父标签id返回所有的子标签
      * @param parentId

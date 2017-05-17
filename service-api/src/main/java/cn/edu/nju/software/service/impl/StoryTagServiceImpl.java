@@ -24,9 +24,10 @@ public class StoryTagServiceImpl implements StoryTagService {
     }
 
     @Override
-    public boolean updateStoryTag(StoryTag storyTag) {
+    public StoryTag updateStoryTag(StoryTag storyTag) {
         storyTag.setUpdateTime(new Date());
-        return storyTagDao.updateStoryTag(storyTag);
+        boolean res = storyTagDao.updateStoryTag(storyTag);
+        return res ? storyTagDao.getStoryTagById(storyTag.getId()) : null;
     }
 
     @Override
@@ -47,5 +48,10 @@ public class StoryTagServiceImpl implements StoryTagService {
     @Override
     public List<StoryTag> getAllStoryTags() {
         return storyTagDao.getAllStoryTags();
+    }
+
+    @Override
+    public StoryTag getStoryTagByIdHard(int tagId) {
+        return storyTagDao.getStoryTagByIdHard(tagId);
     }
 }

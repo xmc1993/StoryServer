@@ -33,45 +33,40 @@ public class StoryTagController {
     private StoryTagService storyTagService;
 
     @ApiOperation(value = "新增标签", notes = "")
-    @RequestMapping(value = "/storyTag",method = {RequestMethod.POST})
+    @RequestMapping(value = "/storyTag", method = {RequestMethod.POST})
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public StoryTag publishStoryTag(
-            @ApiParam("标签文字") @RequestBody StoryTag storyTag,
+            @ApiParam("标签") @RequestBody StoryTag storyTag,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Boolean> responseData = new ResponseData<>();
-        if (storyTag.getParentId() !=0 && !checkValidService.isTagExist(storyTag.getParentId())) {
+        if (storyTag.getParentId() != 0 && !checkValidService.isTagExist(storyTag.getParentId())) {
             logger.error("无效的parentId");
             responseData.jsonFill(2, "无效的parentId", null);
             throw new RuntimeException("无效的parentId");
         }
         storyTag.setCreateTime(new Date());
         storyTag.setUpdateTime(new Date());
+        storyTag.setValid(1);
         storyTagService.saveStoryTag(storyTag);
         return storyTag;
-
     }
 
     @ApiOperation(value = "更新标签文字", notes = "")
-    @RequestMapping(value = "/updateStoryTag", method = {RequestMethod.GET})
+    @RequestMapping(value = "/storyTag/{id}", method = {RequestMethod.PUT})
     @ResponseBody
-    public ResponseData<Boolean> updateStoryTag(
-            @ApiParam("标签文字") @RequestParam("content") String content,
-            @ApiParam("标签ID") @RequestParam("tagId") int tagId,
+    public StoryTag updateStoryTag(
+            @ApiParam("标签ID") @PathVariable int id,
+            @ApiParam("标签") @RequestBody StoryTag storyTag,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<Boolean> responseData = new ResponseData<>();
-        if (!checkValidService.isTagExist(tagId)) {
-            logger.error("无效的tagId");
-            responseData.jsonFill(2, "无效的tagId", null);
-            return responseData;
+        if (!checkValidService.isTagExist(id)) {
+            logger.error("无效的id");
+            throw new RuntimeException("无效的id");
         }
-        StoryTag storyTag = new StoryTag();
-        storyTag.setId(tagId);
-        storyTag.setContent(content);
+        storyTag.setId(id);
         storyTag.setUpdateTime(new Date());
-        boolean success = storyTagService.updateStoryTag(storyTag);
-        responseData.jsonFill(success ? 1 : 2, null, success);
-        return responseData;
+        return storyTagService.updateStoryTag(storyTag);
+
     }
 
     @ApiOperation(value = "删除标签", notes = "")
@@ -83,29 +78,38 @@ public class StoryTagController {
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Boolean> responseData = new ResponseData<>();
         if (!checkValidService.isTagExist(id)) {
-            logger.error("无效的tagId");
-            throw new RuntimeException("无效的parentId");
+            logger.error("无效的id");
+            throw new RuntimeException("无效的id");
         }
         boolean success = storyTagService.deleteStoryTag(id);
-        if (!success){
+        if (!success) {
             response.setStatus(404);
             throw new RuntimeException("删除失败");
         }
     }
 
     @ApiOperation(value = "根据parentId得到标签列表", notes = "")
-    @RequestMapping(value = "/getStoryTagListByParentId", method = {RequestMethod.GET})
+    @RequestMapping(value = "/parent/{parentId}/storyTags", method = {RequestMethod.GET})
     @ResponseBody
     public List<StoryTag> getStoryTagListByParentId(
-            @ApiParam("父标签ID") @RequestParam("parentId") int parentId,
+            @ApiParam("父标签ID") @PathVariable int parentId,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<StoryTag>> responseData = new ResponseData<>();
-        if (!checkValidService.isTagExist(parentId)) {
+        if (parentId !=0 && !checkValidService.isTagExist(parentId)) {
             logger.error("无效的parentId");
             throw new RuntimeException("无效的parentId");
         }
-
         List<StoryTag> tagList = storyTagService.getStoryTagListByParentId(parentId);
+        return tagList;
+    }
+
+    @ApiOperation(value = "得到所有标签列表", notes = "")
+    @RequestMapping(value = "/storyTags", method = {RequestMethod.GET})
+    @ResponseBody
+    public List<StoryTag> getAllStoryTags(
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<StoryTag>> responseData = new ResponseData<>();
+        List<StoryTag> tagList = storyTagService.getAllStoryTags();
         return tagList;
     }
 }

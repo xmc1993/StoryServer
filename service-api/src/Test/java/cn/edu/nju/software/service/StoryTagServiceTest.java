@@ -52,7 +52,7 @@ public class StoryTagServiceTest {
     @Test
     public void test3Update() {
         storyTag.setContent("测试更新");
-        assert storyTagService.updateStoryTag(storyTag);
+        assert storyTagService.updateStoryTag(storyTag) != null;
         assert storyTagService.getStoryTagById(99999).getContent().equals("测试更新");
     }
 

@@ -76,7 +76,13 @@
         select
         <include refid="fields"></include>
         from story_tag
-        WHERE id = #{0}
+        WHERE id = #{0} and valid = 1
     </select>
 
+    <select id="getStoryTagByIdHard" resultType="cn.edu.nju.software.entity.StoryTag">
+        select
+        <include refid="fields"></include>
+        from story_tag
+        WHERE id = #{0}
+    </select>
 </mapper>

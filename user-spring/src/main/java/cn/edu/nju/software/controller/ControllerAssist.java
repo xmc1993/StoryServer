@@ -115,7 +115,7 @@ public class ControllerAssist {
 		logger.info("", exception);
 		ResponseData<?> result = new ResponseData<>();
 		result.jsonFill(2, exception.getMessage(), null);
-		return ResponseEntity.status(404).body(result);
+		return ResponseEntity.status(400).body(result);
 	}
 	
 	/**
