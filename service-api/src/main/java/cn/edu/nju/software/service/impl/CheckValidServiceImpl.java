@@ -20,8 +20,13 @@ public class CheckValidServiceImpl implements CheckValidService {
     private SoundEffectDao soundEffectDao;
 
     @Override
-    public boolean isTagExist(int tagId) {
+         public boolean isTagExist(int tagId) {
         return storyTagDao.getStoryTagById(tagId) != null;
+    }
+
+    @Override
+    public boolean isTagExistHard(int tagId) {
+        return storyTagDao.getStoryTagByIdHard(tagId) != null;
     }
 
     @Override
@@ -41,11 +46,11 @@ public class CheckValidServiceImpl implements CheckValidService {
 
     @Override
     public boolean isSoundEffectExist(int soundEffectId) {
-        return soundEffectDao.getValidSoundEffectById(soundEffectId) != null;
+        return soundEffectDao.getSoundEffectById(soundEffectId) != null;
     }
 
     @Override
     public boolean isSoundEffectExistHard(int soundEffectId) {
-        return soundEffectDao.getSoundEffectById(soundEffectId) != null;
+        return soundEffectDao.getSoundEffectByIdHard(soundEffectId) != null;
     }
 }

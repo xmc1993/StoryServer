@@ -55,7 +55,7 @@ public class SoundEffectController {
         boolean success = UploadFileUtil.mvFile(uploadFile, realPath, fileName);
 
         if (!success) {
-            throw new RuntimeException("请选择文件上传");
+            throw new RuntimeException("文件上传失败");
         }
         SoundEffect soundEffect = new SoundEffect();
         soundEffect.setDescription(description);
@@ -76,7 +76,7 @@ public class SoundEffectController {
     @ResponseBody
     public SoundEffect updateSoundEffect(
             @ApiParam("音效ID") @PathVariable int id,
-            @ApiParam("音效文件") @RequestParam("uploadFile") MultipartFile uploadFile,
+            @ApiParam("音效文件") @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile,
             @ApiParam("音效描述") @RequestParam("description") String description,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Boolean> responseData = new ResponseData<>();

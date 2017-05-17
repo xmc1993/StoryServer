@@ -7,6 +7,8 @@ public interface CheckValidService {
 
     boolean isTagExist(int tagId);
 
+    public boolean isTagExistHard(int tagId);
+
     /**
      * valid = 1
      *

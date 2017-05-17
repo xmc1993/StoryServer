@@ -56,14 +56,14 @@
         select
         <include refid="fields"></include>
         from sound_effect
-        where id = #{0}
+        where id = #{0} and valid = 1
     </select>
 
-    <select id="getValidSoundEffectById" resultType="cn.edu.nju.software.entity.SoundEffect">
+    <select id="getSoundEffectByIdHard" resultType="cn.edu.nju.software.entity.SoundEffect">
         select
         <include refid="fields"></include>
         from sound_effect
-        where id = #{0} and valid = 1
+        where id = #{0}
     </select>
 
     <select id="getAllSoundEffects" resultType="cn.edu.nju.software.entity.SoundEffect">
