@@ -28,9 +28,10 @@ public class SoundEffectServiceTest implements SoundEffectService {
     }
 
     @Override
-    public boolean updateSoundEffect(SoundEffect soundEffect) {
+    public SoundEffect updateSoundEffect(SoundEffect soundEffect) {
         soundEffect.setUpdateTime(new Date());
-        return soundEffectDao.updateSoundEffect(soundEffect);
+        boolean res = soundEffectDao.updateSoundEffect(soundEffect);
+        return res ? soundEffectDao.getSoundEffectById(soundEffect.getId()) : null;
     }
 
     @Override

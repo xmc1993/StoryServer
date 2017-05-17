@@ -1,12 +1,8 @@
 package cn.edu.nju.software.controller.manage;
 
 import cn.edu.nju.software.entity.Admin;
-import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.AdminService;
-import cn.edu.nju.software.util.JedisUtil;
-import cn.edu.nju.software.util.ObjectAndByte;
-import cn.edu.nju.software.util.Util;
-import cn.edu.nju.software.vo.response.LoginResponseVo;
+import cn.edu.nju.software.util.*;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -28,28 +24,26 @@ import java.util.Date;
 
 @Api(value = "Admin", description = "管理接口")
 @Controller
+@RequestMapping("/manage")
 public class AdminController {
 
     @Autowired
     private AdminService adminService;
 
     @ApiOperation(value = "登录", notes = "")
-    @RequestMapping(value = "/manage/login", method = {RequestMethod.POST})
+    @RequestMapping(value = "/auth", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<LoginResponseVo> login(
+    public String login(
             @ApiParam("用户名") @RequestParam("username") String username,
             @ApiParam("密码(用md5加密)") @RequestParam("password") String password,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<LoginResponseVo> responseData = new ResponseData<>();
         Admin admin = adminService.getAdminByUsername(username);
         if (admin == null) {
-            responseData.jsonFill(2, "用户不存在", null);
-            return responseData;
+            throw new RuntimeException("用户不存在");
         }
         //todo 更严格的安全校验
         if (!admin.getPassword().equals(password)) {
-            responseData.jsonFill(2, "密码错误", null);
-            return responseData;
+            throw new RuntimeException("密码错误");
         }
         admin.setAccessToken(Util.getToken());
         long currentTime = System.currentTimeMillis();
@@ -57,13 +51,10 @@ public class AdminController {
         admin.setExpireTime(new Date(currentTime));
         boolean res = adminService.updateAccessToken(admin);
         if (!res) {
-            responseData.jsonFill(2, "登录失败，服务器错误。", null);
-            return responseData;
+            throw new RuntimeException("登录失败，服务器错误。");
+
+
         }
-        LoginResponseVo loginResponseVo = new LoginResponseVo();
-        loginResponseVo.setId(admin.getId());
-        loginResponseVo.setAccessToken(admin.getAccessToken());
-        responseData.jsonFill(1, null, loginResponseVo);
 
         //在缓存中存入登录信息
         Jedis jedis = JedisUtil.getJedis();
@@ -71,15 +62,20 @@ public class AdminController {
         jedis.expire(admin.getAccessToken().getBytes(), 60 * 60 * 6);//缓存用户信息6小时
         jedis.close();
 
-        return responseData;
+        return admin.getAccessToken();
     }
 
     @ApiOperation(value = "登出", notes = "")
-    @RequestMapping(value = "/manage/logout", method = {RequestMethod.GET})
+    @RequestMapping(value = "/auth", method = {RequestMethod.DELETE})
     @ResponseBody
-    public ResponseData<LoginResponseVo> logout(
+    public void logout(
             HttpServletRequest request, HttpServletResponse response) {
-
-        return null;
+        String accessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
+        if (!StringUtil.isEmpty(accessToken)){
+            //注销管理员的session信息
+            Jedis jedis = JedisUtil.getJedis();
+            jedis.del(accessToken.getBytes());
+            jedis.close();
+        }
     }
 }

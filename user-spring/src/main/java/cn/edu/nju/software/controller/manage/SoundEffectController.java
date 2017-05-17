@@ -28,7 +28,8 @@ import java.util.List;
  * Created by xmc1993 on 2017/5/15.
  */
 @Api(value = "Admin", description = "管理接口")
-@Controller()
+@Controller
+@RequestMapping("/manage")
 public class SoundEffectController {
     private static final Logger logger = LoggerFactory.getLogger(SoundEffectController.class);
     @Autowired
@@ -39,7 +40,7 @@ public class SoundEffectController {
     private static final String SOUND_EFFECT_ROOT = "/soundEffect/"; //头像的基础路径
 
     @ApiOperation(value = "增加音效", notes = "")
-    @RequestMapping(value = "/manage/publishSoundEffect", method = {RequestMethod.POST})
+    @RequestMapping(value = "/publishSoundEffect", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> publishSoundEffect(
             @ApiParam("音效文件") @RequestParam("uploadFile") MultipartFile uploadFile,
@@ -104,7 +105,6 @@ public class SoundEffectController {
         String oldUrl = soundEffect.getUrl();
         //TODO 删除老的音效文件 TODO 原子性的问题
 
-
         soundEffect.setDescription(description);
         String url = UploadFileUtil.SOURCE_BASE_URL + SOUND_EFFECT_ROOT + fileName;//拼接音频文件的地址
         soundEffect.setUrl(url);
@@ -115,7 +115,7 @@ public class SoundEffectController {
     }
 
     @ApiOperation(value = "删除音效", notes = "")
-    @RequestMapping(value = "/manage/deleteSoundEffect", method = {RequestMethod.POST})
+    @RequestMapping(value = "/soundEffects", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> deleteSoundEffect(
             @ApiParam("音效ID") @RequestParam("id") int id,
@@ -131,14 +131,15 @@ public class SoundEffectController {
     }
 
     @ApiOperation(value = "得到所有音效", notes = "")
-    @RequestMapping(value = "/manage/getAllSoundEffects", method = {RequestMethod.GET})
+    @RequestMapping(value = "/soundEffects", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<SoundEffect>> getAllSoundEffects(
+    public List<SoundEffect> getAllSoundEffects(
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<SoundEffect>> responseData = new ResponseData<>();
         List<SoundEffect> soundEffectList = soundEffectService.getAllSoundEffect();
-        responseData.jsonFill(1, null, soundEffectList); //todo 是否要分页
-        return responseData;
+        return soundEffectList;
     }
 
 }

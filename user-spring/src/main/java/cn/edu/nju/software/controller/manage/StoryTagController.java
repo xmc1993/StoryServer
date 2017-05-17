@@ -33,7 +33,7 @@ public class StoryTagController {
     private StoryTagService storyTagService;
 
     @ApiOperation(value = "新增标签", notes = "")
-    @RequestMapping(value = "/storyTag", method = {RequestMethod.POST})
+    @RequestMapping(value = "/storyTags", method = {RequestMethod.POST})
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public StoryTag publishStoryTag(
@@ -53,7 +53,7 @@ public class StoryTagController {
     }
 
     @ApiOperation(value = "更新标签文字", notes = "")
-    @RequestMapping(value = "/storyTag/{id}", method = {RequestMethod.PUT})
+    @RequestMapping(value = "/storyTags/{id}", method = {RequestMethod.PUT})
     @ResponseBody
     public StoryTag updateStoryTag(
             @ApiParam("标签ID") @PathVariable int id,
@@ -70,7 +70,7 @@ public class StoryTagController {
     }
 
     @ApiOperation(value = "删除标签", notes = "")
-    @RequestMapping(value = "/storyTag/{id}", method = {RequestMethod.DELETE})
+    @RequestMapping(value = "/storyTags/{id}", method = {RequestMethod.DELETE})
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteStoryTag(
@@ -88,28 +88,43 @@ public class StoryTagController {
         }
     }
 
-    @ApiOperation(value = "根据parentId得到标签列表", notes = "")
-    @RequestMapping(value = "/parent/{parentId}/storyTags", method = {RequestMethod.GET})
+    @ApiOperation(value = "获得一个标签的子标签列表", notes = "")
+    @RequestMapping(value = "/storyTags/{id}/storyTags", method = {RequestMethod.GET})
     @ResponseBody
     public List<StoryTag> getStoryTagListByParentId(
-            @ApiParam("父标签ID") @PathVariable int parentId,
+            @ApiParam("父标签ID") @PathVariable int id,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<StoryTag>> responseData = new ResponseData<>();
-        if (parentId !=0 && !checkValidService.isTagExist(parentId)) {
+        if (id != 0 && !checkValidService.isTagExist(id)) {
             logger.error("无效的parentId");
             throw new RuntimeException("无效的parentId");
         }
-        List<StoryTag> tagList = storyTagService.getStoryTagListByParentId(parentId);
+        List<StoryTag> tagList = storyTagService.getStoryTagListByParentId(id);
         return tagList;
     }
 
-    @ApiOperation(value = "得到所有标签列表", notes = "")
+    @ApiOperation(value = "根据ID获得标签", notes = "")
+    @RequestMapping(value = "/storyTags/{id}", method = {RequestMethod.GET})
+    @ResponseBody
+    public StoryTag getStoryById(
+            @ApiParam("标签ID") @PathVariable int id,
+            HttpServletRequest request, HttpServletResponse response) {
+        StoryTag storyTag = storyTagService.getStoryTagById(id);
+        if (storyTag == null) {
+            throw new RuntimeException("无效的ID");
+        } else {
+            return storyTag;
+        }
+    }
+
+    @ApiOperation(value = "标签列表", notes = "")
     @RequestMapping(value = "/storyTags", method = {RequestMethod.GET})
     @ResponseBody
     public List<StoryTag> getAllStoryTags(
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<StoryTag>> responseData = new ResponseData<>();
-        List<StoryTag> tagList = storyTagService.getAllStoryTags();
+        List<StoryTag> tagList = storyTagService.getStoryTagsByPage(offset, limit);
         return tagList;
     }
 }

@@ -72,6 +72,14 @@
         WHERE valid = 1
     </select>
 
+    <select id="getStoryTagListByPage" resultType="cn.edu.nju.software.entity.StoryTag">
+        select
+        <include refid="fields"></include>
+        from story_tag
+        WHERE valid = 1
+        limit #{0},#{1}
+    </select>
+
     <select id="getStoryTagById" resultType="cn.edu.nju.software.entity.StoryTag">
         select
         <include refid="fields"></include>

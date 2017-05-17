@@ -3,6 +3,7 @@ package cn.edu.nju.software.service.impl;
 import cn.edu.nju.software.dao.StoryTagDao;
 import cn.edu.nju.software.entity.StoryTag;
 import cn.edu.nju.software.service.StoryTagService;
+import cn.edu.nju.software.util.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +49,13 @@ public class StoryTagServiceImpl implements StoryTagService {
     @Override
     public List<StoryTag> getAllStoryTags() {
         return storyTagDao.getAllStoryTags();
+    }
+
+    @Override
+    public List<StoryTag> getStoryTagsByPage(int offset, int limit) {
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        return storyTagDao.getStoryTagListByPage(offset, limit);
     }
 
     @Override

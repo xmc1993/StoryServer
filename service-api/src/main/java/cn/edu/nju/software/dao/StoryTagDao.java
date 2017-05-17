@@ -30,6 +30,8 @@ public interface StoryTagDao {
      */
     List<StoryTag> getStoryTagListByParentId(int parentId);
 
+    List<StoryTag> getStoryTagListByPage(int offset, int limit);
+
     List<StoryTag> getAllStoryTags();
 
     List<StoryTag> getTagListByIdList(@Param("idList") List<Integer> idList);

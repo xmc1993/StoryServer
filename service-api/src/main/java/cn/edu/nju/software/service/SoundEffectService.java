@@ -13,7 +13,7 @@ public interface SoundEffectService {
 
     boolean deleteSoundEffect(int id);
 
-    boolean updateSoundEffect(SoundEffect soundEffect);
+    SoundEffect updateSoundEffect(SoundEffect soundEffect);
 
     List<SoundEffect> getAllSoundEffect();
 
