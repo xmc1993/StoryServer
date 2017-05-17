@@ -83,7 +83,6 @@ public class StoryTagController {
         }
         boolean success = storyTagService.deleteStoryTag(id);
         if (!success) {
-            response.setStatus(404);
             throw new RuntimeException("删除失败");
         }
     }

@@ -12,11 +12,9 @@ import com.wordnik.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,18 +38,15 @@ public class SoundEffectController {
     private static final String SOUND_EFFECT_ROOT = "/soundEffect/"; //头像的基础路径
 
     @ApiOperation(value = "增加音效", notes = "")
-    @RequestMapping(value = "/publishSoundEffect", method = {RequestMethod.POST})
+    @RequestMapping(value = "/soundEffects", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<Boolean> publishSoundEffect(
+    public SoundEffect publishSoundEffect(
             @ApiParam("音效文件") @RequestParam("uploadFile") MultipartFile uploadFile,
             @ApiParam("音效描述") @RequestParam("description") String description,
             HttpServletRequest request, HttpServletResponse response) {
 
-        ResponseData<Boolean> responseData = new ResponseData<>();
-
         if (uploadFile == null) {
-            responseData.jsonFill(2, "请选择文件上传", null);
-            return responseData;
+            throw new RuntimeException("请选择文件上传");
         }
         logger.info("开始上传音效文件!");
 
@@ -60,8 +55,7 @@ public class SoundEffectController {
         boolean success = UploadFileUtil.mvFile(uploadFile, realPath, fileName);
 
         if (!success) {
-            responseData.jsonFill(2, "上传音频文件失败", null);
-            return responseData;
+            throw new RuntimeException("请选择文件上传");
         }
         SoundEffect soundEffect = new SoundEffect();
         soundEffect.setDescription(description);
@@ -70,64 +64,84 @@ public class SoundEffectController {
         soundEffect.setCreateTime(new Date());
         soundEffect.setUpdateTime(new Date());
         boolean res = soundEffectService.saveSoundEffect(soundEffect);
-        responseData.jsonFill(res ? 1 : 2, null, res);
-        return responseData;
+        if (res) {
+            return soundEffect;
+        } else {
+            throw new RuntimeException("发布失败。");
+        }
     }
 
     @ApiOperation(value = "更新音效", notes = "")
-    @RequestMapping(value = "/manage/updateSoundEffect", method = {RequestMethod.GET})
+    @RequestMapping(value = "/soundEffects/{id}", method = {RequestMethod.PUT})
     @ResponseBody
-    public ResponseData<Boolean> updateSoundEffect(
-            @ApiParam("音效ID") @RequestParam("id") int id,
+    public SoundEffect updateSoundEffect(
+            @ApiParam("音效ID") @PathVariable int id,
             @ApiParam("音效文件") @RequestParam("uploadFile") MultipartFile uploadFile,
             @ApiParam("音效描述") @RequestParam("description") String description,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Boolean> responseData = new ResponseData<>();
-        if (uploadFile == null) {
-            responseData.jsonFill(2, "请选择文件上传", null);
-            return responseData;
-        }
+
         if (!checkValidService.isSoundEffectExist(id)) {
             responseData.jsonFill(2, "无效的音效id", null);
-            return responseData;
-        }
-        logger.info("开始上传音效文件!");
-
-        String realPath = UploadFileUtil.getBaseUrl() + SOUND_EFFECT_ROOT;
-        String fileName = RandCharsUtils.getRandomString(16) + "." + UploadFileUtil.getSuffix(uploadFile.getOriginalFilename());
-        boolean success = UploadFileUtil.mvFile(uploadFile, realPath, fileName);
-
-        if (!success) {
-            responseData.jsonFill(2, "上传音频文件失败", null);
-            return responseData;
+            throw new RuntimeException("无效的音效id");
         }
         SoundEffect soundEffect = soundEffectService.getSoundEffectById(id);
-        String oldUrl = soundEffect.getUrl();
-        //TODO 删除老的音效文件 TODO 原子性的问题
+
+        if (uploadFile != null) {
+
+            logger.info("开始上传音效文件!");
+            String realPath = UploadFileUtil.getBaseUrl() + SOUND_EFFECT_ROOT;
+            String fileName = RandCharsUtils.getRandomString(16) + "." + UploadFileUtil.getSuffix(uploadFile.getOriginalFilename());
+            boolean success = UploadFileUtil.mvFile(uploadFile, realPath, fileName);
+
+            if (!success) {
+                throw new RuntimeException("上传音频文件失败");
+            }
+            //TODO 删除老的音效文件 TODO 原子性的问题
+            String url = UploadFileUtil.SOURCE_BASE_URL + SOUND_EFFECT_ROOT + fileName;//拼接音频文件的地址
+            soundEffect.setUrl(url);
+        }
 
         soundEffect.setDescription(description);
-        String url = UploadFileUtil.SOURCE_BASE_URL + SOUND_EFFECT_ROOT + fileName;//拼接音频文件的地址
-        soundEffect.setUrl(url);
         soundEffect.setUpdateTime(new Date());
-        boolean res = soundEffectService.saveSoundEffect(soundEffect);
-        responseData.jsonFill(res ? 1 : 2, null, res);
-        return responseData;
+        SoundEffect result = soundEffectService.updateSoundEffect(soundEffect);
+        if (result != null) {
+            return result;
+        } else {
+            throw new RuntimeException("更新失败。");
+        }
     }
 
     @ApiOperation(value = "删除音效", notes = "")
-    @RequestMapping(value = "/soundEffects", method = {RequestMethod.POST})
-    @ResponseBody
-    public ResponseData<Boolean> deleteSoundEffect(
-            @ApiParam("音效ID") @RequestParam("id") int id,
+         @RequestMapping(value = "/soundEffects/{id}", method = {RequestMethod.DELETE})
+         @ResponseBody
+         @ResponseStatus(HttpStatus.NO_CONTENT)
+         public void deleteSoundEffect(
+            @ApiParam("音效ID") @PathVariable int id,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<Boolean> responseData = new ResponseData<>();
         if (!checkValidService.isSoundEffectExist(id)) {
-            responseData.jsonFill(2, "无效的id", null);
-            return responseData;
+            throw new RuntimeException("无效的id");
         }
         boolean success = soundEffectService.deleteSoundEffect(id);
-        responseData.jsonFill(success ? 1 : 2, null, success);
-        return responseData;
+
+        if (!success){
+            throw new RuntimeException("删除失败。");
+        }
+    }
+
+
+    @ApiOperation(value = "根据ID得到音效", notes = "")
+    @RequestMapping(value = "/soundEffects/{id}", method = {RequestMethod.GET})
+    @ResponseBody
+    public SoundEffect getSoundEffectById(
+            @ApiParam("音效ID") @PathVariable int id,
+            HttpServletRequest request, HttpServletResponse response) {
+        SoundEffect soundEffect = soundEffectService.getSoundEffectById(id);
+        if (null == soundEffect ){
+            throw new RuntimeException("获取音效失败。");
+        }else {
+            return soundEffect;
+        }
     }
 
     @ApiOperation(value = "得到所有音效", notes = "")
@@ -137,8 +151,7 @@ public class SoundEffectController {
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<SoundEffect>> responseData = new ResponseData<>();
-        List<SoundEffect> soundEffectList = soundEffectService.getAllSoundEffect();
+        List<SoundEffect> soundEffectList = soundEffectService.getSoundEffectListByPage(offset, limit);
         return soundEffectList;
     }
 

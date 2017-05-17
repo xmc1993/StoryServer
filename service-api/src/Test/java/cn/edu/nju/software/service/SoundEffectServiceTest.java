@@ -54,7 +54,7 @@ public class SoundEffectServiceTest {
     @Test
     public void test3Update() {
         soundEffect.setDescription("小狗叫");
-        assert soundEffectService.updateSoundEffect(soundEffect);
+        assert soundEffectService.updateSoundEffect(soundEffect) != null;
         SoundEffect temp = null;
         assert (temp = soundEffectService.getSoundEffectById(99999)) != null;
         assert temp.getDescription().equals("小狗叫");

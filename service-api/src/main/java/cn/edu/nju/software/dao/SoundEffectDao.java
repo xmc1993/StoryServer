@@ -25,4 +25,6 @@ public interface SoundEffectDao {
 
     boolean deleteHard(int id);
 
+    List<SoundEffect> getSoundEffectListByPage(int offset, int limit);
+
 }

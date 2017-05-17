@@ -17,6 +17,8 @@ public interface SoundEffectService {
 
     List<SoundEffect> getAllSoundEffect();
 
+    List<SoundEffect> getSoundEffectListByPage(int offset, int limit);
+
     SoundEffect getSoundEffectById(int id);
 
 

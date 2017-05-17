@@ -3,6 +3,7 @@ package cn.edu.nju.software.service.impl;
 import cn.edu.nju.software.dao.SoundEffectDao;
 import cn.edu.nju.software.entity.SoundEffect;
 import cn.edu.nju.software.service.SoundEffectService;
+import cn.edu.nju.software.util.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,13 @@ public class SoundEffectServiceTest implements SoundEffectService {
     @Override
     public List<SoundEffect> getAllSoundEffect() {
         return soundEffectDao.getAllSoundEffects();
+    }
+
+    @Override
+    public List<SoundEffect> getSoundEffectListByPage(int offset, int limit) {
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        return soundEffectDao.getSoundEffectListByPage(offset, limit);
     }
 
     @Override

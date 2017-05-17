@@ -21,7 +21,7 @@
         <id column="valid" property="valid"/>
     </resultMap>
 
-    <insert id="saveSoundEffect" parameterType="cn.edu.nju.software.entity.SoundEffect">
+    <insert id="saveSoundEffect" parameterType="cn.edu.nju.software.entity.SoundEffect" keyProperty="id" useGeneratedKeys="true">
         insert into sound_effect(
         <include refid="fields"></include>
         )
@@ -71,6 +71,14 @@
         <include refid="fields"></include>
         from sound_effect
         where valid = 1
+    </select>
+
+    <select id="getSoundEffectListByPage" resultType="cn.edu.nju.software.entity.SoundEffect">
+        select
+        <include refid="fields"></include>
+        from sound_effect
+        where valid = 1
+        limit #{0},#{1}
     </select>
 
     <delete id="deleteHard">
