@@ -70,7 +70,7 @@ public class AdminController {
     @ResponseBody
     public void logout(
             HttpServletRequest request, HttpServletResponse response) {
-        String accessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
+        String accessToken = request.getHeader("Authorization");
         if (!StringUtil.isEmpty(accessToken)){
             //注销管理员的session信息
             Jedis jedis = JedisUtil.getJedis();
