@@ -31,7 +31,7 @@ public class CheckValidServiceImpl implements CheckValidService {
 
     @Override
     public boolean isStoryExist(int storyId) {
-        return storyDao.getValidStoryById(storyId) != null;
+        return storyDao.getStoryByIdHard(storyId) != null;
     }
 
     @Override

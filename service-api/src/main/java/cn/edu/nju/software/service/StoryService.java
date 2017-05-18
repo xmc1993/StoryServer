@@ -1,7 +1,6 @@
 package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.entity.Story;
-import cn.edu.nju.software.entity.StoryTag;
 
 import java.util.List;
 
@@ -15,7 +14,11 @@ public interface StoryService {
 
     Story getStoryById(int id);
 
+    Story getStoryByIdHard(int id);
+
     List<Story> getAllStories();
 
-    boolean updateStory(Story story);
+    Story updateStory(Story story);
+
+    List<Story> getStoryListByPage(int offset, int limit);
 }

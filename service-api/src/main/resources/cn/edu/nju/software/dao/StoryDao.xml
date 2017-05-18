@@ -33,7 +33,7 @@
         <id column="valid" property="valid"/>
     </resultMap>
 
-    <insert id="saveStory" parameterType="cn.edu.nju.software.entity.Story">
+    <insert id="saveStory" parameterType="cn.edu.nju.software.entity.Story" keyProperty="id" useGeneratedKeys="true">
         insert into story(
         <include refid="fields"></include>
         )
@@ -81,14 +81,14 @@
         select
         <include refid="fields"></include>
         from story
-        where id = #{0}
+        where id = #{0} and valid = 1
     </select>
 
-    <select id="getValidStoryById" resultType="cn.edu.nju.software.entity.Story">
+    <select id="getStoryByIdHard" resultType="cn.edu.nju.software.entity.Story">
         select
         <include refid="fields"></include>
         from story
-        where id = #{0} and valid = 1
+        where id = #{0}
     </select>
 
     <select id="getAllStories" resultType="cn.edu.nju.software.entity.Story">
@@ -96,6 +96,14 @@
         <include refid="fields"></include>
         from story
         where valid = 1
+    </select>
+
+    <select id="getStoryListByPage" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="fields"></include>
+        from story
+        where valid = 1
+        limit #{0},#{1}
     </select>
 
     <select id="getTagListByIdList" resultType="cn.edu.nju.software.entity.Story">

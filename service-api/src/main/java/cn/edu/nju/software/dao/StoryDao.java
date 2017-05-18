@@ -23,12 +23,14 @@ public interface StoryDao {
 
     Story getStoryById(int id);
 
-    Story getValidStoryById(int id);
+    Story getStoryByIdHard(int id);
 
     List<Story> getAllStories();
 
     boolean updateStory(Story story);
 
     boolean deleteHard(int id);
+
+    List<Story> getStoryListByPage(int offset, int limit);
 
 }
