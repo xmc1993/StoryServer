@@ -1,6 +1,8 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.Story;
+import cn.edu.nju.software.entity.StoryTag;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -32,5 +34,7 @@ public interface StoryDao {
     boolean deleteHard(int id);
 
     List<Story> getStoryListByPage(int offset, int limit);
+
+    List<StoryTag> getStoryTagListByIdList(@Param("idList")List<Integer> idList);
 
 }

@@ -25,6 +25,8 @@ public interface StoryTagService {
      */
     List<StoryTag> getStoryTagListByParentId(int parentId);
 
+    List<StoryTag> getStoryTagListByIdList(List<Integer> idList);
+
     List<StoryTag> getAllStoryTags();
 
     List<StoryTag> getStoryTagsByPage(int offset, int limit);

@@ -93,4 +93,14 @@
         from story_tag
         WHERE id = #{0}
     </select>
+
+    <select id="getStoryTagListByIdList" resultType="cn.edu.nju.software.entity.StoryTag">
+        select
+        <include refid="fields"></include>
+        from story
+        where valid = 1 and id in
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

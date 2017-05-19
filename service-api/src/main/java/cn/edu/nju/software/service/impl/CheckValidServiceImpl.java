@@ -31,12 +31,12 @@ public class CheckValidServiceImpl implements CheckValidService {
 
     @Override
     public boolean isStoryExist(int storyId) {
-        return storyDao.getStoryByIdHard(storyId) != null;
+        return storyDao.getStoryById(storyId) != null;
     }
 
     @Override
     public boolean isStoryExistHard(int storyId) {
-        return storyDao.getStoryById(storyId) != null;
+        return storyDao.getStoryByIdHard(storyId) != null;
     }
 
     @Override

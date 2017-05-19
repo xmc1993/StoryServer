@@ -118,6 +118,7 @@ public class ManageStoryController {
         story.setGuide(guide);
         story.setPrice(price);
         story.setUpdateTime(new Date());
+        //TODO 删除旧的封面文件
         Story result = storyService.updateStory(story);
         if (result == null){
             throw new RuntimeException("更新失败");
@@ -154,7 +155,7 @@ public class ManageStoryController {
         }
     }
 
-    @ApiOperation(value = "标签列表", notes = "")
+    @ApiOperation(value = "故事列表", notes = "")
     @RequestMapping(value = "/stories", method = {RequestMethod.GET})
     @ResponseBody
     public List<Story> getAllStories(

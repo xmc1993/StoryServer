@@ -47,6 +47,12 @@ public class StoryTagServiceImpl implements StoryTagService {
     }
 
     @Override
+    public List<StoryTag> getStoryTagListByIdList(List<Integer> idList) {
+        idList.add(-1);
+        storyTagDao
+    }
+
+    @Override
     public List<StoryTag> getAllStoryTags() {
         return storyTagDao.getAllStoryTags();
     }
