@@ -52,6 +52,7 @@ public class StoryServiceImpl implements StoryService {
             return null;
         }
         return storyDao.getStoryById(story.getId());
+
     }
 
     @Override

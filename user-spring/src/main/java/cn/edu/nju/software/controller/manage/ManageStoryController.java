@@ -2,8 +2,10 @@ package cn.edu.nju.software.controller.manage;
 
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.Story;
-import cn.edu.nju.software.entity.StoryTag;
+import cn.edu.nju.software.service.CheckValidService;
 import cn.edu.nju.software.service.StoryService;
+import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
+import cn.edu.nju.software.util.UploadFileUtil;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -13,9 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,21 +28,58 @@ import java.util.List;
  */
 @Api(value = "Admin", description = "管理接口")
 @Controller
+@RequestMapping("/manage")
 public class ManageStoryController {
     private static final Logger logger = LoggerFactory.getLogger(ManageStoryController.class);
+    private static final String COVER_ROOT = "/cover/"; //头像的基础路径
     @Autowired
     private StoryService storyService;
-
-
+    @Autowired
+    private CheckValidService checkValidService;
 
     @ApiOperation(value = "新增故事", notes = "")
     @RequestMapping(value = "/stories", method = {RequestMethod.POST})
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public Story publicStory() {
+    public Story publicStory(
+            @ApiParam("故事标题") @RequestParam String title,
+            @ApiParam("作者") @RequestParam String author,
+            @ApiParam("内容") @RequestParam String content,
+            @ApiParam("出版社") @RequestParam String press,
+            @ApiParam("阅读指导") @RequestParam String guide,
+            @ApiParam("价格") @RequestParam String price,
+            @ApiParam("封面") @RequestParam("coverFile") MultipartFile coverFile,
+            @ApiParam("预览封面") @RequestParam("preCoverFile") MultipartFile preCoverFile,
+            @ApiParam("录制背景") @RequestParam("backgroundFile") MultipartFile backgroundFile,
+            HttpServletRequest request, HttpServletResponse response) {
+        if (coverFile == null || preCoverFile == null || backgroundFile == null) {
+            throw new RuntimeException("请选择封面or背景文件。");
+        }
+        MultipartFile[] files = {coverFile, preCoverFile, backgroundFile};
+        List<String> urlList = new ArrayList<>();
+        for (int i = 0; i < files.length; i++) {
+            String url = uploadFile(files[i]);
+            urlList.add(url);
+        }
+        Story story = new Story();
+        story.setTitle(title);
+        story.setAuthor(author);
+        story.setContent(content);
+        story.setPress(press);
+        story.setGuide(guide);
+        story.setPrice(price);
+        story.setValid(1);
+        story.setCreateTime(new Date());
+        story.setUpdateTime(new Date());
+        story.setCoverUrl(urlList.get(0));
+        story.setPreCoverUrl(urlList.get(1));
+        story.setBackgroundUrl(urlList.get(2));
 
-        //新建故事
-        return null;
+        boolean res = storyService.saveStory(story);
+        if (!res) {
+            throw new RuntimeException("发布故事失败");
+        }
+        return story;
     }
 
 
@@ -46,11 +88,41 @@ public class ManageStoryController {
     @ResponseBody
     public Story updateStoryTag(
             @ApiParam("故事ID") @PathVariable int id,
-            @ApiParam("标签") @RequestBody StoryTag storyTag,
+            @ApiParam("故事标题") @RequestParam String title,
+            @ApiParam("作者") @RequestParam String author,
+            @ApiParam("内容") @RequestParam String content,
+            @ApiParam("出版社") @RequestParam String press,
+            @ApiParam("阅读指导") @RequestParam String guide,
+            @ApiParam("价格") @RequestParam String price,
+            @ApiParam("封面") @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
+            @ApiParam("预览封面") @RequestParam(value = "preCoverFile", required = false) MultipartFile preCoverFile,
+            @ApiParam("录制背景") @RequestParam(value = "backgroundFile", required = false) MultipartFile backgroundFile,
             HttpServletRequest request, HttpServletResponse response) {
-        //TODO 更新
-        return null;
-
+        Story story = storyService.getStoryById(id);
+        if (story == null) {
+            throw new RuntimeException("无效的故事id");
+        }
+        if (coverFile != null){
+            story.setCoverUrl(uploadFile(coverFile));
+        }
+        if (preCoverFile != null){
+            story.setCoverUrl(uploadFile(preCoverFile));
+        }
+        if (backgroundFile != null){
+            story.setCoverUrl(uploadFile(backgroundFile));
+        }
+        story.setTitle(title);
+        story.setContent(content);
+        story.setAuthor(author);
+        story.setPress(press);
+        story.setGuide(guide);
+        story.setPrice(price);
+        story.setUpdateTime(new Date());
+        Story result = storyService.updateStory(story);
+        if (result == null){
+            throw new RuntimeException("更新失败");
+        }
+        return result;
     }
 
 
@@ -72,7 +144,7 @@ public class ManageStoryController {
     @RequestMapping(value = "/stories/{id}", method = {RequestMethod.GET})
     @ResponseBody
     public Story getStoryId(
-            @ApiParam("标签ID") @PathVariable int id,
+            @ApiParam("故事ID") @PathVariable int id,
             HttpServletRequest request, HttpServletResponse response) {
         Story story = storyService.getStoryById(id);
         if (story == null) {
@@ -89,10 +161,24 @@ public class ManageStoryController {
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
+        List<Story> result = storyService.getStoryListByPage(offset, limit);
+        return result;
+    }
 
-        //TODO 分页存取
-//        List<StoryTag> tagList = storyTagService.getStoryTagsByPage(offset, limit);
-        return null;
+    /**
+     * 上传封面文件
+     * @param file
+     * @return
+     */
+    private String uploadFile(MultipartFile file) {
+        String realPath = UploadFileUtil.getBaseUrl() + COVER_ROOT;
+        String fileName = RandCharsUtils.getRandomString(16) + "." + UploadFileUtil.getSuffix(file.getOriginalFilename());
+        boolean success = UploadFileUtil.mvFile(file, realPath, fileName);
+        if (!success) {
+            throw new RuntimeException("文件上传失败");
+        }
+        String url = UploadFileUtil.SOURCE_BASE_URL + COVER_ROOT + fileName;
+        return url;
     }
 
 }

@@ -12,6 +12,7 @@
         coverUrl,
         preCoverUrl,
         backgroundUrl,
+        price,
         createTime,
         updateTime,
         valid
@@ -28,6 +29,7 @@
         <id column="coverUrl" property="coverUrl"/>
         <id column="preCoverUrl" property="preCoverUrl"/>
         <id column="backgroundUrl" property="backgroundUrl"/>
+        <id column="price" property="price"/>
         <id column="createTime" property="createTime"/>
         <id column="updateTime" property="updateTime"/>
         <id column="valid" property="valid"/>
@@ -48,6 +50,7 @@
         #{coverUrl},
         #{preCoverUrl},
         #{backgroundUrl},
+        #{price},
         #{createTime},
         #{updateTime},
         #{valid}
@@ -64,6 +67,7 @@
 		coverUrl=#{coverUrl},
 		preCoverUrl=#{preCoverUrl},
 		backgroundUrl=#{backgroundUrl},
+		price=#{price},
 		updateTime=#{updateTime}
 		where
 		id=#{id}

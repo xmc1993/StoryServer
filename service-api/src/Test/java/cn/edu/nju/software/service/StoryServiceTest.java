@@ -55,7 +55,7 @@ public class StoryServiceTest {
     @Test
     public void test3Update() {
         story.setTitle("新标题");
-        assert storyService.updateStory(story);
+        assert storyService.updateStory(story) != null;
         assert storyService.getStoryById(99999).getTitle().equals("新标题");
     }
 

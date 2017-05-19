@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" style="">
 <head>
     <meta charset="UTF-8">
     <title>测试上传</title>
@@ -8,14 +8,21 @@
 <h2>上传多个文件 实例</h2>
 
 
-<form action="/manage/soundEffects" method="post"
+<form action="/manage/stories" method="post"
       enctype="multipart/form-data">
     <p>
-        选择文件:<input type="file" name="uploadFile">
+        封面:<input style="display: block" type="file" name="coverFile">
+        预览封面:<input style="display: block" type="file" name="preCoverFile">
+        录制背景:<input style="display: block" type="file" name="backgroundFile">
     </p>
 
     <p>
-        手机号:<input type="text" name="description">
+        标题:<input style="display: block" type="text" name="title">
+        作者:<input style="display: block" type="text" name="author">
+        内容:<input style="display: block" type="text" name="content">
+        出版社:<input style="display: block" type="text" name="press">
+        阅读指导:<input style="display: block" type="text" name="guide">
+        价格:<input style="display: block" type="text" name="price">
     </p>
 
     <input type="submit" value="提交">
