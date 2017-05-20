@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en" style="">
+<head>
+    <meta charset="UTF-8">
+    <title>发布作品测试</title>
+</head>
+<body>
+<h2>发布作品测试</h2>
+
+
+<form action="/user/publishWorks" method="post"
+      enctype="multipart/form-data">
+    <p>
+        音频文件:<input style="display: block" type="file" name="uploadFile">
+    </p>
+
+    <p>
+        故事ID:<input style="display: block" type="text" name="storyId">
+    </p>
+
+    <input type="submit" value="提交">
+</form>
+</body>
+</html>

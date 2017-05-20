@@ -172,7 +172,7 @@ public class UserWorksController extends BaseController {
     }
 
     @ApiOperation(value = "发布作品", notes = "")
-    @RequestMapping(value = "/deleteWorks", method = {RequestMethod.POST})
+    @RequestMapping(value = "/publishWorks", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> publishWorks(
             @ApiParam("故事ID") @RequestParam("storyId") int storyId,
