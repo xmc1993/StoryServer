@@ -18,7 +18,7 @@
         <id column="updateTime" property="updateTime"/>
     </resultMap>
 
-    <insert id="saveTagRelation" parameterType="cn.edu.nju.software.entity.TagRelation">
+    <insert id="saveTagRelation" parameterType="cn.edu.nju.software.entity.TagRelation" keyProperty="id" useGeneratedKeys="true">
         insert into tag_relation(
         <include refid="fields"></include>
         )

@@ -69,7 +69,7 @@ public class UserWorksController extends BaseController {
     }
 
     @ApiOperation(value = "获得一个用户所有喜欢的作品列表", notes = "")
-    @RequestMapping(value = "/getWorksListByUserId", method = {RequestMethod.GET})
+    @RequestMapping(value = "/getAgreeWorksListByUserId", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<Works>> getWorksListByUserId(
             @ApiParam("用户ID") @RequestParam("userId") int userId,

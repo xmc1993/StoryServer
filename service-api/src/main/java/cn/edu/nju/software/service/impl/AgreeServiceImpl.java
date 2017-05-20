@@ -5,6 +5,7 @@ import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.dao.user.AppUserDao;
 import cn.edu.nju.software.entity.Agree;
 import cn.edu.nju.software.service.AgreeService;
+import cn.edu.nju.software.util.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,12 +47,16 @@ public class AgreeServiceImpl implements AgreeService {
 
     @Override
     public List<Integer> getAgreeUserIdListByWorksId(int worksId, int offset, int limit) {
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         List<Integer> userIdList = agreeDao.getAgreeUserIdListByWorksId(worksId);
         return userIdList;
     }
 
     @Override
     public List<Integer> getAgreeWorksIdListByUserId(int userId, int offset, int limit) {
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         return agreeDao.getAgreeWorksListByUserId(userId, offset, limit);
     }
 }

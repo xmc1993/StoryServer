@@ -8,9 +8,9 @@ import java.util.Date;
 public class Works {
     private Integer id;
     private Integer storyId;
-    private Integer storyTitle;//字段冗余
+    private String storyTitle;//字段冗余
     private Integer userId;
-    private Integer useName;//字段冗余
+    private String username;//字段冗余
     private String url;//音频的url
     private Integer likeCount = 0;//点赞数
     private Date createTime;
@@ -81,19 +81,19 @@ public class Works {
         this.valid = valid;
     }
 
-    public Integer getStoryTitle() {
+    public String getStoryTitle() {
         return storyTitle;
     }
 
-    public void setStoryTitle(Integer storyTitle) {
+    public void setStoryTitle(String storyTitle) {
         this.storyTitle = storyTitle;
     }
 
-    public Integer getUseName() {
-        return useName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUseName(Integer useName) {
-        this.useName = useName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

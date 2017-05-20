@@ -7,7 +7,7 @@
         storyId,
         storyTitle,
         userId,
-        useName,
+        username,
         url,
         likeCount,
         createTime,
@@ -21,7 +21,7 @@
         <id column="storyId" property="storyId"/>
         <id column="storyTitle" property="storyTitle"/>
         <id column="userId" property="userId"/>
-        <id column="useName" property="useName"/>
+        <id column="username" property="username"/>
         <id column="url" property="url"/>
         <id column="likeCount" property="likeCount"/>
         <id column="createTime" property="createTime"/>
@@ -29,7 +29,7 @@
         <id column="valid" property="valid"/>
     </resultMap>
 
-    <insert id="saveTagRelation" parameterType="cn.edu.nju.software.entity.TagRelation">
+    <insert id="saveWorks" parameterType="cn.edu.nju.software.entity.Works" keyProperty="id" useGeneratedKeys="true">
         insert into works(
         <include refid="fields"></include>
         )
@@ -39,7 +39,7 @@
         #{storyId},
         #{storyTitle},
         #{userId},
-        #{useName},
+        #{username},
         #{url},
         #{likeCount},
         #{createTime},
@@ -106,7 +106,7 @@
     <update id="updateUseName">
         update works
         set
-        useName=#{useName},
+        username=#{username},
         updateTime=#{updateTime}
         where
         userId = #{userId} and valid = 1

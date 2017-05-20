@@ -61,22 +61,13 @@ public class UserUserController extends BaseController {
         return responseData;
     }
 
-    /**
-     * @api {get} /user/loginByWeChat 用户登录
-     * @apiName LoginByWeChat
-     * @apiGroup User|User
-     * @apiVersion 0.0.1
-     * @apiParam {String} appId AppId
-     * @apiParam {String} code 授权码
-     * @apiSuccess (成功) {String} obj AccessToken
-     * @apiError (200错误) OAuth 微信服务失效
-     */
+
     @ApiOperation(value = "用户登录", notes = "用户登录")
     @RequestMapping(value = "/user/loginByWeChat", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public ResponseData<LoginResponseVo> loginByWeChat(@ApiParam("appId") @RequestParam("appId") String appId,
-                                              @ApiParam("code 授权码") @RequestParam("code") String code,
-                                              HttpServletRequest request, HttpServletResponse response) throws Exception {
+                                                       @ApiParam("code 授权码") @RequestParam("code") String code,
+                                                       HttpServletRequest request, HttpServletResponse response) throws Exception {
         ResponseData responseData = new ResponseData();
         Business business = businessService.getBusinessByAppId(appId);
         WeChatOAuthVo weChatOAuthVo = weChatLoginService.getAccessToken(business.getWeChatAppId(), business.getWeChatSecret(), GrantType.AUTHORIZATION_CODE, code);
@@ -139,9 +130,36 @@ public class UserUserController extends BaseController {
         return responseData;
     }
 
+
+    @ApiOperation(value = "测试用直接用ID登录", notes = "用户登录")
+    @RequestMapping(value = "/user/mockLogin", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<LoginResponseVo> mockLogin(
+            @ApiParam("用户ID") @RequestParam int id
+    ) {
+        ResponseData<LoginResponseVo> responseData = new ResponseData<>();
+        User user = userService.getUserByMobileOrId(String.valueOf(id));
+        if (user == null) {
+            responseData.jsonFill(2, "错误", null);
+            return responseData;
+        }
+
+        Util.setNewAccessToken(user);
+        //TODO 更新数据库
+        //登录信息写入缓存
+        JedisUtil.getJedis().set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
+        JedisUtil.getJedis().expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);//缓存用户信息30天
+
+        LoginResponseVo loginResponseVo = new LoginResponseVo();
+        loginResponseVo.setAccessToken(user.getAccessToken());
+        loginResponseVo.setId(user.getId());
+        responseData.jsonFill(1, null, loginResponseVo);
+        return responseData;
+    }
+
     @RequestMapping(value = "/user/test", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public User test(){
+    public User test() {
         User user = new User();
         user.setNickname("xmc");
         user.setCity("南京");

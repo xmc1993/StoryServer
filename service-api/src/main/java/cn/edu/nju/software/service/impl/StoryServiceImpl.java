@@ -70,6 +70,8 @@ public class StoryServiceImpl implements StoryService {
 
     @Override
     public List<Story> getStoryListByTitle(String title, int offset, int limit) {
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         //TODO 交给sql做
         title = "%" + title + "%";
         return storyDao.getStoryListByTitle(title, offset, limit);

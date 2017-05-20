@@ -55,7 +55,7 @@
         select
         worksId
         from agree
-        where storyId = #{0}
+        where userId = #{0}
         limit #{1},#{2}
     </select>
 
