@@ -79,7 +79,7 @@
     <mvc:interceptors>
         <!-- token拦截器 -->
         <mvc:interceptor>
-            <mvc:mapping path="/user/getUserInfo"/>
+            <mvc:mapping path="/user/*"/>
             <!-- 不需要拦截的uri -->
             <!--
             <mvc:exclude-mapping path="/user/getLandingPage"/>

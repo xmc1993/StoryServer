@@ -46,7 +46,7 @@
         followerId = #{0} and followeeId = #{1}
     </delete>
 
-    <select id="getFollowerListByUserId" resultType="java.lang.Integer">
+    <select id="getFollowerIdListByUserId" resultType="java.lang.Integer">
         select
         followerId
         from follow_relation
@@ -54,7 +54,7 @@
         limit #{1},#{2}
     </select>
 
-    <select id="getFolloweeListByUserId" resultType="java.lang.Integer">
+    <select id="getFolloweeIdListByUserId" resultType="java.lang.Integer">
         select
         followeeId
         from follow_relation

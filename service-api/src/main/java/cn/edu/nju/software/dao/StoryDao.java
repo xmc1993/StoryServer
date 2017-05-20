@@ -1,7 +1,6 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.Story;
-import cn.edu.nju.software.entity.StoryTag;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -37,9 +36,7 @@ public interface StoryDao {
 
     List<Story> getStoryListByPage(int offset, int limit);
 
-    List<Story> getStoryListByIdList(List<Integer> idList);
-
-    List<StoryTag> getStoryTagListByIdList(@Param("idList")List<Integer> idList);
-
+    List<Story> getStoryListByIdList(@Param("idList")List<Integer> idList);
+    
 
 }
