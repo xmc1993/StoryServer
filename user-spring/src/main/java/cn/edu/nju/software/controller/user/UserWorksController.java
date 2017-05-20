@@ -219,13 +219,13 @@ public class UserWorksController extends BaseController {
      * @return
      */
     private String uploadFile(MultipartFile file, int userId) {
-        String realPath = UploadFileUtil.getBaseUrl() + WORKS_ROOT + "/" + userId + "/";
+        String realPath = UploadFileUtil.getBaseUrl() + WORKS_ROOT + userId + "/";
         String fileName = RandCharsUtils.getRandomString(16) + "." + UploadFileUtil.getSuffix(file.getOriginalFilename());
         boolean success = UploadFileUtil.mvFile(file, realPath, fileName);
         if (!success) {
             throw new RuntimeException("文件上传失败");
         }
-        String url = UploadFileUtil.SOURCE_BASE_URL + WORKS_ROOT + "/" + userId + "/" + fileName;
+        String url = UploadFileUtil.SOURCE_BASE_URL + WORKS_ROOT + userId + "/" + fileName;
         return url;
     }
 
