@@ -36,7 +36,7 @@ public class UserFollowController {
     @Autowired
     private AppUserService appUserService;
 
-    @ApiOperation(value = "关注某人", notes = "")
+    @ApiOperation(value = "关注某人", notes = "需登录")
     @RequestMapping(value = "/follow", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> follow(
@@ -65,7 +65,7 @@ public class UserFollowController {
         return responseData;
     }
 
-    @ApiOperation(value = "取消关注某人", notes = "")
+    @ApiOperation(value = "取消关注某人", notes = "需登录")
     @RequestMapping(value = "/unfollow", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> unfollow(

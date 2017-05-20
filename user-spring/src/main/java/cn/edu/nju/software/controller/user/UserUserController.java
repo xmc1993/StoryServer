@@ -65,7 +65,6 @@ public class UserUserController extends BaseController {
     @RequestMapping(value = "/getUserSelfInfo", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<User> getUserSelfInfo(
-            @ApiParam("用户ID") @RequestParam("userId") int userId,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
         ResponseData responseData = new ResponseData();
 

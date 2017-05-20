@@ -88,7 +88,7 @@ public class UserWorksController extends BaseController {
         return responseData;
     }
 
-    @ApiOperation(value = "喜欢一个作品", notes = "")
+    @ApiOperation(value = "喜欢一个作品", notes = "需登录")
     @RequestMapping(value = "/likeWorks", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> likeWorks(
@@ -116,7 +116,7 @@ public class UserWorksController extends BaseController {
         return responseData;
     }
 
-    @ApiOperation(value = "取消喜欢一个作品", notes = "")
+    @ApiOperation(value = "取消喜欢一个作品", notes = "需登录")
     @RequestMapping(value = "/unlikeWorks", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> unlikeWorks(
@@ -141,7 +141,7 @@ public class UserWorksController extends BaseController {
     }
 
 
-    @ApiOperation(value = "删除自己的某个作品", notes = "")
+    @ApiOperation(value = "删除自己的某个作品", notes = "需登录")
     @RequestMapping(value = "/deleteWorks", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> deleteWorks(
@@ -171,7 +171,7 @@ public class UserWorksController extends BaseController {
         return responseData;
     }
 
-    @ApiOperation(value = "发布作品", notes = "")
+    @ApiOperation(value = "发布作品", notes = "需登录")
     @RequestMapping(value = "/publishWorks", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> publishWorks(
@@ -214,7 +214,7 @@ public class UserWorksController extends BaseController {
         return responseData;
     }
 
-    @ApiOperation(value = "重新发布作品", notes = "")
+    @ApiOperation(value = "重新发布作品", notes = "需登录")
     @RequestMapping(value = "/rePublishWorks", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> rePublishWorks(

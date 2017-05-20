@@ -79,7 +79,14 @@
     <mvc:interceptors>
         <!-- token拦截器 -->
         <mvc:interceptor>
-            <mvc:mapping path="/user/none"/>
+            <mvc:mapping path="/user/getUserSelfInfo"/>
+            <mvc:mapping path="/user/rePublishWorks"/>
+            <mvc:mapping path="/user/publishWorks"/>
+            <mvc:mapping path="/user/deleteWorks"/>
+            <mvc:mapping path="/user/unlikeWorks"/>
+            <mvc:mapping path="/user/likeWorks"/>
+            <mvc:mapping path="/user/follow"/>
+            <mvc:mapping path="/user/unfollow"/>
             <!-- 不需要拦截的uri -->
             <!--
             <mvc:exclude-mapping path="/user/getLandingPage"/>
