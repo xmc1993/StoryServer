@@ -62,7 +62,7 @@ public class UserUserController extends BaseController {
     }
 
     @ApiOperation(value = "得到当前用户信息", notes = "获取用户信息")
-    @RequestMapping(value = "/getUserBaseInfo", method = {RequestMethod.GET})
+    @RequestMapping(value = "/getUserSelfInfo", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<User> getUserSelfInfo(
             @ApiParam("用户ID") @RequestParam("userId") int userId,
