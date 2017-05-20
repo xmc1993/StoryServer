@@ -15,6 +15,8 @@ public interface WorksService {
 
     boolean deleteWorksById(int id);
 
+    Works getWorksById(int id);
+
     boolean deleteWorks(int storyId, int userId);
 
     List<Works> getWorksListByUserId(int userId, int offset, int limit);

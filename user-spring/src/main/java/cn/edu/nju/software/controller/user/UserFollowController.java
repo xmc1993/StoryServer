@@ -37,7 +37,7 @@ public class UserFollowController {
     private AppUserService appUserService;
 
     @ApiOperation(value = "关注某人", notes = "")
-    @RequestMapping(value = "/follow", method = {RequestMethod.GET})
+    @RequestMapping(value = "/follow", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> follow(
             @ApiParam("被关注者ID") @RequestParam("followeeId") int followeeId,
@@ -66,7 +66,7 @@ public class UserFollowController {
     }
 
     @ApiOperation(value = "取消关注某人", notes = "")
-    @RequestMapping(value = "/unfollow", method = {RequestMethod.GET})
+    @RequestMapping(value = "/unfollow", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> unfollow(
             @ApiParam("需要取消关注者ID") @RequestParam("followeeId") int followeeId,

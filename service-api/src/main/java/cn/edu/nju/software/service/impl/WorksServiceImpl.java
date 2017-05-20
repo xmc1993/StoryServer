@@ -36,6 +36,11 @@ public class WorksServiceImpl implements WorksService {
     }
 
     @Override
+    public Works getWorksById(int id) {
+        return worksDao.getWorksById(id);
+    }
+
+    @Override
     public boolean deleteWorks(int storyId, int userId) {
         return false;
     }

@@ -56,7 +56,6 @@ public final class UploadFileUtil {
         File desFile = new File(new File(desPath), fileName);// 根据parent抽象路径名和child路径名字符串创建一个新File实例。
         if (!desFile.getParentFile().exists()) {// 判断路径"/image/#{businessId}"是否存在
             desFile.getParentFile().mkdirs();
-            // 如果不存在，则创建此路径将文件保存到硬盘上，因为action运行结束后，临时文件就会自动被删除
         }
         try {
             if (!desFile.exists()) {
@@ -74,8 +73,4 @@ public final class UploadFileUtil {
         return true;
     }
 
-
-    public static void main(String[] args) {
-        System.out.println(getSuffix("32131"));
-    }
 }

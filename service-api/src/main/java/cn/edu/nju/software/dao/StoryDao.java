@@ -37,6 +37,6 @@ public interface StoryDao {
     List<Story> getStoryListByPage(int offset, int limit);
 
     List<Story> getStoryListByIdList(@Param("idList")List<Integer> idList);
-    
+
 
 }
