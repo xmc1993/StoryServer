@@ -185,6 +185,11 @@ public class UserWorksController extends BaseController {
             response.setStatus(401);
             return responseData;
         }
+        if (uploadFile == null){
+            responseData.jsonFill(2, "请选择音频文件上传。", null);
+            response.setStatus(404);
+            return responseData;
+        }
         Story story = storyService.getStoryById(storyId);
         if (story == null) {
             responseData.jsonFill(2, "无效的故事ID", null);
@@ -205,12 +210,54 @@ public class UserWorksController extends BaseController {
         works.setUserId(user.getId());
         works.setUsername(user.getNickname());
         works.setUrl(url);
-        //TODO url
         boolean res = worksService.saveWorks(works);
         responseData.jsonFill(res ? 1 : 2, null, res);
         return responseData;
     }
 
+    @ApiOperation(value = "重新发布作品", notes = "")
+    @RequestMapping(value = "/rePublishWorks", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> rePublishWorks(
+            @ApiParam("作品ID") @RequestParam("worksId") int worksId,
+            @ApiParam("音频文件") @RequestParam("uploadFile") MultipartFile uploadFile,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Boolean> responseData = new ResponseData();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
+        if (uploadFile == null){
+            responseData.jsonFill(2, "请选择音频文件上传。", null);
+            response.setStatus(404);
+            return responseData;
+        }
+
+        Works works = worksService.getWorksById(worksId);
+        if (works == null){
+            responseData.jsonFill(2, "无效的作品ID", null);
+            response.setStatus(404);
+            return responseData;
+        }
+        if (works.getUserId() != user.getId()) {
+            responseData.jsonFill(2, "非法请求。", null);
+            response.setStatus(401);
+            return responseData;
+        }
+
+        String url = uploadFile(uploadFile, user.getId());
+        if (url == null) {
+            responseData.jsonFill(2, "文件上传失败", null);
+            return responseData;
+        }
+        works.setUpdateTime(new Date());
+        works.setUrl(url);
+        boolean res = worksService.updateWorks(works);
+        responseData.jsonFill(res ? 1 : 2, null, res);
+        return responseData;
+    }
 
     /**
      * 上传作品的音频文件
