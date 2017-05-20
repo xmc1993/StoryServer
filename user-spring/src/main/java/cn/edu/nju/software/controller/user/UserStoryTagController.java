@@ -22,7 +22,7 @@ import java.util.List;
 
 @Api("tag controller")
 @Controller
-public class TagController extends BaseController {
+public class UserStoryTagController extends BaseController {
 
 
     @ApiOperation(value = "获得所有一级标签", notes = "获得所有一级标签")

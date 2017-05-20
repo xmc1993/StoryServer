@@ -51,6 +51,7 @@
         followerId
         from follow_relation
         where followeeId = #{0}
+        limit #{0},#{1}
     </select>
 
     <select id="getFolloweeListByUserId" resultType="java.lang.Integer">
@@ -58,6 +59,7 @@
         followeeId
         from follow_relation
         where followerId = #{0}
+        limit #{0},#{1}
     </select>
 
 

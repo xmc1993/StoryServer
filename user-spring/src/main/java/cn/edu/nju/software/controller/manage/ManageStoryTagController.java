@@ -25,8 +25,8 @@ import java.util.List;
 @Api(value = "Admin", description = "管理接口")
 @Controller()
 @RequestMapping("/manage")
-public class StoryTagController {
-    private static final Logger logger = LoggerFactory.getLogger(StoryTagController.class);
+public class ManageStoryTagController {
+    private static final Logger logger = LoggerFactory.getLogger(ManageStoryTagController.class);
     @Autowired
     private CheckValidService checkValidService;
     @Autowired

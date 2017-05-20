@@ -15,7 +15,7 @@ public interface FollowService {
 
     boolean deleteFollowRelationById(int id);
 
-    List<Integer> getUserFollowerList(int userId);
+    List<Integer> getUserFollowerList(int userId, int offset, int limit);
 
-    List<Integer> getUserFolloweeList(int userId);
+    List<Integer> getUserFolloweeList(int userId, int offset, int limit);
 }

@@ -26,8 +26,8 @@ import java.util.List;
 @Api(value = "Admin", description = "管理接口")
 @Controller
 @RequestMapping("/manage")
-public class TagRelationController {
-    private static final Logger logger = LoggerFactory.getLogger(TagRelationController.class);
+public class ManageTagRelationController {
+    private static final Logger logger = LoggerFactory.getLogger(ManageTagRelationController.class);
     @Autowired
     private TagRelationService tagRelationService;
     @Autowired

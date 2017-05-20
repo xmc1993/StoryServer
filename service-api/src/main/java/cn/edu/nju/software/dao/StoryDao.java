@@ -37,4 +37,5 @@ public interface StoryDao {
 
     List<StoryTag> getStoryTagListByIdList(@Param("idList")List<Integer> idList);
 
+
 }

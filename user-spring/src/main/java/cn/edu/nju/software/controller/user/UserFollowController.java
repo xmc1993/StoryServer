@@ -29,7 +29,7 @@ import java.util.List;
 @Api("follow controller")
 @Controller
 @RequestMapping("/user")
-public class FollowController {
+public class UserFollowController {
 
     @Autowired
     private FollowService followService;
@@ -94,6 +94,8 @@ public class FollowController {
     @ResponseBody
     public ResponseData<List<UserBase>> getFollowerListByUserId(
             @ApiParam("用户ID") @RequestParam("userId") Integer userId,
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<UserBase>> responseData = new ResponseData<>();
 
@@ -113,6 +115,8 @@ public class FollowController {
     @ResponseBody
     public ResponseData<List<UserBase>> getFolloweeListByUserId(
             @ApiParam("用户ID") @RequestParam("userId") int userId,
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<UserBase>> responseData = new ResponseData<>();
         if (appUserService.getUserByMobileOrId(String.valueOf(userId)) == null) {

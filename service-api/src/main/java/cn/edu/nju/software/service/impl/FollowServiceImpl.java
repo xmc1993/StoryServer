@@ -3,7 +3,6 @@ package cn.edu.nju.software.service.impl;
 import cn.edu.nju.software.dao.FollowRelationDao;
 import cn.edu.nju.software.dao.user.AppUserDao;
 import cn.edu.nju.software.entity.FollowRelation;
-import cn.edu.nju.software.entity.UserBase;
 import cn.edu.nju.software.service.FollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,14 +46,14 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public List<Integer> getUserFollowerList(int userId) {
-        List<Integer> followerIdList = followRelationDao.getFollowerIdListByUserId(userId);
+    public List<Integer> getUserFollowerList(int userId, int offset, int limit) {
+        List<Integer> followerIdList = followRelationDao.getFollowerIdListByUserId(userId, offset, limit);
         return followerIdList;
     }
 
     @Override
-    public List<Integer> getUserFolloweeList(int userId) {
-        List<Integer> followeeIdList = followRelationDao.getFolloweeIdListByUserId(userId);
+    public List<Integer> getUserFolloweeList(int userId, int offset, int limit) {
+        List<Integer> followeeIdList = followRelationDao.getFolloweeIdListByUserId(userId, offset, limit);
         return followeeIdList;
     }
 }

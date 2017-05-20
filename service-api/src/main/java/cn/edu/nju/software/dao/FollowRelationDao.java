@@ -17,8 +17,8 @@ public interface FollowRelationDao {
 
     boolean deleteFollowRelationById(int id);
 
-    List<Integer> getFollowerIdListByUserId(int userId);
+    List<Integer> getFollowerIdListByUserId(int userId, int offset, int limit);
 
-    List<Integer> getFolloweeIdListByUserId(int userId);
+    List<Integer> getFolloweeIdListByUserId(int userId, int offset, int limit);
 
 }

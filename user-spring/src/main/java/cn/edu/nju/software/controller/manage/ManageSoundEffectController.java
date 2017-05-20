@@ -28,8 +28,8 @@ import java.util.List;
 @Api(value = "Admin", description = "管理接口")
 @Controller
 @RequestMapping("/manage")
-public class SoundEffectController {
-    private static final Logger logger = LoggerFactory.getLogger(SoundEffectController.class);
+public class ManageSoundEffectController {
+    private static final Logger logger = LoggerFactory.getLogger(ManageSoundEffectController.class);
     @Autowired
     private SoundEffectService soundEffectService;
     @Autowired

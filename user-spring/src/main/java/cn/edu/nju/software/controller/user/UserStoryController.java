@@ -2,11 +2,14 @@ package cn.edu.nju.software.controller.user;
 
 import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.ResponseData;
-import cn.edu.nju.software.vo.StoryWithTagAndSentenceVo;
+import cn.edu.nju.software.entity.Story;
+import cn.edu.nju.software.service.StoryService;
+import cn.edu.nju.software.service.TagRelationService;
 import cn.edu.nju.software.vo.StoryWithTagVo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,43 +26,60 @@ import java.util.List;
 
 @Api(value = "/story", description = "和故事有关的接口")
 @Controller
-public class StoryController extends BaseController {
-
+public class UserStoryController extends BaseController {
+    @Autowired
+    private StoryService storyService;
+    @Autowired
+    private TagRelationService tagRelationService;
 
     @ApiOperation(value = "获取ID获取故事", notes = "")
     @RequestMapping(value = "/user/getStoryById", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<StoryWithTagAndSentenceVo> getStoryById(
-            @ApiParam("故事ID") @RequestParam("id") String id,
+    public ResponseData<Story> getStoryById(
+            @ApiParam("故事ID") @RequestParam("id") Integer id,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<StoryWithTagAndSentenceVo> responseData = new ResponseData();
+        ResponseData<Story> responseData = new ResponseData();
+        Story story = storyService.getStoryById(id);
+        if (story == null) {
+            responseData.jsonFill(2, "该故事不存在", null);
+        } else {
+            responseData.jsonFill(1, null, story);
+        }
         return responseData;
     }
 
-    @ApiOperation(value = "获取所有故事列表", notes = "获取所有故事列表")
-    @RequestMapping(value = "/user/getAllStory", method = {RequestMethod.GET})
+    @ApiOperation(value = "分页得到故事列表", notes = "分页得到故事列表")
+    @RequestMapping(value = "/user/getStoryListByPage", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<StoryWithTagVo>> getAllStory(
+    public ResponseData<List<Story>> getAllStory(
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<StoryWithTagVo>> responseData = new ResponseData();
+        ResponseData<List<Story>> responseData = new ResponseData();
+        List<Story> storyList = storyService.getStoryListByPage(offset, limit);
+        responseData.jsonFill(1, null, storyList);
         return responseData;
     }
 
     @ApiOperation(value = "根据一级标签获得故事列表", notes = "根据一级标签获得故事列表")
-    @RequestMapping(value = "/user/getStoryIdListByOneLevelTagId", method = {RequestMethod.GET})
+    @RequestMapping(value = "/user/getStoryIdListByFirstLevelTagId", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<StoryWithTagVo>> getStoryIdListByOneLevelTagId(
+    public ResponseData<List<StoryWithTagVo>> getStoryIdListByFirstLevelTagId(
             @ApiParam("一级标签ID") @RequestParam("tagId") String tagId,
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<StoryWithTagVo>> responseData = new ResponseData();
         return responseData;
     }
 
     @ApiOperation(value = "根据二级标签获得故事列表", notes = "根据二级标签获得故事列表")
-    @RequestMapping(value = "/user/getStoryIdListByTwoLevelTagId", method = {RequestMethod.GET})
+    @RequestMapping(value = "/user/getStoryIdListBySecondLevelTagId", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<StoryWithTagVo>> getStoryIdListByTwoLevelTagId(
+    public ResponseData<List<StoryWithTagVo>> getStoryIdListBySecondLevelTagId(
             @ApiParam("二级标签ID") @RequestParam("tagId") String tagId,
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<StoryWithTagVo>> responseData = new ResponseData();
         return responseData;
@@ -70,6 +90,8 @@ public class StoryController extends BaseController {
     @ResponseBody
     public ResponseData<List<StoryWithTagVo>> getStoryIdListByTitle(
             @ApiParam("查询字段") @RequestParam("query") String query,
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         return null;
     }

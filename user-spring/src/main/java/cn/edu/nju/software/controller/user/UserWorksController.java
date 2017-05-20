@@ -25,7 +25,7 @@ import java.util.List;
 @Api(value = "/work", description = "和作品有关的接口")
 @Controller
 @RequestMapping("/user")
-public class WorksController extends BaseController {
+public class UserWorksController extends BaseController {
 
     @Autowired
     private WorksService worksService;
@@ -35,6 +35,8 @@ public class WorksController extends BaseController {
     @ResponseBody
     public ResponseData<List<Works>> getWorksById(
             @ApiParam("用户ID") @RequestParam("userId") int userId,
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<Works>> responseData = new ResponseData();
         List<Works> worksList = worksService.getWorksListByUserId(userId);
@@ -48,6 +50,8 @@ public class WorksController extends BaseController {
     @ResponseBody
     public ResponseData<List<Works>> getWorksListByStoryId(
             @ApiParam("故事ID") @RequestParam("storyId") int storyId,
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<Works>> responseData = new ResponseData();
         List<Works> worksList = worksService.getWorksListByStoryId(storyId);
