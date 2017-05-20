@@ -91,8 +91,8 @@
         <include refid="fields"></include>
         from works
         where storyId = #{0} and valid = 1
-        limit #{1},#{2}
         order by likeCount desc
+        limit #{1},#{2}
     </select>
 
     <select id="getWorksListByUserId" resultType="cn.edu.nju.software.entity.Works">

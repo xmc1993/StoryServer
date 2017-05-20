@@ -91,9 +91,9 @@ public class UserStoryController extends BaseController {
     }
 
     @ApiOperation(value = "根据标题获得故事列表", notes = "")
-    @RequestMapping(value = "/user/getStoryIdListByTitle", method = {RequestMethod.GET})
+    @RequestMapping(value = "/user/getStoryListByTitle", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<Story>> getStoryIdListByTitle(
+    public ResponseData<List<Story>> getStoryListByTitle(
             @ApiParam("查询字段") @RequestParam("query") String query,
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
