@@ -17,8 +17,8 @@ public interface WorksService {
 
     boolean deleteWorks(int storyId, int userId);
 
-    List<Works> getWorksListByUserId(int userId);
+    List<Works> getWorksListByUserId(int userId, int offset, int limit);
 
-    List<Works> getWorksListByStoryId(int storyId);
+    List<Works> getWorksListByStoryId(int storyId, int offset, int limit);
 
 }

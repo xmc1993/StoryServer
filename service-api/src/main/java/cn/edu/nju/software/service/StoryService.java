@@ -21,4 +21,6 @@ public interface StoryService {
     Story updateStory(Story story);
 
     List<Story> getStoryListByPage(int offset, int limit);
+
+    boolean getStoryListByTitle(String title, int offset, int limit);
 }

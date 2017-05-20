@@ -84,6 +84,7 @@
         <include refid="fields"></include>
         from works
         where storyId = #{0} and valid = 1
+        limit #{1},#{2}
         order by likeCount desc
     </select>
 
@@ -92,6 +93,7 @@
         <include refid="fields"></include>
         from works
         where userId = #{0} and valid = 1
+        limit #{1},#{2}
     </select>
 
     <update id="updateUseName">

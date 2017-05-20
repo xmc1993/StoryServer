@@ -39,7 +39,7 @@ public class UserWorksController extends BaseController {
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<Works>> responseData = new ResponseData();
-        List<Works> worksList = worksService.getWorksListByUserId(userId);
+        List<Works> worksList = worksService.getWorksListByUserId(userId, offset, limit);
 
         responseData.jsonFill(1, null, worksList);
         return responseData;
@@ -54,7 +54,7 @@ public class UserWorksController extends BaseController {
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<Works>> responseData = new ResponseData();
-        List<Works> worksList = worksService.getWorksListByStoryId(storyId);
+        List<Works> worksList = worksService.getWorksListByStoryId(storyId, offset, limit);
         responseData.jsonFill(1, null, worksList);
         return responseData;
     }

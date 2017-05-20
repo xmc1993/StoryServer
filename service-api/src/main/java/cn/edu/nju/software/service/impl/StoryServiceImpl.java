@@ -61,4 +61,11 @@ public class StoryServiceImpl implements StoryService {
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         return storyDao.getStoryListByPage(offset, limit);
     }
+
+    @Override
+    public boolean getStoryListByTitle(String title, int offset, int limit) {
+        //TODO 交给sql做
+        title = "%" + title + "%";
+        return storyDao.getStoryListByTitle(title, offset, limit);
+    }
 }

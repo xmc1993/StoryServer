@@ -13,9 +13,9 @@ public interface WorksDao {
 
     boolean saveWorks(Works works);
 
-    List<Works> getWorksListByUserId(int userId);
+    List<Works> getWorksListByUserId(int userId, int offset, int limit);
 
-    List<Works> getWorksListByStoryId(int storyId);
+    List<Works> getWorksListByStoryId(int storyId, int offset, int limit);
 
     Works getWorksById(int id);
 

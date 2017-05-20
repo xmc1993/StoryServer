@@ -40,12 +40,12 @@ public class WorksServiceImpl implements WorksService {
     }
 
     @Override
-    public List<Works> getWorksListByUserId(int userId) {
-        return worksDao.getWorksListByUserId(userId);
+    public List<Works> getWorksListByUserId(int userId, int offset, int limit) {
+        return worksDao.getWorksListByUserId(userId, offset, limit);
     }
 
     @Override
-    public List<Works> getWorksListByStoryId(int storyId) {
-        return worksDao.getWorksListByStoryId(storyId);
+    public List<Works> getWorksListByStoryId(int storyId, int offset, int limit) {
+        return worksDao.getWorksListByStoryId(storyId, offset, limit);
     }
 }

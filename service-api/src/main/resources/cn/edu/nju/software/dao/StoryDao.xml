@@ -110,6 +110,14 @@
         limit #{0},#{1}
     </select>
 
+    <select id="getStoryListByTitle" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="fields"></include>
+        from story
+        where title like #{0} and valid = 1
+        limit #{1},#{2}
+    </select>
+
     <select id="getTagListByIdList" resultType="cn.edu.nju.software.entity.Story">
         select
         <include refid="fields"></include>
