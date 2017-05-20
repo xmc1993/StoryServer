@@ -48,4 +48,5 @@ public interface AppUserDao {
     boolean newLike(int id);
 
     boolean removeLike(int id);
+
 }

@@ -24,6 +24,8 @@ public interface AppUserService {
 
     User addUserByWeChat(User user);
 
+    UserBase getUserBaseById(int id);
+
     List<UserBase> getUserBaseListByIdList(List<Integer> idList);
 
 }

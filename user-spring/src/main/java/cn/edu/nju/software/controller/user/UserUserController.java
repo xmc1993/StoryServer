@@ -4,6 +4,7 @@ import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.Business;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.User;
+import cn.edu.nju.software.entity.UserBase;
 import cn.edu.nju.software.enums.GrantType;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.service.user.UserBusinessService;
@@ -30,10 +31,11 @@ import java.util.Date;
 
 @Api("user controller")
 @Controller
+@RequestMapping("/user")
 public class UserUserController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserUserController.class);
-    private static final String IMAGE_ROOT = "/image/";
+    private static final String IMAGE_ROOT = "/head/";
     private final String default_avatar = "default_avatar.jpg";
     @Autowired
     private AppUserService userService;
@@ -44,26 +46,44 @@ public class UserUserController extends BaseController {
 
 
     @ApiOperation(value = "获取用户信息", notes = "获取用户信息")
-    @RequestMapping(value = "/user/getUserInfo", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/getUserBaseInfo", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<User> getUserInfo(
+            @ApiParam("用户ID") @RequestParam("userId") int userId,
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+        ResponseData responseData = new ResponseData();
+        UserBase userBase = userService.getUserBaseById(userId);
+        if (userBase == null) {
+            responseData.jsonFill(2, "用户不存在。", false);
+            return responseData;
+        }
+        responseData.jsonFill(1, null, userBase);
+        return responseData;
+    }
+
+    @ApiOperation(value = "得到当前用户信息", notes = "获取用户信息")
+    @RequestMapping(value = "/getUserBaseInfo", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<User> getUserSelfInfo(
+            @ApiParam("用户ID") @RequestParam("userId") int userId,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
         ResponseData responseData = new ResponseData();
 
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
-            responseData.jsonFill(2, "该手机号尚未注册", false);
+            responseData.jsonFill(2, "用户尚未登录。", false);
             return responseData;
         }
         user.setVerifyCode(null);
+        user.setExpireTime(null);
+        user.setWxUnionId(null);
         user.setPassword(null);
         responseData.jsonFill(1, null, user);
         return responseData;
     }
 
-
     @ApiOperation(value = "用户登录", notes = "用户登录")
-    @RequestMapping(value = "/user/loginByWeChat", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/loginByWeChat", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<LoginResponseVo> loginByWeChat(@ApiParam("appId") @RequestParam("appId") String appId,
                                                        @ApiParam("code 授权码") @RequestParam("code") String code,
@@ -95,20 +115,22 @@ public class UserUserController extends BaseController {
             user.setCreateTime(new Date());
             user.setCity(userInfo.getCity());
 
-            //生成头像的绝对路径/image/#businessId#
-            String realPath = request.getServletContext().getRealPath(
-                    IMAGE_ROOT + String.valueOf(business.getId()));
+            String realPath = UploadFileUtil.getBaseUrl() + IMAGE_ROOT;
             String avatar = userInfo.getUnionId() + ".jpg";
+
             try {
                 DownloadUtil.download(userInfo.getHeadImgUrl(), avatar, realPath);
             } catch (Exception e) {
                 logger.error("微信头像下载失败!");
                 e.printStackTrace();
                 //如果微信头像下载失败那么就使用默认头像
-                user.setHeadImgUrl(IMAGE_ROOT + String.valueOf(business.getId()) + "/" + default_avatar);
+                user.setHeadImgUrl(UploadFileUtil.SOURCE_BASE_URL + IMAGE_ROOT + default_avatar);
             }
-            user.setHeadImgUrl(IMAGE_ROOT + business.getId() + "/" + avatar);
+            user.setHeadImgUrl(UploadFileUtil.SOURCE_BASE_URL + IMAGE_ROOT + avatar);
             Util.setNewAccessToken(user);//设置token
+            long currentTime = System.currentTimeMillis();
+            currentTime += 1000 * 60 * 60 * 24 * 30;//设置为30天后失效
+            user.setExpireTime(new Date(currentTime));
             user = userService.addUserByWeChat(user);
         }
 
@@ -131,8 +153,8 @@ public class UserUserController extends BaseController {
     }
 
 
-    @ApiOperation(value = "测试用直接用ID登录", notes = "用户登录")
-    @RequestMapping(value = "/user/mockLogin", method = {RequestMethod.GET, RequestMethod.POST})
+    @ApiOperation(value = "测试用直接用ID登录(仅用于测试)", notes = "用户登录")
+    @RequestMapping(value = "/mockLogin", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public ResponseData<LoginResponseVo> mockLogin(
             @ApiParam("用户ID") @RequestParam int id
@@ -157,7 +179,7 @@ public class UserUserController extends BaseController {
         return responseData;
     }
 
-    @RequestMapping(value = "/user/test", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/test", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public User test() {
         User user = new User();

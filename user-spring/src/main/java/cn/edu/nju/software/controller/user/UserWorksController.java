@@ -187,7 +187,6 @@ public class UserWorksController extends BaseController {
         }
         if (uploadFile == null){
             responseData.jsonFill(2, "请选择音频文件上传。", null);
-            response.setStatus(404);
             return responseData;
         }
         Story story = storyService.getStoryById(storyId);
@@ -231,7 +230,6 @@ public class UserWorksController extends BaseController {
         }
         if (uploadFile == null){
             responseData.jsonFill(2, "请选择音频文件上传。", null);
-            response.setStatus(404);
             return responseData;
         }
 

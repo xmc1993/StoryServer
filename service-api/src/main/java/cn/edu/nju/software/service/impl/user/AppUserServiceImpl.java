@@ -99,6 +99,11 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
+    public UserBase getUserBaseById(int id) {
+        return userDao.getUserBaseById(id);
+    }
+
+    @Override
     public List<UserBase> getUserBaseListByIdList(List<Integer> idList) {
         idList.add(-1);//防止mybatis查询出错
         return userDao.getUserBaseListByUserIdList(idList);
