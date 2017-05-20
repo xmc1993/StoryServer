@@ -53,7 +53,7 @@ public class TagRelationServiceImpl implements TagRelationService {
     }
 
     @Override
-    public List<Integer> getStoryIdListByOneLevelTagId(int tagId) {
+    public List<Integer> getStoryIdListByFirstLevelTagId(int tagId) {
         List<StoryTag> childTags = storyTagDao.getStoryTagListByParentId(tagId);
         ArrayList<Integer> tagIdList = new ArrayList<>();
         tagIdList.add(tagId);
@@ -64,7 +64,7 @@ public class TagRelationServiceImpl implements TagRelationService {
     }
 
     @Override
-    public List<Integer> getStoryIdListByTwoLevelTagId(int tagId) {
+    public List<Integer> getStoryIdListBySecondLevelTagId(int tagId) {
         return tagRelationDao.getStoryIdListByTagId(tagId);
     }
 

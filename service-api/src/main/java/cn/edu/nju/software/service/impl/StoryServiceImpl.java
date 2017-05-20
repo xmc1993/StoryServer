@@ -48,7 +48,7 @@ public class StoryServiceImpl implements StoryService {
     public Story updateStory(Story story) {
         story.setUpdateTime(new Date());
         boolean res = storyDao.updateStory(story);
-        if (!res){
+        if (!res) {
             return null;
         }
         return storyDao.getStoryById(story.getId());
@@ -63,7 +63,13 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public boolean getStoryListByTitle(String title, int offset, int limit) {
+    public List<Story> getStoryListByIdList(List<Integer> idList) {
+        idList.add(-1);//防止mybatis查询出错
+        return storyDao.getStoryListByIdList(idList);
+    }
+
+    @Override
+    public List<Story> getStoryListByTitle(String title, int offset, int limit) {
         //TODO 交给sql做
         title = "%" + title + "%";
         return storyDao.getStoryListByTitle(title, offset, limit);

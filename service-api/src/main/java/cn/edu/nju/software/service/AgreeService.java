@@ -1,7 +1,6 @@
 package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.entity.Agree;
-import cn.edu.nju.software.entity.UserBase;
 
 import java.util.List;
 
@@ -16,5 +15,7 @@ public interface AgreeService {
 
     boolean deleteAgreeById(int id);
 
-    List<UserBase> getAgreeUserIdListByWorksId(int worksId);
+    List<Integer> getAgreeUserIdListByWorksId(int worksId, int offset, int limit);
+
+    List<Integer> getAgreeWorksIdListByUserId(int userId, int offset, int limit);
 }

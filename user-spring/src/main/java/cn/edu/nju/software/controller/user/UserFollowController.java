@@ -104,7 +104,7 @@ public class UserFollowController {
             response.setStatus(404);
             return responseData;
         }
-        List<Integer> idList = followService.getUserFollowerList(userId);
+        List<Integer> idList = followService.getUserFollowerList(userId, offset, limit);
         List<UserBase> userBaseList = appUserService.getUserBaseListByIdList(idList);
         responseData.jsonFill(1, null, userBaseList);
         return responseData;
@@ -124,7 +124,7 @@ public class UserFollowController {
             response.setStatus(404);
             return responseData;
         }
-        List<Integer> idList = followService.getUserFolloweeList(userId);
+        List<Integer> idList = followService.getUserFolloweeList(userId, offset, limit);
         List<UserBase> userBaseList = appUserService.getUserBaseListByIdList(idList);
         responseData.jsonFill(1, null, userBaseList);
         return responseData;

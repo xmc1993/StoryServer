@@ -22,5 +22,7 @@ public interface StoryService {
 
     List<Story> getStoryListByPage(int offset, int limit);
 
-    boolean getStoryListByTitle(String title, int offset, int limit);
+    List<Story> getStoryListByIdList(List<Integer> idList);
+
+    List<Story> getStoryListByTitle(String title, int offset, int limit);
 }

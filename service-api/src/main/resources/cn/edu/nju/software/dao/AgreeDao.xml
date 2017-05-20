@@ -48,7 +48,15 @@
         userId
         from agree
         where worksId = #{0}
+        limit #{1},#{2}
     </select>
 
+    <select id="getAgreeWorksListByUserId" resultType="java.lang.Integer">
+        select
+        worksId
+        from agree
+        where storyId = #{0}
+        limit #{1},#{2}
+    </select>
 
 </mapper>

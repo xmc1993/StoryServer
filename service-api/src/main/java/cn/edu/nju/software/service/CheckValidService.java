@@ -42,4 +42,9 @@ public interface CheckValidService {
      * @return
      */
     boolean isSoundEffectExistHard(int soundEffectId);
+
+
+    boolean isWorksExist(int worksId);
+
+    boolean isWorksExistHard(int worksId);
 }

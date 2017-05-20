@@ -3,6 +3,7 @@ package cn.edu.nju.software.service.impl;
 import cn.edu.nju.software.dao.SoundEffectDao;
 import cn.edu.nju.software.dao.StoryDao;
 import cn.edu.nju.software.dao.StoryTagDao;
+import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.service.CheckValidService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ public class CheckValidServiceImpl implements CheckValidService {
     private StoryDao storyDao;
     @Autowired
     private SoundEffectDao soundEffectDao;
+    @Autowired
+    private WorksDao worksDao;
 
     @Override
          public boolean isTagExist(int tagId) {
@@ -52,5 +55,15 @@ public class CheckValidServiceImpl implements CheckValidService {
     @Override
     public boolean isSoundEffectExistHard(int soundEffectId) {
         return soundEffectDao.getSoundEffectByIdHard(soundEffectId) != null;
+    }
+
+    @Override
+    public boolean isWorksExist(int worksId) {
+        return worksDao.getWorksById(worksId) != null;
+    }
+
+    @Override
+    public boolean isWorksExistHard(int worksId) {
+        return worksDao.getWorksByIdHard(worksId) != null;
     }
 }

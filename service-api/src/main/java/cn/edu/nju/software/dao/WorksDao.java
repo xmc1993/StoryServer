@@ -1,6 +1,7 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.Works;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,6 +19,10 @@ public interface WorksDao {
     List<Works> getWorksListByStoryId(int storyId, int offset, int limit);
 
     Works getWorksById(int id);
+
+    Works getWorksByIdHard(int id);
+
+    List<Works> getWorksListByIdList(@Param("idList")List<Integer> idList);
 
     boolean updateWorks(Works works);
 

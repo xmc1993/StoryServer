@@ -110,6 +110,16 @@
         limit #{0},#{1}
     </select>
 
+    <select id="getStoryListByIdList" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="fields"></include>
+        from story
+        where valid = 1 and id in
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
     <select id="getStoryListByTitle" resultType="cn.edu.nju.software.entity.Story">
         select
         <include refid="fields"></include>

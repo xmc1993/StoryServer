@@ -48,4 +48,10 @@ public class WorksServiceImpl implements WorksService {
     public List<Works> getWorksListByStoryId(int storyId, int offset, int limit) {
         return worksDao.getWorksListByStoryId(storyId, offset, limit);
     }
+
+    @Override
+    public List<Works> getWorksListByIdList(List<Integer> idList) {
+        idList.add(-1);//防止mybatis查询出错
+        return worksDao.getWorksListByIdList(idList);
+    }
 }

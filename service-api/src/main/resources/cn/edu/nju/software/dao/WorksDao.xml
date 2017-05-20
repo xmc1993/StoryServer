@@ -69,6 +69,13 @@
         select
         <include refid="fields"></include>
         from works
+        where id = #{0} and valid = 1
+    </select>
+
+    <select id="getWorksByIdHard" resultType="cn.edu.nju.software.entity.Works">
+        select
+        <include refid="fields"></include>
+        from works
         where id = #{0}
     </select>
 
@@ -114,5 +121,16 @@
         where
         storyId = #{storyId} and valid = 1
     </update>
+
+
+    <select id="getWorksListByIdList" resultType="cn.edu.nju.software.entity.Works">
+        select
+        <include refid="fields"></include>
+        from works
+        where valid = 1 and id IN
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 
 </mapper>

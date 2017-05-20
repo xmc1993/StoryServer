@@ -26,7 +26,7 @@ public interface TagRelationService {
      * @param tagId
      * @return
      */
-    List<Integer> getStoryIdListByOneLevelTagId(int tagId);
+    List<Integer> getStoryIdListByFirstLevelTagId(int tagId);
 
 
     /**
@@ -34,6 +34,6 @@ public interface TagRelationService {
      * @param tagId
      * @return
      */
-    List<Integer> getStoryIdListByTwoLevelTagId(int tagId);
+    List<Integer> getStoryIdListBySecondLevelTagId(int tagId);
 
 }

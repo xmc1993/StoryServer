@@ -21,4 +21,6 @@ public interface WorksService {
 
     List<Works> getWorksListByStoryId(int storyId, int offset, int limit);
 
+    List<Works> getWorksListByIdList(List<Integer> idList);
+
 }

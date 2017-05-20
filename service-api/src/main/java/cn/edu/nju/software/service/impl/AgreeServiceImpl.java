@@ -4,7 +4,6 @@ import cn.edu.nju.software.dao.AgreeDao;
 import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.dao.user.AppUserDao;
 import cn.edu.nju.software.entity.Agree;
-import cn.edu.nju.software.entity.UserBase;
 import cn.edu.nju.software.service.AgreeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,9 +45,13 @@ public class AgreeServiceImpl implements AgreeService {
     }
 
     @Override
-    public List<UserBase> getAgreeUserIdListByWorksId(int worksId) {
+    public List<Integer> getAgreeUserIdListByWorksId(int worksId, int offset, int limit) {
         List<Integer> userIdList = agreeDao.getAgreeUserIdListByWorksId(worksId);
-        userIdList.add(-1);//防止空数组使mybatis查询出错
-        return appUserDao.getUserBaseListByUserIdList(userIdList);
+        return userIdList;
+    }
+
+    @Override
+    public List<Integer> getAgreeWorksIdListByUserId(int userId, int offset, int limit) {
+        return agreeDao.getAgreeWorksListByUserId(userId, offset, limit);
     }
 }

@@ -33,9 +33,11 @@ public interface StoryDao {
 
     boolean deleteHard(int id);
 
-    boolean getStoryListByTitle(String title, int offset, int limit);
+    List<Story> getStoryListByTitle(String title, int offset, int limit);
 
     List<Story> getStoryListByPage(int offset, int limit);
+
+    List<Story> getStoryListByIdList(List<Integer> idList);
 
     List<StoryTag> getStoryTagListByIdList(@Param("idList")List<Integer> idList);
 
