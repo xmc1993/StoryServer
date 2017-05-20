@@ -49,7 +49,7 @@ public class StoryTagServiceImpl implements StoryTagService {
     @Override
     public List<StoryTag> getStoryTagListByIdList(List<Integer> idList) {
         idList.add(-1);
-        storyTagDao
+        return storyTagDao.getTagListByIdList(idList);
     }
 
     @Override

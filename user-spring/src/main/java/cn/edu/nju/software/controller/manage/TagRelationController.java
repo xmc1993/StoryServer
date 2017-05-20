@@ -95,9 +95,8 @@ public class TagRelationController {
             throw new RuntimeException("无效的故事ID");
         }
         List<Integer> idList = tagRelationService.getTagIdListByStoryId(id);
-
-        //TODO 返回列表
-        return null;
+        List<StoryTag> storyTagList = storyTagService.getStoryTagListByIdList(idList);
+        return storyTagList;
     }
 
 }
