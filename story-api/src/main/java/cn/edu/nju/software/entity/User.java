@@ -33,6 +33,7 @@ public class User implements Serializable {
 	private Integer followerCount = 0;//粉丝数
 	private Integer followeeCount = 0;//关注的人数
 	private Integer workCount = 0;//作品数
+	private Integer likeCount = 0;//喜欢的作品数
 
 	public Integer getId() {
 		return id;
@@ -200,5 +201,13 @@ public class User implements Serializable {
 
 	public void setWorkCount(Integer workCount) {
 		this.workCount = workCount;
+	}
+
+	public Integer getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(Integer likeCount) {
+		this.likeCount = likeCount;
 	}
 }

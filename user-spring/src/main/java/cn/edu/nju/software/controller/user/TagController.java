@@ -1,5 +1,6 @@
-package cn.edu.nju.software.controller;
+package cn.edu.nju.software.controller.user;
 
+import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.StoryTag;
 import com.wordnik.swagger.annotations.Api;

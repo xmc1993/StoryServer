@@ -44,4 +44,8 @@ public interface AppUserDao {
     List<UserBase> getUserBaseListByUserIdList(@Param("idList") List<Integer> idList);
 
     UserBase getUserBaseById(int id);
+
+    boolean newLike(int id);
+
+    boolean removeLike(int id);
 }

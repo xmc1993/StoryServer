@@ -1,11 +1,9 @@
 package cn.edu.nju.software.service.impl.user;
 
 import cn.edu.nju.software.dao.user.AppUserDao;
-import cn.edu.nju.software.dao.user.UserBusinessDao;
-import cn.edu.nju.software.entity.Business;
 import cn.edu.nju.software.entity.User;
+import cn.edu.nju.software.entity.UserBase;
 import cn.edu.nju.software.service.user.AppUserService;
-import cn.edu.nju.software.service.user.UserMessageService;
 import cn.edu.nju.software.util.PhoneFormatCheckUtils;
 import cn.edu.nju.software.util.Util;
 import org.slf4j.Logger;
@@ -24,17 +22,12 @@ import java.util.List;
 public class AppUserServiceImpl implements AppUserService {
     @Autowired
     private AppUserDao userDao;
-    @Autowired
-    private UserBusinessDao businessDao;
-    @Autowired
-    private UserMessageService messageService;
+
     private static final Logger logger = LoggerFactory.getLogger(AppUserServiceImpl.class);
-    private final String default_avatar = "default_avatar.jpg";
 
 
     @Override
     public boolean updateUser(User user, String appId) {
-        int businessId = new Business().getId();
         return userDao.updateUser(user);
     }
 
@@ -103,5 +96,11 @@ public class AppUserServiceImpl implements AppUserService {
             return user;
         }
         return null;
+    }
+
+    @Override
+    public List<UserBase> getUserBaseListByIdList(List<Integer> idList) {
+        idList.add(-1);//防止mybatis查询出错
+        return userDao.getUserBaseListByUserIdList(idList);
     }
 }

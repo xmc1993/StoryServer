@@ -47,16 +47,14 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public List<UserBase> getUserFollowerList(int userId) {
+    public List<Integer> getUserFollowerList(int userId) {
         List<Integer> followerIdList = followRelationDao.getFollowerIdListByUserId(userId);
-        followerIdList.add(-1);//防止查询出错
-        return appUserDao.getUserBaseListByUserIdList(followerIdList);
+        return followerIdList;
     }
 
     @Override
-    public List<UserBase> getUserFolloweeList(int userId) {
+    public List<Integer> getUserFolloweeList(int userId) {
         List<Integer> followeeIdList = followRelationDao.getFolloweeIdListByUserId(userId);
-        followeeIdList.add(-1);//防止查询出错
-        return appUserDao.getUserBaseListByUserIdList(followeeIdList);
+        return followeeIdList;
     }
 }

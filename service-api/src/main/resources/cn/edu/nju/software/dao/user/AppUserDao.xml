@@ -22,7 +22,8 @@
 		weChatRefreshToken,
 		followerCount,
 		followeeCount,
-		workCount
+		workCount,
+		likeCount
 	</sql>
 
     <sql id="baseFields">
@@ -32,7 +33,8 @@
 		headImgUrl,
 		followerCount,
 		followeeCount,
-		workCount
+		workCount,
+		likeCount
 	</sql>
 
     <resultMap id="userBase" type="cn.edu.nju.software.entity.UserBase">
@@ -43,6 +45,7 @@
         <id column="followerCount" property="followerCount"/>
         <id column="followeeCount" property="followeeCount"/>
         <id column="workCount" property="workCount"/>
+        <id column="likeCount" property="likeCount"/>
     </resultMap>
 
     <resultMap id="user" type="cn.edu.nju.software.entity.User">
@@ -68,6 +71,7 @@
         <id column="followerCount" property="followerCount"/>
         <id column="followeeCount" property="followeeCount"/>
         <id column="workCount" property="workCount"/>
+        <id column="likeCount" property="likeCount"/>
     </resultMap>
 
     <insert id="saveUser" parameterType="cn.edu.nju.software.entity.User" useGeneratedKeys="true">
@@ -94,7 +98,8 @@
         #{weChatRefreshToken},
         #{followerCount},
         #{followeeCount},
-        #{workCount}
+        #{workCount},
+        #{likeCount}
         )
     </insert>
 
@@ -121,7 +126,8 @@
 		weChatRefreshToken=#{weChatRefreshToken},
 		followerCount=#{followerCount},
 		followeeCount=#{followeeCount},
-		workCount=#{workCount}
+		workCount=#{workCount},
+		likeCount=#{likeCount}
 		where
 		id=#{id}
 	</update>
@@ -226,5 +232,21 @@
 		where
 		id=#{0}
 	</update>
+
+    <update id="newLike">
+        update user
+        set
+        likeCount = likeCount + 1
+        where
+        id=#{0}
+    </update>
+
+    <update id="removeLike">
+        update user
+        set
+        likeCount = likeCount - 1
+        where
+        id=#{0}
+    </update>
 
 </mapper>

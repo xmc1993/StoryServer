@@ -1,7 +1,6 @@
 package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.entity.FollowRelation;
-import cn.edu.nju.software.entity.UserBase;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ public interface FollowService {
 
     boolean deleteFollowRelationById(int id);
 
-    List<UserBase> getUserFollowerList(int userId);
+    List<Integer> getUserFollowerList(int userId);
 
-    List<UserBase> getUserFolloweeList(int userId);
+    List<Integer> getUserFolloweeList(int userId);
 }
