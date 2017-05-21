@@ -68,22 +68,6 @@
 			<version>1.10.19</version>
 		</dependency>
 
-		<!-- struts2 -->
-		<!-- <dependency>
-			<groupId>org.apache.struts</groupId>
-			<artifactId>struts2-convention-plugin</artifactId>
-			<version>${struts2.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.struts</groupId>
-			<artifactId>struts2-core</artifactId>
-			<version>${struts2.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.struts</groupId>
-			<artifactId>struts2-spring-plugin</artifactId>
-			<version>${struts2.version}</version>
-		</dependency> -->
 
 		<!-- spring -->
 		<dependency>
@@ -194,17 +178,6 @@
 			<version>1.4</version>
 		</dependency>
 
-		<!--<dependency> -->
-		<!--<groupId>ch.qos.logback</groupId> -->
-		<!--<artifactId>logback-classic</artifactId> -->
-		<!--<version>1.1.2</version> -->
-		<!--</dependency> -->
-		<!--<dependency> -->
-		<!--<groupId>ch.qos.logback</groupId> -->
-		<!--<artifactId>logback-core</artifactId> -->
-		<!--<version>1.1.2</version> -->
-		<!--</dependency> -->
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -262,10 +235,6 @@
 			<version>4.3.5</version>
 		</dependency>
 		<!--<dependency> -->
-		<!--<groupId>com.umeng.message</groupId> -->
-		<!--<artifactId>push</artifactId> -->
-		<!--<version>0.0.1-SNAPSHOT</version> -->
-		<!--</dependency> -->
 
 		<!-- poi start -->
 		<dependency>
@@ -319,13 +288,6 @@
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>system</scope>
 			<systemPath>${basedir}/lib/push-0.0.1-SNAPSHOT.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>pinyin4j</groupId>
-			<artifactId>pinyin4j</artifactId>
-			<version>2.5.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/pinyin4j-2.5.0-.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>

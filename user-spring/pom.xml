@@ -189,11 +189,6 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>com.google.code</groupId>
-			<artifactId>kaptcha</artifactId>
-			<version>2.3.2</version>
-		</dependency> -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
@@ -511,20 +506,7 @@
 			<scope>system</scope>
 			<systemPath>${basedir}/lib/okhttp-3.2.0.jar</systemPath>
 		</dependency>
-		<!-- <dependency>
-			<groupId>qiniu-java-sdk</groupId>
-			<artifactId>qiniu-java-sdk</artifactId>
-			<version>7.1.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/qiniu-java-sdk-7.2.2.jar</systemPath>
-		</dependency> -->
-		<dependency>
-			<groupId>pinyin4j</groupId>
-			<artifactId>pinyin4j</artifactId>
-			<version>2.5.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/pinyin4j-2.5.0-.jar</systemPath>
-		</dependency>
+
 		<dependency>
 			<groupId>com.sinture</groupId>
 			<artifactId>sinture.api</artifactId>
@@ -537,15 +519,6 @@
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
-		<!-- 加载外部jar -->
-		<dependency>
-			<groupId>push</groupId>
-			<artifactId>push</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/push-0.0.1-SNAPSHOT.jar</systemPath>
-		</dependency>
-
 		
 		<dependency>
 			<groupId>bcmail-jdk15on-154</groupId>
