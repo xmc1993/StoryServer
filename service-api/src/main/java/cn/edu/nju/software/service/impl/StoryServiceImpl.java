@@ -1,6 +1,7 @@
 package cn.edu.nju.software.service.impl;
 
 import cn.edu.nju.software.dao.StoryDao;
+import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.util.Const;
@@ -18,6 +19,8 @@ public class StoryServiceImpl implements StoryService {
 
     @Autowired
     private StoryDao storyDao;
+    @Autowired
+    private WorksDao worksDao;
 
     @Override
     public boolean saveStory(Story story) {
@@ -47,9 +50,16 @@ public class StoryServiceImpl implements StoryService {
     @Override
     public Story updateStory(Story story) {
         story.setUpdateTime(new Date());
+
+        Story _story = storyDao.getStoryById(story.getId());
         boolean res = storyDao.updateStory(story);
         if (!res) {
             return null;
+        }
+
+        //如果故事的名字发生改变，那么更新冗余字段
+        if (!_story.getTitle().equals(story.getTitle())) {
+            worksDao.updateStoryTitle(story.getId(), story.getTitle());
         }
         return storyDao.getStoryById(story.getId());
 
@@ -72,8 +82,6 @@ public class StoryServiceImpl implements StoryService {
     public List<Story> getStoryListByTitle(String title, int offset, int limit) {
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
-        //TODO 交给sql做
-        title = "%" + title + "%";
         return storyDao.getStoryListByTitle(title, offset, limit);
     }
 }

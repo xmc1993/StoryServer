@@ -128,7 +128,7 @@
         select
         <include refid="fields"></include>
         from story
-        where title like #{0} and valid = 1
+        where title like CONCAT('%', #{0} ,'%') and valid = 1
         limit #{1},#{2}
     </select>
 

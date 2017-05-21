@@ -28,8 +28,8 @@ public interface WorksDao {
 
     boolean deleteWorksById(int id);
 
-    boolean updateUseName(int userId, int userName);
+    boolean updateUserName(int userId, String userName);
 
-    boolean updateStoryTile(int userId, int userName);
+    boolean updateStoryTitle(int storyId, String storyTitle);
 
 }

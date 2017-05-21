@@ -153,11 +153,10 @@ public class UserUserController extends BaseController {
 
 
     @ApiOperation(value = "游客登录", notes = "")
-    @RequestMapping(value = "/mockLogin", method = {RequestMethod.POST})
+    @RequestMapping(value = "/guestLogin", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<LoginResponseVo> guestLogin(
-            @ApiParam("DeviceId") @RequestParam String deviceId
-    ) {
+            @ApiParam("DeviceId") @RequestParam String deviceId) {
         ResponseData<LoginResponseVo> responseData = new ResponseData<>();
         User user = userService.getUserByDeviceId(deviceId);
 

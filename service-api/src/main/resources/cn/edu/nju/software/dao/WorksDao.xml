@@ -103,23 +103,21 @@
         limit #{1},#{2}
     </select>
 
-    <update id="updateUseName">
+    <update id="updateUserName">
         update works
         set
-        username=#{username},
-        updateTime=#{updateTime}
+        username=#{1}
         where
-        userId = #{userId} and valid = 1
+        userId = #{0}
     </update>
 
 
-    <update id="updateStoryTile">
+    <update id="updateStoryTitle">
         update works
         set
-        storyTitle=#{storyTitle},
-        updateTime=#{updateTime}
+        storyTitle=#{1}
         where
-        storyId = #{storyId} and valid = 1
+        storyId = #{0}
     </update>
 
 

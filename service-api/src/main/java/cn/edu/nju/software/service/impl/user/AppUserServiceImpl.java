@@ -89,7 +89,7 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public User addOrUpdateUser(User user) {
         //如果是需要更新
-        if (user.getId() != 0 && user.getId() != null) {
+        if (user.getId() != null && user.getId() != 0) {
             boolean up = userDao.updateUser(user);
             return up ? user : null;
         }

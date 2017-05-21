@@ -30,7 +30,6 @@ public class UserSoundEffectController extends BaseController {
     @Autowired
     private SoundEffectService soundEffectService;
 
-
     @ApiOperation(value = "获得音效列表", notes = "")
     @RequestMapping(value = "/getSoundEffectListByPage", method = {RequestMethod.GET})
     @ResponseBody
