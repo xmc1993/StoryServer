@@ -25,6 +25,7 @@ import java.util.List;
 
 @Api(value = "/story", description = "和故事有关的接口")
 @Controller
+@RequestMapping("/user")
 public class UserStoryController extends BaseController {
     @Autowired
     private StoryService storyService;
@@ -32,7 +33,7 @@ public class UserStoryController extends BaseController {
     private TagRelationService tagRelationService;
 
     @ApiOperation(value = "获取ID获取故事", notes = "")
-    @RequestMapping(value = "/user/getStoryById", method = {RequestMethod.GET})
+    @RequestMapping(value = "/getStoryById", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<Story> getStoryById(
             @ApiParam("故事ID") @RequestParam("id") Integer id,
@@ -48,7 +49,7 @@ public class UserStoryController extends BaseController {
     }
 
     @ApiOperation(value = "分页得到故事列表", notes = "分页得到故事列表")
-    @RequestMapping(value = "/user/getStoryListByPage", method = {RequestMethod.GET})
+    @RequestMapping(value = "/getStoryListByPage", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<Story>> getAllStory(
             @ApiParam("OFFSET") @RequestParam int offset,
@@ -61,7 +62,7 @@ public class UserStoryController extends BaseController {
     }
 
     @ApiOperation(value = "根据一级标签获得故事列表", notes = "根据一级标签获得故事列表")
-    @RequestMapping(value = "/user/getStoryIdListByFirstLevelTagId", method = {RequestMethod.GET})
+    @RequestMapping(value = "/getStoryIdListByFirstLevelTagId", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<Story>> getStoryIdListByFirstLevelTagId(
             @ApiParam("一级标签ID") @RequestParam("tagId") int tagId,
@@ -76,7 +77,7 @@ public class UserStoryController extends BaseController {
     }
 
     @ApiOperation(value = "根据二级标签获得故事列表", notes = "根据二级标签获得故事列表")
-    @RequestMapping(value = "/user/getStoryIdListBySecondLevelTagId", method = {RequestMethod.GET})
+    @RequestMapping(value = "/getStoryIdListBySecondLevelTagId", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<Story>> getStoryIdListBySecondLevelTagId(
             @ApiParam("二级标签ID") @RequestParam("tagId") int tagId,
@@ -91,7 +92,7 @@ public class UserStoryController extends BaseController {
     }
 
     @ApiOperation(value = "根据标题获得故事列表", notes = "")
-    @RequestMapping(value = "/user/getStoryListByTitle", method = {RequestMethod.GET})
+    @RequestMapping(value = "/getStoryListByTitle", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<Story>> getStoryListByTitle(
             @ApiParam("查询字段") @RequestParam("query") String query,

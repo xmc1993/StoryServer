@@ -28,6 +28,7 @@ public class User implements Serializable {
 	private String weChatOpenId;//Add on 2017/4/11 微信的openId
 	private String weChatAccessToken;//微信的accessToken
 	private String weChatRefreshToken;//微信的refreshToken
+	private String deviceId;//用于游客登录
 
 	//后续添加字段
 	private Integer followerCount = 0;//粉丝数
@@ -209,5 +210,13 @@ public class User implements Serializable {
 
 	public void setLikeCount(Integer likeCount) {
 		this.likeCount = likeCount;
+	}
+
+	public String getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(String deviceId) {
+		this.deviceId = deviceId;
 	}
 }

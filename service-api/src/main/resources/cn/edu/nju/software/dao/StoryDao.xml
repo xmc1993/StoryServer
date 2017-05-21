@@ -12,6 +12,7 @@
         coverUrl,
         preCoverUrl,
         backgroundUrl,
+        originSoundUrl,
         price,
         createTime,
         updateTime,
@@ -29,6 +30,7 @@
         <id column="coverUrl" property="coverUrl"/>
         <id column="preCoverUrl" property="preCoverUrl"/>
         <id column="backgroundUrl" property="backgroundUrl"/>
+        <id column="originSoundUrl" property="originSoundUrl"/>
         <id column="price" property="price"/>
         <id column="createTime" property="createTime"/>
         <id column="updateTime" property="updateTime"/>
@@ -50,6 +52,7 @@
         #{coverUrl},
         #{preCoverUrl},
         #{backgroundUrl},
+        #{originSoundUrl},
         #{price},
         #{createTime},
         #{updateTime},
@@ -67,6 +70,7 @@
 		coverUrl=#{coverUrl},
 		preCoverUrl=#{preCoverUrl},
 		backgroundUrl=#{backgroundUrl},
+		originSoundUrl=#{originSoundUrl},
 		price=#{price},
 		updateTime=#{updateTime}
 		where

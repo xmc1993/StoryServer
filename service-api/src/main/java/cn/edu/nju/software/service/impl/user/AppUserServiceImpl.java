@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -88,8 +87,13 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public User addUserByWeChat(User user) {
-        user.setCreateTime(new Date());
+    public User addOrUpdateUser(User user) {
+        //如果是需要更新
+        if (user.getId() != 0 && user.getId() != null) {
+            boolean up = userDao.updateUser(user);
+            return up ? user : null;
+        }
+        //如果是需要新增用户
         boolean res = userDao.saveUser(user);
         if (res) {
             user.setId(userDao.getNewestId());
@@ -107,5 +111,10 @@ public class AppUserServiceImpl implements AppUserService {
     public List<UserBase> getUserBaseListByIdList(List<Integer> idList) {
         idList.add(-1);//防止mybatis查询出错
         return userDao.getUserBaseListByUserIdList(idList);
+    }
+
+    @Override
+    public User getUserByDeviceId(String deviceId) {
+        return userDao.getUserByDeviceId(deviceId);
     }
 }

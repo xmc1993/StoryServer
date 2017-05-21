@@ -75,6 +75,13 @@
         where id = #{0}
     </select>
 
+    <select id="getUserByDeviceId" resultType="cn.edu.nju.software.entity.User">
+        select
+        <include refid="fields"></include>
+        from user
+        where deviceId = #{0}
+    </select>
+
     <select id="getAllUsers" resultType="cn.edu.nju.software.entity.User">
         select
         <include refid="fields"></include>

@@ -22,10 +22,12 @@ public interface AppUserService {
 
     User loginByUnionId(int businessId, String unionId);
 
-    User addUserByWeChat(User user);
+    User addOrUpdateUser(User user);
 
     UserBase getUserBaseById(int id);
 
     List<UserBase> getUserBaseListByIdList(List<Integer> idList);
+
+    User getUserByDeviceId(String deviceId);
 
 }

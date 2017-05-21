@@ -130,7 +130,7 @@ public class UserUserController extends BaseController {
             long currentTime = System.currentTimeMillis();
             currentTime += 1000 * 60 * 60 * 24 * 30;//设置为30天后失效
             user.setExpireTime(new Date(currentTime));
-            user = userService.addUserByWeChat(user);
+            user = userService.addOrUpdateUser(user);
         }
 
         //如果用户创建失败
@@ -151,6 +151,45 @@ public class UserUserController extends BaseController {
         return responseData;
     }
 
+
+    @ApiOperation(value = "游客登录", notes = "")
+    @RequestMapping(value = "/mockLogin", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<LoginResponseVo> guestLogin(
+            @ApiParam("DeviceId") @RequestParam String deviceId
+    ) {
+        ResponseData<LoginResponseVo> responseData = new ResponseData<>();
+        User user = userService.getUserByDeviceId(deviceId);
+
+        if (user == null) {
+            user = new User();
+            user.setCreateTime(new Date());
+            user.setUpdateTime(new Date());
+            user.setNickname("游客");
+            user.setDeviceId(deviceId);
+            user.setHeadImgUrl(UploadFileUtil.SOURCE_BASE_URL + IMAGE_ROOT + default_avatar);//设置默认头像
+        }
+
+        Util.setNewAccessToken(user);
+        long currentTime = System.currentTimeMillis();
+        currentTime += 1000 * 60 * 60 * 24 * 30;//设置为30天后失效
+        user.setExpireTime(new Date(currentTime));
+
+        user = userService.addOrUpdateUser(user);
+        if (user == null) {
+            responseData.jsonFill(2, "获取用户信息失败", null);
+            return responseData;
+        }
+        //登录信息写入缓存
+        JedisUtil.getJedis().set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
+        JedisUtil.getJedis().expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);//缓存用户信息30天
+
+        LoginResponseVo loginResponseVo = new LoginResponseVo();
+        loginResponseVo.setAccessToken(user.getAccessToken());
+        loginResponseVo.setId(user.getId());
+        responseData.jsonFill(1, null, loginResponseVo);
+        return responseData;
+    }
 
     @ApiOperation(value = "测试用直接用ID登录(仅用于测试)", notes = "用户登录")
     @RequestMapping(value = "/mockLogin", method = {RequestMethod.GET, RequestMethod.POST})

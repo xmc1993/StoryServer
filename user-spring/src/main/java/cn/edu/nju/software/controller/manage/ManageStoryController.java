@@ -51,11 +51,12 @@ public class ManageStoryController {
             @ApiParam("封面") @RequestParam("coverFile") MultipartFile coverFile,
             @ApiParam("预览封面") @RequestParam("preCoverFile") MultipartFile preCoverFile,
             @ApiParam("录制背景") @RequestParam("backgroundFile") MultipartFile backgroundFile,
+            @ApiParam("原音") @RequestParam("originSoundFile") MultipartFile originSoundFile,
             HttpServletRequest request, HttpServletResponse response) {
-        if (coverFile == null || preCoverFile == null || backgroundFile == null) {
-            throw new RuntimeException("请选择封面or背景文件。");
+        if (coverFile == null || preCoverFile == null || backgroundFile == null || originSoundFile == null) {
+            throw new RuntimeException("请选择文件上传。");
         }
-        MultipartFile[] files = {coverFile, preCoverFile, backgroundFile};
+        MultipartFile[] files = {coverFile, preCoverFile, backgroundFile, originSoundFile};
         List<String> urlList = new ArrayList<>();
         for (int i = 0; i < files.length; i++) {
             String url = uploadFile(files[i]);
@@ -74,6 +75,7 @@ public class ManageStoryController {
         story.setCoverUrl(urlList.get(0));
         story.setPreCoverUrl(urlList.get(1));
         story.setBackgroundUrl(urlList.get(2));
+        story.setOriginSoundUrl(urlList.get(3));
 
         boolean res = storyService.saveStory(story);
         if (!res) {
@@ -97,6 +99,7 @@ public class ManageStoryController {
             @ApiParam("封面") @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
             @ApiParam("预览封面") @RequestParam(value = "preCoverFile", required = false) MultipartFile preCoverFile,
             @ApiParam("录制背景") @RequestParam(value = "backgroundFile", required = false) MultipartFile backgroundFile,
+            @ApiParam("原音") @RequestParam("originSoundFile") MultipartFile originSoundFile,
             HttpServletRequest request, HttpServletResponse response) {
         Story story = storyService.getStoryById(id);
         if (story == null) {
@@ -110,6 +113,9 @@ public class ManageStoryController {
         }
         if (backgroundFile != null){
             story.setCoverUrl(uploadFile(backgroundFile));
+        }
+        if (originSoundFile != null){
+            story.setOriginSoundUrl(uploadFile(originSoundFile));
         }
         story.setTitle(title);
         story.setContent(content);

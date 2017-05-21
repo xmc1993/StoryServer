@@ -49,4 +49,6 @@ public interface AppUserDao {
 
     boolean removeLike(int id);
 
+    User getUserByDeviceId(String deviceId);
+
 }

@@ -23,7 +23,8 @@
 		followerCount,
 		followeeCount,
 		workCount,
-		likeCount
+		likeCount,
+		deviceId
 	</sql>
 
     <sql id="baseFields">
@@ -72,6 +73,7 @@
         <id column="followeeCount" property="followeeCount"/>
         <id column="workCount" property="workCount"/>
         <id column="likeCount" property="likeCount"/>
+        <id column="deviceId" property="deviceId"/>
     </resultMap>
 
     <insert id="saveUser" parameterType="cn.edu.nju.software.entity.User" useGeneratedKeys="true">
@@ -99,7 +101,8 @@
         #{followerCount},
         #{followeeCount},
         #{workCount},
-        #{likeCount}
+        #{likeCount},
+        #{deviceId}
         )
     </insert>
 
@@ -127,7 +130,8 @@
 		followerCount=#{followerCount},
 		followeeCount=#{followeeCount},
 		workCount=#{workCount},
-		likeCount=#{likeCount}
+		likeCount=#{likeCount},
+		deviceId=#{deviceId}
 		where
 		id=#{id}
 	</update>

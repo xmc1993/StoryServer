@@ -15,6 +15,7 @@ public class Story {
     private String coverUrl;
     private String preCoverUrl;
     private String backgroundUrl;//录制背景图url
+    private String originSoundUrl;//原始音效url
     private String price;
     private Date createTime;
     private Date updateTime;
@@ -122,5 +123,13 @@ public class Story {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getOriginSoundUrl() {
+        return originSoundUrl;
+    }
+
+    public void setOriginSoundUrl(String originSoundUrl) {
+        this.originSoundUrl = originSoundUrl;
     }
 }
