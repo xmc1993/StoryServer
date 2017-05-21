@@ -50,13 +50,11 @@ public class StoryServiceImpl implements StoryService {
     @Override
     public Story updateStory(Story story) {
         story.setUpdateTime(new Date());
-
         Story _story = storyDao.getStoryById(story.getId());
         boolean res = storyDao.updateStory(story);
         if (!res) {
             return null;
         }
-
         //如果故事的名字发生改变，那么更新冗余字段
         if (!_story.getTitle().equals(story.getTitle())) {
             worksDao.updateStoryTitle(story.getId(), story.getTitle());
