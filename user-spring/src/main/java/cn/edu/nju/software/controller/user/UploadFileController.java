@@ -33,6 +33,7 @@ public class UploadFileController extends BaseController {
     private static final String SUFFIX = ".jpg";
     private static final String HEAD_ROOT = "/head/"; //头像的基础路径
     private static final List<String> VALID_SUFFIX = new ArrayList<>();
+
     //初始化支持的头像类型
     static {
         VALID_SUFFIX.add("jpg");
@@ -54,6 +55,11 @@ public class UploadFileController extends BaseController {
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "用户尚未登录。", false);
+            return responseData;
+        }
+
+        if (uploadFile == null) {
+            responseData.jsonFill(2, "请选择文件上传。", false);
             return responseData;
         }
         logger.info("开始上传头像!");
@@ -90,7 +96,6 @@ public class UploadFileController extends BaseController {
         responseData.jsonFill(1, null, "success");
         return responseData;
     }
-
 
 
 }
