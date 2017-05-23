@@ -8,6 +8,7 @@ import cn.edu.nju.software.util.TokenConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,8 +45,10 @@ public class AccessTokenValidationInterceptor extends HandlerInterceptorAdapter 
             throws Exception {
 
         String AccessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
+        Jedis jedis = null;
         try {
-            byte[] bytes = JedisUtil.getJedis().get(AccessToken.getBytes());
+            jedis = JedisUtil.getJedis();
+            byte[] bytes = jedis.get(AccessToken.getBytes());
             if (bytes == null) {
                 response.setStatus(401);
                 throw new LoginException("登录失效");
@@ -57,14 +60,18 @@ public class AccessTokenValidationInterceptor extends HandlerInterceptorAdapter 
                 } else {
                     request.setAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME, user);
                     //刷新token的时间
-                    JedisUtil.getJedis().set(AccessToken.getBytes(), bytes);
-                    JedisUtil.getJedis().expire(AccessToken.getBytes(), 60 * 60 * 24 * 30);//缓存用户信息30天
+//                    jedis.set(AccessToken.getBytes(), bytes);
+//                    jedis.expire(AccessToken.getBytes(), 60 * 60 * 24 * 30);//缓存用户信息30天
                 }
             }
 
         } catch (Exception e) {
             response.setStatus(401);
             throw new LoginException("登录失效");
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
         }
 
         return true;

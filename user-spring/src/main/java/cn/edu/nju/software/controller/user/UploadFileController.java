@@ -5,6 +5,8 @@ import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
+import cn.edu.nju.software.util.JedisUtil;
+import cn.edu.nju.software.util.ObjectAndByte;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UploadFileUtil;
 import com.wordnik.swagger.annotations.Api;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Api("upload file controller")
+@Api("upload controller")
 @Controller
 @RequestMapping("/user")
 public class UploadFileController extends BaseController {
@@ -91,8 +94,21 @@ public class UploadFileController extends BaseController {
         String url = UploadFileUtil.SOURCE_BASE_URL + HEAD_ROOT + fileName;
         User userInDB = userService.getUserByMobileOrId(String.valueOf(user.getId()));
         userInDB.setUpdateTime(new Date());
-        UploadFileUtil.deleteFileByUrl(userInDB.getHeadImgUrl());
+        String oldHeadImgUrl = userInDB.getHeadImgUrl();
         userInDB.setHeadImgUrl(url);
+        User result = userService.addOrUpdateUser(userInDB);
+        if (result == null) {
+            responseData.jsonFill(2, "更新失败", null);
+            return responseData;
+        }
+
+        //删除旧的头像
+        UploadFileUtil.deleteFileByUrl(oldHeadImgUrl);
+        //更新Session中的用户信息
+        String AccessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
+        Jedis jedis = JedisUtil.getJedis();
+        jedis.set(AccessToken.getBytes(), ObjectAndByte.toByteArray(userInDB));
+        jedis.close();
         responseData.jsonFill(1, null, "success");
         return responseData;
     }
