@@ -251,6 +251,8 @@ public class UserWorksController extends BaseController {
             return responseData;
         }
         works.setUpdateTime(new Date());
+        //删除原有的作品文件
+        UploadFileUtil.deleteFileByUrl(works.getUrl());
         works.setUrl(url);
         boolean res = worksService.updateWorks(works);
         responseData.jsonFill(res ? 1 : 2, null, res);

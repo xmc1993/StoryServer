@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
 	<Properties>
-		<Property name="LOG_DIR">/var/lib/tomcat7/logs/sinture</Property>
+		<Property name="LOG_DIR">/var/lib/tomcat7/logs/story</Property>
 		<Property name="ARCHIVE">${LOG_DIR}/archive</Property>
 		<Property name="PATTERN">%-5level %d [%t] %c:%M(%L): %m%n</Property>
 	</Properties>
@@ -10,7 +10,7 @@
 			<PatternLayout pattern="${PATTERN}" />
 		</Console>
 
-		<RollingFile name="RollingFile" fileName="${LOG_DIR}/sinture.log"
+		<RollingFile name="RollingFile" fileName="${LOG_DIR}/story.log"
 			filePattern="${ARCHIVE}/sinture.log.%d{yyyy-MM-dd}.gz">
 			<MarkerFilter marker="STATISTICS" onMatch="ACCEPT"
 				onMismatch="DENY" />

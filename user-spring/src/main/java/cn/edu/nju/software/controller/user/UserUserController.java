@@ -67,7 +67,6 @@ public class UserUserController extends BaseController {
     public ResponseData<User> getUserSelfInfo(
             HttpServletRequest request, HttpServletResponse response) throws Exception {
         ResponseData responseData = new ResponseData();
-
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "用户尚未登录。", false);

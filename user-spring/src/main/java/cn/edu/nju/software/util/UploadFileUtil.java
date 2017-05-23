@@ -16,6 +16,10 @@ public final class UploadFileUtil {
     //资源服务器的base url
     public static final String SOURCE_BASE_URL = "http://120.27.219.173/source";
 
+    public static final String URL_BASE = "/source";
+
+    public static final String DIR_BASE = "/data";
+
 
     private UploadFileUtil() {
     }
@@ -72,5 +76,46 @@ public final class UploadFileUtil {
         }
         return true;
     }
+
+    /**
+     * 删除服务器上的文件
+     *
+     * @return
+     */
+    public static boolean deleteFile(String fileUri) {
+        if (StringUtil.isEmpty(fileUri)) return true;
+        File file = new File(fileUri);
+        if (file.exists()) {
+            return file.delete();
+        }
+        return true;
+    }
+
+
+    public static String getRealPathFromUrl(String url) {
+        if (StringUtil.isEmpty(url)) return null;
+        int index = url.indexOf(URL_BASE);
+        String result = url.substring(index + URL_BASE.length());
+        result = DIR_BASE + result;
+        return result;
+    }
+
+
+    /**
+     * 根据数据库中的url删除服务器中的文件
+     *
+     * @param url
+     * @return
+     */
+    public static boolean deleteFileByUrl(String url) {
+        String fileUri = getRealPathFromUrl(url);
+        return deleteFile(fileUri);
+    }
+
+    public static void main(String[] args) {
+        String result = getRealPathFromUrl("http://120.27.219.173/source/cover/XKpa5J5vOj9rQVnn.jpg");
+        System.out.println(result);
+    }
+
 
 }

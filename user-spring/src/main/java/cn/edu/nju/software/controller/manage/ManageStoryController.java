@@ -86,7 +86,7 @@ public class ManageStoryController {
 
 
     @ApiOperation(value = "更新故事", notes = "")
-    @RequestMapping(value = "/stories/{id}", method = {RequestMethod.PUT})
+    @RequestMapping(value = "/stories/{id}", method = {RequestMethod.POST})
     @ResponseBody
     public Story updateStoryTag(
             @ApiParam("故事ID") @PathVariable int id,
@@ -105,16 +105,23 @@ public class ManageStoryController {
         if (story == null) {
             throw new RuntimeException("无效的故事id");
         }
-        if (coverFile != null){
+        if (coverFile != null) {
+            //删除旧的封面
+            UploadFileUtil.deleteFileByUrl(story.getCoverUrl());
             story.setCoverUrl(uploadFile(coverFile));
         }
-        if (preCoverFile != null){
-            story.setCoverUrl(uploadFile(preCoverFile));
+        if (preCoverFile != null) {
+            //删除旧
+            UploadFileUtil.deleteFileByUrl(story.getPreCoverUrl());
+            story.setPreCoverUrl(uploadFile(preCoverFile));
         }
-        if (backgroundFile != null){
-            story.setCoverUrl(uploadFile(backgroundFile));
+        if (backgroundFile != null) {
+            //删除旧
+            UploadFileUtil.deleteFileByUrl(story.getBackgroundUrl());
+            story.setBackgroundUrl(uploadFile(backgroundFile));
         }
-        if (originSoundFile != null){
+        if (originSoundFile != null) {
+            UploadFileUtil.deleteFileByUrl(story.getOriginSoundUrl());
             story.setOriginSoundUrl(uploadFile(originSoundFile));
         }
         story.setTitle(title);
@@ -124,9 +131,9 @@ public class ManageStoryController {
         story.setGuide(guide);
         story.setPrice(price);
         story.setUpdateTime(new Date());
-        //TODO 删除旧的封面文件
+
         Story result = storyService.updateStory(story);
-        if (result == null){
+        if (result == null) {
             throw new RuntimeException("更新失败");
         }
         return result;
@@ -174,6 +181,7 @@ public class ManageStoryController {
 
     /**
      * 上传封面文件
+     *
      * @param file
      * @return
      */
@@ -186,6 +194,15 @@ public class ManageStoryController {
         }
         String url = UploadFileUtil.SOURCE_BASE_URL + COVER_ROOT + fileName;
         return url;
+    }
+
+    @RequestMapping(value = "/testPut", method = {RequestMethod.PUT})
+    @ResponseBody
+    public String testPut(
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit) {
+
+        return "" + offset + limit;
     }
 
 }

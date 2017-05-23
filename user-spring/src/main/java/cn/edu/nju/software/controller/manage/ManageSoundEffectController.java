@@ -72,7 +72,7 @@ public class ManageSoundEffectController {
     }
 
     @ApiOperation(value = "更新音效", notes = "")
-    @RequestMapping(value = "/soundEffects/{id}", method = {RequestMethod.PUT})
+    @RequestMapping(value = "/soundEffects/{id}", method = {RequestMethod.POST})
     @ResponseBody
     public SoundEffect updateSoundEffect(
             @ApiParam("音效ID") @PathVariable int id,
