@@ -88,6 +88,9 @@
             <mvc:mapping path="/user/follow"/>
             <mvc:mapping path="/user/unfollow"/>
             <mvc:mapping path="/user/updateHeadImg"/>
+            <mvc:mapping path="/user/addBaby"/>
+            <mvc:mapping path="/user/updateBaby"/>
+            <mvc:mapping path="/user/deleteBaby"/>
             <!-- 不需要拦截的uri -->
             <!--
             <mvc:exclude-mapping path="/user/getLandingPage"/>

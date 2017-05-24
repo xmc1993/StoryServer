@@ -68,4 +68,9 @@ public class StoryTagServiceImpl implements StoryTagService {
     public StoryTag getStoryTagByIdHard(int tagId) {
         return storyTagDao.getStoryTagByIdHard(tagId);
     }
+
+    @Override
+    public List<StoryTag> getAllSecondLevelTags() {
+        return storyTagDao.getAllSecondLevelTags();
+    }
 }

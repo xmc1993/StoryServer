@@ -46,6 +46,18 @@ public class UserStoryTagController extends BaseController {
         return responseData;
     }
 
+
+    @ApiOperation(value = "获得所有二级标签", notes = "")
+    @RequestMapping(value = "/getAllSecondLevelTags", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<StoryTag>> getAllSecondLevelTags(
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<StoryTag>> responseData = new ResponseData<>();
+        List<StoryTag> storyTagList = storyTagService.getAllSecondLevelTags();
+        responseData.jsonFill(1, null, storyTagList);
+        return responseData;
+    }
+
     @ApiOperation(value = "根据父标签ID（目前是根据一级标签id或者二级标签）获得下一级标签列表", notes = "")
     @RequestMapping(value = "/getTagListByParentId", method = {RequestMethod.GET})
     @ResponseBody

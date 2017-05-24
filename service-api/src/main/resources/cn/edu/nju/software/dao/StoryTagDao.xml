@@ -8,7 +8,8 @@
         content,
         createTime,
         updateTime,
-        valid
+        valid,
+        iconUrl
     </sql>
 
 
@@ -20,9 +21,11 @@
         <id column="createTime" property="createTime"/>
         <id column="updateTime" property="updateTime"/>
         <id column="valid" property="valid"/>
+        <id column="iconUrl" property="iconUrl"/>
     </resultMap>
 
-    <insert id="saveStoryTag" parameterType="cn.edu.nju.software.entity.StoryTag" keyProperty="id" useGeneratedKeys="true">
+    <insert id="saveStoryTag" parameterType="cn.edu.nju.software.entity.StoryTag" keyProperty="id"
+            useGeneratedKeys="true">
         insert into story_tag(
         <include refid="fields"></include>
         )
@@ -33,7 +36,8 @@
         #{content},
         #{createTime},
         #{updateTime},
-        #{valid}
+        #{valid},
+        #{iconUrl}
         )
     </insert>
 
@@ -41,6 +45,7 @@
         UPDATE story_tag
         SET
         content=#{content},
+        iconUrl=#{iconUrl},
         updateTime=#{updateTime}
         WHERE id = #{id} and valid = 1
     </update>
@@ -103,4 +108,14 @@
             #{id}
         </foreach>
     </select>
+
+    <select id="getAllSecondLevelTags" resultType="cn.edu.nju.software.entity.StoryTag">
+        <![CDATA[
+        SELECT
+        <include refid="fields"></include>
+        from story_tag
+        WHERE parentId <> 0 and valid = 1
+        ]]>
+    </select>
+
 </mapper>

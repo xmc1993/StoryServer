@@ -33,4 +33,6 @@ public interface StoryTagService {
 
     StoryTag getStoryTagByIdHard(int tagId);
 
+    List<StoryTag> getAllSecondLevelTags();
+
 }

@@ -38,4 +38,6 @@ public interface StoryTagDao {
 
     boolean deleteHard(int id);
 
+    List<StoryTag> getAllSecondLevelTags();
+
 }

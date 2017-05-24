@@ -12,6 +12,7 @@ public class StoryTag {
     private Date createTime;
     private Date updateTime;
     private int valid = 1;//用于软删除
+    private String iconUrl;
 
     public Integer getId() {
         return id;
@@ -59,5 +60,13 @@ public class StoryTag {
 
     public void setValid(int valid) {
         this.valid = valid;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
     }
 }

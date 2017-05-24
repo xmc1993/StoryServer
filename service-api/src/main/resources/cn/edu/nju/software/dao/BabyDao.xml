@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.BabyDao">
+
+    <sql id="fields">
+        id,
+        parentId,
+        babyName,
+        age,
+        sex,
+        birthday,
+        createTime,
+        updateTime
+    </sql>
+
+
+    <resultMap id="baby" type="cn.edu.nju.software.entity.Baby">
+        <id column="id" property="id"/>
+        <id column="parentId" property="parentId"/>
+        <id column="babyName" property="babyName"/>
+        <id column="age" property="age"/>
+        <id column="sex" property="sex"/>
+        <id column="birthday" property="birthday"/>
+        <id column="createTime" property="createTime"/>
+        <id column="updateTime" property="updateTime"/>
+    </resultMap>
+
+    <insert id="saveBaby" parameterType="cn.edu.nju.software.entity.Baby" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into baby(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{parentId},
+        #{babyName},
+        #{age},
+        #{sex},
+        #{birthday},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <update id="updateBaby" parameterType="cn.edu.nju.software.entity.Baby">
+        UPDATE baby
+        SET
+        babyName=#{babyName},
+        age=#{age},
+        sex=#{sex},
+        birthday=#{birthday},
+        updateTime=#{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteBaby">
+        DELETE FROM bady
+        WHERE id = #{0}
+    </delete>
+
+    <select id="getBabyListByParentId" resultType="cn.edu.nju.software.entity.Baby">
+        select
+        <include refid="fields"></include>
+        from baby
+        where parentId = #{0}
+    </select>
+
+    <select id="getAllBabies" resultType="cn.edu.nju.software.entity.Baby">
+        select
+        <include refid="fields"></include>
+        from baby
+    </select>
+
+    <select id="getBabyById" resultType="cn.edu.nju.software.entity.Baby">
+        select
+        <include refid="fields"></include>
+        from baby
+        WHERE id = #{0}
+    </select>
+
+</mapper>
