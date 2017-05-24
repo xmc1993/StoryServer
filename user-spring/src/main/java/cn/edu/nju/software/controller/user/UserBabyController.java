@@ -49,23 +49,29 @@ public class UserBabyController extends BaseController {
     }
 
 
-    @ApiOperation(value = "添加Baby", notes = "")
+    @ApiOperation(value = "添加Baby", notes = "Auth")
     @RequestMapping(value = "/addBaby", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Baby> addBaby(
             @ApiParam("宝宝名字") @RequestParam("babyName") String babyName,
             @ApiParam("年龄") @RequestParam("age") int age,
-            @ApiParam("性别") @RequestParam("userId") String sex,
-            @ApiParam("生日(采用yyyy-MM-dd的格式)") @RequestParam("birthday") String birthday,
+            @ApiParam("性别") @RequestParam("sex") String sex,
+            @ApiParam("生日(采用yyyy-MM-dd HH:mm:ss的格式)") @RequestParam("birthday") String birthday,
             HttpServletRequest request, HttpServletResponse response) throws ParseException {
         ResponseData<Baby> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "用户尚未登录。", null);
+            return responseData;
+        }
         Baby baby = new Baby();
+        baby.setParentId(user.getId());
         baby.setCreateTime(new Date());
         baby.setUpdateTime(new Date());
         baby.setAge(age);
         baby.setSex(sex);
         baby.setBabyName(babyName);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         baby.setBirthday(dateFormat.parse(birthday));
         Baby result = babyService.saveBaby(baby);
         if (result == null) {
@@ -76,15 +82,15 @@ public class UserBabyController extends BaseController {
         return responseData;
     }
 
-    @ApiOperation(value = "更新Baby信息", notes = "")
+    @ApiOperation(value = "更新Baby信息", notes = "Auth")
     @RequestMapping(value = "/updateBaby", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> updateBaby(
             @ApiParam("宝宝ID") @RequestParam("babyId") int babyId,
             @ApiParam("宝宝名字") @RequestParam("babyName") String babyName,
             @ApiParam("年龄") @RequestParam("age") int age,
-            @ApiParam("性别") @RequestParam("userId") String sex,
-            @ApiParam("生日(采用yyyy-MM-dd的格式)") @RequestParam("birthday") String birthday,
+            @ApiParam("性别") @RequestParam("sex") String sex,
+            @ApiParam("生日(采用yyyy-MM-dd HH:mm:ss的格式)") @RequestParam("birthday") String birthday,
             HttpServletRequest request, HttpServletResponse response) throws ParseException {
         ResponseData<Boolean> responseData = new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
@@ -98,18 +104,16 @@ public class UserBabyController extends BaseController {
             responseData.jsonFill(2, "宝宝不存在。", false);
             return responseData;
         }
-        if (baby.getParentId() != user.getId()) {
+        if (baby.getParentId().compareTo(user.getId()) != 0) {
             responseData.jsonFill(2, "无效的请求。", false);
             response.setStatus(401);
             return responseData;
         }
-        baby.setId(babyId);
-        baby.setCreateTime(new Date());
         baby.setUpdateTime(new Date());
         baby.setAge(age);
         baby.setSex(sex);
         baby.setBabyName(babyName);
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         baby.setBirthday(dateFormat.parse(birthday));
         boolean result = babyService.updateBaby(baby);
         responseData.jsonFill(result ? 1 : 2, null, result);
@@ -117,7 +121,7 @@ public class UserBabyController extends BaseController {
     }
 
 
-    @ApiOperation(value = "删除Baby", notes = "")
+    @ApiOperation(value = "删除Baby", notes = "Auth")
     @RequestMapping(value = "/deleteBaby", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> deleteBaby(
