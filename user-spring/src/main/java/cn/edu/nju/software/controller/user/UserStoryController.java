@@ -32,6 +32,8 @@ public class UserStoryController extends BaseController {
     @Autowired
     private TagRelationService tagRelationService;
 
+    private static final String ICON_ROOT = "/icon/"; //头像的基础路径
+
     @ApiOperation(value = "获取ID获取故事", notes = "")
     @RequestMapping(value = "/getStoryById", method = {RequestMethod.GET})
     @ResponseBody
@@ -104,6 +106,5 @@ public class UserStoryController extends BaseController {
         responseData.jsonFill(1, null, storyList);
         return responseData;
     }
-
 
 }
