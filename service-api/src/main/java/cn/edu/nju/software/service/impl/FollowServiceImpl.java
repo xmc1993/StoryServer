@@ -61,4 +61,20 @@ public class FollowServiceImpl implements FollowService {
         List<Integer> followeeIdList = followRelationDao.getFolloweeIdListByUserId(userId, offset, limit);
         return followeeIdList;
     }
+
+    @Override
+    public int getStatusBetween(int curUserId, int userId) {
+        boolean res1 = followRelationDao.getFollowRelation(curUserId, userId) != null;
+        boolean res2 = followRelationDao.getFollowRelation(userId, curUserId) != null;
+        if (res1 && res2) {
+            return 3;//互相关注
+        }
+        if (res2) {
+            return 2;//单方面被关注
+        }
+        if (res1) {
+            return 1;//单方面关注
+        }
+        return 0;//无关联
+    }
 }

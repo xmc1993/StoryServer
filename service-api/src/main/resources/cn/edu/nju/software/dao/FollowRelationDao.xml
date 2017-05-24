@@ -63,4 +63,13 @@
     </select>
 
 
+    <select id="getFollowRelation" resultType="cn.edu.nju.software.entity.FollowRelation">
+        SELECT
+        <include refid="fields"></include>
+        from
+        follow_relation
+        where
+        followerId = #{0} and followeeId = #{1}
+    </select>
+
 </mapper>

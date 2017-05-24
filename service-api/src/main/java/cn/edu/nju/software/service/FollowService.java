@@ -18,4 +18,7 @@ public interface FollowService {
     List<Integer> getUserFollowerList(int userId, int offset, int limit);
 
     List<Integer> getUserFolloweeList(int userId, int offset, int limit);
+
+    int getStatusBetween(int curUserId, int userId);
 }
+

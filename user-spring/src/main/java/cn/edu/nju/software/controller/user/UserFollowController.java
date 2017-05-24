@@ -7,9 +7,11 @@ import cn.edu.nju.software.entity.UserBase;
 import cn.edu.nju.software.service.FollowService;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.util.TokenConfig;
+import cn.edu.nju.software.vo.UserBaseFollowVo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -92,13 +95,17 @@ public class UserFollowController {
     @ApiOperation(value = "得到某个用户的粉丝列表", notes = "")
     @RequestMapping(value = "/getFollowerListByUserId", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<UserBase>> getFollowerListByUserId(
+    public ResponseData<List<UserBaseFollowVo>> getFollowerListByUserId(
             @ApiParam("用户ID") @RequestParam("userId") Integer userId,
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<UserBase>> responseData = new ResponseData<>();
-
+        ResponseData<List<UserBaseFollowVo>> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "用户尚未登录。", null);
+            return responseData;
+        }
         if (appUserService.getUserByMobileOrId(String.valueOf(userId)) == null) {
             responseData.jsonFill(2, "该用户不存在", null);
             response.setStatus(404);
@@ -106,19 +113,31 @@ public class UserFollowController {
         }
         List<Integer> idList = followService.getUserFollowerList(userId, offset, limit);
         List<UserBase> userBaseList = appUserService.getUserBaseListByIdList(idList);
-        responseData.jsonFill(1, null, userBaseList);
+        ArrayList<UserBaseFollowVo> result = new ArrayList<>();
+        for (UserBase userBase : userBaseList) {
+            UserBaseFollowVo userBaseFollowVo = new UserBaseFollowVo();
+            BeanUtils.copyProperties(userBase, userBaseFollowVo);
+            userBaseFollowVo.setStatus(followService.getStatusBetween(user.getId(), userBase.getId()));
+            result.add(userBaseFollowVo);
+        }
+        responseData.jsonFill(1, null, result);
         return responseData;
     }
 
     @ApiOperation(value = "得到某个用户的关注列表", notes = "")
     @RequestMapping(value = "/getFolloweeListByUserId", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<UserBase>> getFolloweeListByUserId(
+    public ResponseData<List<UserBaseFollowVo>> getFolloweeListByUserId(
             @ApiParam("用户ID") @RequestParam("userId") int userId,
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<UserBase>> responseData = new ResponseData<>();
+        ResponseData<List<UserBaseFollowVo>> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "用户尚未登录。", null);
+            return responseData;
+        }
         if (appUserService.getUserByMobileOrId(String.valueOf(userId)) == null) {
             responseData.jsonFill(2, "该用户不存在", null);
             response.setStatus(404);
@@ -126,7 +145,14 @@ public class UserFollowController {
         }
         List<Integer> idList = followService.getUserFolloweeList(userId, offset, limit);
         List<UserBase> userBaseList = appUserService.getUserBaseListByIdList(idList);
-        responseData.jsonFill(1, null, userBaseList);
+        ArrayList<UserBaseFollowVo> result = new ArrayList<>();
+        for (UserBase userBase : userBaseList) {
+            UserBaseFollowVo userBaseFollowVo = new UserBaseFollowVo();
+            BeanUtils.copyProperties(userBase, userBaseFollowVo);
+            userBaseFollowVo.setStatus(followService.getStatusBetween(user.getId(), userBase.getId()));
+            result.add(userBaseFollowVo);
+        }
+        responseData.jsonFill(1, null, result);
         return responseData;
     }
 

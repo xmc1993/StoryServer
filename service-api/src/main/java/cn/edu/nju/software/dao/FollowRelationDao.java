@@ -15,6 +15,8 @@ public interface FollowRelationDao {
 
     boolean deleteFollowRelation(int followerId, int followeeId);
 
+    FollowRelation getFollowRelation(int followerId, int followeeId);
+
     boolean deleteFollowRelationById(int id);
 
     List<Integer> getFollowerIdListByUserId(int userId, int offset, int limit);
