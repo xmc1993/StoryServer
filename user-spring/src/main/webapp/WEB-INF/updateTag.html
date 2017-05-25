@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" style="">
+<head>
+    <meta charset="UTF-8">
+    <title>更新标签测试</title>
+</head>
+<body>
+<h2>更新标签测试</h2>
+
+
+<form action="/manage/storyTags/100025" method="post"
+      enctype="multipart/form-data">
+    <p>
+        ICON:<input style="display: block" type="file" name="uploadFile">
+    </p>
+
+    <p>
+        父标签ID:<input style="display: block" type="text" name="parentId">
+    </p>
+
+    <p>
+        测试标签:<input style="display: block" type="text" name="content">
+    </p>
+    <input type="submit" value="提交">
+</form>
+</body>
+</html>

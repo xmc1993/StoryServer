@@ -105,7 +105,7 @@
         </mvc:interceptor>
 
         <mvc:interceptor>
-            <mvc:mapping path="/manage/*"/>
+            <mvc:mapping path="/manage/**"/>
             <!-- 不需要拦截的uri -->
             <mvc:exclude-mapping path="/swagger/**"/>
             <mvc:exclude-mapping path="/api-docs/**"/>

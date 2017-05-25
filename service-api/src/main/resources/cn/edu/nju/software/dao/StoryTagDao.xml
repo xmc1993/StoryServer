@@ -45,6 +45,7 @@
         UPDATE story_tag
         SET
         content=#{content},
+        parentId=#{parentId},
         iconUrl=#{iconUrl},
         updateTime=#{updateTime}
         WHERE id = #{id} and valid = 1
@@ -110,12 +111,10 @@
     </select>
 
     <select id="getAllSecondLevelTags" resultType="cn.edu.nju.software.entity.StoryTag">
-        <![CDATA[
         SELECT
         <include refid="fields"></include>
         from story_tag
-        WHERE parentId <> 0 and valid = 1
-        ]]>
+        WHERE parentId &lt;&gt; 0 and valid = 1
     </select>
 
 </mapper>

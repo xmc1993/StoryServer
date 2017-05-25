@@ -43,7 +43,7 @@ public class ManageStoryTagController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public StoryTag publishStoryTag(
-            @ApiParam("icon文件") @RequestParam("uploadFile") MultipartFile uploadFile,
+            @ApiParam("icon文件") @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile,
             @ApiParam("标签文字") @RequestParam("content") String content,
             @ApiParam("父标签ID") @RequestParam("parentId") int parentId,
             HttpServletRequest request, HttpServletResponse response) {
@@ -53,7 +53,7 @@ public class ManageStoryTagController {
             logger.error("无效的parentId");
             throw new RuntimeException("无效的parentId");
         }
-        if (uploadFile != null) {
+        if (!uploadFile.isEmpty()) {
             String url = uploadFile(uploadFile);
             if (url == null){
                 throw new RuntimeException("上传图标失败");
@@ -68,12 +68,12 @@ public class ManageStoryTagController {
         return storyTag;
     }
 
-    @ApiOperation(value = "更新标签文字", notes = "")
+    @ApiOperation(value = "更新标签", notes = "")
     @RequestMapping(value = "/storyTags/{id}", method = {RequestMethod.POST})
     @ResponseBody
     public StoryTag updateStoryTag(
             @ApiParam("标签ID") @PathVariable int id,
-            @ApiParam("icon文件") @RequestParam("uploadFile") MultipartFile uploadFile,
+            @ApiParam("icon文件") @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile,
             @ApiParam("标签文字") @RequestParam("content") String content,
             @ApiParam("父标签ID") @RequestParam("parentId") int parentId,
             HttpServletRequest request, HttpServletResponse response) {
@@ -83,11 +83,12 @@ public class ManageStoryTagController {
         }
         storyTag.setContent(content);
         storyTag.setParentId(parentId);
-        if (uploadFile != null) {
+        if (!uploadFile.isEmpty()) {
             String url = uploadFile(uploadFile);
             if (url == null){
                 throw new RuntimeException("上传图标失败");
             }
+            UploadFileUtil.deleteFileByUrl(storyTag.getIconUrl());
             storyTag.setIconUrl(url);
         }
         storyTag.setUpdateTime(new Date());

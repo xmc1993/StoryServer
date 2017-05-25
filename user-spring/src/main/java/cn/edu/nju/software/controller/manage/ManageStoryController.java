@@ -53,7 +53,7 @@ public class ManageStoryController {
             @ApiParam("录制背景") @RequestParam("backgroundFile") MultipartFile backgroundFile,
             @ApiParam("原音") @RequestParam("originSoundFile") MultipartFile originSoundFile,
             HttpServletRequest request, HttpServletResponse response) {
-        if (coverFile == null || preCoverFile == null || backgroundFile == null || originSoundFile == null) {
+        if (coverFile.isEmpty() || preCoverFile.isEmpty() || backgroundFile.isEmpty() || originSoundFile.isEmpty()) {
             throw new RuntimeException("请选择文件上传。");
         }
         MultipartFile[] files = {coverFile, preCoverFile, backgroundFile, originSoundFile};
@@ -105,22 +105,22 @@ public class ManageStoryController {
         if (story == null) {
             throw new RuntimeException("无效的故事id");
         }
-        if (coverFile != null) {
+        if (!coverFile.isEmpty()) {
             //删除旧的封面
             UploadFileUtil.deleteFileByUrl(story.getCoverUrl());
             story.setCoverUrl(uploadFile(coverFile));
         }
-        if (preCoverFile != null) {
+        if (!preCoverFile.isEmpty()) {
             //删除旧
             UploadFileUtil.deleteFileByUrl(story.getPreCoverUrl());
             story.setPreCoverUrl(uploadFile(preCoverFile));
         }
-        if (backgroundFile != null) {
+        if (!backgroundFile.isEmpty()) {
             //删除旧
             UploadFileUtil.deleteFileByUrl(story.getBackgroundUrl());
             story.setBackgroundUrl(uploadFile(backgroundFile));
         }
-        if (originSoundFile != null) {
+        if (!originSoundFile.isEmpty()) {
             UploadFileUtil.deleteFileByUrl(story.getOriginSoundUrl());
             story.setOriginSoundUrl(uploadFile(originSoundFile));
         }

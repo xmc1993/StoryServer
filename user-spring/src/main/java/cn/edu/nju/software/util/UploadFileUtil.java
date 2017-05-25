@@ -108,6 +108,7 @@ public final class UploadFileUtil {
      * @return
      */
     public static boolean deleteFileByUrl(String url) {
+        if (StringUtil.isEmpty(url)) return true;
         String fileUri = getRealPathFromUrl(url);
         return deleteFile(fileUri);
     }

@@ -45,7 +45,7 @@ public class ManageSoundEffectController {
             @ApiParam("音效描述") @RequestParam("description") String description,
             HttpServletRequest request, HttpServletResponse response) {
 
-        if (uploadFile == null) {
+        if (uploadFile.isEmpty()) {
             throw new RuntimeException("请选择文件上传");
         }
         logger.info("开始上传音效文件!");
@@ -87,7 +87,7 @@ public class ManageSoundEffectController {
         }
         SoundEffect soundEffect = soundEffectService.getSoundEffectById(id);
 
-        if (uploadFile != null) {
+        if (!uploadFile.isEmpty()) {
 
             logger.info("开始上传音效文件!");
             String realPath = UploadFileUtil.getBaseUrl() + SOUND_EFFECT_ROOT;
