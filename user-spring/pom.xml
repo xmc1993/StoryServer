@@ -508,8 +508,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.sinture</groupId>
-			<artifactId>sinture.api</artifactId>
+			<groupId>com.story</groupId>
+			<artifactId>story.api</artifactId>
 			<version>1.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
