@@ -302,47 +302,7 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.3.2</version>
 		</dependency>
-		
-		<dependency>
-			<groupId>bcmail-jdk15on-154</groupId>
-			<artifactId>bcmail-jdk15on-154</artifactId>
-			<version>2.5.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/bcmail-jdk15on-154.jar</systemPath>
-		</dependency>
-		
-		<dependency>
-			<groupId>bcpg-jdk15on-154</groupId>
-			<artifactId>bcpg-jdk15on-154</artifactId>
-			<version>2.5.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/bcpg-jdk15on-154.jar</systemPath>
-		</dependency>
-		
-		<dependency>
-			<groupId>bcpkix-jdk15on-154</groupId>
-			<artifactId>bcpkix-jdk15on-154</artifactId>
-			<version>2.5.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/bcpkix-jdk15on-154.jar</systemPath>
-		</dependency>
-		
-		<dependency>
-			<groupId>bcprov-ext-jdk15on-154</groupId>
-			<artifactId>bcprov-ext-jdk15on-154</artifactId>
-			<version>2.5.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/bcprov-ext-jdk15on-154.jar</systemPath>
-		</dependency>
-		
-		<dependency>
-			<groupId>bcprov-jdk15on-154</groupId>
-			<artifactId>bcprov-jdk15on-154</artifactId>
-			<version>2.5.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/bcprov-jdk15on-154.jar</systemPath>
-		</dependency>
-		
+
 	</dependencies>
 
 

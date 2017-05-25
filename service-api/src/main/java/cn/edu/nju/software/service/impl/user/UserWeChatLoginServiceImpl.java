@@ -1,10 +1,8 @@
 package cn.edu.nju.software.service.impl.user;
 
 import cn.edu.nju.software.service.user.UserWeChatLoginService;
-import cn.edu.nju.software.util.AesCbcUtil;
 import cn.edu.nju.software.vo.WeChatOAuthVo;
 import cn.edu.nju.software.vo.WeChatUserInfoVo;
-import cn.edu.nju.software.vo.WxAppletAuthVo;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -137,88 +135,6 @@ public class UserWeChatLoginServiceImpl implements UserWeChatLoginService {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        return null;
-    }
-
-    @Override
-    public WxAppletAuthVo getAppletSessionKey(String appId, String secret, String jsCode, String grantType) {
-        String url = WX_APPLET_OAUTH_URL + "?appid=" + appId + "&secret=" + secret + "&grant_type=" + grantType + "&js_code=" + jsCode;
-
-        URI uri = URI.create(url);
-        HttpClient client = HttpClients.createDefault();
-        HttpGet get = new HttpGet(uri);
-        WxAppletAuthVo authVo = new WxAppletAuthVo();
-
-        HttpResponse response;
-        try {
-            response = client.execute(get);
-            if (response.getStatusLine().getStatusCode() == 200) {
-                HttpEntity entity = response.getEntity();
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent(), "UTF-8"));
-                StringBuilder sb = new StringBuilder();
-
-                for (String temp = reader.readLine(); temp != null; temp = reader.readLine()) {
-                    sb.append(temp);
-                }
-
-                JSONObject object = new JSONObject(sb.toString().trim());
-
-                //获取Auth信息
-                String sessionKey;
-                try {
-                    sessionKey = object.getString("session_key");
-                } catch (Exception e) {//如果返回的结果不存在session_key那么说明返回结果错误
-                    e.printStackTrace();
-                    logger.error("小程序微信登录授权失败");
-                    logger.error(object.toString());
-                    return null;
-                }
-                authVo.setSessionKey(sessionKey);
-                authVo.setOpenId(object.getString("openid"));
-
-                return authVo;
-            }
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public WeChatUserInfoVo getAppletUserInfo(String encryptedData, String iv, String sessionKey) {
-        WeChatUserInfoVo weChatUserInfoVo = new WeChatUserInfoVo();
-
-        // 2、对encryptedData加密数据进行AES解密
-        try {
-            String result = AesCbcUtil.decrypt(encryptedData, sessionKey, iv, "UTF-8");
-            if (null != result && result.length() > 0) {
-
-                JSONObject userInfoJSON = new JSONObject(result);
-
-                weChatUserInfoVo.setNickName(userInfoJSON.getString("nickName"));
-                weChatUserInfoVo.setCity(userInfoJSON.getString("city"));
-                weChatUserInfoVo.setProvince(userInfoJSON.getString("province"));
-                weChatUserInfoVo.setCountry(userInfoJSON.getString("country"));
-                weChatUserInfoVo.setSex(userInfoJSON.getInt("gender"));
-                weChatUserInfoVo.setOpenId(userInfoJSON.getString("openId"));
-                weChatUserInfoVo.setUnionId(userInfoJSON.getString("unionId"));
-                weChatUserInfoVo.setHeadImgUrl(userInfoJSON.getString("avatarUrl"));
-
-                return weChatUserInfoVo;
-            }
-        } catch (Exception e) {
-            logger.error("解析加密用户信息失败");
-            e.printStackTrace();
-        }
-
 
         return null;
     }
