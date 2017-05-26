@@ -88,13 +88,13 @@ public class UserUserController extends BaseController {
                                                        HttpServletRequest request, HttpServletResponse response) throws Exception {
         ResponseData responseData = new ResponseData();
         Business business = businessService.getBusinessByAppId(appId);
-        WeChatOAuthVo weChatOAuthVo = weChatLoginService.getAccessToken(business.getWeChatAppId(), business.getWeChatSecret(), GrantType.AUTHORIZATION_CODE, code);
+        WeChatOAuthVo weChatOAuthVo = weChatLoginService.getAccessToken(business.getWxAppId(),business.getWxSecret(), GrantType.AUTHORIZATION_CODE, code);
         if (null == weChatOAuthVo) {
             responseData.jsonFill(2, "微信OAuth失败", false);
             return responseData;
         }
 
-        User user = userService.loginByUnionId(business.getId(), weChatOAuthVo.getUnionId());
+        User user = userService.loginByUnionId(weChatOAuthVo.getUnionId());
         //如果数据库没有相应的用户那么新建一个用户
 
         if (null == user) {

@@ -68,7 +68,7 @@ public class AppUserServiceImpl implements AppUserService {
 
 
     @Override
-    public User loginByUnionId(int businessId, String unionId) {
+    public User loginByUnionId(String unionId) {
         User user = userDao.getUserByUnionId(unionId);
 
         if (null != user) {

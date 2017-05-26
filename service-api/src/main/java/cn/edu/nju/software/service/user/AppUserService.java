@@ -20,7 +20,7 @@ public interface AppUserService {
 
     void clearOldAvatar(File dir, String mobile, String curAvatar);
 
-    User loginByUnionId(int businessId, String unionId);
+    User loginByUnionId(String unionId);
 
     User addOrUpdateUser(User user);
 
