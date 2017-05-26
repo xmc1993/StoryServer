@@ -1,6 +1,7 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.dao.user.AppUserDao;
+import cn.edu.nju.software.entity.Business;
 import cn.edu.nju.software.entity.User;
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,6 +25,9 @@ public class AppUserDaoTest {
 
     @Autowired
     private AdminDao adminDao;
+
+    @Autowired
+    private Business business;
 
     @Test
     public void testSaveUser(){
@@ -49,5 +53,10 @@ public class AppUserDaoTest {
     @Test
     public void testGetAdmin(){
         adminDao.getAdminByUsername("admin");
+    }
+
+    @Test
+    public void testBusiness(){
+        System.out.println(business.getWxAppId());
     }
 }

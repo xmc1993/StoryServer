@@ -42,6 +42,10 @@
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
 		p:dataSource-ref="dataSource" />
 
+	<bean class="cn.edu.nju.software.entity.Business">
+		<property name="wxAppId" value="wxfa4e5826ea6b4b24"></property>
+		<property name="wxSecret" value="xxxxxxxxx"></property>
+	</bean>
 
 	<context:component-scan base-package="cn.edu.nju.software" />
 

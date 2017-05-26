@@ -7,7 +7,6 @@ import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.entity.UserBase;
 import cn.edu.nju.software.enums.GrantType;
 import cn.edu.nju.software.service.user.AppUserService;
-import cn.edu.nju.software.service.user.UserBusinessService;
 import cn.edu.nju.software.service.user.UserWeChatLoginService;
 import cn.edu.nju.software.util.*;
 import cn.edu.nju.software.vo.WeChatOAuthVo;
@@ -40,9 +39,9 @@ public class UserUserController extends BaseController {
     @Autowired
     private AppUserService userService;
     @Autowired
-    private UserBusinessService businessService;
-    @Autowired
     private UserWeChatLoginService weChatLoginService;
+    @Autowired
+    private Business business;
 
 
     @ApiOperation(value = "获取用户信息", notes = "获取用户信息")
@@ -87,7 +86,6 @@ public class UserUserController extends BaseController {
                                                        @ApiParam("code 授权码") @RequestParam("code") String code,
                                                        HttpServletRequest request, HttpServletResponse response) throws Exception {
         ResponseData responseData = new ResponseData();
-        Business business = businessService.getBusinessByAppId(appId);
         WeChatOAuthVo weChatOAuthVo = weChatLoginService.getAccessToken(business.getWxAppId(),business.getWxSecret(), GrantType.AUTHORIZATION_CODE, code);
         if (null == weChatOAuthVo) {
             responseData.jsonFill(2, "微信OAuth失败", false);
@@ -96,7 +94,6 @@ public class UserUserController extends BaseController {
 
         User user = userService.loginByUnionId(weChatOAuthVo.getUnionId());
         //如果数据库没有相应的用户那么新建一个用户
-
         if (null == user) {
             //获取微信用户信息
             WeChatUserInfoVo userInfo = weChatLoginService.getUserInfo(weChatOAuthVo.getAccessToken(), weChatOAuthVo.getOpenId());
