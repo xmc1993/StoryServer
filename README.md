@@ -41,6 +41,5 @@
 	log4j.properties		日志配置文件
 	log4j2.xml				日志配置文件
 	config/spring/			spring相关配置文件
-	config/struts/			struts相关配置文件
 	cn/edu/nju/software/dao mybaits相关文件
 
