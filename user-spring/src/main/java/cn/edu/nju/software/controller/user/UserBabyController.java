@@ -28,7 +28,7 @@ import java.util.List;
  * Created by xmc1993 on 2017/5/12.
  */
 
-@Api("bady controller")
+@Api("baby controller")
 @Controller
 @RequestMapping("/user")
 public class UserBabyController extends BaseController {

@@ -46,7 +46,6 @@ public class UserStoryTagController extends BaseController {
         return responseData;
     }
 
-
     @ApiOperation(value = "获得所有二级标签", notes = "")
     @RequestMapping(value = "/getAllSecondLevelTags", method = {RequestMethod.GET})
     @ResponseBody
