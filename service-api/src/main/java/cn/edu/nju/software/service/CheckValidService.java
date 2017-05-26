@@ -47,4 +47,8 @@ public interface CheckValidService {
     boolean isWorksExist(int worksId);
 
     boolean isWorksExistHard(int worksId);
+
+    boolean isSoundEffectTagExist(int tagId);
+
+    boolean isSoundEffectTagExistHard(int tagId);
 }

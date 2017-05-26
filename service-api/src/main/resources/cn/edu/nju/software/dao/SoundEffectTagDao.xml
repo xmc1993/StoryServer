@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.SoundEffectTagDao">
+
+    <sql id="fields">
+        id,
+        content,
+        createTime,
+        updateTime,
+        valid
+    </sql>
+
+    <resultMap id="storyTag" type="cn.edu.nju.software.entity.SoundEffectTag">
+
+        <id column="id" property="id"/>
+        <id column="content" property="content"/>
+        <id column="createTime" property="createTime"/>
+        <id column="updateTime" property="updateTime"/>
+        <id column="valid" property="valid"/>
+    </resultMap>
+
+    <insert id="saveSoundEffectTag" parameterType="cn.edu.nju.software.entity.SoundEffectTag" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into sound_effect_tag(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{content},
+        #{createTime},
+        #{updateTime},
+        #{valid}
+        )
+    </insert>
+
+    <update id="updateSoundEffectTag" parameterType="cn.edu.nju.software.entity.SoundEffectTag">
+        UPDATE sound_effect_tag
+        SET
+        content=#{content},
+        updateTime=#{updateTime}
+        WHERE id = #{id} and valid = 1
+    </update>
+
+    <update id="deleteSoundEffectTagById">
+        UPDATE sound_effect_tag
+        SET
+        valid=0
+        WHERE id = #{0} and valid = 1
+    </update>
+
+    <delete id="deleteHard">
+        DELETE FROM sound_effect_tag
+        WHERE id = #{0}
+    </delete>
+
+    <select id="getAllSoundEffectTags" resultType="cn.edu.nju.software.entity.SoundEffectTag">
+        select
+        <include refid="fields"></include>
+        from sound_effect_tag
+        WHERE valid = 1
+    </select>
+
+    <select id="getSoundEffectTagListByPage" resultType="cn.edu.nju.software.entity.SoundEffectTag">
+        select
+        <include refid="fields"></include>
+        from sound_effect_tag
+        WHERE valid = 1
+        limit #{0},#{1}
+    </select>
+
+    <select id="getSoundEffectTagById" resultType="cn.edu.nju.software.entity.SoundEffectTag">
+        select
+        <include refid="fields"></include>
+        from sound_effect_tag
+        WHERE id = #{0} and valid = 1
+    </select>
+
+    <select id="getSoundEffectTagByIdHard" resultType="cn.edu.nju.software.entity.SoundEffectTag">
+        select
+        <include refid="fields"></include>
+        from sound_effect_tag
+        WHERE id = #{0}
+    </select>
+
+    <select id="getSoundEffectTagListByIdList" resultType="cn.edu.nju.software.entity.SoundEffectTag">
+        select
+        <include refid="fields"></include>
+        from story
+        where valid = 1 and id in
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+</mapper>

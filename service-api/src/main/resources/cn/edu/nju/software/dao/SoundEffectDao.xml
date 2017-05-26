@@ -81,6 +81,16 @@
         limit #{0},#{1}
     </select>
 
+    <select id="getSoundEffectListByIdList" resultType="cn.edu.nju.software.entity.SoundEffect">
+        select
+        <include refid="fields"></include>
+        from sound_effect
+        where valid = 1 and id in
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
     <delete id="deleteHard">
         DELETE FROM
         sound_effect

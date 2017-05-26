@@ -1,6 +1,7 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.SoundEffect;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,5 +27,7 @@ public interface SoundEffectDao {
     boolean deleteHard(int id);
 
     List<SoundEffect> getSoundEffectListByPage(int offset, int limit);
+
+    List<SoundEffect> getSoundEffectListByIdList(@Param("idList")List<Integer> idList);
 
 }

@@ -21,5 +21,5 @@ public interface SoundEffectService {
 
     SoundEffect getSoundEffectById(int id);
 
-
+    List<SoundEffect> getSoundEffectListByIdList(List<Integer> idList);
 }
