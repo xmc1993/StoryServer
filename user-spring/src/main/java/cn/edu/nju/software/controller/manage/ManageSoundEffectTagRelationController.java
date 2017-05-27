@@ -1,9 +1,11 @@
 package cn.edu.nju.software.controller.manage;
 
 import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.entity.SoundEffect;
 import cn.edu.nju.software.entity.SoundEffectTag;
 import cn.edu.nju.software.entity.SoundEffectTagRelation;
 import cn.edu.nju.software.service.CheckValidService;
+import cn.edu.nju.software.service.SoundEffectService;
 import cn.edu.nju.software.service.SoundEffectTagService;
 import cn.edu.nju.software.service.SoundEffectTagRelationService;
 import com.wordnik.swagger.annotations.Api;
@@ -36,6 +38,8 @@ public class ManageSoundEffectTagRelationController {
     private CheckValidService checkValidService;
     @Autowired
     private SoundEffectTagService soundEffectTagService;
+    @Autowired
+    private SoundEffectService soundEffectService;
 
 
     @ApiOperation(value = "给音效添加分类", notes = "")
@@ -66,24 +70,20 @@ public class ManageSoundEffectTagRelationController {
     @ApiOperation(value = "删除音效的一个分类", notes = "")
     @RequestMapping(value = "/soundEffects/{soundEffectId}/soundEffectTags/{tagId}", method = {RequestMethod.DELETE})
     @ResponseBody
-    public ResponseData<Boolean> removeTagFromSoundEffect(
+    public Boolean removeTagFromSoundEffect(
             @ApiParam("音效ID") @PathVariable Integer soundEffectId,
             @ApiParam("分类ID") @PathVariable Integer tagId,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Boolean> responseData = new ResponseData<>();
         if (!checkValidService.isSoundEffectTagExist(tagId)) {
-            logger.error("无效的tagId");
-            responseData.jsonFill(2, "无效的tagId", null);
-            return responseData;
+            throw new RuntimeException("无效的tagId");
         }
         if (!checkValidService.isSoundEffectExist(soundEffectId)) {
-            logger.error("无效的soundEffectId");
-            responseData.jsonFill(2, "无效的soundEffectId", null);
-            return responseData;
+
+            throw new RuntimeException("无效的soundEffectId");
         }
         boolean success = soundEffectTagRelationService.deleteTagRelationBySoundEffectIdAndTagId(soundEffectId, tagId);
-        responseData.jsonFill(success ? 1 : 2, null, success);
-        return responseData;
+        return success;
     }
 
     @ApiOperation(value = "获得一个音效的所有分类", notes = "")
@@ -101,4 +101,18 @@ public class ManageSoundEffectTagRelationController {
         return soundEffectTagList;
     }
 
+    @ApiOperation(value = "获得一个分类下的所有音效", notes = "")
+    @RequestMapping(value = "/soundEffectTags/{id}/soundEffects", method = {RequestMethod.GET})
+    @ResponseBody
+    public List<SoundEffect> getSoundEffectListOfTag(
+            @ApiParam("分类ID") @PathVariable Integer id,
+            HttpServletRequest request, HttpServletResponse response) {
+        if (!checkValidService.isSoundEffectExist(id)) {
+            logger.error("无效的音效Id");
+            throw new RuntimeException("无效的音效ID");
+        }
+        List<Integer> idList = soundEffectTagRelationService.getSoundEffectIdListByTagId(id);
+        List<SoundEffect> soundEffectList = soundEffectService.getSoundEffectListByIdList(idList);
+        return soundEffectList;
+    }
 }

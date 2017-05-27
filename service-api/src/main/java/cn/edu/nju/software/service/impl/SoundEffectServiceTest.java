@@ -54,6 +54,7 @@ public class SoundEffectServiceTest implements SoundEffectService {
 
     @Override
     public List<SoundEffect> getSoundEffectListByIdList(List<Integer> idList) {
+        idList.add(-1);
         return soundEffectDao.getSoundEffectListByIdList(idList);
     }
 

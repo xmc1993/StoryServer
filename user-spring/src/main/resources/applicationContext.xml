@@ -62,7 +62,7 @@
 
     <bean class="cn.edu.nju.software.entity.Business">
         <property name="wxAppId" value="wxfa4e5826ea6b4b24"></property>
-        <property name="wxSecret" value="xxxxxxxxx"></property>
+        <property name="wxSecret" value="36ac964dd6f2fe408e14b5383e649257"></property>
     </bean>
 
 

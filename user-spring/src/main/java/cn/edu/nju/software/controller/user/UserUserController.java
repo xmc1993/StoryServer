@@ -82,8 +82,7 @@ public class UserUserController extends BaseController {
     @ApiOperation(value = "用户登录", notes = "用户登录")
     @RequestMapping(value = "/loginByWeChat", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<LoginResponseVo> loginByWeChat(@ApiParam("appId") @RequestParam("appId") String appId,
-                                                       @ApiParam("code 授权码") @RequestParam("code") String code,
+    public ResponseData<LoginResponseVo> loginByWeChat(@ApiParam("code 授权码") @RequestParam("code") String code,
                                                        HttpServletRequest request, HttpServletResponse response) throws Exception {
         ResponseData responseData = new ResponseData();
         WeChatOAuthVo weChatOAuthVo = weChatLoginService.getAccessToken(business.getWxAppId(),business.getWxSecret(), GrantType.AUTHORIZATION_CODE, code);

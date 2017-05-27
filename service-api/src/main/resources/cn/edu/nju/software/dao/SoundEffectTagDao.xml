@@ -83,10 +83,10 @@
         WHERE id = #{0}
     </select>
 
-    <select id="getSoundEffectTagListByIdList" resultType="cn.edu.nju.software.entity.SoundEffectTag">
+    <select id="getTagListByIdList" resultType="cn.edu.nju.software.entity.SoundEffectTag">
         select
         <include refid="fields"></include>
-        from story
+        from sound_effect_tag
         where valid = 1 and id in
         <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
             #{id}
