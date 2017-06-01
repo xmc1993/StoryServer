@@ -53,7 +53,7 @@ public class UserUserController extends BaseController {
         ResponseData responseData = new ResponseData();
         UserBase userBase = userService.getUserBaseById(userId);
         if (userBase == null) {
-            responseData.jsonFill(2, "用户不存在。", false);
+            responseData.jsonFill(2, "用户不存在。", null);
             return responseData;
         }
         responseData.jsonFill(1, null, userBase);
