@@ -16,7 +16,8 @@
         price,
         createTime,
         updateTime,
-        valid
+        valid,
+        recommend
     </sql>
 
 
@@ -35,6 +36,7 @@
         <id column="createTime" property="createTime"/>
         <id column="updateTime" property="updateTime"/>
         <id column="valid" property="valid"/>
+        <id column="recommend" property="recommend"/>
     </resultMap>
 
     <insert id="saveStory" parameterType="cn.edu.nju.software.entity.Story" keyProperty="id" useGeneratedKeys="true">
@@ -56,7 +58,8 @@
         #{price},
         #{createTime},
         #{updateTime},
-        #{valid}
+        #{valid},
+        #{recommend}
         )
     </insert>
 
@@ -144,5 +147,29 @@
         DELETE FROM story
         WHERE id = #{0}
     </delete>
+
+    <update id="recommendStory">
+        update story
+        set
+        recommend = 1
+        where valid = 1 and id=#{0} and recommend = 0
+    </update>
+
+
+    <update id="cancelRecommendStory">
+        update story
+        set
+        recommend = 0
+        where valid = 1 and id=#{0} and recommend = 1
+    </update>
+
+    <select id="getRecommendedStoryListByPage" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="fields"></include>
+        from story
+        where
+        and valid = 1 and recommend = 1
+        limit #{0},#{1}
+    </select>
 
 </mapper>

@@ -38,5 +38,9 @@ public interface StoryDao {
 
     List<Story> getStoryListByIdList(@Param("idList")List<Integer> idList);
 
+    boolean recommendStory(int id);
 
+    boolean cancelRecommendStory(int id);
+
+    List<Story> getRecommendedStoryListByPage(int offset, int limit);
 }

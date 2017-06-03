@@ -82,4 +82,19 @@ public class StoryServiceImpl implements StoryService {
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         return storyDao.getStoryListByTitle(title, offset, limit);
     }
+
+    @Override
+    public boolean recommendStory(int id) {
+        return storyDao.recommendStory(id);
+    }
+
+    @Override
+    public boolean cancelRecommendStory(int id) {
+        return storyDao.cancelRecommendStory(id);
+    }
+
+    @Override
+    public List<Story> getRecommendedStoryListByPage(int offset, int limit) {
+        return storyDao.getRecommendedStoryListByPage(offset, limit);
+    }
 }

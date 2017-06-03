@@ -25,4 +25,10 @@ public interface StoryService {
     List<Story> getStoryListByIdList(List<Integer> idList);
 
     List<Story> getStoryListByTitle(String title, int offset, int limit);
+
+    boolean recommendStory(int id);
+
+    boolean cancelRecommendStory(int id);
+
+    List<Story> getRecommendedStoryListByPage(int offset, int limit);
 }

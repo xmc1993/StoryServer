@@ -105,4 +105,17 @@ public class UserStoryController extends BaseController {
         return responseData;
     }
 
+    @ApiOperation(value = "获得推荐故事列表", notes = "")
+    @RequestMapping(value = "/getRecommendedStoryListByPage", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<Story>> getRecommendedStoryListByPage(
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<Story>> responseData = new ResponseData<>();
+        List<Story> storyList = storyService.getRecommendedStoryListByPage(offset, limit);
+        responseData.jsonFill(1, null, storyList);
+        return responseData;
+    }
+
 }

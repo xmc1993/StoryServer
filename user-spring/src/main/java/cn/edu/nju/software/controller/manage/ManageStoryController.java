@@ -179,6 +179,30 @@ public class ManageStoryController {
         return result;
     }
 
+    @ApiOperation(value = "推荐故事", notes = "")
+    @RequestMapping(value = "/stories/{id}/recommendations", method = {RequestMethod.POST})
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void recommendStory(
+            @ApiParam("故事ID") @PathVariable int id){
+        boolean res = storyService.recommendStory(id);
+        if (!res) {
+            throw new RuntimeException("推荐失败");
+        }
+    }
+
+    @ApiOperation(value = "取消推荐故事", notes = "")
+    @RequestMapping(value = "/stories/{id}/recommendations", method = {RequestMethod.DELETE})
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void cancelRecommendStory(
+            @ApiParam("故事ID") @PathVariable int id){
+        boolean res = storyService.cancelRecommendStory(id);
+        if (!res) {
+            throw new RuntimeException("取消推荐失败");
+        }
+    }
+
     /**
      * 上传封面文件
      *
