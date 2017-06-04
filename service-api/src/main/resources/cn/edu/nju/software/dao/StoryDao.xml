@@ -167,8 +167,7 @@
         select
         <include refid="fields"></include>
         from story
-        where
-        and valid = 1 and recommend = 1
+        where valid = 1 and recommend = 1
         limit #{0},#{1}
     </select>
 
