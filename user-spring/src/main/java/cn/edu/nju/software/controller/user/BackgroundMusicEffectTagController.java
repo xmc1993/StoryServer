@@ -39,7 +39,7 @@ public class BackgroundMusicEffectTagController extends BaseController {
     @Autowired
     private BackgroundMusicService backgroundMusicService;
 
-    @ApiOperation(value = "获得所有音效分类", notes = "")
+    @ApiOperation(value = "获得所有背景音乐分类", notes = "")
     @RequestMapping(value = "/getAllBackgroundMusicTags", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<BackgroundMusicTag>> getAllBackgroundMusicTags(
@@ -53,15 +53,15 @@ public class BackgroundMusicEffectTagController extends BaseController {
     }
 
 
-    @ApiOperation(value = "获得一个音效的所属分类", notes = "")
+    @ApiOperation(value = "获得一个背景音乐的所属分类", notes = "")
     @RequestMapping(value = "/getBackgroundMusicTagListByBackgroundMusicId", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<BackgroundMusicTag>> getBackgroundMusicTagListByBackgroundMusicId(
-            @ApiParam("音效ID") @RequestParam("backgroundMusicId") int backgroundMusicId,
+            @ApiParam("背景音乐ID") @RequestParam("backgroundMusicId") int backgroundMusicId,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<BackgroundMusicTag>> responseData = new ResponseData<>();
         if (!checkValidService.isBackgroundMusicExist(backgroundMusicId)) {
-            responseData.jsonFill(2, "音效不存在", null);
+            responseData.jsonFill(2, "背景音乐不存在", null);
             return responseData;
         }
         List<Integer> idList = backgroundMusicTagRelationService.getTagIdListByBackgroundMusicId(backgroundMusicId);
@@ -71,7 +71,7 @@ public class BackgroundMusicEffectTagController extends BaseController {
     }
 
 
-    @ApiOperation(value = "获得一个分类下的所有音效", notes = "")
+    @ApiOperation(value = "获得一个分类下的所有背景音乐", notes = "")
     @RequestMapping(value = "/getBackgroundMusicListByTagId", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<BackgroundMusic>> getBackgroundMusicListByTagId(
@@ -79,7 +79,7 @@ public class BackgroundMusicEffectTagController extends BaseController {
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<BackgroundMusic>> responseData = new ResponseData<>();
         if (!checkValidService.isBackgroundMusicTagExist(tagId)) {
-            responseData.jsonFill(2, "音效分类不存在", null);
+            responseData.jsonFill(2, "背景音乐分类不存在", null);
             return responseData;
         }
         List<Integer> idList = backgroundMusicTagRelationService.getBackgroundMusicIdListByTagId(tagId);

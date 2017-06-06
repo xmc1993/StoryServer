@@ -22,7 +22,7 @@ import java.util.List;
  * Created by xmc1993 on 2017/5/12.
  */
 
-@Api(value = "/backgroundMusic", description = "和音效有关的接口")
+@Api(value = "/backgroundMusic", description = "和背景音乐有关的接口")
 @Controller
 @RequestMapping("/user")
 public class BackgroundMusicController extends BaseController {
@@ -30,7 +30,7 @@ public class BackgroundMusicController extends BaseController {
     @Autowired
     private BackgroundMusicService backgroundMusicService;
 
-    @ApiOperation(value = "获得音效列表", notes = "")
+    @ApiOperation(value = "获得背景音乐列表", notes = "")
     @RequestMapping(value = "/getBackgroundMusicListByPage", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<BackgroundMusic>> getBackgroundMusicListByPage(
