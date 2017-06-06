@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.BackgroundMusicDao">
+
+    <sql id="fields">
+        id,
+        description,
+        url,
+        createTime,
+        updateTime,
+        valid
+    </sql>
+
+
+    <resultMap id="backgroundMusic" type="cn.edu.nju.software.entity.BackgroundMusic">
+        <id column="id" property="id"/>
+        <id column="description" property="description"/>
+        <id column="url" property="url"/>
+        <id column="createTime" property="createTime"/>
+        <id column="updateTime" property="updateTime"/>
+        <id column="valid" property="valid"/>
+    </resultMap>
+
+    <insert id="saveBackgroundMusic" parameterType="cn.edu.nju.software.entity.BackgroundMusic" keyProperty="id" useGeneratedKeys="true">
+        insert into background_music(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{description},
+        #{url},
+        #{createTime},
+        #{updateTime},
+        #{valid}
+        )
+    </insert>
+
+    <update id="deleteBackgroundMusicById">
+        UPDATE background_music
+        SET
+        valid=0
+        WHERE id = #{0}
+    </update>
+
+    <update id="updateBackgroundMusic" parameterType="cn.edu.nju.software.entity.BackgroundMusic">
+        UPDATE background_music
+        SET
+        description=#{description},
+        url=#{url}
+        WHERE id = #{id} and valid = 1
+    </update>
+
+
+    <select id="getBackgroundMusicById" resultType="cn.edu.nju.software.entity.BackgroundMusic">
+        select
+        <include refid="fields"></include>
+        from background_music
+        where id = #{0} and valid = 1
+    </select>
+
+    <select id="getBackgroundMusicByIdHard" resultType="cn.edu.nju.software.entity.BackgroundMusic">
+        select
+        <include refid="fields"></include>
+        from background_music
+        where id = #{0}
+    </select>
+
+    <select id="getAllBackgroundMusics" resultType="cn.edu.nju.software.entity.BackgroundMusic">
+        select
+        <include refid="fields"></include>
+        from background_music
+        where valid = 1
+    </select>
+
+    <select id="getBackgroundMusicListByPage" resultType="cn.edu.nju.software.entity.BackgroundMusic">
+        select
+        <include refid="fields"></include>
+        from background_music
+        where valid = 1
+        limit #{0},#{1}
+    </select>
+
+    <select id="getBackgroundMusicListByIdList" resultType="cn.edu.nju.software.entity.BackgroundMusic">
+        select
+        <include refid="fields"></include>
+        from background_music
+        where valid = 1 and id in
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <delete id="deleteHard">
+        DELETE FROM
+        background_music
+        WHERE id = #{0}
+    </delete>
+
+</mapper>

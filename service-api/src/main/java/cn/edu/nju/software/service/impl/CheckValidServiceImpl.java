@@ -17,9 +17,13 @@ public class CheckValidServiceImpl implements CheckValidService {
     @Autowired
     private SoundEffectDao soundEffectDao;
     @Autowired
+    private BackgroundMusicDao backgroundMusicDao;
+    @Autowired
     private WorksDao worksDao;
     @Autowired
     private SoundEffectTagDao soundEffectTagDao;
+    @Autowired
+    private BackgroundMusicTagDao backgroundMusicTagDao;
 
     @Override
          public boolean isTagExist(int tagId) {
@@ -52,8 +56,18 @@ public class CheckValidServiceImpl implements CheckValidService {
     }
 
     @Override
+    public boolean isBackgroundMusicExist(int id) {
+        return backgroundMusicDao.getBackgroundMusicById(id) != null;
+    }
+
+    @Override
     public boolean isSoundEffectExistHard(int soundEffectId) {
         return soundEffectDao.getSoundEffectByIdHard(soundEffectId) != null;
+    }
+
+    @Override
+    public boolean isBackgroundMusicExistHard(int id) {
+        return backgroundMusicDao.getBackgroundMusicByIdHard(id) != null;
     }
 
     @Override
@@ -72,7 +86,17 @@ public class CheckValidServiceImpl implements CheckValidService {
     }
 
     @Override
+    public boolean isBackgroundMusicTagExist(int tagId) {
+        return backgroundMusicTagDao.getBackgroundMusicTagById(tagId) != null;
+    }
+
+    @Override
     public boolean isSoundEffectTagExistHard(int tagId) {
         return soundEffectTagDao.getSoundEffectTagByIdHard(tagId) != null;
+    }
+
+    @Override
+    public boolean isBackgroundMusicTagExistHard(int tagId) {
+        return backgroundMusicTagDao.getBackgroundMusicTagByIdHard(tagId) != null;
     }
 }

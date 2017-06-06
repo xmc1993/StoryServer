@@ -35,6 +35,8 @@ public interface CheckValidService {
      */
     boolean isSoundEffectExist(int soundEffectId);
 
+    boolean isBackgroundMusicExist(int id);
+
     /**
      * valid = 0 or 1
      *
@@ -43,6 +45,8 @@ public interface CheckValidService {
      */
     boolean isSoundEffectExistHard(int soundEffectId);
 
+    boolean isBackgroundMusicExistHard(int id);
+
 
     boolean isWorksExist(int worksId);
 
@@ -50,5 +54,13 @@ public interface CheckValidService {
 
     boolean isSoundEffectTagExist(int tagId);
 
+    boolean isBackgroundMusicTagExist(int tagId);
+
     boolean isSoundEffectTagExistHard(int tagId);
+
+    boolean isBackgroundMusicTagExistHard(int tagId);
+
+
+
+
 }

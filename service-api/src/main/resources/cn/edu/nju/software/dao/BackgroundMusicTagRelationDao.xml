@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.edu.nju.software.dao.SoundEffectTagRelationDao">
+<mapper namespace="cn.edu.nju.software.dao.BackgroundMusicTagRelationDao">
 
     <sql id="fields">
         id,
-        soundEffectId,
+        backgroundMusicId,
         tagId,
         createTime,
         updateTime
     </sql>
 
-    <resultMap id="soundEffectTagRelation" type="cn.edu.nju.software.entity.SoundEffectTagRelation">
+    <resultMap id="backgroundMusicTagRelation" type="cn.edu.nju.software.entity.BackgroundMusicTagRelation">
         <id column="id" property="id"/>
-        <id column="soundEffectId" property="soundEffectId"/>
+        <id column="backgroundMusicId" property="backgroundMusicId"/>
         <id column="tagId" property="tagId"/>
         <id column="createTime" property="createTime"/>
         <id column="updateTime" property="updateTime"/>
     </resultMap>
 
     <insert id="saveTagRelation" parameterType="cn.edu.nju.software.entity.TagRelation" keyProperty="id" useGeneratedKeys="true">
-        insert into sound_effect_tag_relation(
+        insert into background_music_tag_relation(
         <include refid="fields"></include>
         )
         VALUES
         (
         #{id},
-        #{soundEffectId},
+        #{backgroundMusicId},
         #{tagId},
         #{createTime},
         #{updateTime}
@@ -33,41 +33,41 @@
     </insert>
 
     <delete id="deleteTagRelationById">
-        DELETE FROM sound_effect_tag_relation
+        DELETE FROM background_music_tag_relation
         WHERE id = #{0}
     </delete>
 
-    <delete id="deleteTagRelationBySoundEffectIdAndTagId">
-        DELETE FROM sound_effect_tag_relation
-        WHERE soundEffectId = #{0} and tagId = #{1}
+    <delete id="deleteTagRelationByBackgroundMusicIdAndTagId">
+        DELETE FROM background_music_tag_relation
+        WHERE backgroundMusicId = #{0} and tagId = #{1}
     </delete>
 
 
-    <select id="getSoundEffectTagById" resultType="cn.edu.nju.software.entity.TagRelation">
+    <select id="getBackgroundMusicTagById" resultType="cn.edu.nju.software.entity.TagRelation">
         select
         <include refid="fields"></include>
-        from sound_effect_tag_relation
+        from background_music_tag_relation
         where id = #{0}
     </select>
 
-    <select id="getSoundEffectIdListByTagId" resultType="java.lang.Integer">
+    <select id="getBackgroundMusicIdListByTagId" resultType="java.lang.Integer">
         select distinct
-        soundEffectId
-        from sound_effect_tag_relation
+        backgroundMusicId
+        from background_music_tag_relation
         where tagId = #{0}
     </select>
 
-    <select id="getTagIdListBySoundEffectId" resultType="java.lang.Integer">
+    <select id="getTagIdListByBackgroundMusicId" resultType="java.lang.Integer">
         select distinct
         tagId
-        from sound_effect_tag_relation
-        where soundEffectId = #{0}
+        from background_music_tag_relation
+        where backgroundMusicId = #{0}
     </select>
 
-    <select id="getSoundEffectIdListByTagIdList" resultType="java.lang.Integer">
+    <select id="getBackgroundMusicIdListByTagIdList" resultType="java.lang.Integer">
         select distinct
-        soundEffectId
-        from sound_effect_tag_relation
+        backgroundMusicId
+        from background_music_tag_relation
         where tagId in
         <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
             #{id}

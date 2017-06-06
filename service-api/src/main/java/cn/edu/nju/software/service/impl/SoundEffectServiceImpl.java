@@ -14,7 +14,7 @@ import java.util.List;
  * Created by xmc1993 on 2017/5/12.
  */
 @Service
-public class SoundEffectServiceTest implements SoundEffectService {
+public class SoundEffectServiceImpl implements SoundEffectService {
     @Autowired
     private SoundEffectDao soundEffectDao;
 
