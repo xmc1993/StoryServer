@@ -2,6 +2,7 @@ package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.dao.StoryDao;
 import cn.edu.nju.software.entity.Story;
+import cn.edu.nju.software.entity.Works;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -26,6 +27,8 @@ public class StoryServiceTest {
     @Autowired
     private StoryDao storyDao;
     private Story story;
+    @Autowired
+    private WorksService worksService;
 
     @Before
     public void setUp() {
@@ -64,5 +67,13 @@ public class StoryServiceTest {
         assert storyService.deleteStoryById(99999);
         assert storyService.getStoryById(99999).getValid() == 0;
         assert storyDao.deleteHard(99999);
+    }
+
+    @Test
+    public void testAddWorks(){
+        Works works = new Works();
+        works.setUserId(20);
+        works.setStoryId(36);
+        worksService.saveWorks(works);
     }
 }
