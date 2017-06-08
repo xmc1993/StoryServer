@@ -209,6 +209,7 @@ public class UserWorksController extends BaseController {
         works.setUserId(user.getId());
         works.setUsername(user.getNickname());
         works.setUrl(url);
+        works.setHeadImgUrl(user.getHeadImgUrl());
         boolean res = worksService.saveWorks(works);
         responseData.jsonFill(res ? 1 : 2, null, res);
         return responseData;

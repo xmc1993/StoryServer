@@ -12,7 +12,8 @@
         likeCount,
         createTime,
         updateTime,
-        valid
+        valid,
+        headImgUrl
     </sql>
 
 
@@ -27,6 +28,7 @@
         <id column="createTime" property="createTime"/>
         <id column="updateTime" property="updateTime"/>
         <id column="valid" property="valid"/>
+        <id column="headImgUrl" property="headImgUrl"/>
     </resultMap>
 
     <insert id="saveWorks" parameterType="cn.edu.nju.software.entity.Works" keyProperty="id" useGeneratedKeys="true">
@@ -44,7 +46,8 @@
         #{likeCount},
         #{createTime},
         #{updateTime},
-        #{valid}
+        #{valid},
+        #{headImgUrl}
         )
     </insert>
 
@@ -120,6 +123,13 @@
         storyId = #{0}
     </update>
 
+    <update id="updateHeadImg">
+        update works
+        set
+        headImgUrl=#{1}
+        where
+        userId = #{0}
+    </update>
 
     <select id="getWorksListByIdList" resultType="cn.edu.nju.software.entity.Works">
         select

@@ -43,4 +43,8 @@ public interface StoryDao {
     boolean cancelRecommendStory(int id);
 
     List<Story> getRecommendedStoryListByPage(int offset, int limit);
+
+    boolean newTell(int id);
+
+    boolean deleteTell(int id);
 }

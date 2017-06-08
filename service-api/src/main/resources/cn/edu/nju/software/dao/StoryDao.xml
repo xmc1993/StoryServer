@@ -17,7 +17,8 @@
         createTime,
         updateTime,
         valid,
-        recommend
+        recommend,
+        tellCount
     </sql>
 
 
@@ -37,6 +38,7 @@
         <id column="updateTime" property="updateTime"/>
         <id column="valid" property="valid"/>
         <id column="recommend" property="recommend"/>
+        <id column="tellCount" property="tellCount"/>
     </resultMap>
 
     <insert id="saveStory" parameterType="cn.edu.nju.software.entity.Story" keyProperty="id" useGeneratedKeys="true">
@@ -59,7 +61,8 @@
         #{createTime},
         #{updateTime},
         #{valid},
-        #{recommend}
+        #{recommend},
+        #{tellCount}
         )
     </insert>
 
@@ -170,5 +173,19 @@
         where valid = 1 and recommend = 1
         limit #{0},#{1}
     </select>
+
+    <update id="newTell">
+        update story
+        set
+        tellCount = tellCount+1
+        where valid = 1 and id=#{0}
+    </update>
+
+    <update id="deleteTell">
+        update story
+        set
+        tellCount = tellCount-1
+        where valid = 1 and id=#{0}
+    </update>
 
 </mapper>

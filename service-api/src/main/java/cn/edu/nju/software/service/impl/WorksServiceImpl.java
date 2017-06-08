@@ -1,6 +1,8 @@
 package cn.edu.nju.software.service.impl;
 
+import cn.edu.nju.software.dao.StoryDao;
 import cn.edu.nju.software.dao.WorksDao;
+import cn.edu.nju.software.dao.user.AppUserDao;
 import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.service.WorksService;
 import cn.edu.nju.software.util.Const;
@@ -18,10 +20,19 @@ public class WorksServiceImpl implements WorksService {
 
     @Autowired
     private WorksDao worksDao;
+    @Autowired
+    private StoryDao storyDao;
+    @Autowired
+    private AppUserDao appUserDao;
 
     @Override
     public boolean saveWorks(Works works) {
-        return worksDao.saveWorks(works);
+        boolean res = worksDao.saveWorks(works);
+        if (res) {
+            storyDao.newTell(works.getStoryId());
+            appUserDao.newWork(works.getUserId());
+        }
+        return res;
     }
 
     @Override
@@ -32,7 +43,13 @@ public class WorksServiceImpl implements WorksService {
 
     @Override
     public boolean deleteWorksById(int id) {
-        return worksDao.deleteWorksById(id);
+        boolean res = worksDao.deleteWorksById(id);
+        if (res) {
+            Works works = worksDao.getWorksByIdHard(id);
+            storyDao.deleteTell(works.getStoryId());
+            appUserDao.removeWork(works.getUserId());
+        }
+        return res;
     }
 
     @Override

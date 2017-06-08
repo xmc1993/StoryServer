@@ -97,4 +97,14 @@ public class StoryServiceImpl implements StoryService {
     public List<Story> getRecommendedStoryListByPage(int offset, int limit) {
         return storyDao.getRecommendedStoryListByPage(offset, limit);
     }
+
+    @Override
+    public boolean newTell(int id) {
+        return storyDao.newTell(id);
+    }
+
+    @Override
+    public boolean deleteTell(int id) {
+        return storyDao.deleteTell(id);
+    }
 }
