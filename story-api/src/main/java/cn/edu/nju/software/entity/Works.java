@@ -20,4 +20,5 @@ public class Works {
     private Date updateTime;
     private Integer valid = 1;//用于软删除
     private String headImgUrl;
+    private String coverUrl;
 }

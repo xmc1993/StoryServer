@@ -34,4 +34,6 @@ public interface WorksDao {
 
     boolean updateHeadImg(int userId, String headImgUrl);
 
+    boolean updateCoverUrl(int storyId, String coverUrl);
+
 }

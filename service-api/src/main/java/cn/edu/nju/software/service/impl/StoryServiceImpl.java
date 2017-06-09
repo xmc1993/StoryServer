@@ -59,6 +59,9 @@ public class StoryServiceImpl implements StoryService {
         if (!_story.getTitle().equals(story.getTitle())) {
             worksDao.updateStoryTitle(story.getId(), story.getTitle());
         }
+        if (!_story.getCoverUrl().equals(story.getCoverUrl())) {
+            worksDao.updateCoverUrl(story.getId(), story.getCoverUrl());
+        }
         return storyDao.getStoryById(story.getId());
 
     }

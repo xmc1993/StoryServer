@@ -88,6 +88,23 @@ public class UserWorksController extends BaseController {
         return responseData;
     }
 
+
+    @ApiOperation(value = "根据ID获得一个作品", notes = "")
+    @RequestMapping(value = "/getWorksById", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Works> getWorksById(
+            @ApiParam("作品ID") @RequestParam("id") int id,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Works> responseData = new ResponseData();
+        Works works = worksService.getWorksById(id);
+        if (works == null) {
+            responseData.jsonFill(2, "作品不存在", null);
+            return responseData;
+        }
+        responseData.jsonFill(1, null, works);
+        return responseData;
+    }
+
     @ApiOperation(value = "喜欢一个作品", notes = "需登录")
     @RequestMapping(value = "/likeWorks", method = {RequestMethod.POST})
     @ResponseBody
@@ -206,6 +223,7 @@ public class UserWorksController extends BaseController {
         works.setUpdateTime(new Date());
         works.setStoryId(storyId);
         works.setStoryTitle(story.getTitle());
+        works.setCoverUrl(story.getCoverUrl());
         works.setUserId(user.getId());
         works.setUsername(user.getNickname());
         works.setUrl(url);
