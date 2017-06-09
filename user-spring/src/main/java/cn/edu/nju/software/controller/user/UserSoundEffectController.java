@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,6 +40,39 @@ public class UserSoundEffectController extends BaseController {
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<SoundEffect>> responseData = new ResponseData();
         List<SoundEffect> soundEffectList = soundEffectService.getSoundEffectListByPage(offset, limit);
+        responseData.jsonFill(1, null, soundEffectList);
+        return responseData;
+    }
+
+
+    @ApiOperation(value = "通过ID获得音效", notes = "")
+    @RequestMapping(value = "/getSoundEffectById", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<SoundEffect> getSoundEffectById(
+            @ApiParam("ID") @RequestParam int id,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<SoundEffect> responseData = new ResponseData();
+        SoundEffect soundEffect = soundEffectService.getSoundEffectById(id);
+        if (soundEffect == null) {
+            responseData.jsonFill(2, "音效不存在", null);
+            return responseData;
+        }
+        responseData.jsonFill(1, null, soundEffect);
+        return responseData;
+    }
+
+    @ApiOperation(value = "通过ID列表获得音效", notes = "")
+    @RequestMapping(value = "/getSoundEffectListByIdList", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<SoundEffect>> getSoundEffectListByIdList(
+            @ApiParam("ID") @RequestParam("ids[]") int[] ids,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<SoundEffect>> responseData = new ResponseData();
+        ArrayList<Integer> idList = new ArrayList<>();
+        for (int i = 0; i < ids.length; i++) {
+            idList.add(ids[i]);
+        }
+        List<SoundEffect> soundEffectList = soundEffectService.getSoundEffectListByIdList(idList);
         responseData.jsonFill(1, null, soundEffectList);
         return responseData;
     }
