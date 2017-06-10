@@ -18,7 +18,8 @@
         updateTime,
         valid,
         recommend,
-        tellCount
+        tellCount,
+        defaultBackGroundMusicId
     </sql>
 
 
@@ -39,6 +40,7 @@
         <id column="valid" property="valid"/>
         <id column="recommend" property="recommend"/>
         <id column="tellCount" property="tellCount"/>
+        <id column="defaultBackGroundMusicId" property="defaultBackGroundMusicId"/>
     </resultMap>
 
     <insert id="saveStory" parameterType="cn.edu.nju.software.entity.Story" keyProperty="id" useGeneratedKeys="true">
@@ -62,7 +64,8 @@
         #{updateTime},
         #{valid},
         #{recommend},
-        #{tellCount}
+        #{tellCount},
+        #{defaultBackGroundMusicId}
         )
     </insert>
 
@@ -78,7 +81,8 @@
 		backgroundUrl=#{backgroundUrl},
 		originSoundUrl=#{originSoundUrl},
 		price=#{price},
-		updateTime=#{updateTime}
+		updateTime=#{updateTime},
+		defaultBackGroundMusicId=#{defaultBackGroundMusicId}
 		where
 		id=#{id}
 	</update>

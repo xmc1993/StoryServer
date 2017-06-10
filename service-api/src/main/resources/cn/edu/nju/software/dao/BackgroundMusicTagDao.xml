@@ -83,7 +83,7 @@
         WHERE id = #{0}
     </select>
 
-    <select id="getTagListByIdList" resultType="cn.edu.nju.software.entity.BackgroundMusicTag">
+    <select id="getGroundMusicTagListByIdList" resultType="cn.edu.nju.software.entity.BackgroundMusicTag">
         select
         <include refid="fields"></include>
         from background_music_tag

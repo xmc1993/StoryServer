@@ -21,4 +21,5 @@ public class Works {
     private Integer valid = 1;//用于软删除
     private String headImgUrl;
     private String coverUrl;
+    private String duration;
 }

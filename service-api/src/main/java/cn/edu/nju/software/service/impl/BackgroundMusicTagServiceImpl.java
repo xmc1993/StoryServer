@@ -45,7 +45,7 @@ public class BackgroundMusicTagServiceImpl implements BackgroundMusicTagService 
     @Override
     public List<BackgroundMusicTag> getBackgroundMusicTagListByIdList(List<Integer> idList) {
         idList.add(-1);
-        return backgroundMusicTagDao.getTagListByIdList(idList);
+        return backgroundMusicTagDao.getGroundMusicTagListByIdList(idList);
     }
 
     @Override

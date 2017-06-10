@@ -100,10 +100,10 @@
         WHERE id = #{0}
     </select>
 
-    <select id="getStoryTagListByIdList" resultType="cn.edu.nju.software.entity.StoryTag">
+    <select id="getTagListByIdList" resultType="cn.edu.nju.software.entity.StoryTag">
         select
         <include refid="fields"></include>
-        from story
+        from story_tag
         where valid = 1 and id in
         <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
             #{id}

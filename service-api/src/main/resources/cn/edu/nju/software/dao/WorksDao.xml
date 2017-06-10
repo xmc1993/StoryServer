@@ -14,7 +14,8 @@
         updateTime,
         valid,
         headImgUrl,
-        coverUrl
+        coverUrl,
+        duration
     </sql>
 
 
@@ -31,6 +32,7 @@
         <id column="valid" property="valid"/>
         <id column="headImgUrl" property="headImgUrl"/>
         <id column="coverUrl" property="coverUrl"/>
+        <id column="duration" property="duration"/>
     </resultMap>
 
     <insert id="saveWorks" parameterType="cn.edu.nju.software.entity.Works" keyProperty="id" useGeneratedKeys="true">
@@ -50,7 +52,8 @@
         #{updateTime},
         #{valid},
         #{headImgUrl},
-        #{coverUrl}
+        #{coverUrl},
+        #{duration}
         )
     </insert>
 
@@ -66,6 +69,7 @@
         update works
         set
         url=#{url},
+        duration=#{duration},
         updateTime=#{updateTime}
         where
         id = #{id} and valid = 1

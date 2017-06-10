@@ -48,6 +48,7 @@ public class ManageStoryController {
             @ApiParam("出版社") @RequestParam String press,
             @ApiParam("阅读指导") @RequestParam String guide,
             @ApiParam("价格") @RequestParam String price,
+            @ApiParam("默认背景音ID") @RequestParam Integer defaultBackGroundMusicId,
             @ApiParam("封面") @RequestParam("coverFile") MultipartFile coverFile,
             @ApiParam("预览封面") @RequestParam("preCoverFile") MultipartFile preCoverFile,
             @ApiParam("录制背景") @RequestParam("backgroundFile") MultipartFile backgroundFile,
@@ -70,6 +71,7 @@ public class ManageStoryController {
         story.setGuide(guide);
         story.setPrice(price);
         story.setValid(1);
+        story.setDefaultBackGroundMusicId(defaultBackGroundMusicId);
         story.setCreateTime(new Date());
         story.setUpdateTime(new Date());
         story.setCoverUrl(urlList.get(0));

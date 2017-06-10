@@ -193,6 +193,7 @@ public class UserWorksController extends BaseController {
     @ResponseBody
     public ResponseData<Boolean> publishWorks(
             @ApiParam("故事ID") @RequestParam("storyId") int storyId,
+            @ApiParam("音频长度") @RequestParam("duration") String duration,
             @ApiParam("音频文件") @RequestParam("uploadFile") MultipartFile uploadFile,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Boolean> responseData = new ResponseData();
@@ -219,6 +220,7 @@ public class UserWorksController extends BaseController {
             return responseData;
         }
         Works works = new Works();
+        works.setDuration(duration);
         works.setCreateTime(new Date());
         works.setUpdateTime(new Date());
         works.setStoryId(storyId);
@@ -238,6 +240,7 @@ public class UserWorksController extends BaseController {
     @ResponseBody
     public ResponseData<Boolean> rePublishWorks(
             @ApiParam("作品ID") @RequestParam("worksId") int worksId,
+            @ApiParam("音频长度") @RequestParam("duration") String duration,
             @ApiParam("音频文件") @RequestParam("uploadFile") MultipartFile uploadFile,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Boolean> responseData = new ResponseData();
@@ -269,6 +272,7 @@ public class UserWorksController extends BaseController {
             responseData.jsonFill(2, "文件上传失败", null);
             return responseData;
         }
+        works.setDuration(duration);
         works.setUpdateTime(new Date());
         //删除原有的作品文件
         UploadFileUtil.deleteFileByUrl(works.getUrl());

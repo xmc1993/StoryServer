@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -88,6 +89,7 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public User addOrUpdateUser(User user) {
+        user.setUpdateTime(new Date());
         //如果是需要更新
         if (user.getId() != null && user.getId() != 0) {
             boolean up = userDao.updateUser(user);

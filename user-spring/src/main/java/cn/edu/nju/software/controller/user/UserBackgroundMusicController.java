@@ -25,7 +25,7 @@ import java.util.List;
 @Api(value = "/backgroundMusic", description = "和背景音乐有关的接口")
 @Controller
 @RequestMapping("/user")
-public class BackgroundMusicController extends BaseController {
+public class UserBackgroundMusicController extends BaseController {
 
     @Autowired
     private BackgroundMusicService backgroundMusicService;
@@ -43,7 +43,21 @@ public class BackgroundMusicController extends BaseController {
         return responseData;
     }
 
-
+    @ApiOperation(value = "通过ID获得背景音", notes = "")
+    @RequestMapping(value = "/getBackgroundMusicById", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<BackgroundMusic> getBackgroundMusicById(
+            @ApiParam("ID") @RequestParam int id,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<BackgroundMusic> responseData = new ResponseData();
+        BackgroundMusic backgroundMusic = backgroundMusicService.getBackgroundMusicById(id);
+        if (backgroundMusic == null) {
+            responseData.jsonFill(2, "背景音不存在", null);
+            return responseData;
+        }
+        responseData.jsonFill(1, null, backgroundMusic);
+        return responseData;
+    }
 
 
 }

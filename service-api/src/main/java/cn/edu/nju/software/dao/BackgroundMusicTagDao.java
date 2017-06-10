@@ -27,7 +27,7 @@ public interface BackgroundMusicTagDao {
 
     List<BackgroundMusicTag> getAllBackgroundMusicTags();
 
-    List<BackgroundMusicTag> getTagListByIdList(@Param("idList") List<Integer> idList);
+    List<BackgroundMusicTag> getGroundMusicTagListByIdList(@Param("idList") List<Integer> idList);
 
     boolean deleteHard(int id);
 

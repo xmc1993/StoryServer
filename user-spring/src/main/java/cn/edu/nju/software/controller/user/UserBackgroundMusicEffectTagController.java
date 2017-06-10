@@ -29,7 +29,7 @@ import java.util.List;
 @Api("tag controller")
 @Controller
 @RequestMapping("/user")
-public class BackgroundMusicEffectTagController extends BaseController {
+public class UserBackgroundMusicEffectTagController extends BaseController {
     @Autowired
     private BackgroundMusicTagService backgroundMusicTagService;
     @Autowired
