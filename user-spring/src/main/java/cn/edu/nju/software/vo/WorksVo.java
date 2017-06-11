@@ -8,5 +8,5 @@ import lombok.Data;
  */
 @Data
 public class WorksVo extends Works{
-    private String headImgUrl;//用户头像
+    private boolean like = false;
 }

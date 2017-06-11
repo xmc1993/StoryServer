@@ -59,4 +59,11 @@
         limit #{1},#{2}
     </select>
 
+
+    <select id="getAgree" resultType="cn.edu.nju.software.entity.Agree">
+        select
+        <include refid="fields"></include>
+        from agree
+        where userId = #{0} and worksId = #{1}
+    </select>
 </mapper>

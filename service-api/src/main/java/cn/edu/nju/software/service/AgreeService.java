@@ -18,4 +18,7 @@ public interface AgreeService {
     List<Integer> getAgreeUserIdListByWorksId(int worksId, int offset, int limit);
 
     List<Integer> getAgreeWorksIdListByUserId(int userId, int offset, int limit);
+
+    Agree getAgree(int userId, int worksId);
+
 }

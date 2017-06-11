@@ -9,9 +9,11 @@ import cn.edu.nju.software.service.WorksService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UploadFileUtil;
+import cn.edu.nju.software.vo.WorksVo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -44,31 +47,62 @@ public class UserWorksController extends BaseController {
     @Autowired
     private StoryService storyService;
 
-    @ApiOperation(value = "获取某个用户的作品列表", notes = "")
+    @ApiOperation(value = "获取某个用户的作品列表", notes = "需要登录")
     @RequestMapping(value = "/getWorksByUserId", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<Works>> getWorksById(
+    public ResponseData<List<WorksVo>> getWorksById(
             @ApiParam("用户ID") @RequestParam("userId") int userId,
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<Works>> responseData = new ResponseData();
+        ResponseData<List<WorksVo>> responseData = new ResponseData();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
         List<Works> worksList = worksService.getWorksListByUserId(userId, offset, limit);
-        responseData.jsonFill(1, null, worksList);
+        List<WorksVo> worksVoList = new ArrayList<>();
+        for (Works works : worksList) {
+            WorksVo worksVo = new WorksVo();
+            BeanUtils.copyProperties(works, worksVo);
+            if (agreeService.getAgree(user.getId(), works.getId()) != null) {
+                worksVo.setLike(true);
+            }
+            worksVoList.add(worksVo);
+        }
+        responseData.jsonFill(1, null, worksVoList);
         return responseData;
     }
 
     @ApiOperation(value = "获取一个故事的所有作品列表(按照点赞数降序)", notes = "")
     @RequestMapping(value = "/getWorksListByStoryId", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<Works>> getWorksListByStoryId(
+    public ResponseData<List<WorksVo>> getWorksListByStoryId(
             @ApiParam("故事ID") @RequestParam("storyId") int storyId,
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<Works>> responseData = new ResponseData();
+        ResponseData<List<WorksVo>> responseData = new ResponseData();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
+
         List<Works> worksList = worksService.getWorksListByStoryId(storyId, offset, limit);
-        responseData.jsonFill(1, null, worksList);
+        List<WorksVo> worksVoList = new ArrayList<>();
+        for (Works works : worksList) {
+            WorksVo worksVo = new WorksVo();
+            BeanUtils.copyProperties(works, worksVo);
+            if (agreeService.getAgree(user.getId(), works.getId()) != null) {
+                worksVo.setLike(true);
+            }
+            worksVoList.add(worksVo);
+        }
+        responseData.jsonFill(1, null, worksVoList);
         return responseData;
     }
 
@@ -81,7 +115,12 @@ public class UserWorksController extends BaseController {
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<Works>> responseData = new ResponseData();
-
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
         List<Integer> idList = agreeService.getAgreeWorksIdListByUserId(userId, offset, limit);
         List<Works> worksList = worksService.getWorksListByIdList(idList);
         responseData.jsonFill(1, null, worksList);
@@ -92,16 +131,26 @@ public class UserWorksController extends BaseController {
     @ApiOperation(value = "根据ID获得一个作品", notes = "")
     @RequestMapping(value = "/getWorksById", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<Works> getWorksById(
+    public ResponseData<WorksVo> getWorksById(
             @ApiParam("作品ID") @RequestParam("id") int id,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<Works> responseData = new ResponseData();
+        ResponseData<WorksVo> responseData = new ResponseData();
         Works works = worksService.getWorksById(id);
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
         if (works == null) {
             responseData.jsonFill(2, "作品不存在", null);
             return responseData;
         }
-        responseData.jsonFill(1, null, works);
+        WorksVo worksVo = new WorksVo();
+        if (agreeService.getAgree(user.getId(), works.getId()) != null) {
+            worksVo.setLike(true);
+        }
+        responseData.jsonFill(1, null, worksVo);
         return responseData;
     }
 

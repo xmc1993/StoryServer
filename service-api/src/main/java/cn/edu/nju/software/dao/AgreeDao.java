@@ -21,4 +21,6 @@ public interface AgreeDao {
 
     List<Integer> getAgreeWorksListByUserId(int userId, int offset, int limit);
 
+    Agree getAgree(int userId, int worksId);
+
 }
