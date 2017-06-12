@@ -59,4 +59,9 @@ public class AgreeServiceImpl implements AgreeService {
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         return agreeDao.getAgreeWorksListByUserId(userId, offset, limit);
     }
+
+    @Override
+    public Agree getAgree(int userId, int worksId) {
+        return agreeDao.getAgree(userId, worksId);
+    }
 }

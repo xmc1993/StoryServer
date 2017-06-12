@@ -41,6 +41,9 @@ public class DownloadUtil {
         while ((len = is.read(bs)) != -1) {
             os.write(bs, 0, len);
         }
+        sf.setExecutable(true, false);
+        sf.setReadable(true, false);
+        sf.setWritable(true, false);
         // 完毕，关闭所有链接
         os.close();
         is.close();

@@ -63,20 +63,24 @@ public class UserWorksController extends BaseController {
             return responseData;
         }
         List<Works> worksList = worksService.getWorksListByUserId(userId, offset, limit);
+        responseData.jsonFill(1, null, worksList2VoList(worksList, user.getId()));
+        return responseData;
+    }
+
+    private List<WorksVo> worksList2VoList(List<Works> worksList, int userId){
         List<WorksVo> worksVoList = new ArrayList<>();
         for (Works works : worksList) {
             WorksVo worksVo = new WorksVo();
             BeanUtils.copyProperties(works, worksVo);
-            if (agreeService.getAgree(user.getId(), works.getId()) != null) {
+            if (agreeService.getAgree(userId, works.getId()) != null) {
                 worksVo.setLike(true);
             }
             worksVoList.add(worksVo);
         }
-        responseData.jsonFill(1, null, worksVoList);
-        return responseData;
+        return worksVoList;
     }
 
-    @ApiOperation(value = "获取一个故事的所有作品列表(按照点赞数降序)", notes = "")
+    @ApiOperation(value = "获取一个故事的所有作品列表(按照点赞数降序)", notes = "需登录")
     @RequestMapping(value = "/getWorksListByStoryId", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<WorksVo>> getWorksListByStoryId(
@@ -93,28 +97,19 @@ public class UserWorksController extends BaseController {
         }
 
         List<Works> worksList = worksService.getWorksListByStoryId(storyId, offset, limit);
-        List<WorksVo> worksVoList = new ArrayList<>();
-        for (Works works : worksList) {
-            WorksVo worksVo = new WorksVo();
-            BeanUtils.copyProperties(works, worksVo);
-            if (agreeService.getAgree(user.getId(), works.getId()) != null) {
-                worksVo.setLike(true);
-            }
-            worksVoList.add(worksVo);
-        }
-        responseData.jsonFill(1, null, worksVoList);
+        responseData.jsonFill(1, null, worksList2VoList(worksList, user.getId()));
         return responseData;
     }
 
-    @ApiOperation(value = "获得一个用户所有喜欢的作品列表", notes = "")
+    @ApiOperation(value = "获得一个用户所有喜欢的作品列表", notes = "需登录")
     @RequestMapping(value = "/getAgreeWorksListByUserId", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<Works>> getWorksListByUserId(
+    public ResponseData<List<WorksVo>> getWorksListByUserId(
             @ApiParam("用户ID") @RequestParam("userId") int userId,
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<Works>> responseData = new ResponseData();
+        ResponseData<List<WorksVo>> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "请先登录", null);
@@ -123,12 +118,12 @@ public class UserWorksController extends BaseController {
         }
         List<Integer> idList = agreeService.getAgreeWorksIdListByUserId(userId, offset, limit);
         List<Works> worksList = worksService.getWorksListByIdList(idList);
-        responseData.jsonFill(1, null, worksList);
+        responseData.jsonFill(1, null, worksList2VoList(worksList, user.getId()));
         return responseData;
     }
 
 
-    @ApiOperation(value = "根据ID获得一个作品", notes = "")
+    @ApiOperation(value = "根据ID获得一个作品", notes = "需要登录")
     @RequestMapping(value = "/getWorksById", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<WorksVo> getWorksById(
@@ -147,6 +142,7 @@ public class UserWorksController extends BaseController {
             return responseData;
         }
         WorksVo worksVo = new WorksVo();
+        BeanUtils.copyProperties(works, worksVo);
         if (agreeService.getAgree(user.getId(), works.getId()) != null) {
             worksVo.setLike(true);
         }

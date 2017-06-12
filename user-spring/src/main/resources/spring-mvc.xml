@@ -92,7 +92,10 @@
             <mvc:mapping path="/user/updateBaby"/>
             <mvc:mapping path="/user/deleteBaby"/>
             <mvc:mapping path="/user/getFollowerListByUserId"/>
-            <mvc:mapping path="/user/getFolloweeListByUserId"/>
+            <mvc:mapping path="/user/getWorksByUserId"/>
+            <mvc:mapping path="/user/getWorksListByStoryId"/>
+            <mvc:mapping path="/user/getAgreeWorksListByUserId"/>
+            <mvc:mapping path="/user/getWorksById"/>
             <!-- 不需要拦截的uri -->
             <!--
             <mvc:exclude-mapping path="/user/getLandingPage"/>
