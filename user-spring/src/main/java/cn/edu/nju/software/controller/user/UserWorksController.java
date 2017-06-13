@@ -67,7 +67,7 @@ public class UserWorksController extends BaseController {
         return responseData;
     }
 
-    private List<WorksVo> worksList2VoList(List<Works> worksList, int userId){
+    private List<WorksVo> worksList2VoList(List<Works> worksList, int userId) {
         List<WorksVo> worksVoList = new ArrayList<>();
         for (Works works : worksList) {
             WorksVo worksVo = new WorksVo();
@@ -95,7 +95,6 @@ public class UserWorksController extends BaseController {
             response.setStatus(401);
             return responseData;
         }
-
         List<Works> worksList = worksService.getWorksListByStoryId(storyId, offset, limit);
         responseData.jsonFill(1, null, worksList2VoList(worksList, user.getId()));
         return responseData;
@@ -147,6 +146,29 @@ public class UserWorksController extends BaseController {
             worksVo.setLike(true);
         }
         responseData.jsonFill(1, null, worksVo);
+        return responseData;
+    }
+
+
+    @ApiOperation(value = "根据ID获得一个分享作品（无需登录）", notes = "")
+    @RequestMapping(value = "/getShareWorksById", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Works> getShareWorksById(
+            @ApiParam("作品ID") @RequestParam("id") int id,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Works> responseData = new ResponseData();
+        Works works = worksService.getWorksById(id);
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
+        if (works == null) {
+            responseData.jsonFill(2, "作品不存在", null);
+            return responseData;
+        }
+        responseData.jsonFill(1, null, works);
         return responseData;
     }
 
@@ -236,19 +258,19 @@ public class UserWorksController extends BaseController {
     @ApiOperation(value = "发布作品", notes = "需登录")
     @RequestMapping(value = "/publishWorks", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<Boolean> publishWorks(
+    public ResponseData<Works> publishWorks(
             @ApiParam("故事ID") @RequestParam("storyId") int storyId,
             @ApiParam("音频长度") @RequestParam("duration") String duration,
             @ApiParam("音频文件") @RequestParam("uploadFile") MultipartFile uploadFile,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<Boolean> responseData = new ResponseData();
+        ResponseData<Works> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "请先登录", null);
             response.setStatus(401);
             return responseData;
         }
-        if (uploadFile == null){
+        if (uploadFile == null) {
             responseData.jsonFill(2, "请选择音频文件上传。", null);
             return responseData;
         }
@@ -276,32 +298,37 @@ public class UserWorksController extends BaseController {
         works.setUrl(url);
         works.setHeadImgUrl(user.getHeadImgUrl());
         boolean res = worksService.saveWorks(works);
-        responseData.jsonFill(res ? 1 : 2, null, res);
+        if (res) {
+            responseData.jsonFill(1, null, works);
+        } else {
+            responseData.jsonFill(2, "发布失败", null);
+        }
         return responseData;
+
     }
 
     @ApiOperation(value = "重新发布作品", notes = "需登录")
     @RequestMapping(value = "/rePublishWorks", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<Boolean> rePublishWorks(
+    public ResponseData<Works> rePublishWorks(
             @ApiParam("作品ID") @RequestParam("worksId") int worksId,
             @ApiParam("音频长度") @RequestParam("duration") String duration,
             @ApiParam("音频文件") @RequestParam("uploadFile") MultipartFile uploadFile,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<Boolean> responseData = new ResponseData();
+        ResponseData<Works> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "请先登录", null);
             response.setStatus(401);
             return responseData;
         }
-        if (uploadFile == null){
+        if (uploadFile == null) {
             responseData.jsonFill(2, "请选择音频文件上传。", null);
             return responseData;
         }
 
         Works works = worksService.getWorksById(worksId);
-        if (works == null){
+        if (works == null) {
             responseData.jsonFill(2, "无效的作品ID", null);
             response.setStatus(404);
             return responseData;
@@ -323,7 +350,11 @@ public class UserWorksController extends BaseController {
         UploadFileUtil.deleteFileByUrl(works.getUrl());
         works.setUrl(url);
         boolean res = worksService.updateWorks(works);
-        responseData.jsonFill(res ? 1 : 2, null, res);
+        if (res) {
+            responseData.jsonFill(1, null, works);
+        } else {
+            responseData.jsonFill(2, "发布失败", null);
+        }
         return responseData;
     }
 

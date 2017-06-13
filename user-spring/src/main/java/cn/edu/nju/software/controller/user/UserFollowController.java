@@ -124,7 +124,7 @@ public class UserFollowController {
         return responseData;
     }
 
-    @ApiOperation(value = "得到某个用户的关注列表", notes = "")
+    @ApiOperation(value = "得到某个用户的关注列表", notes = "需登录")
     @RequestMapping(value = "/getFolloweeListByUserId", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<UserBaseFollowVo>> getFolloweeListByUserId(
@@ -153,6 +153,23 @@ public class UserFollowController {
             result.add(userBaseFollowVo);
         }
         responseData.jsonFill(1, null, result);
+        return responseData;
+    }
+
+    @ApiOperation(value = "关注关系", notes = "需登录(0无关系 1单方面关注 2单方面被关注 3相互关注)")
+    @RequestMapping(value = "/getFollowingStatus", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Integer> getFollowingStatus(
+            @ApiParam("用户ID") @RequestParam("userId") int userId,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Integer> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "用户尚未登录。", null);
+            return responseData;
+        }
+        int status = followService.getStatusBetween(user.getId(), userId);
+        responseData.jsonFill(1, null, status);
         return responseData;
     }
 
