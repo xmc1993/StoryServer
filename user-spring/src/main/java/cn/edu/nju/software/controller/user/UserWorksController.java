@@ -158,12 +158,6 @@ public class UserWorksController extends BaseController {
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Works> responseData = new ResponseData();
         Works works = worksService.getWorksById(id);
-        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
-        if (user == null) {
-            responseData.jsonFill(2, "请先登录", null);
-            response.setStatus(401);
-            return responseData;
-        }
         if (works == null) {
             responseData.jsonFill(2, "作品不存在", null);
             return responseData;
