@@ -61,6 +61,9 @@ public final class UploadFileUtil {
         if (!desFile.getParentFile().exists()) {// 判断路径"/image/#{businessId}"是否存在
             desFile.getParentFile().mkdirs();
         }
+        desFile.getParentFile().setReadable(true, false);
+        desFile.getParentFile().setExecutable(true, false);
+        desFile.getParentFile().setWritable(true, false);
         try {
             if (!desFile.exists()) {
                 desFile.createNewFile();
