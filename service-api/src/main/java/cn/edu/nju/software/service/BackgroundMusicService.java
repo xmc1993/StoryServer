@@ -22,4 +22,6 @@ public interface BackgroundMusicService {
     BackgroundMusic getBackgroundMusicById(int id);
 
     List<BackgroundMusic> getBackgroundMusicListByIdList(List<Integer> idList);
+
+    Integer getBackgroundMusicCount();
 }

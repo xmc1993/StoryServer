@@ -92,5 +92,9 @@
             #{id}
         </foreach>
     </select>
+    <select id="getBackgroundMusicTagCount" resultType="java.lang.Integer">
+        select count(id)
+        from background_music
+    </select>
 
 </mapper>

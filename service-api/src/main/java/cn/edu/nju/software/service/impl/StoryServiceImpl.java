@@ -110,4 +110,9 @@ public class StoryServiceImpl implements StoryService {
     public boolean deleteTell(int id) {
         return storyDao.deleteTell(id);
     }
+
+    @Override
+    public Integer getStoryCount(){
+        return storyDao.getStoryCount();
+    }
 }

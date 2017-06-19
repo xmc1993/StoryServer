@@ -40,4 +40,6 @@ public interface StoryTagDao {
 
     List<StoryTag> getAllSecondLevelTags();
 
+    Integer getStoryTagCount();
+
 }

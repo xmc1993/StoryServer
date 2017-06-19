@@ -65,4 +65,8 @@ public class SoundEffectTagServiceImpl implements SoundEffectTagService {
         return soundEffectTagDao.getSoundEffectTagByIdHard(tagId);
     }
 
+    @Override
+    public Integer getSoundEffectTagCount(){
+        return soundEffectTagDao.getSoundEffectTagCount();
+    }
 }

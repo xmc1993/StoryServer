@@ -25,4 +25,5 @@ public interface SoundEffectTagService {
 
     SoundEffectTag getSoundEffectTagByIdHard(int tagId);
 
+    Integer getSoundEffectTagCount();
 }

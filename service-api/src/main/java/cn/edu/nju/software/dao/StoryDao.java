@@ -47,4 +47,6 @@ public interface StoryDao {
     boolean newTell(int id);
 
     boolean deleteTell(int id);
+
+    Integer getStoryCount();
 }

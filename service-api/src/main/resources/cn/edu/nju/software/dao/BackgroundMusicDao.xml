@@ -90,6 +90,10 @@
             #{id}
         </foreach>
     </select>
+    <select id="getBackgroundMusicCount" resultType="java.lang.Integer">
+        select count(id)
+        from background_music
+    </select>
 
     <delete id="deleteHard">
         DELETE FROM

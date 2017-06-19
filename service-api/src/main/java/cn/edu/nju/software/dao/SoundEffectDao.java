@@ -30,4 +30,5 @@ public interface SoundEffectDao {
 
     List<SoundEffect> getSoundEffectListByIdList(@Param("idList")List<Integer> idList);
 
+    Integer getSoundEffectCount();
 }

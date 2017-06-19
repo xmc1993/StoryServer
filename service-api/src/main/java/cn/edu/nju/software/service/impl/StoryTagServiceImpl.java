@@ -73,4 +73,9 @@ public class StoryTagServiceImpl implements StoryTagService {
     public List<StoryTag> getAllSecondLevelTags() {
         return storyTagDao.getAllSecondLevelTags();
     }
+
+    @Override
+    public Integer getStoryTagCount(){
+        return storyTagDao.getStoryTagCount();
+    }
 }

@@ -65,4 +65,8 @@ public class BackgroundMusicTagServiceImpl implements BackgroundMusicTagService 
         return backgroundMusicTagDao.getBackgroundMusicTagByIdHard(tagId);
     }
 
+    @Override
+    public Integer getBackgroundMusicTag(){
+        return backgroundMusicTagDao.getBackgroundMusicTagCount();
+    }
 }
