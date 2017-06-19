@@ -33,4 +33,5 @@ public interface SoundEffectTagDao {
 
     List<SoundEffectTag> getAllSecondLevelTags();
 
+    Integer getSoundEffectTagCount();
 }

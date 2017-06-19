@@ -102,4 +102,11 @@ public class ManageSoundEffectTagController {
         List<SoundEffectTag> tagList = soundEffectTagService.getSoundEffectTagsByPage(offset, limit);
         return tagList;
     }
+
+    @ApiOperation(value = "获取背景音乐分类数量", notes = "")
+    @RequestMapping(value = "/soundEffectTagCount", method = {RequestMethod.GET})
+    @ResponseBody
+    public Integer getSoundEffectTagCount(){
+        return soundEffectTagService.getSoundEffectTagCount();
+    }
 }

@@ -33,4 +33,6 @@ public interface BackgroundMusicTagDao {
 
     List<BackgroundMusicTag> getAllSecondLevelTags();
 
+    Integer getBackgroundMusicTagCount();
+
 }

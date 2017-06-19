@@ -177,6 +177,10 @@
         where valid = 1 and recommend = 1
         limit #{0},#{1}
     </select>
+    <select id="getStoryCount" resultType="java.lang.Integer">
+        select count(id)
+        from story
+    </select>
 
     <update id="newTell">
         update story
