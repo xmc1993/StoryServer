@@ -21,8 +21,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -83,12 +85,8 @@ public class ManageStoryController {
         story.setPreCoverUrl(urlList.get(1));
         story.setBackgroundUrl(urlList.get(2));
         story.setOriginSoundUrl(urlList.get(3));
-        try {
-            String duration=storyService.getOriginSoundLength(new URL(story.getOriginSoundUrl()));
-            story.setDuration(duration);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        String duration=storyService.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(story.getOriginSoundUrl())));
+        story.setDuration(duration);
         boolean res = storyService.saveStory(story);
         if (!res) {
             throw new RuntimeException("发布故事失败");
@@ -135,12 +133,8 @@ public class ManageStoryController {
         if (!originSoundFile.isEmpty()) {
             UploadFileUtil.deleteFileByUrl(story.getOriginSoundUrl());
             story.setOriginSoundUrl(uploadFile(originSoundFile));
-            try {
-                String duration=storyService.getOriginSoundLength(new URL(story.getOriginSoundUrl()));
-                story.setDuration(duration);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
+            String duration=storyService.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(story.getOriginSoundUrl())));
+            story.setDuration(duration);
         }
         story.setTitle(title);
         story.setContent(content);
@@ -156,13 +150,6 @@ public class ManageStoryController {
         }
         return result;
     }
-   /* @RequestMapping(value = "/test/length")
-    @ResponseBody
-    public String test() throws MalformedURLException {
-        String test=storyService.getOriginSoundLength(new URL("http://120.27.219.173/source/cover/TianTianShuaYaXiGuanHao.wav"));
-        return test;
-    }
-*/
     @ApiOperation(value = "删除故事", notes = "")
     @RequestMapping(value = "/stories/{id}", method = {RequestMethod.DELETE})
     @ResponseBody

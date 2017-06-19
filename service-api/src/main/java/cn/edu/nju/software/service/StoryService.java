@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -43,5 +44,5 @@ public interface StoryService {
 
     Integer getStoryCount();
 
-    String getOriginSoundLength(URL url);
+    String getOriginSoundLength(File file);
 }
