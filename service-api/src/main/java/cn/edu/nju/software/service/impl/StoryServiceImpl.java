@@ -7,7 +7,12 @@ import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.util.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -114,5 +119,36 @@ public class StoryServiceImpl implements StoryService {
     @Override
     public Integer getStoryCount(){
         return storyDao.getStoryCount();
+    }
+
+    @Override
+    public String getOriginSoundLength(URL url) {
+        AudioInputStream ais = null;
+        try {
+            /*String location=fileLocation+originSoundFile.getOriginalFilename();
+            originSoundFile.transferTo(new File(location));
+            File localFile=new File(location);*/
+            ais = AudioSystem.getAudioInputStream(url);
+            Clip clip = AudioSystem.getClip();
+            clip.open(ais);
+            int length= (int) (clip.getMicrosecondLength()/1000000);
+            int hours=length/3600;
+            int minutes=(length%3600)/60;
+            int seconds=(length%60);
+            StringBuilder stringBuilder=new StringBuilder();
+            stringBuilder.append(hours==0?"0":String.valueOf(hours));
+            stringBuilder.append(":");
+            stringBuilder.append(minutes==0?"0":String.valueOf(minutes));
+            stringBuilder.append(":");
+            stringBuilder.append(seconds==0?"0":String.valueOf(seconds));
+            return stringBuilder.toString();
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
