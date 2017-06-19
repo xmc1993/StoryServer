@@ -66,7 +66,7 @@ public class BackgroundMusicTagServiceImpl implements BackgroundMusicTagService 
     }
 
     @Override
-    public Integer getBackgroundMusicTag(){
+    public Integer getBackgroundMusicTagCount(){
         return backgroundMusicTagDao.getBackgroundMusicTagCount();
     }
 }

@@ -154,5 +154,10 @@ public class ManageBackgroundMusicController {
         List<BackgroundMusic> backgroundMusicList = backgroundMusicService.getBackgroundMusicListByPage(offset, limit);
         return backgroundMusicList;
     }
-
+    @ApiOperation(value = "获取背景音乐数量", notes = "")
+    @RequestMapping(value = "/backgroundMusicCount", method = {RequestMethod.GET})
+    @ResponseBody
+    public Integer getBackgroundMusicCount(){
+        return backgroundMusicService.getBackgroundMusicCount();
+    }
 }

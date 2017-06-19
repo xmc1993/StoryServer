@@ -230,5 +230,10 @@ public class ManageStoryController {
 
         return "" + offset + limit;
     }
-
+    @ApiOperation(value = "获取故事数量", notes = "")
+    @RequestMapping(value = "/storyCount", method = {RequestMethod.GET})
+    @ResponseBody
+    public Integer getStoryCount(){
+        return storyService.getStoryCount();
+    }
 }

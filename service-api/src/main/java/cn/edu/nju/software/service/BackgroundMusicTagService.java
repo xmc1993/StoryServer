@@ -25,5 +25,5 @@ public interface BackgroundMusicTagService {
 
     BackgroundMusicTag getBackgroundMusicTagByIdHard(int tagId);
 
-    Integer getBackgroundMusicTag();
+    Integer getBackgroundMusicTagCount();
 }

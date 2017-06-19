@@ -164,4 +164,10 @@ public class ManageStoryTagController {
         String url = UploadFileUtil.SOURCE_BASE_URL + ICON_ROOT + fileName;
         return url;
     }
+    @ApiOperation(value = "获取故事标签数量", notes = "")
+    @RequestMapping(value = "/storyTagCount", method = {RequestMethod.GET})
+    @ResponseBody
+    public Integer getStoryTagCount(){
+        return storyTagService.getStoryTagCount();
+    }
 }
