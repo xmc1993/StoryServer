@@ -155,4 +155,10 @@ public class ManageSoundEffectController {
         return soundEffectList;
     }
 
+    @ApiOperation(value = "获取背景音效数量", notes = "")
+    @RequestMapping(value = "/soundEffectCount", method = {RequestMethod.GET})
+    @ResponseBody
+    public Integer getSoundEffectCount(){
+        return soundEffectService.getSoundEffectCount();
+    }
 }

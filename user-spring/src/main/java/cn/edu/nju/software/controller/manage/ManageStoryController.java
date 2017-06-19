@@ -19,6 +19,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -78,7 +85,8 @@ public class ManageStoryController {
         story.setPreCoverUrl(urlList.get(1));
         story.setBackgroundUrl(urlList.get(2));
         story.setOriginSoundUrl(urlList.get(3));
-
+        String duration=storyService.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(story.getOriginSoundUrl())));
+        story.setDuration(duration);
         boolean res = storyService.saveStory(story);
         if (!res) {
             throw new RuntimeException("发布故事失败");
@@ -125,6 +133,8 @@ public class ManageStoryController {
         if (!originSoundFile.isEmpty()) {
             UploadFileUtil.deleteFileByUrl(story.getOriginSoundUrl());
             story.setOriginSoundUrl(uploadFile(originSoundFile));
+            String duration=storyService.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(story.getOriginSoundUrl())));
+            story.setDuration(duration);
         }
         story.setTitle(title);
         story.setContent(content);
@@ -140,8 +150,6 @@ public class ManageStoryController {
         }
         return result;
     }
-
-
     @ApiOperation(value = "删除故事", notes = "")
     @RequestMapping(value = "/stories/{id}", method = {RequestMethod.DELETE})
     @ResponseBody
@@ -230,5 +238,10 @@ public class ManageStoryController {
 
         return "" + offset + limit;
     }
-
+    @ApiOperation(value = "获取故事数量", notes = "")
+    @RequestMapping(value = "/storyCount", method = {RequestMethod.GET})
+    @ResponseBody
+    public Integer getStoryCount(){
+        return storyService.getStoryCount();
+    }
 }

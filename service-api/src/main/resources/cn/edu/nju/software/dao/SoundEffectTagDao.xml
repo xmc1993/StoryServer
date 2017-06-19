@@ -92,5 +92,9 @@
             #{id}
         </foreach>
     </select>
+    <select id="getSoundEffectTagCount" resultType="java.lang.Integer">
+        select count(id)
+        from sound_effect_tag
+    </select>
 
 </mapper>

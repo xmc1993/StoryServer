@@ -116,5 +116,9 @@
         from story_tag
         WHERE parentId &lt;&gt; 0 and valid = 1
     </select>
+    <select id="getStoryTagCount" resultType="java.lang.Integer">
+        select count(id)
+        from story_tag
+    </select>
 
 </mapper>

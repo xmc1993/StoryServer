@@ -30,4 +30,5 @@ public interface BackgroundMusicDao {
 
     List<BackgroundMusic> getBackgroundMusicListByIdList(@Param("idList") List<Integer> idList);
 
+    Integer getBackgroundMusicCount();
 }

@@ -58,4 +58,8 @@ public class SoundEffectServiceImpl implements SoundEffectService {
         return soundEffectDao.getSoundEffectListByIdList(idList);
     }
 
+    @Override
+    public Integer getSoundEffectCount(){
+        return soundEffectDao.getSoundEffectCount();
+    }
 }

@@ -58,4 +58,9 @@ public class BackgroundMusicServiceImpl implements BackgroundMusicService {
         return backgroundMusicDao.getBackgroundMusicListByIdList(idList);
     }
 
+    @Override
+    public Integer getBackgroundMusicCount(){
+        return backgroundMusicDao.getBackgroundMusicCount();
+    }
+
 }

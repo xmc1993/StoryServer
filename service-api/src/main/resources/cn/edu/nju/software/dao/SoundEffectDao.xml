@@ -90,6 +90,10 @@
             #{id}
         </foreach>
     </select>
+    <select id="getSoundEffectCount" resultType="java.lang.Integer">
+        select count(id)
+        from sound_effect
+    </select>
 
     <delete id="deleteHard">
         DELETE FROM

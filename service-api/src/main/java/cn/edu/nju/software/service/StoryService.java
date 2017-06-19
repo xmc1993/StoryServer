@@ -1,7 +1,13 @@
 package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.entity.Story;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -35,4 +41,8 @@ public interface StoryService {
     boolean newTell(int id);
 
     boolean deleteTell(int id);
+
+    Integer getStoryCount();
+
+    String getOriginSoundLength(File file);
 }

@@ -102,4 +102,10 @@ public class ManageBackgroundMusicTagController {
         List<BackgroundMusicTag> tagList = backgroundMusicTagService.getBackgroundMusicTagsByPage(offset, limit);
         return tagList;
     }
+    @ApiOperation(value = "获取背景音乐分类数量", notes = "")
+    @RequestMapping(value = "/backgroundMusicTagCount", method = {RequestMethod.GET})
+    @ResponseBody
+    public Integer getBackgroundMusicTagCount(){
+        return backgroundMusicTagService.getBackgroundMusicTagCount();
+    }
 }
