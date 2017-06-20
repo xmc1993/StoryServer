@@ -49,6 +49,7 @@ public class UserBackgroundMusicEffectTagController extends BaseController {
         ResponseData<List<BackgroundMusicTag>> responseData = new ResponseData<>();
         List<BackgroundMusicTag> backgroundMusicTagList = backgroundMusicTagService.getBackgroundMusicTagsByPage(offset, limit);
         responseData.jsonFill(1, null, backgroundMusicTagList);
+        responseData.setCount(backgroundMusicTagList.size());
         return responseData;
     }
 
@@ -67,6 +68,7 @@ public class UserBackgroundMusicEffectTagController extends BaseController {
         List<Integer> idList = backgroundMusicTagRelationService.getTagIdListByBackgroundMusicId(backgroundMusicId);
         List<BackgroundMusicTag> backgroundMusicTagList = backgroundMusicTagService.getBackgroundMusicTagListByIdList(idList);
         responseData.jsonFill(1, null, backgroundMusicTagList);
+        responseData.setCount(backgroundMusicTagList.size());
         return responseData;
     }
 
@@ -85,6 +87,7 @@ public class UserBackgroundMusicEffectTagController extends BaseController {
         List<Integer> idList = backgroundMusicTagRelationService.getBackgroundMusicIdListByTagId(tagId);
         List<BackgroundMusic> result = backgroundMusicService.getBackgroundMusicListByIdList(idList);
         responseData.jsonFill(1, null, result);
+        responseData.setCount(result.size());
         return responseData;
     }
 

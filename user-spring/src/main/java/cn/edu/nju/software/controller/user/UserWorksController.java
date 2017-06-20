@@ -64,6 +64,7 @@ public class UserWorksController extends BaseController {
         }
         List<Works> worksList = worksService.getWorksListByUserId(userId, offset, limit);
         responseData.jsonFill(1, null, worksList2VoList(worksList, user.getId()));
+        responseData.setCount(worksList.size());
         return responseData;
     }
 
@@ -97,6 +98,7 @@ public class UserWorksController extends BaseController {
         }
         List<Works> worksList = worksService.getWorksListByStoryId(storyId, offset, limit);
         responseData.jsonFill(1, null, worksList2VoList(worksList, user.getId()));
+        responseData.setCount(worksList.size());
         return responseData;
     }
 
@@ -118,6 +120,7 @@ public class UserWorksController extends BaseController {
         List<Integer> idList = agreeService.getAgreeWorksIdListByUserId(userId, offset, limit);
         List<Works> worksList = worksService.getWorksListByIdList(idList);
         responseData.jsonFill(1, null, worksList2VoList(worksList, user.getId()));
+        responseData.setCount(worksList.size());
         return responseData;
     }
 

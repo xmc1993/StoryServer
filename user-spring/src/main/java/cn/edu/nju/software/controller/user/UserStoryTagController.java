@@ -43,6 +43,7 @@ public class UserStoryTagController extends BaseController {
         ResponseData<List<StoryTag>> responseData = new ResponseData<>();
         List<StoryTag> storyTagList = storyTagService.getStoryTagListByParentId(0);
         responseData.jsonFill(1, null, storyTagList);
+        responseData.setCount(storyTagList.size());
         return responseData;
     }
 
@@ -54,6 +55,7 @@ public class UserStoryTagController extends BaseController {
         ResponseData<List<StoryTag>> responseData = new ResponseData<>();
         List<StoryTag> storyTagList = storyTagService.getAllSecondLevelTags();
         responseData.jsonFill(1, null, storyTagList);
+        responseData.setCount(storyTagList.size());
         return responseData;
     }
 
@@ -70,6 +72,7 @@ public class UserStoryTagController extends BaseController {
         }
         List<StoryTag> storyTagList = storyTagService.getStoryTagListByParentId(parentId);
         responseData.jsonFill(1, null, storyTagList);
+        responseData.setCount(storyTagList.size());
         return responseData;
     }
 
@@ -87,6 +90,7 @@ public class UserStoryTagController extends BaseController {
         List<Integer> idList = tagRelationService.getTagIdListByStoryId(storyId);
         List<StoryTag> storyTagList = storyTagService.getStoryTagListByIdList(idList);
         responseData.jsonFill(1, null, storyTagList);
+        responseData.setCount(storyTagList.size());
         return responseData;
     }
 

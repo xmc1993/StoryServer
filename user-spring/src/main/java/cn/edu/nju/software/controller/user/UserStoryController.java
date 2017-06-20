@@ -58,6 +58,7 @@ public class UserStoryController extends BaseController {
         ResponseData<List<Story>> responseData = new ResponseData();
         List<Story> storyList = storyService.getStoryListByPage(offset, limit);
         responseData.jsonFill(1, null, storyList);
+        responseData.setCount(storyList.size());
         return responseData;
     }
 
@@ -73,6 +74,7 @@ public class UserStoryController extends BaseController {
         List<Integer> idList = tagRelationService.getStoryIdListByFirstLevelTagId(tagId);
         List<Story> storyList = storyService.getStoryListByIdList(idList);
         responseData.jsonFill(1, null, storyList);
+        responseData.setCount(storyList.size());
         return responseData;
     }
 
@@ -88,6 +90,7 @@ public class UserStoryController extends BaseController {
         List<Integer> idList = tagRelationService.getStoryIdListBySecondLevelTagId(tagId);
         List<Story> storyList = storyService.getStoryListByIdList(idList);
         responseData.jsonFill(1, null, storyList);
+        responseData.setCount(storyList.size());
         return responseData;
     }
 
@@ -102,6 +105,7 @@ public class UserStoryController extends BaseController {
         ResponseData<List<Story>> responseData = new ResponseData<>();
         List<Story> storyList = storyService.getStoryListByTitle(query, offset, limit);
         responseData.jsonFill(1, null, storyList);
+        responseData.setCount(storyList.size());
         return responseData;
     }
 
@@ -115,6 +119,7 @@ public class UserStoryController extends BaseController {
         ResponseData<List<Story>> responseData = new ResponseData<>();
         List<Story> storyList = storyService.getRecommendedStoryListByPage(offset, limit);
         responseData.jsonFill(1, null, storyList);
+        responseData.setCount(storyList.size());
         return responseData;
     }
 

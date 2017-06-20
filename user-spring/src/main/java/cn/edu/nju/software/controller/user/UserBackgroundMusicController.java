@@ -40,6 +40,7 @@ public class UserBackgroundMusicController extends BaseController {
         ResponseData<List<BackgroundMusic>> responseData = new ResponseData();
         List<BackgroundMusic> backgroundMusicList = backgroundMusicService.getBackgroundMusicListByPage(offset, limit);
         responseData.jsonFill(1, null, backgroundMusicList);
+        responseData.setCount(backgroundMusicList.size());
         return responseData;
     }
 

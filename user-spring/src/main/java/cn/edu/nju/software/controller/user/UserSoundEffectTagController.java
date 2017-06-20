@@ -49,6 +49,7 @@ public class UserSoundEffectTagController extends BaseController {
         ResponseData<List<SoundEffectTag>> responseData = new ResponseData<>();
         List<SoundEffectTag> soundEffectTagList = soundEffectTagService.getSoundEffectTagsByPage(offset, limit);
         responseData.jsonFill(1, null, soundEffectTagList);
+        responseData.setCount(soundEffectTagList.size());
         return responseData;
     }
 
@@ -67,6 +68,7 @@ public class UserSoundEffectTagController extends BaseController {
         List<Integer> idList = soundEffectTagRelationService.getTagIdListBySoundEffectId(soundEffectId);
         List<SoundEffectTag> soundEffectTagList = soundEffectTagService.getSoundEffectTagListByIdList(idList);
         responseData.jsonFill(1, null, soundEffectTagList);
+        responseData.setCount(soundEffectTagList.size());
         return responseData;
     }
 
@@ -85,6 +87,7 @@ public class UserSoundEffectTagController extends BaseController {
         List<Integer> idList = soundEffectTagRelationService.getSoundEffectIdListByTagId(tagId);
         List<SoundEffect> result = soundEffectService.getSoundEffectListByIdList(idList);
         responseData.jsonFill(1, null, result);
+        responseData.setCount(result.size());
         return responseData;
     }
 
