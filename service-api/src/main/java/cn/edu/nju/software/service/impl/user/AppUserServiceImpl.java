@@ -30,7 +30,10 @@ public class AppUserServiceImpl implements AppUserService {
     public boolean updateUser(User user, String appId) {
         return userDao.updateUser(user);
     }
-
+    @Override
+    public boolean updateUser(User user){
+        return userDao.updateUser(user);
+    }
     @Override
     public User getUserByMobileOrId(String unionId) {
         //做兼容 mobile既可以传mobile又或者是传id都可以Service层根据实际值进行不同的Dao层调用

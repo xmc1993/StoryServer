@@ -80,6 +80,7 @@
         <!-- token拦截器 -->
         <mvc:interceptor>
             <mvc:mapping path="/user/getUserSelfInfo"/>
+            <mvc:mapping path="/user/updateUserSelfInfo"/>
             <mvc:mapping path="/user/rePublishWorks"/>
             <mvc:mapping path="/user/publishWorks"/>
             <mvc:mapping path="/user/deleteWorks"/>

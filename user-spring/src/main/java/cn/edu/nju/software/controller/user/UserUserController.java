@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -61,7 +63,7 @@ public class UserUserController extends BaseController {
     }
 
     @ApiOperation(value = "得到当前用户信息", notes = "获取用户信息")
-    @RequestMapping(value = "/getUserSelfInfo", method = {RequestMethod.GET})
+    @RequestMapping(value = "/getUserSelfInfo", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<User> getUserSelfInfo(
             HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -76,6 +78,34 @@ public class UserUserController extends BaseController {
         user.setWxUnionId(null);
         user.setPassword(null);
         responseData.jsonFill(1, null, user);
+        return responseData;
+    }
+    @ApiOperation(value = "修改当前用户信息", notes = "修改用户信息")
+    @RequestMapping(value = "/updateUserSelfInfo", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> getUserSelfInfo(HttpServletRequest request, HttpServletResponse response,
+            @ApiParam("昵称") @RequestParam(value = "nickname",required = false) String nickname,
+            @ApiParam("性别") @RequestParam(value = "sex",required = false) String sex,
+            @ApiParam("公司") @RequestParam(value = "company",required = false) String company,
+            @ApiParam("城市") @RequestParam(value = "city",required = false) String city
+            ) throws Exception {
+        ResponseData<Boolean> responseData=new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "用户尚未登录。", false);
+            return responseData;
+        }
+        if(nickname!=null) user.setNickname(nickname);
+        if(sex!=null) user.setSex(sex);
+        if(company!=null) user.setCompany(company);
+        if(city!=null) user.setCity(city);
+        user.setUpdateTime(new Date());
+        userService.updateUser(user);
+        String AccessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
+        Jedis jedis = JedisUtil.getJedis();
+        jedis.set(AccessToken.getBytes(), ObjectAndByte.toByteArray(user));
+        jedis.close();
+        responseData.jsonFill(1, null,true);
         return responseData;
     }
 

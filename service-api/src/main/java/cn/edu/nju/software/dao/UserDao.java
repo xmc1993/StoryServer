@@ -26,4 +26,5 @@ public interface UserDao {
 	
 	public Integer getStatsUserAllCount(StatQueryBean bean);
 
+
 }
