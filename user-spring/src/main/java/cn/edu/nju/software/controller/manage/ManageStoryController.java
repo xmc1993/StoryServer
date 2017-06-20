@@ -181,12 +181,21 @@ public class ManageStoryController {
     @ApiOperation(value = "故事列表", notes = "")
     @RequestMapping(value = "/stories", method = {RequestMethod.GET})
     @ResponseBody
-    public List<Story> getAllStories(
+    public ResponseData<List<Story>> getAllStories(
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        List<Story> result = storyService.getStoryListByPage(offset, limit);
-        return result;
+        List<Story> storyList = storyService.getStoryListByPage(offset, limit);
+        ResponseData<List<Story>> result=new ResponseData<>();
+        if(storyList==null){
+            result.jsonFill(2,"获取故事列表失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,storyList);
+            result.setCount(storyList.size());
+            return result;
+        }
     }
 
     @ApiOperation(value = "推荐故事", notes = "")

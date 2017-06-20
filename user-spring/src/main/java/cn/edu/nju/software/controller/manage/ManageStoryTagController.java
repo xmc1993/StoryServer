@@ -146,12 +146,21 @@ public class ManageStoryTagController {
     @ApiOperation(value = "标签列表", notes = "")
     @RequestMapping(value = "/storyTags", method = {RequestMethod.GET})
     @ResponseBody
-    public List<StoryTag> getAllStoryTags(
+    public ResponseData<List<StoryTag>> getAllStoryTags(
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         List<StoryTag> tagList = storyTagService.getStoryTagsByPage(offset, limit);
-        return tagList;
+        ResponseData<List<StoryTag>> result=new ResponseData<>();
+        if(tagList==null){
+            result.jsonFill(2,"获取故事标签列表失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,tagList);
+            result.setCount(tagList.size());
+            return result;
+        }
     }
 
     private String uploadFile(MultipartFile file) {
