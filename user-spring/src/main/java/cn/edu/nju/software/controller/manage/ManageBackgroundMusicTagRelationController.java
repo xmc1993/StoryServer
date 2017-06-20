@@ -90,7 +90,7 @@ public class ManageBackgroundMusicTagRelationController {
     @ApiOperation(value = "获得一个背景音乐的所有分类", notes = "")
     @RequestMapping(value = "/backgroundMusics/{id}/backgroundMusicTags", method = {RequestMethod.GET})
     @ResponseBody
-    public List<BackgroundMusicTag> getTagListOfBackgroundMusic(
+    public ResponseData<List<BackgroundMusicTag>> getTagListOfBackgroundMusic(
             @ApiParam("背景音乐ID") @PathVariable Integer id,
             HttpServletRequest request, HttpServletResponse response) {
         if (!checkValidService.isBackgroundMusicExist(id)) {
@@ -99,13 +99,22 @@ public class ManageBackgroundMusicTagRelationController {
         }
         List<Integer> idList = backgroundMusicTagRelationService.getTagIdListByBackgroundMusicId(id);
         List<BackgroundMusicTag> backgroundMusicTagList = backgroundMusicTagService.getBackgroundMusicTagListByIdList(idList);
-        return backgroundMusicTagList;
+        ResponseData<List<BackgroundMusicTag>> result=new ResponseData<>();
+        if(backgroundMusicTagList==null){
+            result.jsonFill(2,"获取背景音乐所有分类失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,backgroundMusicTagList);
+            result.setCount(backgroundMusicTagList.size());
+            return result;
+        }
     }
 
     @ApiOperation(value = "获得一个分类下的所有背景音乐", notes = "")
     @RequestMapping(value = "/backgroundMusicTags/{id}/backgroundMusics", method = {RequestMethod.GET})
     @ResponseBody
-    public List<BackgroundMusic> getBackgroundMusicListOfTag(
+    public ResponseData<List<BackgroundMusic>> getBackgroundMusicListOfTag(
             @ApiParam("分类ID") @PathVariable Integer id,
             HttpServletRequest request, HttpServletResponse response) {
         if (!checkValidService.isBackgroundMusicExist(id)) {
@@ -114,6 +123,15 @@ public class ManageBackgroundMusicTagRelationController {
         }
         List<Integer> idList = backgroundMusicTagRelationService.getBackgroundMusicIdListByTagId(id);
         List<BackgroundMusic> backgroundMusicList = backgroundMusicService.getBackgroundMusicListByIdList(idList);
-        return backgroundMusicList;
+        ResponseData<List<BackgroundMusic>> result=new ResponseData<>();
+        if(backgroundMusicList==null){
+            result.jsonFill(2,"获取一个分类下的所有背景音乐失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,backgroundMusicList);
+            result.setCount(backgroundMusicList.size());
+            return result;
+        }
     }
 }

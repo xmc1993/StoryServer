@@ -89,7 +89,7 @@ public class ManageSoundEffectTagRelationController {
     @ApiOperation(value = "获得一个音效的所有分类", notes = "")
     @RequestMapping(value = "/soundEffects/{id}/soundEffectTags", method = {RequestMethod.GET})
     @ResponseBody
-    public List<SoundEffectTag> getTagListOfSoundEffect(
+    public ResponseData<List<SoundEffectTag>> getTagListOfSoundEffect(
             @ApiParam("音效ID") @PathVariable Integer id,
             HttpServletRequest request, HttpServletResponse response) {
         if (!checkValidService.isSoundEffectExist(id)) {
@@ -98,13 +98,22 @@ public class ManageSoundEffectTagRelationController {
         }
         List<Integer> idList = soundEffectTagRelationService.getTagIdListBySoundEffectId(id);
         List<SoundEffectTag> soundEffectTagList = soundEffectTagService.getSoundEffectTagListByIdList(idList);
-        return soundEffectTagList;
+        ResponseData<List<SoundEffectTag>> result=new ResponseData<>();
+        if(soundEffectTagList==null){
+            result.jsonFill(2,"获取一个音效的所有分类失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,soundEffectTagList);
+            result.setCount(soundEffectTagList.size());
+            return result;
+        }
     }
 
     @ApiOperation(value = "获得一个分类下的所有音效", notes = "")
     @RequestMapping(value = "/soundEffectTags/{id}/soundEffects", method = {RequestMethod.GET})
     @ResponseBody
-    public List<SoundEffect> getSoundEffectListOfTag(
+    public ResponseData<List<SoundEffect>> getSoundEffectListOfTag(
             @ApiParam("分类ID") @PathVariable Integer id,
             HttpServletRequest request, HttpServletResponse response) {
         if (!checkValidService.isSoundEffectExist(id)) {
@@ -113,6 +122,15 @@ public class ManageSoundEffectTagRelationController {
         }
         List<Integer> idList = soundEffectTagRelationService.getSoundEffectIdListByTagId(id);
         List<SoundEffect> soundEffectList = soundEffectService.getSoundEffectListByIdList(idList);
-        return soundEffectList;
+        ResponseData<List<SoundEffect>> result=new ResponseData<>();
+        if(soundEffectList==null){
+            result.jsonFill(2,"获得一个分类下的所有音效失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,soundEffectList);
+            result.setCount(soundEffectList.size());
+            return result;
+        }
     }
 }
