@@ -160,7 +160,7 @@ public class ManageBackgroundMusicController {
         }
         else{
             result.jsonFill(1,null,backgroundMusicList);
-            result.setCount(backgroundMusicList.size());
+            result.setCount(backgroundMusicService.getBackgroundMusicCount());
             return result;
         }
     }

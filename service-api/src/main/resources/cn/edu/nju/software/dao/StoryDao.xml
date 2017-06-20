@@ -179,7 +179,26 @@
     </select>
     <select id="getStoryCount" resultType="java.lang.Integer">
         select count(id)
+        from story WHERE valid = 1
+    </select>
+    <select id="getStoryCountByTitle" resultType="java.lang.Integer">
+        select count(id)
         from story
+        where title like CONCAT('%', #{0} ,'%') and valid = 1
+    </select>
+    <select id="getStoryIdCountByTagIdList" resultType="java.lang.Integer">
+            select count(id)
+            from story
+            where valid = 1 and id in
+            <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+    </select>
+    <select id="getRecommendedStoryCount" resultType="java.lang.Integer">
+        select
+        count(id)
+        from story
+        where valid = 1 and recommend = 1
     </select>
 
     <update id="newTell">

@@ -49,4 +49,10 @@ public interface StoryDao {
     boolean deleteTell(int id);
 
     Integer getStoryCount();
+
+    Integer getStoryCountByTitle(String title);
+
+    Integer getStoryIdCountByTagIdList(@Param("idList")List<Integer> idList);
+
+    Integer getRecommendedStoryCount();
 }

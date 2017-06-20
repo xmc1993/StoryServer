@@ -49,7 +49,7 @@ public class UserSoundEffectTagController extends BaseController {
         ResponseData<List<SoundEffectTag>> responseData = new ResponseData<>();
         List<SoundEffectTag> soundEffectTagList = soundEffectTagService.getSoundEffectTagsByPage(offset, limit);
         responseData.jsonFill(1, null, soundEffectTagList);
-        responseData.setCount(soundEffectTagList.size());
+        responseData.setCount(soundEffectTagService.getSoundEffectTagCount());
         return responseData;
     }
 

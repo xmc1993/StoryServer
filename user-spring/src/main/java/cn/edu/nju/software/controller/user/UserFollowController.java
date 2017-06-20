@@ -121,7 +121,7 @@ public class UserFollowController {
             result.add(userBaseFollowVo);
         }
         responseData.jsonFill(1, null, result);
-        responseData.setCount(result.size());
+        responseData.setCount(followService.getUserFollowerCountByUserId(userId));
         return responseData;
     }
 
@@ -154,7 +154,7 @@ public class UserFollowController {
             result.add(userBaseFollowVo);
         }
         responseData.jsonFill(1, null, result);
-        responseData.setCount(result.size());
+        responseData.setCount(followService.getUserFolloweeCountByUserId(userId));
         return responseData;
     }
 

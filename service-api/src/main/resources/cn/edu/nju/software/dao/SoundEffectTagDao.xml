@@ -94,7 +94,7 @@
     </select>
     <select id="getSoundEffectTagCount" resultType="java.lang.Integer">
         select count(id)
-        from sound_effect_tag
+        from sound_effect_tag WHERE valid = 1
     </select>
 
 </mapper>

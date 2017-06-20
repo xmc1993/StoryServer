@@ -55,11 +55,21 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
+    public Integer getUserFollowerCountByUserId(int userId){
+        return followRelationDao.getFollowerCountByUserId(userId);
+    }
+
+    @Override
     public List<Integer> getUserFolloweeList(int userId, int offset, int limit) {
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         List<Integer> followeeIdList = followRelationDao.getFolloweeIdListByUserId(userId, offset, limit);
         return followeeIdList;
+    }
+
+    @Override
+    public Integer getUserFolloweeCountByUserId(int userId){
+        return followRelationDao.getFolloweeCountByUserId(userId);
     }
 
     @Override

@@ -159,7 +159,7 @@ public class ManageSoundEffectController {
         }
         else{
             result.jsonFill(1,null,soundEffectList);
-            result.setCount(soundEffectList.size());
+            result.setCount(soundEffectService.getSoundEffectCount());
             return result;
         }
     }

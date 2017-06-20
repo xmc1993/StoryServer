@@ -25,4 +25,11 @@ public interface WorksService {
 
     List<Works> getWorksListByIdList(List<Integer> idList);
 
+    Integer getWorksCount();
+
+    Integer getWorksCountByUserId(Integer userId);
+
+    Integer getWorksCountByStoryId(Integer storyId);
+
+    Integer getWorksCountByIdList(List<Integer> idList);
 }

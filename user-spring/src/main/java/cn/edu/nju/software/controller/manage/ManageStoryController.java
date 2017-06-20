@@ -193,7 +193,7 @@ public class ManageStoryController {
         }
         else{
             result.jsonFill(1,null,storyList);
-            result.setCount(storyList.size());
+            result.setCount(storyService.getStoryCount());
             return result;
         }
     }

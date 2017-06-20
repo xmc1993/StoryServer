@@ -38,6 +38,8 @@ public interface StoryService {
 
     List<Story> getRecommendedStoryListByPage(int offset, int limit);
 
+    Integer getRecommendedStoryCount();
+
     boolean newTell(int id);
 
     boolean deleteTell(int id);

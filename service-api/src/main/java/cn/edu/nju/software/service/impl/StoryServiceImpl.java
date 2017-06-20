@@ -110,6 +110,11 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
+    public Integer getRecommendedStoryCount() {
+        return storyDao.getRecommendedStoryCount();
+    }
+
+    @Override
     public boolean newTell(int id) {
         return storyDao.newTell(id);
     }

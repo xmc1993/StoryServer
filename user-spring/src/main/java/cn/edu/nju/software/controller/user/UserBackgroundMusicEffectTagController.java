@@ -49,7 +49,7 @@ public class UserBackgroundMusicEffectTagController extends BaseController {
         ResponseData<List<BackgroundMusicTag>> responseData = new ResponseData<>();
         List<BackgroundMusicTag> backgroundMusicTagList = backgroundMusicTagService.getBackgroundMusicTagsByPage(offset, limit);
         responseData.jsonFill(1, null, backgroundMusicTagList);
-        responseData.setCount(backgroundMusicTagList.size());
+        responseData.setCount(backgroundMusicTagService.getBackgroundMusicTagCount());
         return responseData;
     }
 

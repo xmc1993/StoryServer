@@ -94,7 +94,7 @@
     </select>
     <select id="getBackgroundMusicTagCount" resultType="java.lang.Integer">
         select count(id)
-        from background_music_tag
+        from background_music_tag and valid = 1
     </select>
 
 </mapper>

@@ -92,7 +92,7 @@
     </select>
     <select id="getBackgroundMusicCount" resultType="java.lang.Integer">
         select count(id)
-        from background_music
+        from background_music and valid = 1
     </select>
 
     <delete id="deleteHard">

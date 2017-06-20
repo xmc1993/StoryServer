@@ -107,7 +107,7 @@ public class ManageSoundEffectTagController {
         }
         else{
             result.jsonFill(1,null,tagList);
-            result.setCount(tagList.size());
+            result.setCount(soundEffectTagService.getSoundEffectTagCount());
             return result;
         }
     }

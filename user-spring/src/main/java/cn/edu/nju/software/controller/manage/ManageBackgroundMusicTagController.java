@@ -107,7 +107,7 @@ public class ManageBackgroundMusicTagController {
         }
         else{
             result.jsonFill(1,null,tagList);
-            result.setCount(tagList.size());
+            result.setCount(backgroundMusicTagService.getBackgroundMusicTagCount());
             return result;
         }
     }

@@ -23,4 +23,7 @@ public interface FollowRelationDao {
 
     List<Integer> getFolloweeIdListByUserId(int userId, int offset, int limit);
 
+    Integer getFollowerCountByUserId(int userId);
+
+    Integer getFolloweeCountByUserId(int userId);
 }

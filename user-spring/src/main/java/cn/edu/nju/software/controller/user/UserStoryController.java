@@ -58,7 +58,7 @@ public class UserStoryController extends BaseController {
         ResponseData<List<Story>> responseData = new ResponseData();
         List<Story> storyList = storyService.getStoryListByPage(offset, limit);
         responseData.jsonFill(1, null, storyList);
-        responseData.setCount(storyList.size());
+        responseData.setCount(storyService.getStoryCount());
         return responseData;
     }
 
@@ -105,7 +105,7 @@ public class UserStoryController extends BaseController {
         ResponseData<List<Story>> responseData = new ResponseData<>();
         List<Story> storyList = storyService.getStoryListByTitle(query, offset, limit);
         responseData.jsonFill(1, null, storyList);
-        responseData.setCount(storyList.size());
+        responseData.setCount(storyService.getStoryCount());
         return responseData;
     }
 
@@ -119,7 +119,7 @@ public class UserStoryController extends BaseController {
         ResponseData<List<Story>> responseData = new ResponseData<>();
         List<Story> storyList = storyService.getRecommendedStoryListByPage(offset, limit);
         responseData.jsonFill(1, null, storyList);
-        responseData.setCount(storyList.size());
+        responseData.setCount(storyService.getRecommendedStoryCount());
         return responseData;
     }
 

@@ -155,5 +155,31 @@
             #{id}
         </foreach>
     </select>
+    <select id="getWorksCount" resultType="java.lang.Integer">
+        select
+        count(id)
+        from works
+        where valid = 1
+    </select>
+    <select id="getWorksCountByUserId" resultType="java.lang.Integer">
+        select
+        count(id)
+        from works
+        where valid = 1 and userId=#{userId}
+    </select>
+    <select id="getWorksCountByStoryId" resultType="java.lang.Integer">
+        select
+        count(id)
+        from works
+        where valid = 1 and storyId=#{storyId}
+    </select>
+    <select id="getWorksCountByIdList" resultType="java.lang.Integer">
+        select count(*)
+        from works
+        where valid = 1 and id IN
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 
 </mapper>
