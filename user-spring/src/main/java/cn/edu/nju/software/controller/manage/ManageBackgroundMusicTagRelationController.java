@@ -117,9 +117,13 @@ public class ManageBackgroundMusicTagRelationController {
     public ResponseData<List<BackgroundMusic>> getBackgroundMusicListOfTag(
             @ApiParam("分类ID") @PathVariable Integer id,
             HttpServletRequest request, HttpServletResponse response) {
-        if (!checkValidService.isBackgroundMusicExist(id)) {
+        /*if (!checkValidService.isBackgroundMusicExist(id)) {
             logger.error("无效的背景音乐Id");
             throw new RuntimeException("无效的背景音乐ID");
+        }*/
+        if (!checkValidService.isBackgroundMusicTagExist(id)) {
+            logger.error("无效的背景音乐分类Id");
+            throw new RuntimeException("无效的背景音乐分类ID");
         }
         List<Integer> idList = backgroundMusicTagRelationService.getBackgroundMusicIdListByTagId(id);
         List<BackgroundMusic> backgroundMusicList = backgroundMusicService.getBackgroundMusicListByIdList(idList);

@@ -116,9 +116,13 @@ public class ManageSoundEffectTagRelationController {
     public ResponseData<List<SoundEffect>> getSoundEffectListOfTag(
             @ApiParam("分类ID") @PathVariable Integer id,
             HttpServletRequest request, HttpServletResponse response) {
-        if (!checkValidService.isSoundEffectExist(id)) {
+        /*if (!checkValidService.isSoundEffectExist(id)) {
             logger.error("无效的音效Id");
             throw new RuntimeException("无效的音效ID");
+        }*/
+        if (!checkValidService.isSoundEffectTagExist(id)) {
+            logger.error("无效的音效分类Id");
+            throw new RuntimeException("无效的音效分类Id");
         }
         List<Integer> idList = soundEffectTagRelationService.getSoundEffectIdListByTagId(id);
         List<SoundEffect> soundEffectList = soundEffectService.getSoundEffectListByIdList(idList);
