@@ -16,12 +16,28 @@
 				onMismatch="DENY" />
 			<PatternLayout pattern="%d: %m%n" />
 			<TimeBasedTriggeringPolicy />
+			<Filters>
+				<ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
+				<ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+			</Filters>
+		</RollingFile>
+		<RollingFile name="errorRollingFile" fileName="logs/story_error.log"
+					 filePattern="${ARCHIVE}/error.log.%d{yyyy-MM-dd}.gz.gz">
+			<PatternLayout pattern="%d: %m%n" />
+			<TimeBasedTriggeringPolicy />
+			<Filters>
+				<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+			</Filters>
 		</RollingFile>
 	</Appenders>
 	<Loggers>
 		<Root level="trace">
 			<AppenderRef ref="Console" />
 			<AppenderRef ref="RollingFile" />
+		</Root>
+		<Root level="error">
+			<AppenderRef ref="Console"/>
+			<AppenderRef ref="errorRollingFile"/>
 		</Root>
 		<logger name="org.springframework" level="error" />
 		<logger name="org.mybatis" level="debug" />
