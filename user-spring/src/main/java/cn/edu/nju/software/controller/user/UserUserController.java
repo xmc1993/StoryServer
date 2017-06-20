@@ -249,20 +249,6 @@ public class UserUserController extends BaseController {
         user.setCity("南京");
         return user;
     }
-    @RequestMapping(value = "/error")
-    @ResponseBody
-    public boolean errortest(){
-        try
-        {
-            logger.info("run division..");
-            int result = 7/0;
-        }
-        catch(ArithmeticException e)
-        {
-            logger.error("Can not divide by zero");
-        }
-        return true;
-    }
 
     private String parse(int gendar) {
         if (gendar == 1) {
