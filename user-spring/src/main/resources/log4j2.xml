@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
+<configuration status="WARN">
+
 	<Properties>
-		<Property name="LOG_DIR">/var/lib/tomcat7/logs/story</Property>
+		<Property name="LOG_DIR">D:/logs</Property>
 		<Property name="ARCHIVE">${LOG_DIR}/archive</Property>
 		<Property name="PATTERN">%-5level %d [%t] %c:%M(%L): %m%n</Property>
 	</Properties>
-	<Appenders>
-		<Console name="Console">
-			<PatternLayout pattern="${PATTERN}" />
+	<!--先定义所有的appender-->
+	<appenders>
+		<!--这个输出控制台的配置-->
+		<Console name="Console" target="SYSTEM_OUT">
+			<!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+			<ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+			<!--输出日志的格式-->
+			<PatternLayout pattern="${PATTERN}"/>
 		</Console>
-
+		<!--这个会打印出所有的信息-->
 		<RollingFile name="RollingFile" fileName="${LOG_DIR}/story.log"
-			filePattern="${ARCHIVE}/sinture.log.%d{yyyy-MM-dd}.gz">
-			<MarkerFilter marker="STATISTICS" onMatch="ACCEPT"
-				onMismatch="DENY" />
-			<PatternLayout pattern="%d: %m%n" />
-			<TimeBasedTriggeringPolicy />
-			<Filters>
-				<ThresholdFilter level="error" onMatch="DENY" onMismatch="NEUTRAL"/>
-				<ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
-			</Filters>
+					 filePattern="${ARCHIVE}/story.log.%d{yyyy-MM-dd}.gz">
+			<PatternLayout pattern="${PATTERN}"/>
+			<!--<MarkerFilter marker="STATISTICS" onMatch="ACCEPT"
+						  onMismatch="DENY" />-->
+			<!--按照大小分-->
+			<!--<SizeBasedTriggeringPolicy size="20MB"/>-->
+			<TimeBasedTriggeringPolicy/>
 		</RollingFile>
-		<RollingFile name="errorRollingFile" fileName="logs/story_error.log"
-					 filePattern="${ARCHIVE}/error.log.%d{yyyy-MM-dd}.gz.gz">
-			<PatternLayout pattern="%d: %m%n" />
-			<TimeBasedTriggeringPolicy />
-			<Filters>
-				<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
-			</Filters>
+		<!--error日志-->
+		<RollingFile name="errorRollingFile" fileName="${LOG_DIR}/error.log"
+					 filePattern="${ARCHIVE}/error.log.%d{yyyy-MM-dd}.gz">
+			<PatternLayout pattern="${PATTERN}"/>
+			<!--<MarkerFilter marker="STATISTICS" onMatch="ACCEPT"
+						  onMismatch="DENY" />-->
+			<!--按照大小分-->
+			<!--<SizeBasedTriggeringPolicy size="20MB"/>-->
+			<TimeBasedTriggeringPolicy/>
 		</RollingFile>
-	</Appenders>
-	<Loggers>
-		<Root level="trace">
-			<AppenderRef ref="Console" />
-			<AppenderRef ref="RollingFile" />
-		</Root>
-		<Root level="error">
-			<AppenderRef ref="Console"/>
-			<AppenderRef ref="errorRollingFile"/>
-		</Root>
+	</appenders>
+	<!--然后定义logger，只有定义了logger并引入的appender，appender才会生效-->
+	<loggers>
+		<!--建立一个默认的root的logger-->
+		<root level="trace">
+			<appender-ref ref="RollingFile"/>
+			<appender-ref ref="Console"/>
+		</root>
 		<logger name="org.springframework" level="error" />
 		<logger name="org.mybatis" level="debug" />
-		<!-- 上线配置成info -->
-		<logger name="cn.edu" level="debug" additivity="false">
-			<AppenderRef ref="ProductLog" />
-			<AppenderRef ref="Console" />
+		<logger name="cn.edu" level="debug" />
+		<logger name="cn.edu" level="error" additivity="false">
+			<appender-ref ref="errorRollingFile"/>
+			<appender-ref ref="Console"/>
 		</logger>
-		<Root level="debug" includeLocation="true">
-			<AppenderRef ref="Console" />
-			<AppenderRef ref="RollingFile" />
-		</Root>
-	</Loggers>
-</Configuration>
+	</loggers>
+</configuration>
