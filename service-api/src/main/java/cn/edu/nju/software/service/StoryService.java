@@ -47,4 +47,6 @@ public interface StoryService {
     Integer getStoryCount();
 
     String getOriginSoundLength(File file);
+
+    Integer getStoryCountByTitle(String query);
 }

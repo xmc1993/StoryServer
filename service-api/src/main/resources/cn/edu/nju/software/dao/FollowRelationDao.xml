@@ -74,12 +74,12 @@
     <select id="getFollowerCountByUserId" resultType="java.lang.Integer">
         select count(id)
         from follow_relation
-        whre  followeeId=#{userId}
+        where  followeeId=#{userId}
     </select>
     <select id="getFolloweeCountByUserId" resultType="java.lang.Integer">
         select count(id)
         from follow_relation
-        whre  followerId=#{userId}
+        where  followerId=#{userId}
     </select>
 
 </mapper>

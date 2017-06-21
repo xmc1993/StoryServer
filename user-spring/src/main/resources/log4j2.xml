@@ -2,7 +2,9 @@
 <configuration status="WARN">
 
 	<Properties>
-		<Property name="LOG_DIR">/usr/share/apache-tomcat-8.5.9/logs/log4j</Property>
+		<!--<Property name="LOG_DIR">/usr/share/apache-tomcat-8.5.9/logs/log4j</Property>
+		<Property name="ARCHIVE">${LOG_DIR}/archive</Property>-->
+		<Property name="LOG_DIR">d:/logs</Property>
 		<Property name="ARCHIVE">${LOG_DIR}/archive</Property>
 		<Property name="PATTERN">%-5level %d [%t] %c:%M(%L): %m%n</Property>
 	</Properties>
@@ -29,6 +31,9 @@
 		<RollingFile name="errorRollingFile" fileName="${LOG_DIR}/error.log"
 					 filePattern="${ARCHIVE}/error.log.%d{yyyy-MM-dd}.gz">
 			<PatternLayout pattern="${PATTERN}"/>
+			<Filters>
+				<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+			</Filters>
 			<!--<MarkerFilter marker="STATISTICS" onMatch="ACCEPT"
 						  onMismatch="DENY" />-->
 			<!--按照大小分-->
@@ -42,13 +47,14 @@
 		<root level="trace">
 			<appender-ref ref="RollingFile"/>
 			<appender-ref ref="Console"/>
+			<appender-ref ref="errorRollingFile"/>
 		</root>
 		<logger name="org.springframework" level="error" />
 		<logger name="org.mybatis" level="debug" />
 		<logger name="cn.edu" level="debug" />
-		<logger name="cn.edu" level="error" additivity="false">
+		<!--<logger name="cn.edu" level="error" additivity="false">
 			<appender-ref ref="errorRollingFile"/>
 			<appender-ref ref="Console"/>
-		</logger>
+		</logger>-->
 	</loggers>
 </configuration>

@@ -240,7 +240,12 @@ public class UserUserController extends BaseController {
         responseData.jsonFill(1, null, loginResponseVo);
         return responseData;
     }
-
+    @RequestMapping(value = "/testError", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public boolean testError() {
+        logger.error("ERROR");
+        return true;
+    }
     @RequestMapping(value = "/test", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public User test() {

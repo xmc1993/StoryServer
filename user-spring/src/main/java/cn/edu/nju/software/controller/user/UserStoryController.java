@@ -61,7 +61,7 @@ public class UserStoryController extends BaseController {
         responseData.setCount(storyService.getStoryCount());
         return responseData;
     }
-
+    //TODO 一级标签查询实际没有分页 count也因此暂定为list size
     @ApiOperation(value = "根据一级标签获得故事列表", notes = "根据一级标签获得故事列表")
     @RequestMapping(value = "/getStoryIdListByFirstLevelTagId", method = {RequestMethod.GET})
     @ResponseBody
@@ -78,6 +78,7 @@ public class UserStoryController extends BaseController {
         return responseData;
     }
 
+    //TODO 二级标签查询实际没有分页 count也因此暂定为list size
     @ApiOperation(value = "根据二级标签获得故事列表", notes = "根据二级标签获得故事列表")
     @RequestMapping(value = "/getStoryIdListBySecondLevelTagId", method = {RequestMethod.GET})
     @ResponseBody
@@ -105,7 +106,7 @@ public class UserStoryController extends BaseController {
         ResponseData<List<Story>> responseData = new ResponseData<>();
         List<Story> storyList = storyService.getStoryListByTitle(query, offset, limit);
         responseData.jsonFill(1, null, storyList);
-        responseData.setCount(storyService.getStoryCount());
+        responseData.setCount(storyService.getStoryCountByTitle(query));
         return responseData;
     }
 

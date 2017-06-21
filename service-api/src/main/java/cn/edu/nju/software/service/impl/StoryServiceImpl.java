@@ -151,4 +151,9 @@ public class StoryServiceImpl implements StoryService {
         }
         return null;
     }
+
+    @Override
+    public Integer getStoryCountByTitle(String query) {
+        return storyDao.getStoryCountByTitle(query);
+    }
 }
