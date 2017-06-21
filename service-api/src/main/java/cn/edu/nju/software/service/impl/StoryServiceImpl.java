@@ -10,12 +10,8 @@ import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.MultimediaInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.sound.sampled.*;
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -82,9 +78,11 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public List<Story> getStoryListByIdList(List<Integer> idList) {
+    public List<Story> getStoryListByIdList(List<Integer> idList, Integer offset, Integer limit) {
         idList.add(-1);//防止mybatis查询出错
-        return storyDao.getStoryListByIdList(idList);
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        return storyDao.getStoryListByIdList(idList,offset,limit);
     }
 
     @Override
@@ -155,5 +153,13 @@ public class StoryServiceImpl implements StoryService {
     @Override
     public Integer getStoryCountByTitle(String query) {
         return storyDao.getStoryCountByTitle(query);
+    }
+
+    @Override
+    public Integer getStoryCountByIdList(List<Integer> idList, int offset, int limit) {
+        idList.add(-1);//防止mybatis查询出错
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        return storyDao.getStoryCountByIdList(idList,offset,limit);
     }
 }

@@ -36,7 +36,7 @@ public interface StoryDao {
 
     List<Story> getStoryListByPage(int offset, int limit);
 
-    List<Story> getStoryListByIdList(@Param("idList")List<Integer> idList);
+    List<Story> getStoryListByIdList(@Param("idList") List<Integer> idList, @Param("offset")Integer offset,@Param("limit") Integer limit);
 
     boolean recommendStory(int id);
 
@@ -55,4 +55,6 @@ public interface StoryDao {
     Integer getStoryIdCountByTagIdList(@Param("idList")List<Integer> idList);
 
     Integer getRecommendedStoryCount();
+
+    Integer getStoryCountByIdList(@Param("idList") List<Integer> idList, @Param("offset")Integer offset,@Param("limit") Integer limit);
 }

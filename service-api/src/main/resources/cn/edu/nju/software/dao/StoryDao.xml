@@ -132,6 +132,7 @@
         <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
             #{id}
         </foreach>
+        limit #{offset},#{limit}
     </select>
 
     <select id="getStoryListByTitle" resultType="cn.edu.nju.software.entity.Story">
@@ -199,6 +200,16 @@
         count(id)
         from story
         where valid = 1 and recommend = 1
+    </select>
+    <select id="getStoryCountByIdList" resultType="java.lang.Integer">
+        select
+        count(id)
+        from story
+        where valid = 1 and id in
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        limit #{offset},#{limit}
     </select>
 
     <update id="newTell">

@@ -1,13 +1,8 @@
 package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.entity.Story;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 /**
@@ -28,7 +23,7 @@ public interface StoryService {
 
     List<Story> getStoryListByPage(int offset, int limit);
 
-    List<Story> getStoryListByIdList(List<Integer> idList);
+    List<Story> getStoryListByIdList(List<Integer> idList, Integer offset, Integer limit);
 
     List<Story> getStoryListByTitle(String title, int offset, int limit);
 
@@ -49,4 +44,6 @@ public interface StoryService {
     String getOriginSoundLength(File file);
 
     Integer getStoryCountByTitle(String query);
+
+    Integer getStoryCountByIdList(List<Integer> idList, int offset, int limit);
 }
