@@ -156,10 +156,15 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public Integer getStoryCountByIdList(List<Integer> idList, int offset, int limit) {
+    public Integer getStoryCountByIdList(List<Integer> idList) {
         idList.add(-1);//防止mybatis查询出错
-        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
-        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
-        return storyDao.getStoryCountByIdList(idList,offset,limit);
+        return storyDao.getStoryCountByIdList(idList);
+    }
+    @Override
+    public List <Story>  getStoryByFuzzyQuery(String author, String tag, String press){
+        if(author!=null&&author.trim()=="") author=null;
+        if(tag!=null&&tag.trim()=="") tag=null;
+        if(press!=null&&press.trim()=="") press=null;
+        return storyDao.getStoryByFuzzyQuery(author,tag,press);
     }
 }

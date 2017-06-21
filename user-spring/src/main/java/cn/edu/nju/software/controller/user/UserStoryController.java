@@ -74,7 +74,7 @@ public class UserStoryController extends BaseController {
         List<Integer> idList = tagRelationService.getStoryIdListByFirstLevelTagId(tagId);
         List<Story> storyList = storyService.getStoryListByIdList(idList,offset,limit);
         responseData.jsonFill(1, null, storyList);
-        responseData.setCount(storyService.getStoryCountByIdList(idList, offset, limit));
+        responseData.setCount(storyService.getStoryCountByIdList(idList));
         return responseData;
     }
 
@@ -90,7 +90,7 @@ public class UserStoryController extends BaseController {
         List<Integer> idList = tagRelationService.getStoryIdListBySecondLevelTagId(tagId);
         List<Story> storyList = storyService.getStoryListByIdList(idList, offset, limit);
         responseData.jsonFill(1, null, storyList);
-        responseData.setCount(storyService.getStoryCountByIdList(idList, offset, limit));
+        responseData.setCount(storyService.getStoryCountByIdList(idList));
         return responseData;
     }
 
@@ -121,6 +121,25 @@ public class UserStoryController extends BaseController {
         responseData.jsonFill(1, null, storyList);
         responseData.setCount(storyService.getRecommendedStoryCount());
         return responseData;
+    }
+    @ApiOperation(value = "模糊查询获取故事", notes = "")
+    @RequestMapping(value = "/storiesByFuzzyQuery", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<Story>> getStoryByFuzzyQuery(
+            @ApiParam("author") @RequestParam(value = "author",required = false) String author,
+            @ApiParam("press") @RequestParam(value = "press",required = false) String press,
+            @ApiParam("tag") @RequestParam(value = "tag",required = false) String tag){
+        ResponseData<List<Story>> result=new ResponseData<>();
+        List<Story> stories= storyService.getStoryByFuzzyQuery(author,tag,press);
+        if(stories==null){
+            result.jsonFill(2,"模糊查询失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,stories);
+            result.setCount(stories.size());
+            return result;
+        }
     }
 
 }

@@ -23,7 +23,26 @@
         duration
     </sql>
 
-
+    <sql id="multiTableFields">
+       story.id,
+       story.title,
+       story.author,
+       story.content,
+       story.press,
+       story.guide,
+       story.coverUrl,
+       story.preCoverUrl,
+       story.backgroundUrl,
+       story.originSoundUrl,
+       story.price,
+       story.createTime,
+       story.updateTime,
+       story.valid,
+       story.recommend,
+       story.tellCount,
+       story.defaultBackGroundMusicId,
+       story.duration
+    </sql>
     <resultMap id="story" type="cn.edu.nju.software.entity.Story">
         <id column="id" property="id"/>
         <id column="title" property="title"/>
@@ -213,7 +232,26 @@
         <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
             #{id}
         </foreach>
-        limit #{offset},#{limit}
+    </select>
+    <select id="getStoryByFuzzyQuery" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="multiTableFields"/>
+        From story
+        <if test="tag != null">
+            LEFT JOIN tag_relation ON story.id = tag_relation.storyId
+            LEFT JOIN story_tag ON tag_relation.tagId = story_tag.id
+        </if>
+        where story.valid = 1
+        <if test="author != null">
+            AND story.author like CONCAT('%', #{author} ,'%')
+        </if>
+        <if test="press != null">
+            AND story.press like CONCAT('%', #{press} ,'%')
+        </if>
+        <if test="tag != null">
+        AND story_tag.content  like CONCAT('%', #{tag} ,'%')
+        </if>
+        GROUP BY story.id
     </select>
 
     <update id="newTell">

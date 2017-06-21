@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.xml.ws.Response;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -253,4 +254,25 @@ public class ManageStoryController {
     public Integer getStoryCount(){
         return storyService.getStoryCount();
     }
+
+    @ApiOperation(value = "模糊查询获取故事", notes = "")
+    @RequestMapping(value = "/storiesByFuzzyQuery", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<Story>> getStoryByFuzzyQuery(
+            @ApiParam("author") @RequestParam(value = "author",required = false) String author,
+            @ApiParam("press") @RequestParam(value = "press",required = false) String press,
+            @ApiParam("tag") @RequestParam(value = "tag",required = false) String tag){
+        ResponseData<List<Story>> result=new ResponseData<>();
+        List<Story> stories= storyService.getStoryByFuzzyQuery(author,tag,press);
+        if(stories==null){
+            result.jsonFill(2,"模糊查询失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,stories);
+            result.setCount(stories.size());
+            return result;
+        }
+    }
+
 }

@@ -45,5 +45,7 @@ public interface StoryService {
 
     Integer getStoryCountByTitle(String query);
 
-    Integer getStoryCountByIdList(List<Integer> idList, int offset, int limit);
+    Integer getStoryCountByIdList(List<Integer> idList);
+
+    List <Story>  getStoryByFuzzyQuery(String author, String tag, String press);
 }
