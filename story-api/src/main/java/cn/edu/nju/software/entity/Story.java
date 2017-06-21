@@ -27,5 +27,5 @@ public class Story {
     private Integer recommend = 0;//是否被推荐 0 否 1 是
     private Integer tellCount = 0;//
     private Integer defaultBackGroundMusicId;//
-
+    private Integer likeCount;
 }

@@ -1,6 +1,8 @@
 package cn.edu.nju.software.service.impl;
 
 import cn.edu.nju.software.dao.StoryDao;
+import cn.edu.nju.software.dao.UserDao;
+import cn.edu.nju.software.dao.UserRelationStoryDao;
 import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.service.StoryService;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +28,10 @@ public class StoryServiceImpl implements StoryService {
     private StoryDao storyDao;
     @Autowired
     private WorksDao worksDao;
-
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private UserRelationStoryDao userRelationStoryDao;
     @Override
     public boolean saveStory(Story story) {
         return storyDao.saveStory(story);
@@ -33,6 +39,10 @@ public class StoryServiceImpl implements StoryService {
 
     @Override
     public boolean deleteStoryById(int id) {
+        List<Integer> userIdList=userRelationStoryDao.getUserIdListByStoryId(id);
+        for(Integer userId:userIdList){
+            userDao.delLikeStoryCount(userId);
+        }
         return storyDao.deleteStoryById(id);
     }
 
@@ -161,10 +171,47 @@ public class StoryServiceImpl implements StoryService {
         return storyDao.getStoryCountByIdList(idList);
     }
     @Override
-    public List <Story>  getStoryByFuzzyQuery(String author, String tag, String press){
+    public List <Story>  getStoryByFuzzyQuery(String query, Integer offset, Integer limit){
+        if(query !=null&& query.trim()=="") return null;
+        String[] queries=query.split(" ");
+        List<String> queryList=new ArrayList<String>();
+        for(String temp:queries){
+            if(temp.trim()!="")  queryList.add(temp.trim());
+        }
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        return storyDao.getStoryByFuzzyQuery(queryList,offset,limit);
+    }
+
+    @Override
+    public List<Story>  getStoryByClassifyFuzzyQuery(String title, String author, String content, String press, String tag, Integer offset, Integer limit){
+        if(title!=null&&title.trim()=="") title=null;
+        else if(title!=null) title=title.trim();
         if(author!=null&&author.trim()=="") author=null;
-        if(tag!=null&&tag.trim()=="") tag=null;
+        else if(author!=null) author=author.trim();
+        if(content!=null&&content.trim()=="") content=null;
+        else if(content!=null) content=content.trim();
         if(press!=null&&press.trim()=="") press=null;
-        return storyDao.getStoryByFuzzyQuery(author,tag,press);
+        else if(press!=null) press=press.trim();
+        if(tag!=null&&tag.trim()=="") tag=null;
+        else if(tag!=null) tag=tag.trim();
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        return storyDao.getStoryListByClassifyFuzzyQuery(
+                title, author, content, press, tag, offset,  limit);
+    }
+    @Override
+    public Integer getStoryCountByClassifyFuzzyQuery(String title, String author, String content, String press, String tag){
+        if(title!=null&&title.trim()=="") title=null;
+        else if(title!=null) title=title.trim();
+        if(author!=null&&author.trim()=="") author=null;
+        else if(author!=null) author=author.trim();
+        if(content!=null&&content.trim()=="") content=null;
+        else if(content!=null) content=content.trim();
+        if(press!=null&&press.trim()=="") press=null;
+        else if(press!=null) press=press.trim();
+        if(tag!=null&&tag.trim()=="") tag=null;
+        else if(tag!=null) tag=tag.trim();
+        return storyDao.getStoryCountByClassifyFuzzyQuery(title, author, content, press, tag);
     }
 }

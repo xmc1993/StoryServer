@@ -20,7 +20,8 @@
         recommend,
         tellCount,
         defaultBackGroundMusicId,
-        duration
+        duration,
+        likeCount
     </sql>
 
     <sql id="multiTableFields">
@@ -41,7 +42,8 @@
        story.recommend,
        story.tellCount,
        story.defaultBackGroundMusicId,
-       story.duration
+       story.duration,
+       story.likeCount
     </sql>
     <resultMap id="story" type="cn.edu.nju.software.entity.Story">
         <id column="id" property="id"/>
@@ -62,6 +64,7 @@
         <id column="tellCount" property="tellCount"/>
         <id column="defaultBackGroundMusicId" property="defaultBackGroundMusicId"/>
         <id column="duration" property="duration"/>
+        <id column="likeCount" property="likeCount"/>
     </resultMap>
 
     <insert id="saveStory" parameterType="cn.edu.nju.software.entity.Story" keyProperty="id" useGeneratedKeys="true">
@@ -89,6 +92,11 @@
         #{duration},
         #{defaultBackGroundMusicId}
         )
+    </insert>
+    <insert id="addStoryLikeCount">
+        update story
+        set likeCount=likeCount+1
+        where id=#{0} and valid = 1
     </insert>
 
     <update id="updateStory" parameterType="cn.edu.nju.software.entity.Story">
@@ -178,6 +186,11 @@
         DELETE FROM story
         WHERE id = #{0}
     </delete>
+    <delete id="delStoryLikeCount">
+        update story
+        set likeCount=likeCount-1
+        where id=#{0}
+    </delete>
 
     <update id="recommendStory">
         update story
@@ -237,21 +250,78 @@
         select
         <include refid="multiTableFields"/>
         From story
-        <if test="tag != null">
+            LEFT JOIN tag_relation ON story.id = tag_relation.storyId
+            LEFT JOIN story_tag ON tag_relation.tagId = story_tag.id
+        where story.valid = 1
+            AND
+        <foreach collection="queryList" item="query" index="index" open="(" separator="," close=")">
+            story.title like CONCAT('%', #{query} ,'%')
+
+            OR story.author like CONCAT('%', #{query} ,'%')
+
+            OR story.press like CONCAT('%', #{query} ,'%')
+
+            OR story_tag.content  like CONCAT('%', #{query} ,'%')
+        </foreach>
+
+        GROUP BY story.id
+        limit #{offset},#{limit}
+    </select>
+    <select id="getStoryListByClassifyFuzzyQuery" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="multiTableFields"/>
+        From story
+        <if test=" tag!=null">
+        LEFT JOIN tag_relation ON story.id = tag_relation.storyId
+        LEFT JOIN story_tag ON tag_relation.tagId = story_tag.id
+        </if>
+        <where>
+            story.valid = 1
+            <if test="title!=null">
+                AND story.title like CONCAT('%', #{title} ,'%')
+            </if>
+            <if test="author!=null">
+                AND story.author like CONCAT('%', #{author} ,'%')
+            </if>
+            <if test="content!=null">
+                AND story.content like CONCAT('%', #{content} ,'%')
+            </if>
+            <if test="press!=null">
+                AND story.press like CONCAT('%', #{press} ,'%')
+            </if>
+            <if test="tag!=null">
+                AND story_tag.content like CONCAT('%', #{tag} ,'%')
+            </if>
+        </where>
+        GROUP BY story.id
+        limit #{offset},#{limit}
+    </select>
+    <select id="getStoryCountByClassifyFuzzyQuery" resultType="java.lang.Integer">
+        select
+        count(DISTINCT story.id)
+        From story
+        <if test="tag!=null">
             LEFT JOIN tag_relation ON story.id = tag_relation.storyId
             LEFT JOIN story_tag ON tag_relation.tagId = story_tag.id
         </if>
-        where story.valid = 1
-        <if test="author != null">
-            AND story.author like CONCAT('%', #{author} ,'%')
-        </if>
-        <if test="press != null">
-            AND story.press like CONCAT('%', #{press} ,'%')
-        </if>
-        <if test="tag != null">
-        AND story_tag.content  like CONCAT('%', #{tag} ,'%')
-        </if>
-        GROUP BY story.id
+        <where>
+            story.valid = 1
+            <if test="title!=null">
+                AND story.title like CONCAT('%', #{title} ,'%')
+            </if>
+            <if test="author!=null">
+                AND story.author like CONCAT('%', #{author} ,'%')
+            </if>
+            <if test="content!=null">
+                AND story.content like CONCAT('%', #{content} ,'%')
+            </if>
+            <if test="press!=null">
+                AND story.press like CONCAT('%', #{press} ,'%')
+            </if>
+            <if test="tag!=null">
+                AND story_tag.content like CONCAT('%', #{tag} ,'%')
+            </if>
+        </where>
     </select>
 
     <update id="newTell">

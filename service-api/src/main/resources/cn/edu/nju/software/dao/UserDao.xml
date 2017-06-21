@@ -20,8 +20,19 @@
         email,
         weChatOpenId,
         weChatAccessToken,
-        weChatRefreshToken
+        weChatRefreshToken,
+        likeCount
     </sql>
+    <insert id="addLikeStoryCount">
+        update story
+        set likeCount=likeCount+1
+        where id=#{0}
+    </insert>
+    <delete id="delLikeStoryCount">
+         update story
+        set likeCount=likeCount-1
+        where id=#{0}
+    </delete>
 
     <resultMap id="user" type="cn.edu.nju.software.entity.User">
         <id column="id" property="id" />
@@ -42,6 +53,7 @@
         <id column="weChatAccessToken" property="weChatAccessToken" />
         <id column="weChatAccessToken" property="weChatAccessToken" />
         <id column="weChatRefreshToken" property="weChatRefreshToken" />
+        <id column="likeCount"  property="likeCount"/>
     </resultMap>
 
     <update id="updateUser" parameterType="cn.edu.nju.software.entity.User">

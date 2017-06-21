@@ -3,8 +3,12 @@ package cn.edu.nju.software.controller.user;
 import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.Story;
+import cn.edu.nju.software.entity.User;
+import cn.edu.nju.software.entity.UserRelationStory;
 import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.service.TagRelationService;
+import cn.edu.nju.software.service.UserRelationStoryService;
+import cn.edu.nju.software.util.TokenConfig;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -31,6 +35,8 @@ public class UserStoryController extends BaseController {
     private StoryService storyService;
     @Autowired
     private TagRelationService tagRelationService;
+    @Autowired
+    private UserRelationStoryService userRelationStoryService;
 
     @ApiOperation(value = "获取ID获取故事", notes = "")
     @RequestMapping(value = "/getStoryById", method = {RequestMethod.GET})
@@ -126,11 +132,12 @@ public class UserStoryController extends BaseController {
     @RequestMapping(value = "/storiesByFuzzyQuery", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<Story>> getStoryByFuzzyQuery(
-            @ApiParam("author") @RequestParam(value = "author",required = false) String author,
-            @ApiParam("press") @RequestParam(value = "press",required = false) String press,
-            @ApiParam("tag") @RequestParam(value = "tag",required = false) String tag){
+            @ApiParam("query") @RequestParam(value = "query") String query,
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit
+            ){
         ResponseData<List<Story>> result=new ResponseData<>();
-        List<Story> stories= storyService.getStoryByFuzzyQuery(author,tag,press);
+        List<Story> stories= storyService.getStoryByFuzzyQuery(query,offset,limit);
         if(stories==null){
             result.jsonFill(2,"模糊查询失败",null);
             return result;
@@ -142,4 +149,52 @@ public class UserStoryController extends BaseController {
         }
     }
 
+    @ApiOperation(value = "不可用设置喜爱的故事", notes = "")
+    @RequestMapping(value = "/setLikeStory", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> likeStory(
+            @ApiParam("storyId") @RequestParam("storyId") int storyId
+            ,HttpServletRequest request, HttpServletResponse response){
+        ResponseData<Boolean> result=new ResponseData<>();
+        User user=(User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        boolean success=userRelationStoryService.addUserRelationStory(storyId,user.getId());
+        if(success){
+            result.jsonFill(1,null,true);
+        }
+        else{
+            result.jsonFill(2,"设置喜爱的故事失败",false);
+        }
+        return result;
+    }
+    @ApiOperation(value = "不可用获取喜爱的故事", notes = "")
+    @RequestMapping(value = "/likeStories", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<Story>> getLikeStories(
+            @ApiParam("userId") @RequestParam int userId,
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit,
+            HttpServletRequest request, HttpServletResponse response){
+        ResponseData<List<Story>> result=new ResponseData<>();
+        List<Story> storyList=userRelationStoryService.getLikeStories(userId,offset,limit);
+        result.jsonFill(1,null,storyList);
+        result.setCount(userRelationStoryService.getLikeStoriesCount(userId));
+        return result;
+    }
+    @ApiOperation(value = "不可用取消喜爱的故事", notes = "")
+    @RequestMapping(value = "/setDislikeStory", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> dislikeStory(
+            @ApiParam("storyId") @RequestParam("storyId") int storyId
+            ,HttpServletRequest request, HttpServletResponse response){
+        ResponseData<Boolean> result=new ResponseData<>();
+        User user=(User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        boolean success=userRelationStoryService.deleteUserRelationStory(storyId,user.getId());
+        if(success){
+            result.jsonFill(1,null,true);
+        }
+        else{
+            result.jsonFill(2,"取消喜爱的故事失败",false);
+        }
+        return result;
+    }
 }

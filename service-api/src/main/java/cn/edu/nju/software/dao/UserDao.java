@@ -26,5 +26,7 @@ public interface UserDao {
 	
 	public Integer getStatsUserAllCount(StatQueryBean bean);
 
+	public int addLikeStoryCount(int userId);
 
+	public int delLikeStoryCount(int userId);
 }

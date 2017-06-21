@@ -19,14 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.xml.ws.Response;
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -259,18 +252,22 @@ public class ManageStoryController {
     @RequestMapping(value = "/storiesByFuzzyQuery", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<Story>> getStoryByFuzzyQuery(
+            @ApiParam("title") @RequestParam(value = "title",required = false) String title,
             @ApiParam("author") @RequestParam(value = "author",required = false) String author,
+            @ApiParam("content") @RequestParam(value = "content",required = false) String content,
             @ApiParam("press") @RequestParam(value = "press",required = false) String press,
-            @ApiParam("tag") @RequestParam(value = "tag",required = false) String tag){
+            @ApiParam("tag") @RequestParam(value = "tag",required = false) String tag,
+            @ApiParam("offset") @RequestParam(value = "offset") int offset,
+            @ApiParam("limit") @RequestParam(value = "limit") int limit){
         ResponseData<List<Story>> result=new ResponseData<>();
-        List<Story> stories= storyService.getStoryByFuzzyQuery(author,tag,press);
+        List<Story> stories= storyService.getStoryByClassifyFuzzyQuery(title,author,content,press,tag,offset,limit);
         if(stories==null){
             result.jsonFill(2,"模糊查询失败",null);
             return result;
         }
         else{
             result.jsonFill(1,null,stories);
-            result.setCount(stories.size());
+            result.setCount(storyService.getStoryCountByClassifyFuzzyQuery(title,author,content,press,tag));
             return result;
         }
     }

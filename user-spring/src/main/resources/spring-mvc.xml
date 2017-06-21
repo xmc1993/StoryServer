@@ -79,6 +79,8 @@
     <mvc:interceptors>
         <!-- token拦截器 -->
         <mvc:interceptor>
+            <mvc:mapping path="/user/setDislikeStory"/>
+            <mvc:mapping path="/user/setLikeStory"/>
             <mvc:mapping path="/user/getUserSelfInfo"/>
             <mvc:mapping path="/user/updateUserSelfInfo"/>
             <mvc:mapping path="/user/rePublishWorks"/>
