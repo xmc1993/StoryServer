@@ -57,6 +57,10 @@ public class UserFollowController {
             response.setStatus(404);
             return responseData;
         }
+        if(user.getId()==followeeId) {
+            responseData.jsonFill(2, "请勿关注自己", false);
+            return responseData;
+        }
         FollowRelation followRelation = new FollowRelation();
         followRelation.setFolloweeId(followeeId);
         followRelation.setFollowerId(user.getId());
