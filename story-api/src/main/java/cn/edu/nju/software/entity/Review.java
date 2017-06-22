@@ -26,4 +26,13 @@ public class Review {
     private Date updateTime;
 
     private String content;
+
+    public Review() {
+    }
+
+    public Review(Integer workId, Integer fromUserId, String content) {
+        this.workId = workId;
+        this.fromUserId = fromUserId;
+        this.content = content;
+    }
 }

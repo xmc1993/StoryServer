@@ -15,8 +15,15 @@
         valid,
         headImgUrl,
         coverUrl,
-        duration
+        duration,
+        reviewCount
     </sql>
+    <delete id="delReviewCount">
+        update works
+        SET
+        reviewCount=reviewCount-1
+        where id = #{workId}
+    </delete>
 
 
     <resultMap id="works" type="cn.edu.nju.software.entity.Works">
@@ -33,6 +40,7 @@
         <id column="headImgUrl" property="headImgUrl"/>
         <id column="coverUrl" property="coverUrl"/>
         <id column="duration" property="duration"/>
+        <id column="reviewCount" property="reviewCount"/>
     </resultMap>
 
     <insert id="saveWorks" parameterType="cn.edu.nju.software.entity.Works" keyProperty="id" useGeneratedKeys="true">
@@ -53,8 +61,14 @@
         #{valid},
         #{headImgUrl},
         #{coverUrl},
-        #{duration}
+        #{duration},
+        #{reviewCount}
         )
+    </insert>
+    <insert id="addReviewCount">
+        update works
+        SET reviewCount=reviewCount+1
+        where id = #{workId}
     </insert>
 
     <update id="deleteWorksById">
@@ -144,6 +158,11 @@
         headImgUrl=#{1}
         where
         userId = #{0}
+    </update>
+    <update id="setReviewCount">
+        update works
+        set reviewCount = #{reviewCount}
+        where workId = #{workId}
     </update>
 
     <select id="getWorksListByIdList" resultType="cn.edu.nju.software.entity.Works">

@@ -16,31 +16,38 @@
     id, worksId, parentId, fromUserId, toUserId, content,subCommentCount, createTime, updateTime
   </sql>
 
-  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="getReviewById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="All_Column_List" />
     from reviews
     where id = #{id,jdbcType=INTEGER}
   </select>
 
-  <select id="selectReviewListByParentId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="getReviewListByParentId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select
     <include refid="All_Column_List" />
     from reviews
     where workId = #{workId} and parentId = #{parentId}
   </select>
-  <select id="selectReviewListByWorkId" resultType="cn.edu.nju.software.entity.Review">
+  <select id="getReviewListByWorkId" resultType="cn.edu.nju.software.entity.Review">
     select
     <include refid="All_Column_List" />
     from reviews
     where workId = #{workId}
+    order by createTime
+    limit #{offset},#{limit}
   </select>
 
   <delete id="deleteById" parameterType="java.lang.Integer" >
     delete from reviews
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="cn.edu.nju.software.entity.Review" >
+  <delete id="delSubCommentCount">
+    update reviews
+    set subCommentCount=subCommentCount-1
+    where workId = #{workId} and id = #{id}
+  </delete>
+  <insert id="saveReview" parameterType="cn.edu.nju.software.entity.Review" >
     insert into reviews (id, worksId, parentId, 
       fromUserId, toUserId, subCommentCount, 
       createTime, updateTime, content
@@ -49,6 +56,11 @@
       #{fromuserid,jdbcType=INTEGER}, #{touserid,jdbcType=INTEGER}, #{subcommentcount,jdbcType=INTEGER}, 
       #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
       )
+  </insert>
+  <insert id="addSubCommentCount">
+    update reviews
+    set subCommentCount=subCommentCount+1
+    where workId = #{workId} and id = #{id}
   </insert>
   <update id="updateById" parameterType="cn.edu.nju.software.entity.Review" >
     update reviews
@@ -61,4 +73,5 @@
       updateTime = #{updatetime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
 </mapper>

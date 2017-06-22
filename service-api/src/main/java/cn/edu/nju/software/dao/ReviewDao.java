@@ -6,15 +6,19 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface ReviewDao {
-    int deleteById(Integer id);
+    boolean deleteById(Integer id);
 
-    int insert(Review record);
+    boolean saveReview(Review record);
 
-    Review selectById(Integer id);
+    Review getReviewById(Integer id);
 
-    List<Review> selectReviewListByWorkId(@Param("workId") Integer workId);
+    List<Review> getReviewListByWorkId(@Param("workId") Integer workId, @Param("offset") int offset, @Param("limit") int limit);
 
-    List<Review> selectReviewListByParentId(@Param("workId") Integer workId, @Param("parentId") Integer parentId);
+    List<Review> getReviewListByParentId(@Param("workId") Integer workId, @Param("parentId") Integer parentId);
 
-    int updateById(Review record);
+    boolean updateById(Review record);
+
+    boolean addSubCommentCount(@Param("workId") Integer workId, @Param("id") Integer id);
+
+    boolean delSubCommentCount(@Param("workId") Integer workId, @Param("id") Integer id);
 }
