@@ -13,6 +13,7 @@
         preCoverUrl,
         backgroundUrl,
         originSoundUrl,
+        guideSoundUrl,
         price,
         createTime,
         updateTime,
@@ -21,7 +22,8 @@
         tellCount,
         defaultBackGroundMusicId,
         duration,
-        likeCount
+        likeCount,
+        draft
     </sql>
 
     <sql id="multiTableFields">
@@ -35,6 +37,7 @@
        story.preCoverUrl,
        story.backgroundUrl,
        story.originSoundUrl,
+       story.guideSoundUrl,
        story.price,
        story.createTime,
        story.updateTime,
@@ -43,7 +46,8 @@
        story.tellCount,
        story.defaultBackGroundMusicId,
        story.duration,
-       story.likeCount
+       story.likeCount,
+       story.draft
     </sql>
     <resultMap id="story" type="cn.edu.nju.software.entity.Story">
         <id column="id" property="id"/>
@@ -56,6 +60,7 @@
         <id column="preCoverUrl" property="preCoverUrl"/>
         <id column="backgroundUrl" property="backgroundUrl"/>
         <id column="originSoundUrl" property="originSoundUrl"/>
+        <id column="guideSoundUrl" property="guideSoundUrl"/>
         <id column="price" property="price"/>
         <id column="createTime" property="createTime"/>
         <id column="updateTime" property="updateTime"/>
@@ -65,6 +70,7 @@
         <id column="defaultBackGroundMusicId" property="defaultBackGroundMusicId"/>
         <id column="duration" property="duration"/>
         <id column="likeCount" property="likeCount"/>
+        <id column="draft" property="draft"/>
     </resultMap>
 
     <insert id="saveStory" parameterType="cn.edu.nju.software.entity.Story" keyProperty="id" useGeneratedKeys="true">
@@ -83,6 +89,7 @@
         #{preCoverUrl},
         #{backgroundUrl},
         #{originSoundUrl},
+        #{guideSoundUrl},
         #{price},
         #{createTime},
         #{updateTime},
@@ -90,7 +97,8 @@
         #{recommend},
         #{tellCount},
         #{duration},
-        #{defaultBackGroundMusicId}
+        #{defaultBackGroundMusicId},
+        #{draft}
         )
     </insert>
     <insert id="addStoryLikeCount">
@@ -110,10 +118,12 @@
 		preCoverUrl=#{preCoverUrl},
 		backgroundUrl=#{backgroundUrl},
 		originSoundUrl=#{originSoundUrl},
+		guideSoundUrl=#{guideSoundUrl},
 		price=#{price},
 		updateTime=#{updateTime},
 		defaultBackGroundMusicId=#{defaultBackGroundMusicId},
-		duration=#{duration}
+		duration=#{duration},
+		draft=#{draft}
 		where
 		id=#{id}
 	</update>
@@ -323,6 +333,19 @@
             </if>
         </where>
     </select>
+    <select id="getDraftList" resultType="cn.edu.nju.software.entity.Story">
+        SELECT 
+        <include refid="fields"/>
+        from story
+        where valid = 1 and draft = 1
+        limit #{0},#{1}
+    </select>
+    <select id="getDraftCount" resultType="java.lang.Integer">
+        SELECT
+        count(id)
+        from story
+        where valid = 1 and draft = 1
+    </select>
 
     <update id="newTell">
         update story
@@ -337,5 +360,12 @@
         tellCount = tellCount-1
         where valid = 1 and id=#{0}
     </update>
+    <update id="setDraftCompleteByStoryId">
+        update story
+        set
+        dratf=0
+        where valid=1 and id=#{storyId}
+    </update>
+
 
 </mapper>

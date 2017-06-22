@@ -197,4 +197,16 @@ public class UserStoryController extends BaseController {
         }
         return result;
     }
+    @ApiOperation(value = "获取草稿列表")
+    @RequestMapping(value = "/draftStories",method = {RequestMethod.GET})
+    @ResponseBody
+    public  ResponseData<List<Story>> getStoryByFuzzyQuery(
+            @ApiParam("offset") @RequestParam("offset") int offset,
+            @ApiParam("limit") @RequestParam("limit") int limit){
+        ResponseData<List<Story>> result=new ResponseData<>();
+        List<Story> storyList = storyService.getDraftList(offset,limit);
+        result.jsonFill(1,null,storyList);
+        result.setCount(storyService.getDraftCount());
+        return result;
+    }
 }

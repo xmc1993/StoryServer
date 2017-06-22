@@ -215,4 +215,22 @@ public class StoryServiceImpl implements StoryService {
         else if(tag!=null) tag=tag.trim();
         return storyDao.getStoryCountByClassifyFuzzyQuery(title, author, content, press, tag);
     }
+
+    @Override
+    public boolean setDraftComplete(Integer storyId){
+        if(storyDao.getStoryById(storyId).getDraft()==0) return false;
+        return storyDao.setDraftCompleteByStoryId(storyId);
+    }
+
+    @Override
+    public Integer getDraftCount(){
+        return storyDao.getDraftCount();
+    }
+
+    @Override
+    public List<Story> getDraftList(Integer offset,Integer limit){
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        return storyDao.getDraftList(offset,limit);
+    }
 }

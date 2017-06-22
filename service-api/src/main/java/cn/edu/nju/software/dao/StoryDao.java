@@ -71,4 +71,10 @@ public interface StoryDao {
 
     Integer getStoryCountByClassifyFuzzyQuery(@Param("title") String title, @Param("author") String author,@Param("content") String content,
                                                   @Param("press") String press, @Param("tag") String tag);
+
+    List<Story> getDraftList(Integer offset,Integer limit);
+
+    Integer getDraftCount();
+
+    boolean setDraftCompleteByStoryId(@Param("storyId") Integer storyId);
 }

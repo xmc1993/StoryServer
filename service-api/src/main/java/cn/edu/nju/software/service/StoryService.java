@@ -52,4 +52,10 @@ public interface StoryService {
     List<Story>  getStoryByClassifyFuzzyQuery(String title, String author, String content, String press, String tag, Integer offset, Integer limit);
 
     Integer getStoryCountByClassifyFuzzyQuery(String title, String author, String content, String press, String tag);
+
+    boolean setDraftComplete(Integer storyId);
+
+    Integer getDraftCount();
+
+    List<Story> getDraftList(Integer offset, Integer limit);
 }

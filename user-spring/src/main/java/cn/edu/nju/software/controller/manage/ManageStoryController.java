@@ -38,7 +38,7 @@ public class ManageStoryController {
     @Autowired
     private CheckValidService checkValidService;
 
-    @ApiOperation(value = "新增故事", notes = "")
+    @ApiOperation(value = "新增故事", notes = "草稿状态1为草稿0为完成")
     @RequestMapping(value = "/stories", method = {RequestMethod.POST})
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
@@ -49,16 +49,18 @@ public class ManageStoryController {
             @ApiParam("出版社") @RequestParam String press,
             @ApiParam("阅读指导") @RequestParam String guide,
             @ApiParam("价格") @RequestParam String price,
+            @ApiParam("草稿状态") @RequestParam("draft")int draft,
             @ApiParam("默认背景音ID") @RequestParam Integer defaultBackGroundMusicId,
             @ApiParam("封面") @RequestParam("coverFile") MultipartFile coverFile,
             @ApiParam("预览封面") @RequestParam("preCoverFile") MultipartFile preCoverFile,
             @ApiParam("录制背景") @RequestParam("backgroundFile") MultipartFile backgroundFile,
             @ApiParam("原音") @RequestParam("originSoundFile") MultipartFile originSoundFile,
+            @ApiParam("朗读指导")@RequestParam("guideSoundFIle")MultipartFile guideSoundFile,
             HttpServletRequest request, HttpServletResponse response) {
-        if (coverFile.isEmpty() || preCoverFile.isEmpty() || backgroundFile.isEmpty() || originSoundFile.isEmpty()) {
+        if (coverFile.isEmpty() || preCoverFile.isEmpty() || backgroundFile.isEmpty() || originSoundFile.isEmpty()||guideSoundFile.isEmpty()) {
             throw new RuntimeException("请选择文件上传。");
         }
-        MultipartFile[] files = {coverFile, preCoverFile, backgroundFile, originSoundFile};
+        MultipartFile[] files = {coverFile, preCoverFile, backgroundFile, originSoundFile,guideSoundFile};
         List<String> urlList = new ArrayList<>();
         for (int i = 0; i < files.length; i++) {
             String url = uploadFile(files[i]);
@@ -79,8 +81,10 @@ public class ManageStoryController {
         story.setPreCoverUrl(urlList.get(1));
         story.setBackgroundUrl(urlList.get(2));
         story.setOriginSoundUrl(urlList.get(3));
+        story.setGuideSoundUrl(urlList.get(4));
         String duration=storyService.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(story.getOriginSoundUrl())));
         story.setDuration(duration);
+        story.setDraft(draft);
         boolean res = storyService.saveStory(story);
         if (!res) {
             throw new RuntimeException("发布故事失败");
@@ -100,10 +104,12 @@ public class ManageStoryController {
             @ApiParam("出版社") @RequestParam String press,
             @ApiParam("阅读指导") @RequestParam String guide,
             @ApiParam("价格") @RequestParam String price,
+            @ApiParam("草稿状态") @RequestParam("draft")int draft,
             @ApiParam("封面") @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
             @ApiParam("预览封面") @RequestParam(value = "preCoverFile", required = false) MultipartFile preCoverFile,
             @ApiParam("录制背景") @RequestParam(value = "backgroundFile", required = false) MultipartFile backgroundFile,
             @ApiParam("原音") @RequestParam(value = "originSoundFile", required = false) MultipartFile originSoundFile,
+            @ApiParam("朗读指导")@RequestParam("guideSoundFIle")MultipartFile guideSoundFile,
             HttpServletRequest request, HttpServletResponse response) {
         Story story = storyService.getStoryById(id);
         if (story == null) {
@@ -124,6 +130,11 @@ public class ManageStoryController {
             UploadFileUtil.deleteFileByUrl(story.getBackgroundUrl());
             story.setBackgroundUrl(uploadFile(backgroundFile));
         }
+        if (!guideSoundFile.isEmpty()) {
+            //删除旧
+            UploadFileUtil.deleteFileByUrl(story.getGuideSoundUrl());
+            story.setGuideSoundUrl(uploadFile(guideSoundFile));
+        }
         if (!originSoundFile.isEmpty()) {
             UploadFileUtil.deleteFileByUrl(story.getOriginSoundUrl());
             story.setOriginSoundUrl(uploadFile(originSoundFile));
@@ -137,7 +148,7 @@ public class ManageStoryController {
         story.setGuide(guide);
         story.setPrice(price);
         story.setUpdateTime(new Date());
-
+        story.setDraft(draft);
         Story result = storyService.updateStory(story);
         if (result == null) {
             throw new RuntimeException("更新失败");
@@ -272,4 +283,16 @@ public class ManageStoryController {
         }
     }
 
+    @ApiOperation(value = "获取草稿列表")
+    @RequestMapping(value = "/draftStories", method = {RequestMethod.GET})
+    @ResponseBody
+    public  ResponseData<List<Story>> getStoryByFuzzyQuery(
+            @ApiParam("offset") @RequestParam("offset") int offset,
+            @ApiParam("limit") @RequestParam("limit") int limit){
+        ResponseData<List<Story>> result=new ResponseData<>();
+        List<Story> storyList = storyService.getDraftList(offset,limit);
+        result.jsonFill(1,null,storyList);
+        result.setCount(storyService.getDraftCount());
+        return result;
+    }
 }
