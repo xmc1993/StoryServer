@@ -145,7 +145,7 @@ public class UserStoryController extends BaseController {
         }
         else{
             result.jsonFill(1,null,stories);
-            result.setCount(stories.size());
+            result.setCount(storyService.getStoryCountByFuzzyQuery(query));
             return result;
         }
     }
@@ -179,6 +179,18 @@ public class UserStoryController extends BaseController {
         List<Story> storyList=userRelationStoryService.getLikeStories(userId,offset,limit);
         result.jsonFill(1,null,storyList);
         result.setCount(userRelationStoryService.getLikeStoriesCount(userId));
+        return result;
+    }
+    @ApiOperation(value = "是否为用户喜爱的故事", notes = "")
+    @RequestMapping(value = "/isLikedStory", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> getLikeStories(
+            @ApiParam("userId") @RequestParam int userId,
+            @ApiParam("storyId") @RequestParam int storyId,
+            HttpServletRequest request, HttpServletResponse response){
+        ResponseData<Boolean> result=new ResponseData<>();
+        boolean isLiked=userRelationStoryService.isLikedByUser(userId,storyId);
+        result.jsonFill(1,null,isLiked);
         return result;
     }
     @ApiOperation(value = "取消喜爱的故事", notes = "")

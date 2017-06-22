@@ -254,4 +254,15 @@ public class StoryServiceImpl implements StoryService {
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         return storyDao.getDraftList(offset,limit);
     }
+
+    @Override
+    public Integer getStoryCountByFuzzyQuery(String query) {
+        if(query !=null&& query.trim()=="") return null;
+        String[] queries=query.split(" ");
+        List<String> queryList=new ArrayList<String>();
+        for(String temp:queries){
+            if(temp.trim()!="")  queryList.add(temp.trim());
+        }
+        return storyDao.getStoryCountByFuzzyQuery(queryList);
+    }
 }

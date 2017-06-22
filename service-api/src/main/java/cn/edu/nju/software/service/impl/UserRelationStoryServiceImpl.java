@@ -56,4 +56,10 @@ public class UserRelationStoryServiceImpl implements UserRelationStoryService {
         if(idList.size()==0) return 0;
         return storyDao.getStoryCountByIdList(idList);
     }
+
+    @Override
+    public boolean isLikedByUser(int userId, int storyId) {
+        if(userRelationStoryDao.storyIsLikedByUserId(storyId,userId)==null) return false;
+        return true;
+    }
 }

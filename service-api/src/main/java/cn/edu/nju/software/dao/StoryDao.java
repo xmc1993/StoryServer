@@ -89,4 +89,5 @@ public interface StoryDao {
     Story getStoryByIdIncludeDrafts(int id);
 
     Integer getStoryCountByTitleIncludeDrafts(String query);
+    
 }

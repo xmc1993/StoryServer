@@ -17,4 +17,6 @@ public interface UserRelationStoryService {
     List<Story> getLikeStories(int userId, int offset, int limit);
 
     Integer getLikeStoriesCount(int userId);
+
+    boolean isLikedByUser(int userId, int storyId);
 }
