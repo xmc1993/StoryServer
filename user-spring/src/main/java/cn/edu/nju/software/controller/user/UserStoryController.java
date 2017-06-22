@@ -149,7 +149,7 @@ public class UserStoryController extends BaseController {
         }
     }
 
-    @ApiOperation(value = "不可用设置喜爱的故事", notes = "")
+    @ApiOperation(value = "设置喜爱的故事", notes = "")
     @RequestMapping(value = "/setLikeStory", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> likeStory(
@@ -166,7 +166,7 @@ public class UserStoryController extends BaseController {
         }
         return result;
     }
-    @ApiOperation(value = "不可用获取喜爱的故事", notes = "")
+    @ApiOperation(value = "获取喜爱的故事", notes = "")
     @RequestMapping(value = "/likeStories", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<Story>> getLikeStories(
@@ -180,7 +180,7 @@ public class UserStoryController extends BaseController {
         result.setCount(userRelationStoryService.getLikeStoriesCount(userId));
         return result;
     }
-    @ApiOperation(value = "不可用取消喜爱的故事", notes = "")
+    @ApiOperation(value = "取消喜爱的故事", notes = "")
     @RequestMapping(value = "/setDislikeStory", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> dislikeStory(

@@ -10,6 +10,7 @@ import cn.edu.nju.software.util.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,6 +44,7 @@ public class UserRelationStoryServiceImpl implements UserRelationStoryService {
     @Override
     public List<Story> getLikeStories(int userId, int offset, int limit){
         List<Integer> idList = userRelationStoryDao.getStoryIdListByUserId(userId);
+        if(idList.size()==0) return new ArrayList<Story>();
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         List<Story> storyList=storyDao.getStoryListByIdList(idList,offset,limit);
@@ -51,6 +53,7 @@ public class UserRelationStoryServiceImpl implements UserRelationStoryService {
     @Override
     public Integer getLikeStoriesCount(int userId){
         List<Integer> idList = userRelationStoryDao.getStoryIdListByUserId(userId);
+        if(idList.size()==0) return 0;
         return storyDao.getStoryCountByIdList(idList);
     }
 }

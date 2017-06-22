@@ -42,6 +42,7 @@ public class StoryServiceImpl implements StoryService {
         List<Integer> userIdList=userRelationStoryDao.getUserIdListByStoryId(id);
         for(Integer userId:userIdList){
             userDao.delLikeStoryCount(userId);
+            userRelationStoryDao.delete(id,userId);
         }
         return storyDao.deleteStoryById(id);
     }

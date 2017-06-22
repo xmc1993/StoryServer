@@ -39,14 +39,13 @@
     </update>
     <delete id="delete">
         delete
-        <include refid="all_column"></include>
         from user_relation_story
         where userId=#{userId} and storyid=#{storyId}
     </delete>
     <select id="getStoryIdListByUserId" resultType="java.lang.Integer">
         SELECT storyid
         from  user_relation_story
-        where userId = #{0}
+        where userId = #{userId}
     </select>
     <select id="getUserIdListByStoryId" resultType="java.lang.Integer">
         SELECT userId

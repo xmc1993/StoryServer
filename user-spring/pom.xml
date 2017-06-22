@@ -102,6 +102,8 @@
 				<version>8.1.8.v20121106</version>
 				<configuration>
 					<reload>manual</reload>
+					<!--避免启动时浪费时间-->
+					<contextXml>${project.basedir}/src/main/resources/jetty-context.xml</contextXml>
 					<webAppConfig>
 						<contextPath>/</contextPath>
 					</webAppConfig>
