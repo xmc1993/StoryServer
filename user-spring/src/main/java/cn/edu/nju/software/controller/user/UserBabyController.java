@@ -45,6 +45,7 @@ public class UserBabyController extends BaseController {
         ResponseData<List<Baby>> responseData = new ResponseData<>();
         List<Baby> babyList = babyService.getBabyListByParentId(userId);
         responseData.jsonFill(1, null, babyList);
+        responseData.setCount(babyList.size());
         return responseData;
     }
 

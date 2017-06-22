@@ -22,4 +22,5 @@ public class Works {
     private String headImgUrl;
     private String coverUrl;
     private String duration;
+    private Integer reviewCount;
 }

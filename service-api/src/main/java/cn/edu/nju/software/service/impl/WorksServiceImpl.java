@@ -81,4 +81,26 @@ public class WorksServiceImpl implements WorksService {
         idList.add(-1);//防止mybatis查询出错
         return worksDao.getWorksListByIdList(idList);
     }
+
+    @Override
+    public Integer getWorksCount() {
+        return worksDao.getWorksCount();
+    }
+
+    @Override
+    public Integer getWorksCountByUserId(Integer userId) {
+       return worksDao.getWorksCountByUserId(userId);
+    }
+
+    @Override
+    public Integer getWorksCountByStoryId(Integer storyId){
+        return worksDao.getWorksCountByStoryId(storyId);
+    }
+
+    @Override
+    public Integer getWorksCountByIdList(List<Integer> idList) {
+        idList.add(-1);//防止mybatis查询出错
+        return worksDao.getWorksCountByIdList(idList);
+    }
+
 }

@@ -71,5 +71,15 @@
         where
         followerId = #{0} and followeeId = #{1}
     </select>
+    <select id="getFollowerCountByUserId" resultType="java.lang.Integer">
+        select count(id)
+        from follow_relation
+        where  followeeId=#{userId}
+    </select>
+    <select id="getFolloweeCountByUserId" resultType="java.lang.Integer">
+        select count(id)
+        from follow_relation
+        where  followerId=#{userId}
+    </select>
 
 </mapper>

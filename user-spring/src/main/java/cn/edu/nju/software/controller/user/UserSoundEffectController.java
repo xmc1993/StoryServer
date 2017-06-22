@@ -41,6 +41,7 @@ public class UserSoundEffectController extends BaseController {
         ResponseData<List<SoundEffect>> responseData = new ResponseData();
         List<SoundEffect> soundEffectList = soundEffectService.getSoundEffectListByPage(offset, limit);
         responseData.jsonFill(1, null, soundEffectList);
+        responseData.setCount(soundEffectService.getSoundEffectCount());
         return responseData;
     }
 
@@ -74,6 +75,7 @@ public class UserSoundEffectController extends BaseController {
         }
         List<SoundEffect> soundEffectList = soundEffectService.getSoundEffectListByIdList(idList);
         responseData.jsonFill(1, null, soundEffectList);
+        responseData.setCount(soundEffectList.size());
         return responseData;
     }
 

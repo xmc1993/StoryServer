@@ -87,7 +87,7 @@ public class ManageTagRelationController {
     @ApiOperation(value = "获得一个故事的所有标签", notes = "")
     @RequestMapping(value = "/stories/{id}/storyTags", method = {RequestMethod.GET})
     @ResponseBody
-    public List<StoryTag> getTagListOfStory(
+    public ResponseData<List<StoryTag>> getTagListOfStory(
             @ApiParam("故事ID") @PathVariable Integer id,
             HttpServletRequest request, HttpServletResponse response) {
         if (!checkValidService.isStoryExist(id)) {
@@ -96,7 +96,16 @@ public class ManageTagRelationController {
         }
         List<Integer> idList = tagRelationService.getTagIdListByStoryId(id);
         List<StoryTag> storyTagList = storyTagService.getStoryTagListByIdList(idList);
-        return storyTagList;
+        ResponseData<List<StoryTag>> result=new ResponseData<>();
+        if(storyTagList==null){
+            result.jsonFill(2,"获得一个故事的所有标签失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,storyTagList);
+            result.setCount(storyTagList.size());
+            return result;
+        }
     }
 
 }

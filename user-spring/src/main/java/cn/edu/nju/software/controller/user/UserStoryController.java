@@ -3,8 +3,12 @@ package cn.edu.nju.software.controller.user;
 import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.Story;
+import cn.edu.nju.software.entity.User;
+import cn.edu.nju.software.entity.UserRelationStory;
 import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.service.TagRelationService;
+import cn.edu.nju.software.service.UserRelationStoryService;
+import cn.edu.nju.software.util.TokenConfig;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -31,6 +35,8 @@ public class UserStoryController extends BaseController {
     private StoryService storyService;
     @Autowired
     private TagRelationService tagRelationService;
+    @Autowired
+    private UserRelationStoryService userRelationStoryService;
 
     @ApiOperation(value = "获取ID获取故事", notes = "")
     @RequestMapping(value = "/getStoryById", method = {RequestMethod.GET})
@@ -42,7 +48,8 @@ public class UserStoryController extends BaseController {
         Story story = storyService.getStoryById(id);
         if (story == null) {
             responseData.jsonFill(2, "该故事不存在", null);
-        } else {
+        }
+        else{
             responseData.jsonFill(1, null, story);
         }
         return responseData;
@@ -58,6 +65,7 @@ public class UserStoryController extends BaseController {
         ResponseData<List<Story>> responseData = new ResponseData();
         List<Story> storyList = storyService.getStoryListByPage(offset, limit);
         responseData.jsonFill(1, null, storyList);
+        responseData.setCount(storyService.getStoryCount());
         return responseData;
     }
 
@@ -71,8 +79,9 @@ public class UserStoryController extends BaseController {
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<Story>> responseData = new ResponseData();
         List<Integer> idList = tagRelationService.getStoryIdListByFirstLevelTagId(tagId);
-        List<Story> storyList = storyService.getStoryListByIdList(idList);
+        List<Story> storyList = storyService.getStoryListByIdList(idList,offset,limit);
         responseData.jsonFill(1, null, storyList);
+        responseData.setCount(storyService.getStoryCountByIdList(idList));
         return responseData;
     }
 
@@ -86,8 +95,9 @@ public class UserStoryController extends BaseController {
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<Story>> responseData = new ResponseData();
         List<Integer> idList = tagRelationService.getStoryIdListBySecondLevelTagId(tagId);
-        List<Story> storyList = storyService.getStoryListByIdList(idList);
+        List<Story> storyList = storyService.getStoryListByIdList(idList, offset, limit);
         responseData.jsonFill(1, null, storyList);
+        responseData.setCount(storyService.getStoryCountByIdList(idList));
         return responseData;
     }
 
@@ -102,6 +112,7 @@ public class UserStoryController extends BaseController {
         ResponseData<List<Story>> responseData = new ResponseData<>();
         List<Story> storyList = storyService.getStoryListByTitle(query, offset, limit);
         responseData.jsonFill(1, null, storyList);
+        responseData.setCount(storyService.getStoryCountByTitle(query));
         return responseData;
     }
 
@@ -115,7 +126,88 @@ public class UserStoryController extends BaseController {
         ResponseData<List<Story>> responseData = new ResponseData<>();
         List<Story> storyList = storyService.getRecommendedStoryListByPage(offset, limit);
         responseData.jsonFill(1, null, storyList);
+        responseData.setCount(storyService.getRecommendedStoryCount());
         return responseData;
     }
+    @ApiOperation(value = "模糊查询获取故事", notes = "")
+    @RequestMapping(value = "/storiesByFuzzyQuery", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<Story>> getStoryByFuzzyQuery(
+            @ApiParam("query") @RequestParam(value = "query") String query,
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit
+            ){
+        ResponseData<List<Story>> result=new ResponseData<>();
+        List<Story> stories= storyService.getStoryByFuzzyQuery(query,offset,limit);
+        if(stories==null){
+            result.jsonFill(2,"模糊查询失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,stories);
+            result.setCount(stories.size());
+            return result;
+        }
+    }
 
+    @ApiOperation(value = "设置喜爱的故事", notes = "")
+    @RequestMapping(value = "/setLikeStory", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> likeStory(
+            @ApiParam("storyId") @RequestParam("storyId") int storyId
+            ,HttpServletRequest request, HttpServletResponse response){
+        ResponseData<Boolean> result=new ResponseData<>();
+        User user=(User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        boolean success=userRelationStoryService.addUserRelationStory(storyId,user.getId());
+        if(success){
+            result.jsonFill(1,null,true);
+        }
+        else{
+            result.jsonFill(2,"设置喜爱的故事失败",false);
+        }
+        return result;
+    }
+    @ApiOperation(value = "获取喜爱的故事", notes = "")
+    @RequestMapping(value = "/likeStories", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<Story>> getLikeStories(
+            @ApiParam("userId") @RequestParam int userId,
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit,
+            HttpServletRequest request, HttpServletResponse response){
+        ResponseData<List<Story>> result=new ResponseData<>();
+        List<Story> storyList=userRelationStoryService.getLikeStories(userId,offset,limit);
+        result.jsonFill(1,null,storyList);
+        result.setCount(userRelationStoryService.getLikeStoriesCount(userId));
+        return result;
+    }
+    @ApiOperation(value = "取消喜爱的故事", notes = "")
+    @RequestMapping(value = "/setDislikeStory", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> dislikeStory(
+            @ApiParam("storyId") @RequestParam("storyId") int storyId
+            ,HttpServletRequest request, HttpServletResponse response){
+        ResponseData<Boolean> result=new ResponseData<>();
+        User user=(User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        boolean success=userRelationStoryService.deleteUserRelationStory(storyId,user.getId());
+        if(success){
+            result.jsonFill(1,null,true);
+        }
+        else{
+            result.jsonFill(2,"取消喜爱的故事失败",false);
+        }
+        return result;
+    }
+    @ApiOperation(value = "获取草稿列表")
+    @RequestMapping(value = "/draftStories",method = {RequestMethod.GET})
+    @ResponseBody
+    public  ResponseData<List<Story>> getStoryByFuzzyQuery(
+            @ApiParam("offset") @RequestParam("offset") int offset,
+            @ApiParam("limit") @RequestParam("limit") int limit){
+        ResponseData<List<Story>> result=new ResponseData<>();
+        List<Story> storyList = storyService.getDraftList(offset,limit);
+        result.jsonFill(1,null,storyList);
+        result.setCount(storyService.getDraftCount());
+        return result;
+    }
 }

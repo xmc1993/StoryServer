@@ -15,8 +15,15 @@
         valid,
         headImgUrl,
         coverUrl,
-        duration
+        duration,
+        reviewCount
     </sql>
+    <delete id="delReviewCount">
+        update works
+        SET
+        reviewCount=reviewCount-1
+        where id = #{workId}
+    </delete>
 
 
     <resultMap id="works" type="cn.edu.nju.software.entity.Works">
@@ -33,6 +40,7 @@
         <id column="headImgUrl" property="headImgUrl"/>
         <id column="coverUrl" property="coverUrl"/>
         <id column="duration" property="duration"/>
+        <id column="reviewCount" property="reviewCount"/>
     </resultMap>
 
     <insert id="saveWorks" parameterType="cn.edu.nju.software.entity.Works" keyProperty="id" useGeneratedKeys="true">
@@ -53,8 +61,14 @@
         #{valid},
         #{headImgUrl},
         #{coverUrl},
-        #{duration}
+        #{duration},
+        #{reviewCount}
         )
+    </insert>
+    <insert id="addReviewCount">
+        update works
+        SET reviewCount=reviewCount+1
+        where id = #{workId}
     </insert>
 
     <update id="deleteWorksById">
@@ -145,10 +159,41 @@
         where
         userId = #{0}
     </update>
+    <update id="setReviewCount">
+        update works
+        set reviewCount = #{reviewCount}
+        where workId = #{workId}
+    </update>
 
     <select id="getWorksListByIdList" resultType="cn.edu.nju.software.entity.Works">
         select
         <include refid="fields"></include>
+        from works
+        where valid = 1 and id IN
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <select id="getWorksCount" resultType="java.lang.Integer">
+        select
+        count(id)
+        from works
+        where valid = 1
+    </select>
+    <select id="getWorksCountByUserId" resultType="java.lang.Integer">
+        select
+        count(id)
+        from works
+        where valid = 1 and userId=#{userId}
+    </select>
+    <select id="getWorksCountByStoryId" resultType="java.lang.Integer">
+        select
+        count(id)
+        from works
+        where valid = 1 and storyId=#{storyId}
+    </select>
+    <select id="getWorksCountByIdList" resultType="java.lang.Integer">
+        select count(*)
         from works
         where valid = 1 and id IN
         <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">

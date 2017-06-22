@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.nju.software.dao.UserRelationStoryDao">
+    <!--auto generated Code-->
+    <resultMap id="AllColumnMap" type="cn.edu.nju.software.entity.UserRelationStory">
+        <result column="id" property="id"/>
+        <result column="storyId" property="storyId"/>
+        <result column="userId" property="userId"/>
+    </resultMap>
+
+    <!--auto generated Code-->
+    <sql id="all_column">
+        id,
+        storyId,
+        userId
+    </sql>
+
+    <insert id="insert" parameterType="cn.edu.nju.software.entity.UserRelationStory" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO user_relation_story (
+            id,
+            storyId,
+            userId
+        ) VALUES (
+            #{id},
+            #{storyId},
+            #{userId}
+        )
+    </insert>
+
+
+    <!--auto generated Code-->
+    <update id="update">
+        UPDATE user_relation_story
+        <set>
+            <if test="storyId != null"> storyid = #{storyId}, </if>
+            <if test="userId != null"> userid = #{userId} </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <delete id="delete">
+        delete
+        from user_relation_story
+        where userId=#{userId} and storyid=#{storyId}
+    </delete>
+    <select id="getStoryIdListByUserId" resultType="java.lang.Integer">
+        SELECT storyid
+        from  user_relation_story
+        where userId = #{userId}
+    </select>
+    <select id="getUserIdListByStoryId" resultType="java.lang.Integer">
+        SELECT userId
+        from user_relation_story
+        where storyId = #{0}
+    </select>
+    <select id="storyIsLikedByUserId" resultType="java.lang.Integer">
+        select id
+        from user_relation_story
+        where storyId= #{storyId} and userId=#{userId}
+    </select>
+
+
+</mapper>
+

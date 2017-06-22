@@ -1,13 +1,8 @@
 package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.entity.Story;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 /**
@@ -20,6 +15,8 @@ public interface StoryService {
 
     Story getStoryById(int id);
 
+    Story getStoryByIdIncludeDrafts(int id);
+
     Story getStoryByIdHard(int id);
 
     List<Story> getAllStories();
@@ -28,7 +25,9 @@ public interface StoryService {
 
     List<Story> getStoryListByPage(int offset, int limit);
 
-    List<Story> getStoryListByIdList(List<Integer> idList);
+    List<Story> getStoryListByPageIncludeDrafts(int offset, int limit);
+
+    List<Story> getStoryListByIdList(List<Integer> idList, Integer offset, Integer limit);
 
     List<Story> getStoryListByTitle(String title, int offset, int limit);
 
@@ -38,11 +37,33 @@ public interface StoryService {
 
     List<Story> getRecommendedStoryListByPage(int offset, int limit);
 
+    Integer getRecommendedStoryCount();
+
     boolean newTell(int id);
 
     boolean deleteTell(int id);
 
     Integer getStoryCount();
 
+    Integer getStoryCountIncludeDrafts();
+
     String getOriginSoundLength(File file);
+
+    Integer getStoryCountByTitle(String query);
+
+    Integer getStoryCountByTitleIncludeDrafts(String query);
+
+    Integer getStoryCountByIdList(List<Integer> idList);
+
+    List <Story>  getStoryByFuzzyQuery(String query, Integer offset, Integer limit);
+
+    List<Story> getStoryByClassifyFuzzyQueryInludeDrafts(String title, String author, String content, String press, String tag, Integer offset, Integer limit);
+
+    Integer getStoryCountByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, String tag);
+
+    boolean setDraftComplete(Integer storyId);
+
+    Integer getDraftCount();
+
+    List<Story> getDraftList(Integer offset, Integer limit);
 }

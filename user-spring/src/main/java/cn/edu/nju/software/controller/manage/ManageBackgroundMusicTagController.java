@@ -95,12 +95,21 @@ public class ManageBackgroundMusicTagController {
     @ApiOperation(value = "背景音乐分类列表", notes = "")
     @RequestMapping(value = "/backgroundMusicTags", method = {RequestMethod.GET})
     @ResponseBody
-    public List<BackgroundMusicTag> getAllBackgroundMusicTags(
+    public ResponseData<List<BackgroundMusicTag>> getAllBackgroundMusicTags(
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         List<BackgroundMusicTag> tagList = backgroundMusicTagService.getBackgroundMusicTagsByPage(offset, limit);
-        return tagList;
+        ResponseData<List<BackgroundMusicTag>> result=new ResponseData<>();
+        if(tagList==null){
+            result.jsonFill(2,"获取背景音乐分类列表失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,tagList);
+            result.setCount(backgroundMusicTagService.getBackgroundMusicTagCount());
+            return result;
+        }
     }
     @ApiOperation(value = "获取背景音乐分类数量", notes = "")
     @RequestMapping(value = "/backgroundMusicTagCount", method = {RequestMethod.GET})

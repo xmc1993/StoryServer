@@ -147,12 +147,21 @@ public class ManageSoundEffectController {
     @ApiOperation(value = "得到所有音效", notes = "")
     @RequestMapping(value = "/soundEffects", method = {RequestMethod.GET})
     @ResponseBody
-    public List<SoundEffect> getAllSoundEffects(
+    public ResponseData<List<SoundEffect>> getAllSoundEffects(
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         List<SoundEffect> soundEffectList = soundEffectService.getSoundEffectListByPage(offset, limit);
-        return soundEffectList;
+        ResponseData<List<SoundEffect>> result=new ResponseData<>();
+        if(soundEffectList==null){
+            result.jsonFill(2,"获取音效列表失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,soundEffectList);
+            result.setCount(soundEffectService.getSoundEffectCount());
+            return result;
+        }
     }
 
     @ApiOperation(value = "获取背景音效数量", notes = "")

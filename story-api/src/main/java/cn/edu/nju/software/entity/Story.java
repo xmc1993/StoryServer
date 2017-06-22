@@ -19,6 +19,7 @@ public class Story {
     private String preCoverUrl;
     private String backgroundUrl;//录制背景图url
     private String originSoundUrl;//原始音效url
+    private String guideSoundUrl;
     private String price;
     private Date createTime;
     private Date updateTime;
@@ -27,5 +28,6 @@ public class Story {
     private Integer recommend = 0;//是否被推荐 0 否 1 是
     private Integer tellCount = 0;//
     private Integer defaultBackGroundMusicId;//
-
+    private Integer likeCount;
+    private Integer draft;
 }

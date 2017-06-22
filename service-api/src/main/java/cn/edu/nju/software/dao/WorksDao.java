@@ -36,4 +36,17 @@ public interface WorksDao {
 
     boolean updateCoverUrl(int storyId, String coverUrl);
 
+    Integer getWorksCount();
+
+    Integer getWorksCountByUserId(Integer userId);
+
+    Integer getWorksCountByStoryId(Integer storyId);
+
+    Integer getWorksCountByIdList(@Param("idList")List<Integer> idList);
+
+    boolean addReviewCount(@Param("workId") Integer workId);
+
+    boolean delReviewCount(@Param("workId") Integer workId);
+
+    boolean setReviewCount(@Param("workId") Integer workId, @Param("reviewCount") int reviewCount);
 }

@@ -92,7 +92,7 @@
     </select>
     <select id="getSoundEffectCount" resultType="java.lang.Integer">
         select count(id)
-        from sound_effect
+        from sound_effect where valid = 1
     </select>
 
     <delete id="deleteHard">

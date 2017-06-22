@@ -95,12 +95,21 @@ public class ManageSoundEffectTagController {
     @ApiOperation(value = "音效分类列表", notes = "")
     @RequestMapping(value = "/soundEffectTags", method = {RequestMethod.GET})
     @ResponseBody
-    public List<SoundEffectTag> getAllSoundEffectTags(
+    public ResponseData<List<SoundEffectTag>> getAllSoundEffectTags(
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         List<SoundEffectTag> tagList = soundEffectTagService.getSoundEffectTagsByPage(offset, limit);
-        return tagList;
+        ResponseData<List<SoundEffectTag>> result=new ResponseData<>();
+        if(tagList==null){
+            result.jsonFill(2,"获取音效分类列表失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,tagList);
+            result.setCount(soundEffectTagService.getSoundEffectTagCount());
+            return result;
+        }
     }
 
     @ApiOperation(value = "获取背景音乐分类数量", notes = "")

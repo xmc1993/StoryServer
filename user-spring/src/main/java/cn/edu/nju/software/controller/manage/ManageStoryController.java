@@ -19,13 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,7 +38,7 @@ public class ManageStoryController {
     @Autowired
     private CheckValidService checkValidService;
 
-    @ApiOperation(value = "新增故事", notes = "")
+    @ApiOperation(value = "新增故事", notes = "草稿状态1为草稿0为完成")
     @RequestMapping(value = "/stories", method = {RequestMethod.POST})
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
@@ -55,16 +49,18 @@ public class ManageStoryController {
             @ApiParam("出版社") @RequestParam String press,
             @ApiParam("阅读指导") @RequestParam String guide,
             @ApiParam("价格") @RequestParam String price,
+            @ApiParam("草稿状态") @RequestParam("draft")int draft,
             @ApiParam("默认背景音ID") @RequestParam Integer defaultBackGroundMusicId,
             @ApiParam("封面") @RequestParam("coverFile") MultipartFile coverFile,
             @ApiParam("预览封面") @RequestParam("preCoverFile") MultipartFile preCoverFile,
             @ApiParam("录制背景") @RequestParam("backgroundFile") MultipartFile backgroundFile,
             @ApiParam("原音") @RequestParam("originSoundFile") MultipartFile originSoundFile,
+            @ApiParam("朗读指导")@RequestParam("guideSoundFIle")MultipartFile guideSoundFile,
             HttpServletRequest request, HttpServletResponse response) {
-        if (coverFile.isEmpty() || preCoverFile.isEmpty() || backgroundFile.isEmpty() || originSoundFile.isEmpty()) {
+        if (coverFile.isEmpty() || preCoverFile.isEmpty() || backgroundFile.isEmpty() || originSoundFile.isEmpty()||guideSoundFile.isEmpty()) {
             throw new RuntimeException("请选择文件上传。");
         }
-        MultipartFile[] files = {coverFile, preCoverFile, backgroundFile, originSoundFile};
+        MultipartFile[] files = {coverFile, preCoverFile, backgroundFile, originSoundFile,guideSoundFile};
         List<String> urlList = new ArrayList<>();
         for (int i = 0; i < files.length; i++) {
             String url = uploadFile(files[i]);
@@ -85,8 +81,10 @@ public class ManageStoryController {
         story.setPreCoverUrl(urlList.get(1));
         story.setBackgroundUrl(urlList.get(2));
         story.setOriginSoundUrl(urlList.get(3));
+        story.setGuideSoundUrl(urlList.get(4));
         String duration=storyService.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(story.getOriginSoundUrl())));
         story.setDuration(duration);
+        story.setDraft(draft);
         boolean res = storyService.saveStory(story);
         if (!res) {
             throw new RuntimeException("发布故事失败");
@@ -106,10 +104,12 @@ public class ManageStoryController {
             @ApiParam("出版社") @RequestParam String press,
             @ApiParam("阅读指导") @RequestParam String guide,
             @ApiParam("价格") @RequestParam String price,
+            @ApiParam("草稿状态") @RequestParam("draft")int draft,
             @ApiParam("封面") @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
             @ApiParam("预览封面") @RequestParam(value = "preCoverFile", required = false) MultipartFile preCoverFile,
             @ApiParam("录制背景") @RequestParam(value = "backgroundFile", required = false) MultipartFile backgroundFile,
             @ApiParam("原音") @RequestParam(value = "originSoundFile", required = false) MultipartFile originSoundFile,
+            @ApiParam("朗读指导")@RequestParam("guideSoundFIle")MultipartFile guideSoundFile,
             HttpServletRequest request, HttpServletResponse response) {
         Story story = storyService.getStoryById(id);
         if (story == null) {
@@ -130,6 +130,11 @@ public class ManageStoryController {
             UploadFileUtil.deleteFileByUrl(story.getBackgroundUrl());
             story.setBackgroundUrl(uploadFile(backgroundFile));
         }
+        if (!guideSoundFile.isEmpty()) {
+            //删除旧
+            UploadFileUtil.deleteFileByUrl(story.getGuideSoundUrl());
+            story.setGuideSoundUrl(uploadFile(guideSoundFile));
+        }
         if (!originSoundFile.isEmpty()) {
             UploadFileUtil.deleteFileByUrl(story.getOriginSoundUrl());
             story.setOriginSoundUrl(uploadFile(originSoundFile));
@@ -143,7 +148,7 @@ public class ManageStoryController {
         story.setGuide(guide);
         story.setPrice(price);
         story.setUpdateTime(new Date());
-
+        story.setDraft(draft);
         Story result = storyService.updateStory(story);
         if (result == null) {
             throw new RuntimeException("更新失败");
@@ -170,7 +175,7 @@ public class ManageStoryController {
     public Story getStoryId(
             @ApiParam("故事ID") @PathVariable int id,
             HttpServletRequest request, HttpServletResponse response) {
-        Story story = storyService.getStoryById(id);
+        Story story = storyService.getStoryByIdIncludeDrafts(id);
         if (story == null) {
             throw new RuntimeException("无效的ID");
         } else {
@@ -181,12 +186,21 @@ public class ManageStoryController {
     @ApiOperation(value = "故事列表", notes = "")
     @RequestMapping(value = "/stories", method = {RequestMethod.GET})
     @ResponseBody
-    public List<Story> getAllStories(
+    public ResponseData<List<Story>> getAllStories(
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        List<Story> result = storyService.getStoryListByPage(offset, limit);
-        return result;
+        List<Story> storyList = storyService.getStoryListByPageIncludeDrafts(offset, limit);
+        ResponseData<List<Story>> result=new ResponseData<>();
+        if(storyList==null){
+            result.jsonFill(2,"获取故事列表失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,storyList);
+            result.setCount(storyService.getStoryCountIncludeDrafts());
+            return result;
+        }
     }
 
     @ApiOperation(value = "推荐故事", notes = "")
@@ -242,6 +256,43 @@ public class ManageStoryController {
     @RequestMapping(value = "/storyCount", method = {RequestMethod.GET})
     @ResponseBody
     public Integer getStoryCount(){
-        return storyService.getStoryCount();
+        return storyService.getStoryCountIncludeDrafts();
+    }
+
+    @ApiOperation(value = "模糊查询获取故事", notes = "")
+    @RequestMapping(value = "/storiesByFuzzyQuery", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<Story>> getStoryByFuzzyQuery(
+            @ApiParam("title") @RequestParam(value = "title",required = false) String title,
+            @ApiParam("author") @RequestParam(value = "author",required = false) String author,
+            @ApiParam("content") @RequestParam(value = "content",required = false) String content,
+            @ApiParam("press") @RequestParam(value = "press",required = false) String press,
+            @ApiParam("tag") @RequestParam(value = "tag",required = false) String tag,
+            @ApiParam("offset") @RequestParam(value = "offset") int offset,
+            @ApiParam("limit") @RequestParam(value = "limit") int limit){
+        ResponseData<List<Story>> result=new ResponseData<>();
+        List<Story> stories= storyService.getStoryByClassifyFuzzyQueryInludeDrafts(title,author,content,press,tag,offset,limit);
+        if(stories==null){
+            result.jsonFill(2,"模糊查询失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,stories);
+            result.setCount(storyService.getStoryCountByClassifyFuzzyQueryIncludeDrafts(title,author,content,press,tag));
+            return result;
+        }
+    }
+
+    @ApiOperation(value = "获取草稿列表")
+    @RequestMapping(value = "/draftStories", method = {RequestMethod.GET})
+    @ResponseBody
+    public  ResponseData<List<Story>> getStoryByFuzzyQuery(
+            @ApiParam("offset") @RequestParam("offset") int offset,
+            @ApiParam("limit") @RequestParam("limit") int limit){
+        ResponseData<List<Story>> result=new ResponseData<>();
+        List<Story> storyList = storyService.getDraftList(offset,limit);
+        result.jsonFill(1,null,storyList);
+        result.setCount(storyService.getDraftCount());
+        return result;
     }
 }

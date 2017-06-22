@@ -118,7 +118,7 @@
     </select>
     <select id="getStoryTagCount" resultType="java.lang.Integer">
         select count(id)
-        from story_tag
+        from story_tag where valid = 1
     </select>
 
 </mapper>

@@ -117,16 +117,24 @@ public class ManageStoryTagController {
     @ApiOperation(value = "获得一个标签的子标签列表", notes = "")
     @RequestMapping(value = "/storyTags/{id}/storyTags", method = {RequestMethod.GET})
     @ResponseBody
-    public List<StoryTag> getStoryTagListByParentId(
+    public ResponseData<List<StoryTag>> getStoryTagListByParentId(
             @ApiParam("父标签ID") @PathVariable int id,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<StoryTag>> responseData = new ResponseData<>();
+        ResponseData<List<StoryTag>> result = new ResponseData<>();
         if (id != 0 && !checkValidService.isTagExist(id)) {
             logger.error("无效的parentId");
             throw new RuntimeException("无效的parentId");
         }
         List<StoryTag> tagList = storyTagService.getStoryTagListByParentId(id);
-        return tagList;
+        if(tagList==null){
+            result.jsonFill(2,"获取一个标签的子标签列表失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,tagList);
+            result.setCount(tagList.size());
+            return result;
+        }
     }
 
     @ApiOperation(value = "根据ID获得标签", notes = "")
@@ -146,12 +154,21 @@ public class ManageStoryTagController {
     @ApiOperation(value = "标签列表", notes = "")
     @RequestMapping(value = "/storyTags", method = {RequestMethod.GET})
     @ResponseBody
-    public List<StoryTag> getAllStoryTags(
+    public ResponseData<List<StoryTag>> getAllStoryTags(
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         List<StoryTag> tagList = storyTagService.getStoryTagsByPage(offset, limit);
-        return tagList;
+        ResponseData<List<StoryTag>> result=new ResponseData<>();
+        if(tagList==null){
+            result.jsonFill(2,"获取故事标签列表失败",null);
+            return result;
+        }
+        else{
+            result.jsonFill(1,null,tagList);
+            result.setCount(storyTagService.getStoryTagCount());
+            return result;
+        }
     }
 
     private String uploadFile(MultipartFile file) {

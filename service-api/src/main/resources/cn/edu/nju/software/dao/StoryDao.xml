@@ -13,16 +13,42 @@
         preCoverUrl,
         backgroundUrl,
         originSoundUrl,
+        guideSoundUrl,
         price,
         createTime,
         updateTime,
         valid,
         recommend,
         tellCount,
-        defaultBackGroundMusicId
+        defaultBackGroundMusicId,
+        duration,
+        likeCount,
+        draft
     </sql>
 
-
+    <sql id="multiTableFields">
+       story.id,
+       story.title,
+       story.author,
+       story.content,
+       story.press,
+       story.guide,
+       story.coverUrl,
+       story.preCoverUrl,
+       story.backgroundUrl,
+       story.originSoundUrl,
+       story.guideSoundUrl,
+       story.price,
+       story.createTime,
+       story.updateTime,
+       story.valid,
+       story.recommend,
+       story.tellCount,
+       story.defaultBackGroundMusicId,
+       story.duration,
+       story.likeCount,
+       story.draft
+    </sql>
     <resultMap id="story" type="cn.edu.nju.software.entity.Story">
         <id column="id" property="id"/>
         <id column="title" property="title"/>
@@ -34,6 +60,7 @@
         <id column="preCoverUrl" property="preCoverUrl"/>
         <id column="backgroundUrl" property="backgroundUrl"/>
         <id column="originSoundUrl" property="originSoundUrl"/>
+        <id column="guideSoundUrl" property="guideSoundUrl"/>
         <id column="price" property="price"/>
         <id column="createTime" property="createTime"/>
         <id column="updateTime" property="updateTime"/>
@@ -41,6 +68,9 @@
         <id column="recommend" property="recommend"/>
         <id column="tellCount" property="tellCount"/>
         <id column="defaultBackGroundMusicId" property="defaultBackGroundMusicId"/>
+        <id column="duration" property="duration"/>
+        <id column="likeCount" property="likeCount"/>
+        <id column="draft" property="draft"/>
     </resultMap>
 
     <insert id="saveStory" parameterType="cn.edu.nju.software.entity.Story" keyProperty="id" useGeneratedKeys="true">
@@ -59,14 +89,22 @@
         #{preCoverUrl},
         #{backgroundUrl},
         #{originSoundUrl},
+        #{guideSoundUrl},
         #{price},
         #{createTime},
         #{updateTime},
         #{valid},
         #{recommend},
         #{tellCount},
-        #{defaultBackGroundMusicId}
+        #{duration},
+        #{defaultBackGroundMusicId},
+        #{draft}
         )
+    </insert>
+    <insert id="addStoryLikeCount">
+        update story
+        set likeCount=likeCount+1
+        where id=#{0} and valid = 1 and draft = 0
     </insert>
 
     <update id="updateStory" parameterType="cn.edu.nju.software.entity.Story">
@@ -80,9 +118,12 @@
 		preCoverUrl=#{preCoverUrl},
 		backgroundUrl=#{backgroundUrl},
 		originSoundUrl=#{originSoundUrl},
+		guideSoundUrl=#{guideSoundUrl},
 		price=#{price},
 		updateTime=#{updateTime},
-		defaultBackGroundMusicId=#{defaultBackGroundMusicId}
+		defaultBackGroundMusicId=#{defaultBackGroundMusicId},
+		duration=#{duration},
+		draft=#{draft}
 		where
 		id=#{id}
 	</update>
@@ -99,7 +140,7 @@
         select
         <include refid="fields"></include>
         from story
-        where id = #{0} and valid = 1
+        where id = #{0} and valid = 1 and draft = 1
     </select>
 
     <select id="getStoryByIdHard" resultType="cn.edu.nju.software.entity.Story">
@@ -113,14 +154,14 @@
         select
         <include refid="fields"></include>
         from story
-        where valid = 1
+        where valid = 1 and draft = 0
     </select>
 
     <select id="getStoryListByPage" resultType="cn.edu.nju.software.entity.Story">
         select
         <include refid="fields"></include>
         from story
-        where valid = 1
+        where valid = 1 and draft = 0
         limit #{0},#{1}
     </select>
 
@@ -128,17 +169,18 @@
         select
         <include refid="fields"></include>
         from story
-        where valid = 1 and id in
+        where valid = 1 and draft = 0 and id in
         <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
             #{id}
         </foreach>
+        limit #{offset},#{limit}
     </select>
 
     <select id="getStoryListByTitle" resultType="cn.edu.nju.software.entity.Story">
         select
         <include refid="fields"></include>
         from story
-        where title like CONCAT('%', #{0} ,'%') and valid = 1
+        where title like CONCAT('%', #{0} ,'%') and valid = 1 and draft = 0
         limit #{1},#{2}
     </select>
 
@@ -147,19 +189,24 @@
         <include refid="fields"></include>
         from story
         where
-        and valid = 1
+        and valid = 1 and draft = 0
     </select>
 
     <delete id="deleteHard">
         DELETE FROM story
         WHERE id = #{0}
     </delete>
+    <delete id="delStoryLikeCount">
+        update story
+        set likeCount=likeCount-1
+        where id=#{0} and draft = 0
+    </delete>
 
     <update id="recommendStory">
         update story
         set
         recommend = 1
-        where valid = 1 and id=#{0} and recommend = 0
+        where valid = 1 and id=#{0} and recommend = 0 and draft = 0
     </update>
 
 
@@ -174,12 +221,177 @@
         select
         <include refid="fields"></include>
         from story
-        where valid = 1 and recommend = 1
+        where valid = 1 and recommend = 1 and draft = 0
         limit #{0},#{1}
     </select>
     <select id="getStoryCount" resultType="java.lang.Integer">
         select count(id)
+        from story WHERE valid = 1 and draft = 0
+    </select>
+    <select id="getStoryCountByTitle" resultType="java.lang.Integer">
+        select count(id)
         from story
+        where title like CONCAT('%', #{0} ,'%') and valid = 1 and draft = 0
+    </select>
+    <select id="getStoryIdCountByTagIdList" resultType="java.lang.Integer">
+            select count(id)
+            from story
+            where valid = 1 and draft = 0 and id in
+            <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+    </select>
+    <select id="getRecommendedStoryCount" resultType="java.lang.Integer">
+        select
+        count(id)
+        from story
+        where valid = 1 and recommend = 1 and draft = 0
+    </select>
+    <select id="getStoryCountByIdList" resultType="java.lang.Integer">
+        select
+        count(id)
+        from story
+        where valid = 1 and draft = 0 and id in
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <select id="getStoryByFuzzyQuery" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="multiTableFields"/>
+        From story
+            LEFT JOIN tag_relation ON story.id = tag_relation.storyId
+            LEFT JOIN story_tag ON tag_relation.tagId = story_tag.id
+        where story.valid = 1 and draft = 0
+            AND
+        <foreach collection="queryList" item="query" index="index" open="(" separator="," close=")">
+            story.title like CONCAT('%', #{query} ,'%')
+
+            OR story.author like CONCAT('%', #{query} ,'%')
+
+            OR story.press like CONCAT('%', #{query} ,'%')
+
+            OR story_tag.content  like CONCAT('%', #{query} ,'%')
+        </foreach>
+
+        GROUP BY story.id
+        limit #{offset},#{limit}
+    </select>
+    <select id="getStoryListByClassifyFuzzyQueryIncludeDrafts" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="multiTableFields"/>
+        From story
+        <if test=" tag!=null">
+        LEFT JOIN tag_relation ON story.id = tag_relation.storyId
+        LEFT JOIN story_tag ON tag_relation.tagId = story_tag.id
+        </if>
+        <where>
+            story.valid = 1
+            <if test="title!=null">
+                AND story.title like CONCAT('%', #{title} ,'%')
+            </if>
+            <if test="author!=null">
+                AND story.author like CONCAT('%', #{author} ,'%')
+            </if>
+            <if test="content!=null">
+                AND story.content like CONCAT('%', #{content} ,'%')
+            </if>
+            <if test="press!=null">
+                AND story.press like CONCAT('%', #{press} ,'%')
+            </if>
+            <if test="tag!=null">
+                AND story_tag.content like CONCAT('%', #{tag} ,'%')
+            </if>
+        </where>
+        GROUP BY story.id
+        limit #{offset},#{limit}
+    </select>
+    <select id="getStoryCountByClassifyFuzzyQueryIncludeDrafts" resultType="java.lang.Integer">
+        select
+        count(DISTINCT story.id)
+        From story
+        <if test="tag!=null">
+            LEFT JOIN tag_relation ON story.id = tag_relation.storyId
+            LEFT JOIN story_tag ON tag_relation.tagId = story_tag.id
+        </if>
+        <where>
+            story.valid = 1
+            <if test="title!=null">
+                AND story.title like CONCAT('%', #{title} ,'%')
+            </if>
+            <if test="author!=null">
+                AND story.author like CONCAT('%', #{author} ,'%')
+            </if>
+            <if test="content!=null">
+                AND story.content like CONCAT('%', #{content} ,'%')
+            </if>
+            <if test="press!=null">
+                AND story.press like CONCAT('%', #{press} ,'%')
+            </if>
+            <if test="tag!=null">
+                AND story_tag.content like CONCAT('%', #{tag} ,'%')
+            </if>
+        </where>
+    </select>
+    <select id="getDraftList" resultType="cn.edu.nju.software.entity.Story">
+        SELECT 
+        <include refid="fields"/>
+        from story
+        where valid = 1 and draft = 1
+        limit #{0},#{1}
+    </select>
+    <select id="getDraftCount" resultType="java.lang.Integer">
+        SELECT
+        count(id)
+        from story
+        where valid = 1 and draft = 1
+    </select>
+    <select id="getStoryCountByFuzzyQuery" resultType="java.lang.Integer">
+        select
+        count(DISTINCT story.id)
+        From story
+        LEFT JOIN tag_relation ON story.id = tag_relation.storyId
+        LEFT JOIN story_tag ON tag_relation.tagId = story_tag.id
+        where story.valid = 1 and draft = 0
+        AND
+        <foreach collection="queryList" item="query" index="index" open="(" separator="," close=")">
+            story.title like CONCAT('%', #{query} ,'%')
+
+            OR story.author like CONCAT('%', #{query} ,'%')
+
+            OR story.press like CONCAT('%', #{query} ,'%')
+
+            OR story_tag.content  like CONCAT('%', #{query} ,'%')
+        </foreach>
+
+    </select>
+    <select id="getAllStoriesIncludeDrafts" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="fields"></include>
+        from story
+        where valid = 1
+    </select>
+    <select id="getStoryListByPageIncludeDrafts" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="fields"></include>
+        from story
+        where valid = 1
+        limit #{0},#{1}
+    </select>
+    <select id="getStoryCountIncludeDrafts" resultType="java.lang.Integer">
+        select count(id)
+        from story WHERE valid = 1
+    </select>
+    <select id="getStoryByIdIncludeDrafts" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="fields"></include>
+        from story
+        where id = #{0} and valid = 1
+    </select>
+    <select id="getStoryCountByTitleIncludeDrafts" resultType="java.lang.Integer">
+        select count(id)
+        from story
+        where title like CONCAT('%', #{0} ,'%') and valid = 1
     </select>
 
     <update id="newTell">
@@ -195,5 +407,12 @@
         tellCount = tellCount-1
         where valid = 1 and id=#{0}
     </update>
+    <update id="setDraftCompleteByStoryId">
+        update story
+        set
+        dratf=0
+        where valid=1 and id=#{storyId}
+    </update>
+
 
 </mapper>

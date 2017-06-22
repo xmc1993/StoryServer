@@ -28,6 +28,8 @@ public interface StoryDao {
 
     List<Story> getAllStories();
 
+    List<Story> getAllStoriesIncludeDrafts();
+
     boolean updateStory(Story story);
 
     boolean deleteHard(int id);
@@ -36,7 +38,7 @@ public interface StoryDao {
 
     List<Story> getStoryListByPage(int offset, int limit);
 
-    List<Story> getStoryListByIdList(@Param("idList")List<Integer> idList);
+    List<Story> getStoryListByIdList(@Param("idList") List<Integer> idList, @Param("offset")Integer offset,@Param("limit") Integer limit);
 
     boolean recommendStory(int id);
 
@@ -49,4 +51,42 @@ public interface StoryDao {
     boolean deleteTell(int id);
 
     Integer getStoryCount();
+
+    Integer getStoryCountByTitle(String title);
+
+    Integer getStoryIdCountByTagIdList(@Param("idList")List<Integer> idList);
+
+    Integer getRecommendedStoryCount();
+
+    Integer getStoryCountByIdList(@Param("idList") List<Integer> idList);
+
+    List<Story> getStoryByFuzzyQuery(@Param("query") List<String> queryList, @Param("offset")Integer offset, @Param("limit")Integer limit);
+
+    Integer getStoryCountByFuzzyQuery(@Param("query") List<String> queryList);
+
+    int addStoryLikeCount(int storyId);
+
+    int delStoryLikeCount(int storyId);
+
+
+    List<Story> getStoryListByClassifyFuzzyQueryIncludeDrafts(@Param("title") String title, @Param("author") String author, @Param("content") String content,
+                                                              @Param("press") String press, @Param("tag") String tag, @Param("offset") Integer offset,
+                                                              @Param("limit") Integer limit);
+
+    Integer getStoryCountByClassifyFuzzyQueryIncludeDrafts(@Param("title") String title, @Param("author") String author, @Param("content") String content,
+                                                           @Param("press") String press, @Param("tag") String tag);
+
+    List<Story> getDraftList(Integer offset,Integer limit);
+
+    Integer getDraftCount();
+
+    boolean setDraftCompleteByStoryId(@Param("storyId") Integer storyId);
+
+    List<Story> getStoryListByPageIncludeDrafts(int offset, int limit);
+
+    Integer getStoryCountIncludeDrafts();
+
+    Story getStoryByIdIncludeDrafts(int id);
+
+    Integer getStoryCountByTitleIncludeDrafts(String query);
 }

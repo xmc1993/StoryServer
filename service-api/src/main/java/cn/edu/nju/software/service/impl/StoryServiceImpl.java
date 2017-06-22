@@ -1,6 +1,8 @@
 package cn.edu.nju.software.service.impl;
 
 import cn.edu.nju.software.dao.StoryDao;
+import cn.edu.nju.software.dao.UserDao;
+import cn.edu.nju.software.dao.UserRelationStoryDao;
 import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.service.StoryService;
@@ -10,12 +12,9 @@ import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.MultimediaInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.sound.sampled.*;
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +28,10 @@ public class StoryServiceImpl implements StoryService {
     private StoryDao storyDao;
     @Autowired
     private WorksDao worksDao;
-
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private UserRelationStoryDao userRelationStoryDao;
     @Override
     public boolean saveStory(Story story) {
         return storyDao.saveStory(story);
@@ -37,12 +39,22 @@ public class StoryServiceImpl implements StoryService {
 
     @Override
     public boolean deleteStoryById(int id) {
+        List<Integer> userIdList=userRelationStoryDao.getUserIdListByStoryId(id);
+        for(Integer userId:userIdList){
+            userDao.delLikeStoryCount(userId);
+            userRelationStoryDao.delete(id,userId);
+        }
         return storyDao.deleteStoryById(id);
     }
 
     @Override
     public Story getStoryById(int id) {
         return storyDao.getStoryById(id);
+    }
+
+    @Override
+    public Story getStoryByIdIncludeDrafts(int id) {
+        return storyDao.getStoryByIdIncludeDrafts(id);
     }
 
     @Override
@@ -82,9 +94,18 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public List<Story> getStoryListByIdList(List<Integer> idList) {
+    public List<Story> getStoryListByPageIncludeDrafts(int offset, int limit) {
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        return storyDao.getStoryListByPageIncludeDrafts(offset, limit);
+    }
+
+    @Override
+    public List<Story> getStoryListByIdList(List<Integer> idList, Integer offset, Integer limit) {
         idList.add(-1);//防止mybatis查询出错
-        return storyDao.getStoryListByIdList(idList);
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        return storyDao.getStoryListByIdList(idList,offset,limit);
     }
 
     @Override
@@ -110,6 +131,11 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
+    public Integer getRecommendedStoryCount() {
+        return storyDao.getRecommendedStoryCount();
+    }
+
+    @Override
     public boolean newTell(int id) {
         return storyDao.newTell(id);
     }
@@ -122,6 +148,11 @@ public class StoryServiceImpl implements StoryService {
     @Override
     public Integer getStoryCount(){
         return storyDao.getStoryCount();
+    }
+
+    @Override
+    public Integer getStoryCountIncludeDrafts(){
+        return storyDao.getStoryCountIncludeDrafts();
     }
 
     @Override
@@ -145,5 +176,82 @@ public class StoryServiceImpl implements StoryService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public Integer getStoryCountByTitle(String query) {
+        return storyDao.getStoryCountByTitle(query);
+    }
+    @Override
+    public Integer getStoryCountByTitleIncludeDrafts(String query) {
+        return storyDao.getStoryCountByTitleIncludeDrafts(query);
+    }
+
+    @Override
+    public Integer getStoryCountByIdList(List<Integer> idList) {
+        idList.add(-1);//防止mybatis查询出错
+        return storyDao.getStoryCountByIdList(idList);
+    }
+    @Override
+    public List <Story>  getStoryByFuzzyQuery(String query, Integer offset, Integer limit){
+        if(query !=null&& query.trim()=="") return null;
+        String[] queries=query.split(" ");
+        List<String> queryList=new ArrayList<String>();
+        for(String temp:queries){
+            if(temp.trim()!="")  queryList.add(temp.trim());
+        }
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        return storyDao.getStoryByFuzzyQuery(queryList,offset,limit);
+    }
+
+    @Override
+    public List<Story> getStoryByClassifyFuzzyQueryInludeDrafts(String title, String author, String content, String press, String tag, Integer offset, Integer limit){
+        if(title!=null&&title.trim()=="") title=null;
+        else if(title!=null) title=title.trim();
+        if(author!=null&&author.trim()=="") author=null;
+        else if(author!=null) author=author.trim();
+        if(content!=null&&content.trim()=="") content=null;
+        else if(content!=null) content=content.trim();
+        if(press!=null&&press.trim()=="") press=null;
+        else if(press!=null) press=press.trim();
+        if(tag!=null&&tag.trim()=="") tag=null;
+        else if(tag!=null) tag=tag.trim();
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        return storyDao.getStoryListByClassifyFuzzyQueryIncludeDrafts(
+                title, author, content, press, tag, offset,  limit);
+    }
+    @Override
+    public Integer getStoryCountByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, String tag){
+        if(title!=null&&title.trim()=="") title=null;
+        else if(title!=null) title=title.trim();
+        if(author!=null&&author.trim()=="") author=null;
+        else if(author!=null) author=author.trim();
+        if(content!=null&&content.trim()=="") content=null;
+        else if(content!=null) content=content.trim();
+        if(press!=null&&press.trim()=="") press=null;
+        else if(press!=null) press=press.trim();
+        if(tag!=null&&tag.trim()=="") tag=null;
+        else if(tag!=null) tag=tag.trim();
+        return storyDao.getStoryCountByClassifyFuzzyQueryIncludeDrafts(title, author, content, press, tag);
+    }
+
+    @Override
+    public boolean setDraftComplete(Integer storyId){
+        if(storyDao.getStoryById(storyId).getDraft()==0) return false;
+        return storyDao.setDraftCompleteByStoryId(storyId);
+    }
+
+    @Override
+    public Integer getDraftCount(){
+        return storyDao.getDraftCount();
+    }
+
+    @Override
+    public List<Story> getDraftList(Integer offset, Integer limit){
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        return storyDao.getDraftList(offset,limit);
     }
 }

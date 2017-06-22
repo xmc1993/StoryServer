@@ -12,6 +12,8 @@ import java.util.List;
 public interface AppUserService {
 
 
+    boolean updateUser(User user);
+
     User getUserByMobileOrId(String unionId);
 
     User getUserByMobile(String mobile);
