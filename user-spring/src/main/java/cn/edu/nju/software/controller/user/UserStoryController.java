@@ -48,7 +48,8 @@ public class UserStoryController extends BaseController {
         Story story = storyService.getStoryById(id);
         if (story == null) {
             responseData.jsonFill(2, "该故事不存在", null);
-        } else {
+        }
+        else{
             responseData.jsonFill(1, null, story);
         }
         return responseData;

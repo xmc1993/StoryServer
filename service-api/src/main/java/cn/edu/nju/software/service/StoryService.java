@@ -15,6 +15,8 @@ public interface StoryService {
 
     Story getStoryById(int id);
 
+    Story getStoryByIdIncludeDrafts(int id);
+
     Story getStoryByIdHard(int id);
 
     List<Story> getAllStories();
@@ -22,6 +24,8 @@ public interface StoryService {
     Story updateStory(Story story);
 
     List<Story> getStoryListByPage(int offset, int limit);
+
+    List<Story> getStoryListByPageIncludeDrafts(int offset, int limit);
 
     List<Story> getStoryListByIdList(List<Integer> idList, Integer offset, Integer limit);
 
@@ -41,17 +45,21 @@ public interface StoryService {
 
     Integer getStoryCount();
 
+    Integer getStoryCountIncludeDrafts();
+
     String getOriginSoundLength(File file);
 
     Integer getStoryCountByTitle(String query);
+
+    Integer getStoryCountByTitleIncludeDrafts(String query);
 
     Integer getStoryCountByIdList(List<Integer> idList);
 
     List <Story>  getStoryByFuzzyQuery(String query, Integer offset, Integer limit);
 
-    List<Story>  getStoryByClassifyFuzzyQuery(String title, String author, String content, String press, String tag, Integer offset, Integer limit);
+    List<Story> getStoryByClassifyFuzzyQueryInludeDrafts(String title, String author, String content, String press, String tag, Integer offset, Integer limit);
 
-    Integer getStoryCountByClassifyFuzzyQuery(String title, String author, String content, String press, String tag);
+    Integer getStoryCountByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, String tag);
 
     boolean setDraftComplete(Integer storyId);
 

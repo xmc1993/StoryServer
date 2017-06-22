@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.nju.software.dao.ReviewDao" >
+  <resultMap id="BaseResultMap" type="cn.edu.nju.software.entity.Review" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="workId" property="workId" jdbcType="INTEGER" />
+    <result column="parentId" property="parentId" jdbcType="INTEGER" />
+    <result column="fromUserId" property="fromUserId" jdbcType="INTEGER" />
+    <result column="toUserId" property="toUserId" jdbcType="INTEGER" />
+    <result column="subCommentCount" property="subCommentCount" jdbcType="INTEGER" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="All_Column_List" >
+    id, worksId, parentId, fromUserId, toUserId, content,subCommentCount, createTime, updateTime
+  </sql>
+
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="All_Column_List" />
+    from reviews
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectReviewListByParentId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="All_Column_List" />
+    from reviews
+    where workId = #{workId} and parentId = #{parentId}
+  </select>
+  <select id="selectReviewListByWorkId" resultType="cn.edu.nju.software.entity.Review">
+    select
+    <include refid="All_Column_List" />
+    from reviews
+    where workId = #{workId}
+  </select>
+
+  <delete id="deleteById" parameterType="java.lang.Integer" >
+    delete from reviews
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.nju.software.entity.Review" >
+    insert into reviews (id, worksId, parentId, 
+      fromUserId, toUserId, subCommentCount, 
+      createTime, updateTime, content
+      )
+    values (#{id,jdbcType=INTEGER}, #{worksid,jdbcType=INTEGER}, #{parentid,jdbcType=INTEGER}, 
+      #{fromuserid,jdbcType=INTEGER}, #{touserid,jdbcType=INTEGER}, #{subcommentcount,jdbcType=INTEGER}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <update id="updateById" parameterType="cn.edu.nju.software.entity.Review" >
+    update reviews
+    set worksId = #{worksid,jdbcType=INTEGER},
+      parentId = #{parentid,jdbcType=INTEGER},
+      fromUserId = #{fromuserid,jdbcType=INTEGER},
+      toUserId = #{touserid,jdbcType=INTEGER},
+      subCommentCount = #{subcommentcount,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

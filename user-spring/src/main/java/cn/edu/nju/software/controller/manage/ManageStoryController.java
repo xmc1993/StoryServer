@@ -175,7 +175,7 @@ public class ManageStoryController {
     public Story getStoryId(
             @ApiParam("故事ID") @PathVariable int id,
             HttpServletRequest request, HttpServletResponse response) {
-        Story story = storyService.getStoryById(id);
+        Story story = storyService.getStoryByIdIncludeDrafts(id);
         if (story == null) {
             throw new RuntimeException("无效的ID");
         } else {
@@ -190,7 +190,7 @@ public class ManageStoryController {
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        List<Story> storyList = storyService.getStoryListByPage(offset, limit);
+        List<Story> storyList = storyService.getStoryListByPageIncludeDrafts(offset, limit);
         ResponseData<List<Story>> result=new ResponseData<>();
         if(storyList==null){
             result.jsonFill(2,"获取故事列表失败",null);
@@ -198,7 +198,7 @@ public class ManageStoryController {
         }
         else{
             result.jsonFill(1,null,storyList);
-            result.setCount(storyService.getStoryCount());
+            result.setCount(storyService.getStoryCountIncludeDrafts());
             return result;
         }
     }
@@ -256,7 +256,7 @@ public class ManageStoryController {
     @RequestMapping(value = "/storyCount", method = {RequestMethod.GET})
     @ResponseBody
     public Integer getStoryCount(){
-        return storyService.getStoryCount();
+        return storyService.getStoryCountIncludeDrafts();
     }
 
     @ApiOperation(value = "模糊查询获取故事", notes = "")
@@ -271,14 +271,14 @@ public class ManageStoryController {
             @ApiParam("offset") @RequestParam(value = "offset") int offset,
             @ApiParam("limit") @RequestParam(value = "limit") int limit){
         ResponseData<List<Story>> result=new ResponseData<>();
-        List<Story> stories= storyService.getStoryByClassifyFuzzyQuery(title,author,content,press,tag,offset,limit);
+        List<Story> stories= storyService.getStoryByClassifyFuzzyQueryInludeDrafts(title,author,content,press,tag,offset,limit);
         if(stories==null){
             result.jsonFill(2,"模糊查询失败",null);
             return result;
         }
         else{
             result.jsonFill(1,null,stories);
-            result.setCount(storyService.getStoryCountByClassifyFuzzyQuery(title,author,content,press,tag));
+            result.setCount(storyService.getStoryCountByClassifyFuzzyQueryIncludeDrafts(title,author,content,press,tag));
             return result;
         }
     }

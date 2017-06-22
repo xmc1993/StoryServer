@@ -53,6 +53,11 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
+    public Story getStoryByIdIncludeDrafts(int id) {
+        return storyDao.getStoryByIdIncludeDrafts(id);
+    }
+
+    @Override
     public Story getStoryByIdHard(int id) {
         return storyDao.getStoryByIdHard(id);
     }
@@ -86,6 +91,13 @@ public class StoryServiceImpl implements StoryService {
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         return storyDao.getStoryListByPage(offset, limit);
+    }
+
+    @Override
+    public List<Story> getStoryListByPageIncludeDrafts(int offset, int limit) {
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        return storyDao.getStoryListByPageIncludeDrafts(offset, limit);
     }
 
     @Override
@@ -139,6 +151,11 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
+    public Integer getStoryCountIncludeDrafts(){
+        return storyDao.getStoryCountIncludeDrafts();
+    }
+
+    @Override
     public String getOriginSoundLength(File file) {
         Encoder encoder = new Encoder();
         MultimediaInfo m = null;
@@ -165,6 +182,10 @@ public class StoryServiceImpl implements StoryService {
     public Integer getStoryCountByTitle(String query) {
         return storyDao.getStoryCountByTitle(query);
     }
+    @Override
+    public Integer getStoryCountByTitleIncludeDrafts(String query) {
+        return storyDao.getStoryCountByTitleIncludeDrafts(query);
+    }
 
     @Override
     public Integer getStoryCountByIdList(List<Integer> idList) {
@@ -185,7 +206,7 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public List<Story>  getStoryByClassifyFuzzyQuery(String title, String author, String content, String press, String tag, Integer offset, Integer limit){
+    public List<Story> getStoryByClassifyFuzzyQueryInludeDrafts(String title, String author, String content, String press, String tag, Integer offset, Integer limit){
         if(title!=null&&title.trim()=="") title=null;
         else if(title!=null) title=title.trim();
         if(author!=null&&author.trim()=="") author=null;
@@ -198,11 +219,11 @@ public class StoryServiceImpl implements StoryService {
         else if(tag!=null) tag=tag.trim();
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
-        return storyDao.getStoryListByClassifyFuzzyQuery(
+        return storyDao.getStoryListByClassifyFuzzyQueryIncludeDrafts(
                 title, author, content, press, tag, offset,  limit);
     }
     @Override
-    public Integer getStoryCountByClassifyFuzzyQuery(String title, String author, String content, String press, String tag){
+    public Integer getStoryCountByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, String tag){
         if(title!=null&&title.trim()=="") title=null;
         else if(title!=null) title=title.trim();
         if(author!=null&&author.trim()=="") author=null;
@@ -213,7 +234,7 @@ public class StoryServiceImpl implements StoryService {
         else if(press!=null) press=press.trim();
         if(tag!=null&&tag.trim()=="") tag=null;
         else if(tag!=null) tag=tag.trim();
-        return storyDao.getStoryCountByClassifyFuzzyQuery(title, author, content, press, tag);
+        return storyDao.getStoryCountByClassifyFuzzyQueryIncludeDrafts(title, author, content, press, tag);
     }
 
     @Override
@@ -228,7 +249,7 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public List<Story> getDraftList(Integer offset,Integer limit){
+    public List<Story> getDraftList(Integer offset, Integer limit){
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         return storyDao.getDraftList(offset,limit);
