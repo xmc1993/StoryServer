@@ -20,7 +20,9 @@
   <delete id="deleteWorkUserLogByIdList">
     delete from work_user_log
     where id in
-    <foreach collection="idList" item="id" open="(" separator="," close=")"/>
+    <foreach collection="idList" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
   </delete>
   <select id="getUserIdListByWorkId" resultType="java.lang.Integer">
     select userId

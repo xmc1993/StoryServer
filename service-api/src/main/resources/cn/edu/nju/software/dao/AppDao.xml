@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.AppDao">
+    <resultMap id="BaseResultMap" type="cn.edu.nju.software.entity.App" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="version" property="version" jdbcType="VARCHAR" />
+        <result column="updateHint" property="updateHint" jdbcType="VARCHAR" />
+        <result column="fileSize" property="fileSize" jdbcType="VARCHAR" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="fields">
+        id, version, updateHint,fileSize, url, createTime, updateTime
+    </sql>
+    <insert id="insertApp">
+        insert into apps
+        (<include refid="fields"/>)
+        VALUES
+        (#{app.id},#{app.version},#{app.updateHint},#{app.fileSize},#{app.url},#{app.createTime},#{app.updateTime})
+    </insert>
+    <update id="updateApp">
+        update apps set
+        version = #{app.version},
+        updateHint = #{app.updateHint},
+        fileSize = #{app.fileSize},
+        url = #{app.url},
+        updateTime =#{app.updateTime}
+        where id = #{app.id}
+    </update>
+    <delete id="deleteAppById">
+        delete from apps
+        where id = #{id}
+    </delete>
+    <delete id="deleteAppByIdList">
+        delete from apps
+        where id in
+        <foreach collection="idList" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="getAppListByPageDesc" resultType="cn.edu.nju.software.entity.App">
+        select
+        <include refid="fields"/>
+        from apps
+        order by createTime DESC
+        limit #{offset},#{limit}
+    </select>
+    <select id="getAppById" resultType="cn.edu.nju.software.entity.App">
+        select <include refid="fields"/>
+        from apps
+        where id = #{id}
+    </select>
+    <select id="getAppListByIdList" resultType="cn.edu.nju.software.entity.App">
+        select
+        <include refid="fields"/>
+        from apps
+        where id in
+        <foreach collection="idList" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        order by createTime DESC
+    </select>
+    <select id="getAppCount" resultType="java.lang.Integer">
+        select count(DISTINCT id)
+        from apps
+    </select>
+</mapper>

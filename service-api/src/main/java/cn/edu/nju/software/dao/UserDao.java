@@ -29,4 +29,6 @@ public interface UserDao {
 	public int addLikeStoryCount(int userId);
 
 	public int delLikeStoryCount(int userId);
+
+    Integer getLikeCountByUserId(int userId);
 }

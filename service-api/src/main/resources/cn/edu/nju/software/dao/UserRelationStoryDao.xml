@@ -43,7 +43,7 @@
         where userId=#{userId} and storyid=#{storyId}
     </delete>
     <select id="getStoryIdListByUserId" resultType="java.lang.Integer">
-        SELECT storyid
+        SELECT storyId
         from  user_relation_story
         where userId = #{userId}
     </select>

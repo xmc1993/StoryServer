@@ -52,9 +52,10 @@ public class UserRelationStoryServiceImpl implements UserRelationStoryService {
     }
     @Override
     public Integer getLikeStoriesCount(int userId){
-        List<Integer> idList = userRelationStoryDao.getStoryIdListByUserId(userId);
+        /*List<Integer> idList = userRelationStoryDao.getStoryIdListByUserId(userId);
         if(idList.size()==0) return 0;
-        return storyDao.getStoryCountByIdList(idList);
+        return storyDao.getStoryCountByIdList(idList);*/
+        return userDao.getLikeCountByUserId(userId);
     }
 
     @Override

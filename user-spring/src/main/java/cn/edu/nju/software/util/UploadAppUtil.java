@@ -10,22 +10,18 @@ import java.io.IOException;
 /**
  * Created by xmc1993 on 2017/5/12.
  */
-public final class UploadFileUtil {
-    private static final Logger logger = LoggerFactory.getLogger(UploadFileUtil.class);
+public final class UploadAppUtil {
+    private static final Logger logger = LoggerFactory.getLogger(UploadAppUtil.class);
 
     //资源服务器的base url
     public static final String SOURCE_BASE_URL = "http://120.27.219.173/source";
 
     public static final String URL_BASE = "/source";
 
-    public static final String DIR_BASE = "/data";
-   /* public static final String SOURCE_BASE_URL = "C:/source";
+    public static final String DIR_BASE = "/data/apps";
 
-    public static final String URL_BASE = "/source";
 
-    public static final String DIR_BASE = "/data";*/
-
-    private UploadFileUtil() {
+    private UploadAppUtil() {
     }
 
     /**
@@ -34,7 +30,7 @@ public final class UploadFileUtil {
      * @return
      */
     public static String getBaseUrl() {
-        return System.getenv().get("STORY_HOME") != null ? System.getenv().get("STORY_HOME") : "/data";
+        return DIR_BASE;
     }
 
     /**
@@ -60,7 +56,7 @@ public final class UploadFileUtil {
      * @param fileName
      * @return
      */
-    public static boolean mvFile(MultipartFile uploadFile, String desPath, String fileName) {
+    public static boolean mvApp(MultipartFile uploadFile, String desPath, String fileName) {
         File desFile = new File(new File(desPath), fileName);// 根据parent抽象路径名和child路径名字符串创建一个新File实例。
         if (!desFile.getParentFile().exists()) {// 判断路径"/image/#{businessId}"是否存在
             desFile.getParentFile().mkdirs();
@@ -86,7 +82,7 @@ public final class UploadFileUtil {
      *
      * @return
      */
-    public static boolean deleteFile(String fileUri) {
+    public static boolean deleteApp(String fileUri) {
         if (StringUtil.isEmpty(fileUri)) return true;
         File file = new File(fileUri);
         if (file.exists()) {
@@ -111,16 +107,12 @@ public final class UploadFileUtil {
      * @param url
      * @return
      */
-    public static boolean deleteFileByUrl(String url) {
+    public static boolean deleteAppByUrl(String url) {
         if (StringUtil.isEmpty(url)) return true;
         String fileUri = getRealPathFromUrl(url);
-        return deleteFile(fileUri);
+        return deleteApp(fileUri);
     }
 
-    public static void main(String[] args) {
-        String result = getRealPathFromUrl("http://120.27.219.173/source/cover/XKpa5J5vOj9rQVnn.jpg");
-        System.out.println(result);
-    }
 
 
 }
