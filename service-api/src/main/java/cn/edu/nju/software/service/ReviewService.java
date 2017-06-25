@@ -16,8 +16,19 @@ public interface ReviewService {
 
     boolean updateReview(int reviewId, int fromUserId, String content);
 
+
+    boolean deleteByWorkAuthor(int[] reviewIdList, int userId);
+
+    boolean deleteByUser(int[] reviewIdList, int userId);
+
     boolean deleteReviewByWorkAuthor(int reviewId, int userId);
 
-    //TODO 用户删除自己的一级评论
+    boolean deleteSubReviewByWorkAuthor(int reviewId, int userId);
+
+
     boolean deleteReviewByUser(int reviewId, int userId);
+
+    boolean deleteSubReviewByParentUser(int reviewId, int userId);
+
+    boolean deleteSubReviewByUser(int reviewId, int userId);
 }
