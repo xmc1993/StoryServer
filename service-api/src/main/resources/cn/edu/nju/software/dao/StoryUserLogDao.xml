@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.nju.software.dao.StoryUserLogDao" >
+  <resultMap id="BaseResultMap" type="cn.edu.nju.software.entity.StoryUserLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="userId" property="userId" jdbcType="INTEGER" />
+    <result column="storyId" property="storyId" jdbcType="INTEGER" />
+    <result column="channel" property="channel" jdbcType="VARCHAR" />
+    <result column="accessTime" property="accessTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userId, storyId, channel, accessTime
+  </sql>
+  <insert id="insertStoryUserLog">
+    insert into story_user_log (
+    <include refid="Base_Column_List"/>
+    )
+    VALUES (
+    #{storyUserLog.id},
+    #{storyUserLog.userId},
+    #{storyUserLog.storyId},
+    #{storyUserLog.channel},
+    #{storyUserLog.accessTime}
+    )
+  </insert>
+  <delete id="deleteStoryUserLogByIdList">
+    delete from story_user_log
+    where id in
+    <foreach collection="idList" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </delete>
+  <select id="getUserIdListByStoryId" resultType="java.lang.Integer">
+    select
+    userId
+    from story_user_log
+    where storyId = #{storyId}
+    limit #{offset},#{limit}
+  </select>
+  <select id="getStoryIdListByUserId" resultType="java.lang.Integer">
+    select
+    storyId
+    from story_user_log
+    where userId = #{userId}
+    limit #{offset},#{limit}
+  </select>
+
+</mapper>
