@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/manage/updateDiscovery" method="post"
+      enctype="multipart/form-data">
+    <p>
+        id:<input style="display: block" type="text" name="id">
+    </p>
+    <p>
+        标题:<input style="display: block" type="text" name="title">
+    </p>
+    <p>
+        描述:<input style="display: block" type="text" name="description">
+    </p>
+    <p>
+        图片:<input style="display: block" type="file" name="picture">
+    </p>
+    <p>
+        压缩包:<input style="display: block" type="file" name="zip">
+    </p>
+    <input type="submit" value="提交">
+</form>
+</body>
+</html>

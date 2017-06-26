@@ -5,12 +5,14 @@ import cn.edu.nju.software.entity.Discovery;
 import cn.edu.nju.software.service.DiscoveryService;
 import cn.edu.nju.software.util.Const;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by Kt on 2017/6/26.
  */
+@Service
 public class DiscoveryServiceImpl implements DiscoveryService {
     @Autowired
     private DiscoveryDao discoveryDao;
