@@ -392,6 +392,11 @@
         from story
         where title like CONCAT('%', #{0} ,'%') and valid = 1
     </select>
+    <select id="getExactStoryByTitle" resultType="cn.edu.nju.software.entity.Story">
+        select <include refid="fields"/>
+        from story
+        where title = #{title} and valid = 1
+    </select>
 
     <update id="newTell">
         update story

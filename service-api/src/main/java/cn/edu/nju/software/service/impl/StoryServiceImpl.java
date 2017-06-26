@@ -265,4 +265,9 @@ public class StoryServiceImpl implements StoryService {
         }
         return storyDao.getStoryCountByFuzzyQuery(queryList);
     }
+
+    @Override
+    public Story getExactStoryByTitle(String title){
+        return storyDao.getExactStoryByTitle(title);
+    }
 }

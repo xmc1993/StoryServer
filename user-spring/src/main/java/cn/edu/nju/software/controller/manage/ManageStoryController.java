@@ -57,6 +57,8 @@ public class ManageStoryController {
             @ApiParam("原音") @RequestParam(value = "originSoundFile", required = false) MultipartFile originSoundFile,
             @ApiParam("朗读指导")@RequestParam(value = "guideSoundFile",required = false)MultipartFile guideSoundFile,
             HttpServletRequest request, HttpServletResponse response) {
+        Story dbStory=storyService.getExactStoryByTitle(title);
+        if(dbStory!=null) return dbStory;
         Story story = new Story();
         if (!coverFile.isEmpty()) {
             story.setCoverUrl(uploadFile(coverFile));

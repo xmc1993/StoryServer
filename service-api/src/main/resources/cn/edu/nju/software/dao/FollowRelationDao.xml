@@ -10,7 +10,7 @@
         updateTime
     </sql>
 
-    <resultMap id="storyTag" type="cn.edu.nju.software.entity.StoryTag">
+    <resultMap id="storyTag" type="cn.edu.nju.software.entity.FollowRelation">
         <id column="id" property="id"/>
         <id column="followerId" property="followerId"/>
         <id column="followeeId" property="followeeId"/>

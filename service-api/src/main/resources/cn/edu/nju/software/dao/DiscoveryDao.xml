@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.nju.software.dao.DiscoveryDao" >
+    <resultMap id="BaseResultMap" type="cn.edu.nju.software.entity.Discovery" >
+        <id column="id" property="id" />
+        <result column="title" property="title"/>
+        <result column="pictureUrl" property="pictureUrl" />
+        <result column="webUrl" property="webUrl"  />
+        <result column="description" property="description" />
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+    </resultMap>
+    <sql id="All_Column_List" >
+        id,prictureUrl,webUrl,description,createTime,updateTime
+    </sql>
+    <insert id="saveDiscovery">
+        insert into discoveries
+        (<include refid="All_Column_List"/> )
+        VALUES
+        (#{discovery.id},#{discovery.title},#{discovery.pictureUrl},#{discovery.webUrl},#{discovery.description},
+        #{discovery.createTime},#{discovery.updateTime})
+    </insert>
+    <update id="updateDiscovery">
+        update discoveries
+        set
+        pictureUrl = #{discovery.pictureUrl},
+        title = #{discovery.title}
+        webUrl = #{discovery.webUrl},
+        description = #{discovery.description},
+        updateTime = #{discovery.updateTime}
+        where id = #{discovery.id}
+    </update>
+    <delete id="deleteDiscoveryById">
+        delete from discoveries
+        where id = #{id}
+    </delete>
+    <delete id="deleteDiscoveryByIdList">
+        delete from discoveries
+        where id in
+        <foreach collection="idList" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="getDiscoveryByRandomPage" resultType="cn.edu.nju.software.entity.Discovery">
+         select <include refid="All_Column_List"/>
+        from discoveries
+        order by rand()
+        limit #{offset},#{limit}
+    </select>
+    <select id="getDiscoveryByCreateTimeDescPage" resultType="cn.edu.nju.software.entity.Discovery">
+        select <include refid="All_Column_List"/>
+        from discoveries
+        order by createTime DESC
+        limit #{offset},#{limit}
+    </select>
+    <select id="getDiscoveryById" resultType="cn.edu.nju.software.entity.Discovery">
+        select <include refid="All_Column_List"/>
+        from discoveries
+        where id=#{id}
+    </select>
+    <select id="getDiscoveryCount" resultType="java.lang.Integer">
+        select count(DISTINCT id)
+        from discoveries
+    </select>
+
+</mapper>

@@ -316,5 +316,13 @@
 			<artifactId>jave</artifactId>
 			<version>1.02</version>
 		</dependency>
+		<!--压缩实现依赖-->
+		<!-- https://mvnrepository.com/artifact/org.apache.ant/ant -->
+		<dependency>
+			<groupId>org.apache.ant</groupId>
+			<artifactId>ant</artifactId>
+			<version>1.8.2</version>
+		</dependency>
+
 	</dependencies>
 </project>

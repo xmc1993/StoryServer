@@ -68,4 +68,6 @@ public interface StoryService {
     List<Story> getDraftList(Integer offset, Integer limit);
 
     Integer getStoryCountByFuzzyQuery(String query);
+
+    Story getExactStoryByTitle(String title);
 }
