@@ -20,7 +20,8 @@ public final class UploadFileUtil {
     public static final String URL_BASE = "/source";
 
     public static final String DIR_BASE = "/data";
-    /*public static final String SOURCE_BASE_URL = "http://11111/source";
+
+   /* public static final String SOURCE_BASE_URL = "http://11111/source";
 
     public static final String URL_BASE = "/source";
 
@@ -150,7 +151,7 @@ public final class UploadFileUtil {
         if (StringUtil.isEmpty(localPath)) return null;
         int index = localPath.indexOf(DIR_BASE);
         String result = localPath.substring(index + DIR_BASE.length());
-        result = URL_BASE + result;
+        result = SOURCE_BASE_URL + result;
         return result;
     }
 }

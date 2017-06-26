@@ -3,14 +3,12 @@ package cn.edu.nju.software.controller.manage;
 import cn.edu.nju.software.entity.Discovery;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.DiscoveryService;
-import cn.edu.nju.software.util.AntZipUtil;
 import cn.edu.nju.software.util.FileUtil;
-import cn.edu.nju.software.util.UnZipUti;
+import cn.edu.nju.software.util.UnZipUtil;
 import cn.edu.nju.software.util.UploadFileUtil;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import org.apache.xpath.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,9 +47,10 @@ public class ManageDiscoveryController {
         if(zipFile.isEmpty()||pictureFile.isEmpty()){
             result.jsonFill(2,"请上传文件",false);
         }
-        if(zipFile.getContentType()!="application/x-zip-compressed") {
+        /*if(zipFile.getContentType()!="application/x-zip-compressed") {
             result.jsonFill(2,"错误的压缩格式",false);
-        }
+            return result;
+        }*/
         Discovery discovery = new Discovery();
         String pictureUrl = UploadFileUtil.uploadFile(pictureFile,DISCOVERY_PICTURE_ROOT);
         discovery.setPictureUrl(pictureUrl);
@@ -69,7 +68,7 @@ public class ManageDiscoveryController {
     @ApiOperation(value = "修改发现", notes = "")
     @RequestMapping(value = "/updateDiscovery", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<Boolean> saveDiscovery( @ApiParam("发现") @RequestParam(value = "id") int id,
+    public ResponseData<Boolean> updateDiscovery( @ApiParam("发现") @RequestParam(value = "id") int id,
             @ApiParam("标题") @RequestParam(value = "title",required = false) String title,
                                                @ApiParam("描述") @RequestParam(value = "description",required = false) String description,
                                                @ApiParam("图片") @RequestParam(value = "picture",required = false) MultipartFile pictureFile,
@@ -81,15 +80,16 @@ public class ManageDiscoveryController {
             result.jsonFill(2,"错误的id编号",false);
             return result;
         }
-        if(pictureFile!=null){
-            UploadFileUtil.deleteFile(discovery.getPictureUrl());
+        if(!pictureFile.isEmpty()){
+            UploadFileUtil.deleteFileByUrl(discovery.getPictureUrl());
         String pictureUrl = UploadFileUtil.uploadFile(pictureFile,DISCOVERY_PICTURE_ROOT);
         discovery.setPictureUrl(pictureUrl);
         }
-        if(zipFile!=null) {
-            if (zipFile.getContentType() != "application/x-zip-compressed") {
-                result.jsonFill(2, "错误的压缩格式", false);
-            }
+        if(!zipFile.isEmpty()) {
+            /*if(zipFile.getContentType()!="application/x-zip-compressed") {
+                result.jsonFill(2,"错误的压缩格式",false);
+                return result;
+            }*/
             FileUtil.deleteFile(UploadFileUtil.getRealPathFromUrl(discovery.getWebUrl().substring(0,discovery.getWebUrl().lastIndexOf("/"))));
             result = this.uploadDiscoveryZip(zipFile, discovery);
             if(result.getStatus()==2) return result;
@@ -149,7 +149,7 @@ public class ManageDiscoveryController {
     @ApiOperation(value = "分页获取发现时间排序", notes = "")
     @RequestMapping(value = "/Discoveries", method = {RequestMethod.GET})
     @ResponseBody
-    public  ResponseData<List<Discovery>>  deleteDiscovery(@ApiParam("offset") @RequestParam(value = "offset") int offset,
+    public  ResponseData<List<Discovery>>  getDiscoveryByPage(@ApiParam("offset") @RequestParam(value = "offset") int offset,
                                                    @ApiParam("limit") @RequestParam(value = "limit") int limit,HttpServletRequest request, HttpServletResponse response){
         ResponseData<List<Discovery>> result = new ResponseData<>();
         List<Discovery> discoveryList = discoveryService.getDiscoveryByCreateTimeDescPage(offset,limit);
@@ -158,6 +158,25 @@ public class ManageDiscoveryController {
         result.setCount(count);
         return result;
     }
+    @ApiOperation(value = "获取发现", notes = "")
+    @RequestMapping(value = "/Discovery", method = {RequestMethod.GET})
+    @ResponseBody
+    public  ResponseData<Discovery>  getDiscovery(@ApiParam("id") @RequestParam(value = "id") int id,
+                                                           HttpServletRequest request, HttpServletResponse response){
+        ResponseData<Discovery> result = new ResponseData<>();
+        Discovery discovery = discoveryService.getDiscoveryById(id);
+        int count = discoveryService.getDiscoveryCount();
+        result.jsonFill(1,null,discovery);
+        result.setCount(count);
+        return result;
+    }
+    @RequestMapping(value = "/testDiscovery", method = {RequestMethod.GET})
+    @ResponseBody
+    public boolean test(@ApiParam("id") @RequestParam(value = "id") int id,
+                        HttpServletRequest request, HttpServletResponse response){
+        discoveryService.deleteDiscovery(id);
+        return true;
+    }
     private ResponseData<Boolean> uploadDiscoveryZip(MultipartFile zipFile,Discovery discovery){
         ResponseData<Boolean> result= new ResponseData<>();
         String zipUrl = UploadFileUtil.uploadFile(zipFile,DISCOVERY_ZIP_ROOT);
@@ -165,7 +184,9 @@ public class ManageDiscoveryController {
         String upZipPath =UploadFileUtil.getRealPathFromUrl(zipUrl.substring(0,zipUrl.lastIndexOf(".")));
         String upZipName = zipUrl.substring(zipUrl.lastIndexOf("/")+1);
         try {
-            UnZipUti.unzip(zipPath+"/"+upZipName,upZipPath);
+            //UnZipUtil.unzip(zipPath+"/"+upZipName,upZipPath);
+            //AntZipUtil.unZip(zipPath+"/"+upZipName,upZipPath);
+            UnZipUtil.unZip(zipPath+"/"+upZipName,upZipPath);
         } catch (Exception e) {
             e.printStackTrace();
             result.jsonFill(2,"解压失败，请检查压缩文件",false);
@@ -187,4 +208,5 @@ public class ManageDiscoveryController {
         result.jsonFill(1,null,true);
         return result;
     }
+
 }

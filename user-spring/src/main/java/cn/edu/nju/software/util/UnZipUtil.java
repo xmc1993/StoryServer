@@ -7,13 +7,15 @@ import java.io.InputStream;
 import java.util.Enumeration;
 
 
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.taskdefs.Expand;
 import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipFile;
 
 /**
  * Created by Kt on 2017/6/26.
  */
-public class UnZipUti {
+public class UnZipUtil {
 
     public static synchronized void unzip(String zipFileName, String extPlace) throws Exception{
         unZipFiles(zipFileName, extPlace);
@@ -77,5 +79,42 @@ public class UnZipUti {
             e.printStackTrace();
             return false;
         }
+    }
+    public static void unZip(String sourceZip,String destDir) throws Exception{
+
+        try{
+
+            Project p = new Project();
+
+            Expand e = new Expand();
+
+            e.setProject(p);
+
+            e.setSrc(new File(sourceZip));
+
+            e.setOverwrite(false);
+
+            e.setDest(new File(destDir));
+
+            /*
+
+            ant下的zip工具默认压缩编码为UTF-8编码，
+
+            而winRAR软件压缩是用的windows默认的GBK或者GB2312编码
+
+            所以解压缩时要制定编码格式
+
+            */
+
+            e.setEncoding("UTF-8");  //根据linux系统的实际编码设置
+
+            e.execute();
+
+        }catch(Exception e){
+
+            throw e;
+
+        }
+
     }
 }

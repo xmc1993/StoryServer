@@ -11,7 +11,7 @@
         <result column="updateTime" property="updateTime"/>
     </resultMap>
     <sql id="All_Column_List" >
-        id,prictureUrl,webUrl,description,createTime,updateTime
+        id,title,pictureUrl,webUrl,description,createTime,updateTime
     </sql>
     <insert id="saveDiscovery">
         insert into discoveries
@@ -24,7 +24,7 @@
         update discoveries
         set
         pictureUrl = #{discovery.pictureUrl},
-        title = #{discovery.title}
+        title = #{discovery.title},
         webUrl = #{discovery.webUrl},
         description = #{discovery.description},
         updateTime = #{discovery.updateTime}
