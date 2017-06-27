@@ -2,6 +2,7 @@ package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.entity.SoundEffectTagRelation;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,4 +22,5 @@ public interface SoundEffectTagRelationService {
 
     List<Integer> getSoundEffectIdListByTagIdList(List<Integer> tagIds);
 
+    boolean updateRelation(int id, Integer tagId, Date updateTime);
 }

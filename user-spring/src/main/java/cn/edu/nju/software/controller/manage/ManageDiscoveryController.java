@@ -174,7 +174,9 @@ public class ManageDiscoveryController {
     @ResponseBody
     public boolean test(@ApiParam("id") @RequestParam(value = "id") int id,
                         HttpServletRequest request, HttpServletResponse response){
-        discoveryService.deleteDiscovery(id);
+        Discovery discovery= discoveryService.getDiscoveryById(id);
+        String temp = UploadFileUtil.getRealPathFromUrl(discovery.getWebUrl().substring(0, discovery.getWebUrl().lastIndexOf("/")));
+        FileUtil.deleteFile(UploadFileUtil.getRealPathFromUrl(discovery.getWebUrl().substring(0, discovery.getWebUrl().lastIndexOf("/"))));
         return true;
     }
     private ResponseData<Boolean> uploadDiscoveryZip(MultipartFile zipFile,Discovery discovery){

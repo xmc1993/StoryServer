@@ -42,7 +42,7 @@ public class ManageStoryController {
     @RequestMapping(value = "/stories", method = {RequestMethod.POST})
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public Story publicStory(
+    public ResponseData<Story> publicStory(
             @ApiParam("故事标题") @RequestParam String title,
             @ApiParam("作者") @RequestParam String author,
             @ApiParam("内容") @RequestParam String content,
@@ -57,8 +57,11 @@ public class ManageStoryController {
             @ApiParam("原音") @RequestParam(value = "originSoundFile", required = false) MultipartFile originSoundFile,
             @ApiParam("朗读指导")@RequestParam(value = "guideSoundFile",required = false)MultipartFile guideSoundFile,
             HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Story> result = new ResponseData<>();
         Story dbStory=storyService.getExactStoryByTitle(title);
-        if(dbStory!=null) return dbStory;
+        if(dbStory!=null) {
+            result.jsonFill(2,"重复的标题名称",dbStory);
+        }
         Story story = new Story();
         if (!coverFile.isEmpty()) {
             story.setCoverUrl(uploadFile(coverFile));
@@ -93,7 +96,8 @@ public class ManageStoryController {
         if (!res) {
             throw new RuntimeException("发布故事失败");
         }
-        return story;
+        result.jsonFill(1,null,story);
+        return result;
     }
 
 
