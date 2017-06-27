@@ -36,9 +36,6 @@ public class UserDiscoveryController {
             @ApiParam("limit") @RequestParam("limit") int limit,
             HttpServletRequest request,HttpServletResponse response){
         ResponseData<List<Discovery>> result = new ResponseData<>();
-        for(int id:excludeIdList){
-            System.out.println("测试"+id);
-        }
         List<Discovery> discoveryList = discoveryService.getDiscoveryByRandomPage(offset,limit,excludeIdList);
         result.jsonFill(1,null,discoveryList);
         result.setCount(discoveryService.getDiscoveryCount());

@@ -34,7 +34,7 @@ public class ManageDiscoveryController {
     @Autowired
     private DiscoveryService discoveryService;
     private static String DISCOVERY_PICTURE_ROOT = "/discovery/picture/";
-    private static String DISCOVERY_ZIP_ROOT = "/discovery/zip/";
+    private static String DISCOVERY_ZIP_ROOT = "/discovery/";
     @ApiOperation(value = "新增发现", notes = "")
     @RequestMapping(value = "/saveDiscovery", method = {RequestMethod.POST})
     @ResponseBody
@@ -186,9 +186,8 @@ public class ManageDiscoveryController {
         String upZipPath =UploadFileUtil.getRealPathFromUrl(zipUrl.substring(0,zipUrl.lastIndexOf(".")));
         String upZipName = zipUrl.substring(zipUrl.lastIndexOf("/")+1);
         try {
-            //UnZipUtil.unzip(zipPath+"/"+upZipName,upZipPath);
-            //AntZipUtil.unZip(zipPath+"/"+upZipName,upZipPath);
-            UnZipUtil.unZip(zipPath+"/"+upZipName,upZipPath);
+            UnZipUtil.unzip(zipPath+"/"+upZipName,upZipPath);
+            //UnZipUtil.unZip(zipPath+"/"+upZipName,upZipPath);
         } catch (Exception e) {
             e.printStackTrace();
             result.jsonFill(2,"解压失败，请检查压缩文件",false);

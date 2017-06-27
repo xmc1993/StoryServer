@@ -31,4 +31,6 @@ public interface UserDao {
 	public int delLikeStoryCount(int userId);
 
     Integer getLikeCountByUserId(int userId);
+
+    List<User> getUserListByIdList(List<Integer> idList, int offset, int limit);
 }

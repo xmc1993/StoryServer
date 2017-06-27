@@ -112,6 +112,14 @@
         from user
         where id = #{userId}
     </select>
+    <select id="getUserListByIdList" resultType="cn.edu.nju.software.entity.User">
+        select <include refid="fields"/>
+        from USER
+        WHERE id in
+        <foreach collection="idList" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 
 
 </mapper>

@@ -13,6 +13,16 @@ import java.util.List;
 public interface StoryUserLogDao {
     public boolean insertStoryUserLog(@Param("storyUserLog") StoryUserLog storyUserLog);
     public Integer deleteStoryUserLogByIdList(@Param("idList") List<Integer> idList);
-    public List<Integer> getUserIdListByStoryId(@Param("storyId") int storyId, @Param("offset") int offset, @Param("limit") int limit);
-    public List<Integer> getStoryIdListByUserId(@Param("userId") int userId, @Param("offset") int offset, @Param("limit") int limit);
+    public StoryUserLog getStoryUserLogById(@Param("id") int id);
+    public List<Integer> getUserIdListByStoryIdTimeDesc(@Param("storyId") int storyId, @Param("offset") int offset, @Param("limit") int limit);
+    public List<Integer> getStoryIdListByUserIdTimeDesc(@Param("userId") int userId, @Param("offset") int offset, @Param("limit") int limit);
+    public int getUserCountByStoryId(@Param("storyId") int storyId);
+    public int getStoryCountByUserId(@Param("userId") int userId);
+
+    boolean deleteStoryUserLogById(@Param("id") int id);
+
+
+    List<StoryUserLog> getStoryUserLogByPageTimeDesc(int offset, int limit);
+
+    int getStoryUserLogCount();
 }

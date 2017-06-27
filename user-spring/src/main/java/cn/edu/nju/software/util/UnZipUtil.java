@@ -38,6 +38,9 @@ public class UnZipUtil {
             }
             String strPath, gbkPath, strtemp;
             File tempFile = new File(extPlace);
+            //管理权限加入 可能有问题
+            tempFile.setReadable(true);
+            tempFile.setExecutable(true);
             strPath = tempFile.getAbsolutePath();
             Enumeration<?> e = zipFile.getEntries();
             while(e.hasMoreElements()){
@@ -47,6 +50,9 @@ public class UnZipUtil {
                     strtemp = strPath + File.separator + gbkPath;
                     File dir = new File(strtemp);
                     dir.mkdirs();
+                    //管理权限加入 可能有问题
+                    dir.setReadable(true);
+                    dir.setExecutable(true);
                     continue;
                 } else {
                     //读写文件
@@ -62,6 +68,9 @@ public class UnZipUtil {
                             File subdir = new File(temp);
                             if(!subdir.exists())
                                 subdir.mkdir();
+                            //管理权限加入 可能有问题
+                            subdir.setReadable(true);
+                            subdir.setExecutable(true);
                         }
                     }
                     FileOutputStream fos = new FileOutputStream(strtemp);
