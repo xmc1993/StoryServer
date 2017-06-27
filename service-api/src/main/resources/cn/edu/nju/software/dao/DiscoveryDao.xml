@@ -42,8 +42,13 @@
         </foreach>
     </delete>
     <select id="getDiscoveryByRandomPage" resultType="cn.edu.nju.software.entity.Discovery">
-         select <include refid="All_Column_List"/>
+        select <include refid="All_Column_List"/>
         from discoveries
+        <if test="excludeIdList.length > 0">
+        WHERE id
+        not in
+        <foreach collection="excludeIdList" item="excludeId" open="(" separator="," close=")">#{excludeId}</foreach>
+        </if>
         order by rand()
         limit #{offset},#{limit}
     </select>

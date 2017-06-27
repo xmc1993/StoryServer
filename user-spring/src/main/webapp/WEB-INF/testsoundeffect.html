@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/manage/testSoundEffect" method="post"
+      enctype="multipart/form-data">
+    @ApiParam("音效ID") @PathVariable int id,
+    @ApiParam("音效标签ID") @RequestParam(value = "tagId",required = false) Integer tagId,
+    @ApiParam("音效描述") @RequestParam("description") String description,
+    <p>
+        音效ID:<input style="display: block" type="text" name="id">
+    </p>
+    <p>
+        音效标签ID<input style="display: block" type="text" name="tagId">
+    </p>
+    <p>
+        描述:<input style="display: block" type="text" name="description">
+    </p>
+
+    <input type="submit" value="提交">
+</form>
+</body>
+</html>

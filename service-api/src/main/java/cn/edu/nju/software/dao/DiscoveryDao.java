@@ -15,7 +15,7 @@ public interface DiscoveryDao {
     boolean updateDiscovery(@Param("discovery") Discovery discovery);
     boolean deleteDiscoveryById(@Param("id") int id);
     int deleteDiscoveryByIdList(@Param("idList") int[] idList);
-    List<Discovery> getDiscoveryByRandomPage(@Param("offset") int offset, @Param("limit") int limit);
+    List<Discovery> getDiscoveryByRandomPage(@Param("offset") int offset, @Param("limit") int limit, @Param("excludeIdList") int[] excludeIdList);
     List<Discovery> getDiscoveryByCreateTimeDescPage(@Param("offset") int offset, @Param("limit") int limit);
 
     Discovery getDiscoveryById(@Param("id") int id);

@@ -40,10 +40,10 @@ public class DiscoveryServiceImpl implements DiscoveryService {
         return false;
     }
     @Override
-    public List<Discovery> getDiscoveryByRandomPage(int offset, int limit){
+    public List<Discovery> getDiscoveryByRandomPage(int offset, int limit, int[] excludeIdList){
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
-        return discoveryDao.getDiscoveryByRandomPage(offset,limit);
+        return discoveryDao.getDiscoveryByRandomPage(offset,limit,excludeIdList);
     }
     @Override
     public List<Discovery> getDiscoveryByCreateTimeDescPage(int offset, int limit){

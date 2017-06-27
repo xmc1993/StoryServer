@@ -76,7 +76,6 @@ public class ManageStoryController {
             story.setGuideSoundUrl(uploadFile(guideSoundFile));
         }
         if (!originSoundFile.isEmpty()) {
-            UploadFileUtil.deleteFileByUrl(story.getOriginSoundUrl());
             story.setOriginSoundUrl(uploadFile(originSoundFile));
             String duration=storyService.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(story.getOriginSoundUrl())));
             story.setDuration(duration);

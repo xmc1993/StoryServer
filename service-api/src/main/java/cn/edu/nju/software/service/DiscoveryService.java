@@ -18,7 +18,7 @@ public interface DiscoveryService {
 
     boolean deleteDiscoveryByIdList(int[] idList);
 
-    List<Discovery> getDiscoveryByRandomPage(int offset, int limit);
+    List<Discovery> getDiscoveryByRandomPage(int offset, int limit, int[] excludeIdList);
 
     List<Discovery> getDiscoveryByCreateTimeDescPage(int offset, int limit);
 
