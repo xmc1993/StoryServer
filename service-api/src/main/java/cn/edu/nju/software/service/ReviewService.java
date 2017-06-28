@@ -33,5 +33,5 @@ public interface ReviewService {
     boolean deleteSubReviewByUser(int reviewId, int userId);
 
 
-    Review getReviewById(Integer parentId);
+    Review getReviewById(Integer id);
 }

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en" style="">
+<head>
+    <meta charset="UTF-8">
+    <title>评论</title>
+</head>
+<body>
+<h2>评论</h2>
+<form action="/user/addReview" method="post"
+      enctype="multipart/form-data">
+
+    <p>
+        workId:<input style="display: block" type="text" name="workId">
+        parentId:<input style="display: block" type="text" name="parentId">
+        fromUserId:<input style="display: block" type="text" name="fromUserId">
+        toUserId:<input style="display: block" type="text" name="toUserId">
+        content:<input style="display: block" type="text" name="content">
+    </p>
+
+    <input type="submit" value="提交">
+</form>
+</body>
+</html>

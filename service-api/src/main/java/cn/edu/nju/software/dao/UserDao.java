@@ -34,4 +34,6 @@ public interface UserDao {
     Integer getLikeCountByUserId(int userId);
 
     List<User> getUserListByIdList(@Param("idList") List<Integer> idList, @Param("offset") int offset, @Param("limit") int limit);
+
+	User getUserByPrimaryKey(int userId);
 }
