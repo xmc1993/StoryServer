@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,19 +42,19 @@ public class ManageStoryController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseData<Story> publicStory(
-            @ApiParam("故事标题") @RequestParam String title,
-            @ApiParam("作者") @RequestParam String author,
-            @ApiParam("内容") @RequestParam String content,
-            @ApiParam("出版社") @RequestParam String press,
-            @ApiParam("阅读指导") @RequestParam String guide,
-            @ApiParam("价格") @RequestParam String price,
+            @ApiParam("故事标题") @RequestParam(value = "title" ,required = false) String title,
+            @ApiParam("作者") @RequestParam(value = "author" ,required = false) String author,
+            @ApiParam("内容") @RequestParam(value = "content" ,required = false) String content,
+            @ApiParam("出版社") @RequestParam(value = "press" ,required = false) String press,
+            @ApiParam("阅读指导") @RequestParam(value = "guide" ,required = false) String guide,
+            @ApiParam("价格") @RequestParam(value = "price" ,required = false) String price,
             @ApiParam("草稿状态") @RequestParam("draft")int draft,
+            @ApiParam("朗读指导") @RequestParam(value = "readGuide",required = false) String readGuide,
             @ApiParam("默认背景音ID") @RequestParam Integer defaultBackGroundMusicId,
             @ApiParam("封面") @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
             @ApiParam("预览封面") @RequestParam(value = "preCoverFile", required = false) MultipartFile preCoverFile,
             @ApiParam("录制背景") @RequestParam(value = "backgroundFile", required = false) MultipartFile backgroundFile,
             @ApiParam("原音") @RequestParam(value = "originSoundFile", required = false) MultipartFile originSoundFile,
-            @ApiParam("朗读指导")@RequestParam(value = "guideSoundFile",required = false)MultipartFile guideSoundFile,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Story> result = new ResponseData<>();
         Story dbStory=storyService.getExactStoryByTitle(title);
@@ -72,25 +71,24 @@ public class ManageStoryController {
         if (!backgroundFile.isEmpty()) {
             story.setBackgroundUrl(uploadFile(backgroundFile));
         }
-        if (!guideSoundFile.isEmpty()) {
-            story.setGuideSoundUrl(uploadFile(guideSoundFile));
-        }
         if (!originSoundFile.isEmpty()) {
             story.setOriginSoundUrl(uploadFile(originSoundFile));
             String duration=storyService.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(story.getOriginSoundUrl())));
             story.setDuration(duration);
         }
-        story.setTitle(title);
-        story.setAuthor(author);
-        story.setContent(content);
-        story.setPress(press);
-        story.setGuide(guide);
-        story.setPrice(price);
+        if(title!=null)story.setTitle(title);
+        if(author!=null)story.setAuthor(author);
+        if(content!=null)story.setContent(content);
+        if(press!=null)story.setPress(press);
+        if(guide!=null)story.setGuide(guide);
+        if(price!=null)story.setPrice(price);
+        if(readGuide!=null) story.setReadGuide(readGuide);
         story.setValid(1);
         story.setDefaultBackGroundMusicId(defaultBackGroundMusicId);
         story.setCreateTime(new Date());
         story.setUpdateTime(new Date());
         story.setDraft(draft);
+        story.setLikeCount(0);
         boolean res = storyService.saveStory(story);
         if (!res) {
             throw new RuntimeException("发布故事失败");
@@ -105,18 +103,18 @@ public class ManageStoryController {
     @ResponseBody
     public Story updateStoryTag(
             @ApiParam("故事ID") @PathVariable int id,
-            @ApiParam("故事标题") @RequestParam String title,
-            @ApiParam("作者") @RequestParam String author,
-            @ApiParam("内容") @RequestParam String content,
-            @ApiParam("出版社") @RequestParam String press,
-            @ApiParam("阅读指导") @RequestParam String guide,
-            @ApiParam("价格") @RequestParam String price,
+            @ApiParam("故事标题") @RequestParam(value = "title",required = false) String title,
+            @ApiParam("作者") @RequestParam(value = "author" ,required = false) String author,
+            @ApiParam("内容") @RequestParam(value = "content" ,required = false) String content,
+            @ApiParam("出版社") @RequestParam(value = "press" ,required = false) String press,
+            @ApiParam("阅读指导") @RequestParam(value = "guide" ,required = false) String guide,
+            @ApiParam("价格") @RequestParam(value = "price" ,required = false) String price,
             @ApiParam("草稿状态") @RequestParam("draft")int draft,
+            @ApiParam("朗读指导") @RequestParam(value = "readGuide",required = false) String readGuide,
             @ApiParam("封面") @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
             @ApiParam("预览封面") @RequestParam(value = "preCoverFile", required = false) MultipartFile preCoverFile,
             @ApiParam("录制背景") @RequestParam(value = "backgroundFile", required = false) MultipartFile backgroundFile,
             @ApiParam("原音") @RequestParam(value = "originSoundFile", required = false) MultipartFile originSoundFile,
-            @ApiParam("朗读指导")@RequestParam(value = "guideSoundFile",required = false)MultipartFile guideSoundFile,
             HttpServletRequest request, HttpServletResponse response) {
         Story story = storyService.getStoryById(id);
         if (story == null) {
@@ -137,23 +135,19 @@ public class ManageStoryController {
             if(story.getBackgroundUrl()!=null)UploadFileUtil.deleteFileByUrl(story.getBackgroundUrl());
             story.setBackgroundUrl(uploadFile(backgroundFile));
         }
-        if (!guideSoundFile.isEmpty()) {
-            //删除旧
-            if(story.getGuideSoundUrl()!=null) UploadFileUtil.deleteFileByUrl(story.getGuideSoundUrl());
-            story.setGuideSoundUrl(uploadFile(guideSoundFile));
-        }
         if (!originSoundFile.isEmpty()) {
             if(story.getOriginSoundUrl()!=null)UploadFileUtil.deleteFileByUrl(story.getOriginSoundUrl());
             story.setOriginSoundUrl(uploadFile(originSoundFile));
             String duration=storyService.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(story.getOriginSoundUrl())));
             story.setDuration(duration);
         }
-        story.setTitle(title);
-        story.setContent(content);
-        story.setAuthor(author);
-        story.setPress(press);
-        story.setGuide(guide);
-        story.setPrice(price);
+        if(title!=null)story.setTitle(title);
+        if(content!=null)story.setContent(content);
+        if(author!=null)story.setAuthor(author);
+        if(press!=null)story.setPress(press);
+        if(guide!=null)story.setGuide(guide);
+        if(price!=null)story.setPrice(price);
+        if(readGuide!=null)story.setReadGuide(readGuide);
         story.setUpdateTime(new Date());
         story.setDraft(draft);
         Story result = storyService.updateStory(story);

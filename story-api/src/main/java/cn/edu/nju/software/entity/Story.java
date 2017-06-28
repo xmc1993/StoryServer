@@ -14,12 +14,12 @@ public class Story {
     private String author;
     private String content;
     private String press;//出版社
-    private String guide;//阅读指导
+    private String guide;//阅读分级
     private String coverUrl;
     private String preCoverUrl;
     private String backgroundUrl;//录制背景图url
     private String originSoundUrl;//原始音效url
-    private String guideSoundUrl;
+    private String readGuide; //阅读指导
     private String price;
     private Date createTime;
     private Date updateTime;

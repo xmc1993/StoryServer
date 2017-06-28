@@ -13,7 +13,7 @@
         preCoverUrl,
         backgroundUrl,
         originSoundUrl,
-        guideSoundUrl,
+        readGuide,
         price,
         createTime,
         updateTime,
@@ -37,7 +37,7 @@
        story.preCoverUrl,
        story.backgroundUrl,
        story.originSoundUrl,
-       story.guideSoundUrl,
+       story.readGuide,
        story.price,
        story.createTime,
        story.updateTime,
@@ -60,7 +60,7 @@
         <id column="preCoverUrl" property="preCoverUrl"/>
         <id column="backgroundUrl" property="backgroundUrl"/>
         <id column="originSoundUrl" property="originSoundUrl"/>
-        <id column="guideSoundUrl" property="guideSoundUrl"/>
+        <id column="readGuide" property="readGuide"/>
         <id column="price" property="price"/>
         <id column="createTime" property="createTime"/>
         <id column="updateTime" property="updateTime"/>
@@ -89,15 +89,16 @@
         #{preCoverUrl},
         #{backgroundUrl},
         #{originSoundUrl},
-        #{guideSoundUrl},
+        #{readGuide},
         #{price},
         #{createTime},
         #{updateTime},
         #{valid},
         #{recommend},
         #{tellCount},
-        #{duration},
         #{defaultBackGroundMusicId},
+        #{duration},
+        #{likeCount},
         #{draft}
         )
     </insert>
@@ -118,7 +119,7 @@
 		preCoverUrl=#{preCoverUrl},
 		backgroundUrl=#{backgroundUrl},
 		originSoundUrl=#{originSoundUrl},
-		guideSoundUrl=#{guideSoundUrl},
+		readGuide=#{readGuide},
 		price=#{price},
 		updateTime=#{updateTime},
 		defaultBackGroundMusicId=#{defaultBackGroundMusicId},
