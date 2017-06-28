@@ -1,5 +1,6 @@
 package cn.edu.nju.software.util;
 
+import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +21,11 @@ public final class UploadFileUtil {
 
     public static final String DIR_BASE = "/data";
 
+   /* public static final String SOURCE_BASE_URL = "http://11111/source";
+
+    public static final String URL_BASE = "/source";
+
+    public static final String DIR_BASE = "C:/data";*/
 
     private UploadFileUtil() {
     }
@@ -46,6 +52,7 @@ public final class UploadFileUtil {
         String res = fileName.substring(fileName.lastIndexOf(".") + 1);
         return res;
     }
+
 
 
     /**
@@ -104,6 +111,7 @@ public final class UploadFileUtil {
     }
 
 
+
     /**
      * 根据数据库中的url删除服务器中的文件
      *
@@ -116,10 +124,37 @@ public final class UploadFileUtil {
         return deleteFile(fileUri);
     }
 
+    public static String uploadFile(MultipartFile file, String root) {
+        String realPath = UploadFileUtil.getBaseUrl() + root;
+        String fileName = RandCharsUtils.getRandomString(16) + "." + UploadFileUtil.getSuffix(file.getOriginalFilename());
+        boolean success = UploadFileUtil.mvFile(file, realPath, fileName);
+        if (!success) {
+            throw new RuntimeException("文件上传失败");
+        }
+        String url = UploadFileUtil.SOURCE_BASE_URL + root + fileName;
+        return url;
+    }
+    public static String uploadDiscovery(MultipartFile file, String root) {
+        String realPath = UploadFileUtil.getBaseUrl() + root;
+        String fileName = file.getOriginalFilename();
+        boolean success = UploadFileUtil.mvFile(file, realPath, fileName);
+        if (!success) {
+            throw new RuntimeException("文件上传失败");
+        }
+        String url = UploadFileUtil.SOURCE_BASE_URL + root + fileName;
+        return url;
+    }
     public static void main(String[] args) {
         String result = getRealPathFromUrl("http://120.27.219.173/source/cover/XKpa5J5vOj9rQVnn.jpg");
         System.out.println(result);
     }
 
 
+    public static String getURLFromPath(String localPath) {
+        if (StringUtil.isEmpty(localPath)) return null;
+        int index = localPath.indexOf(DIR_BASE);
+        String result = localPath.substring(index + DIR_BASE.length());
+        result = SOURCE_BASE_URL + result;
+        return result;
+    }
 }

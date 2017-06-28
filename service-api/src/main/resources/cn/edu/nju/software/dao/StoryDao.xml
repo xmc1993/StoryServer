@@ -140,7 +140,7 @@
         select
         <include refid="fields"></include>
         from story
-        where id = #{0} and valid = 1 and draft = 1
+        where id = #{0} and valid = 1
     </select>
 
     <select id="getStoryByIdHard" resultType="cn.edu.nju.software.entity.Story">
@@ -264,7 +264,7 @@
             LEFT JOIN story_tag ON tag_relation.tagId = story_tag.id
         where story.valid = 1 and draft = 0
             AND
-        <foreach collection="queryList" item="query" index="index" open="(" separator="," close=")">
+        <foreach collection="queryList" item="query" index="index" open="(" separator=" OR " close=")">
             story.title like CONCAT('%', #{query} ,'%')
 
             OR story.author like CONCAT('%', #{query} ,'%')
@@ -273,7 +273,6 @@
 
             OR story_tag.content  like CONCAT('%', #{query} ,'%')
         </foreach>
-
         GROUP BY story.id
         limit #{offset},#{limit}
     </select>
@@ -354,7 +353,7 @@
         LEFT JOIN story_tag ON tag_relation.tagId = story_tag.id
         where story.valid = 1 and draft = 0
         AND
-        <foreach collection="queryList" item="query" index="index" open="(" separator="," close=")">
+        <foreach collection="queryList" item="query" index="index" open="(" separator=" OR " close=")">
             story.title like CONCAT('%', #{query} ,'%')
 
             OR story.author like CONCAT('%', #{query} ,'%')
@@ -392,6 +391,11 @@
         select count(id)
         from story
         where title like CONCAT('%', #{0} ,'%') and valid = 1
+    </select>
+    <select id="getExactStoryByTitle" resultType="cn.edu.nju.software.entity.Story">
+        select <include refid="fields"/>
+        from story
+        where title = #{title} and valid = 1
     </select>
 
     <update id="newTell">

@@ -4,6 +4,7 @@ import cn.edu.nju.software.entity.SoundEffectTagRelation;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,4 +26,5 @@ public interface SoundEffectTagRelationDao {
 
     List<Integer> getSoundEffectIdListByTagIdList(@Param("idList") List<Integer> idList);
 
+    boolean updateSoundEffectTagRelation(@Param("soundEffectId") int soundEffectId, @Param("tagId") Integer tagId, @Param("updateTime") Date updateTime);
 }

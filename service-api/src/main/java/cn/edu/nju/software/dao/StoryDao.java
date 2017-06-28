@@ -60,9 +60,9 @@ public interface StoryDao {
 
     Integer getStoryCountByIdList(@Param("idList") List<Integer> idList);
 
-    List<Story> getStoryByFuzzyQuery(@Param("query") List<String> queryList, @Param("offset")Integer offset, @Param("limit")Integer limit);
+    List<Story> getStoryByFuzzyQuery(@Param("queryList") List<String> queryList, @Param("offset")Integer offset, @Param("limit")Integer limit);
 
-    Integer getStoryCountByFuzzyQuery(@Param("query") List<String> queryList);
+    Integer getStoryCountByFuzzyQuery(@Param("queryList") List<String> queryList);
 
     int addStoryLikeCount(int storyId);
 
@@ -89,4 +89,7 @@ public interface StoryDao {
     Story getStoryByIdIncludeDrafts(int id);
 
     Integer getStoryCountByTitleIncludeDrafts(String query);
+
+    Story getExactStoryByTitle(@Param("title") String title);
+    
 }

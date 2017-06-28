@@ -10,6 +10,7 @@
         updateTime
     </sql>
 
+
     <resultMap id="soundEffectTagRelation" type="cn.edu.nju.software.entity.SoundEffectTagRelation">
         <id column="id" property="id"/>
         <id column="soundEffectId" property="soundEffectId"/>
@@ -17,7 +18,11 @@
         <id column="createTime" property="createTime"/>
         <id column="updateTime" property="updateTime"/>
     </resultMap>
-
+    <update id="updateSoundEffectTagRelation">
+        update sound_effect_tag_relation
+        set tagId = #{tagId},updateTime = #{updateTime}
+        where soundEffectId = #{soundEffectId}
+    </update>
     <insert id="saveTagRelation" parameterType="cn.edu.nju.software.entity.TagRelation" keyProperty="id" useGeneratedKeys="true">
         insert into sound_effect_tag_relation(
         <include refid="fields"></include>

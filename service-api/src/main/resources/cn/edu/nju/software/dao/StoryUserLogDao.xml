@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.nju.software.dao.StoryUserLogDao" >
+  <resultMap id="BaseResultMap" type="cn.edu.nju.software.entity.StoryUserLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="userId" property="userId" jdbcType="INTEGER" />
+    <result column="storyId" property="storyId" jdbcType="INTEGER" />
+    <result column="channel" property="channel" jdbcType="VARCHAR" />
+    <result column="accessTime" property="accessTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, userId, storyId, channel, accessTime
+  </sql>
+  <insert id="insertStoryUserLog">
+    insert into story_user_log (
+    <include refid="Base_Column_List"/>
+    )
+    VALUES (
+    #{storyUserLog.id},
+    #{storyUserLog.userId},
+    #{storyUserLog.storyId},
+    #{storyUserLog.channel},
+    #{storyUserLog.accessTime}
+    )
+  </insert>
+  <delete id="deleteStoryUserLogByIdList">
+    delete from story_user_log
+      where id in
+      <foreach collection="idList" item="id" open="(" separator="," close=")">
+        #{id}
+      </foreach>
+  </delete>
+  <delete id="deleteStoryUserLogById">
+    delete from story_user_log
+    where id = #{id}
+  </delete>
+  <select id="getUserIdListByStoryIdTimeDesc" resultType="java.lang.Integer">
+    select
+    userId
+    from story_user_log
+    where storyId = #{storyId}
+    order by accessTime desc
+    limit #{offset},#{limit}
+  </select>
+  <select id="getStoryIdListByUserIdTimeDesc" resultType="java.lang.Integer">
+    select
+    storyId
+    from story_user_log
+    where userId = #{userId}
+    order by accessTime desc
+    limit #{offset},#{limit}
+  </select>
+  <select id="getStoryUserLogById" resultType="cn.edu.nju.software.entity.StoryUserLog">
+    select <include refid="Base_Column_List"/>
+    from story_user_log
+    where id = #{id}
+  </select>
+  <select id="getUserCountByStoryId" resultType="java.lang.Integer">
+    select count(id)
+    from story_user_log
+    where storyId = #{storyId}
+  </select>
+  <select id="getStoryCountByUserId" resultType="java.lang.Integer">
+    select count(id)
+    from story_user_log
+    where userId = #{userId}
+  </select>
+  <select id="getStoryUserLogByPageTimeDesc" resultType="cn.edu.nju.software.entity.StoryUserLog">
+    select <include refid="Base_Column_List"/>
+    from story_user_log
+    order by accessTime desc
+    limit #{offset},#{limit}
+  </select>
+  <select id="getStoryUserLogCount" resultType="java.lang.Integer">
+    select count(DISTINCT id )
+    from story_user_log
+  </select>
+
+</mapper>

@@ -198,7 +198,7 @@ public class StoryServiceImpl implements StoryService {
         String[] queries=query.split(" ");
         List<String> queryList=new ArrayList<String>();
         for(String temp:queries){
-            if(temp.trim()!="")  queryList.add(temp.trim());
+            if(!temp.trim().equals(""))  queryList.add(temp.trim());
         }
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
@@ -207,15 +207,15 @@ public class StoryServiceImpl implements StoryService {
 
     @Override
     public List<Story> getStoryByClassifyFuzzyQueryInludeDrafts(String title, String author, String content, String press, String tag, Integer offset, Integer limit){
-        if(title!=null&&title.trim()=="") title=null;
+        if(title!=null&&title.trim().equals("")) title=null;
         else if(title!=null) title=title.trim();
-        if(author!=null&&author.trim()=="") author=null;
+        if(author!=null&&author.trim().equals("")) author=null;
         else if(author!=null) author=author.trim();
-        if(content!=null&&content.trim()=="") content=null;
+        if(content!=null&&content.trim().equals("")) content=null;
         else if(content!=null) content=content.trim();
-        if(press!=null&&press.trim()=="") press=null;
+        if(press!=null&&press.trim().equals("")) press=null;
         else if(press!=null) press=press.trim();
-        if(tag!=null&&tag.trim()=="") tag=null;
+        if(tag!=null&&tag.trim().equals("")) tag=null;
         else if(tag!=null) tag=tag.trim();
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
@@ -224,15 +224,15 @@ public class StoryServiceImpl implements StoryService {
     }
     @Override
     public Integer getStoryCountByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, String tag){
-        if(title!=null&&title.trim()=="") title=null;
+        if(title!=null&&title.trim().equals("")) title=null;
         else if(title!=null) title=title.trim();
-        if(author!=null&&author.trim()=="") author=null;
+        if(author!=null&&author.trim().equals("")) author=null;
         else if(author!=null) author=author.trim();
-        if(content!=null&&content.trim()=="") content=null;
+        if(content!=null&&content.trim().equals("")) content=null;
         else if(content!=null) content=content.trim();
-        if(press!=null&&press.trim()=="") press=null;
+        if(press!=null&&press.trim().equals("")) press=null;
         else if(press!=null) press=press.trim();
-        if(tag!=null&&tag.trim()=="") tag=null;
+        if(tag!=null&&tag.trim().equals("")) tag=null;
         else if(tag!=null) tag=tag.trim();
         return storyDao.getStoryCountByClassifyFuzzyQueryIncludeDrafts(title, author, content, press, tag);
     }
@@ -253,5 +253,21 @@ public class StoryServiceImpl implements StoryService {
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         return storyDao.getDraftList(offset,limit);
+    }
+
+    @Override
+    public Integer getStoryCountByFuzzyQuery(String query) {
+        if(query !=null&& query.trim().equals("")) return null;
+        String[] queries=query.split(" ");
+        List<String> queryList=new ArrayList<String>();
+        for(String temp:queries){
+            if(!temp.trim().equals(""))  queryList.add(temp.trim());
+        }
+        return storyDao.getStoryCountByFuzzyQuery(queryList);
+    }
+
+    @Override
+    public Story getExactStoryByTitle(String title){
+        return storyDao.getExactStoryByTitle(title);
     }
 }

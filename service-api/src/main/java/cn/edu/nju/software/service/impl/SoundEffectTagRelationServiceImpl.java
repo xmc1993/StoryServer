@@ -2,14 +2,12 @@ package cn.edu.nju.software.service.impl;
 
 import cn.edu.nju.software.dao.SoundEffectTagDao;
 import cn.edu.nju.software.dao.SoundEffectTagRelationDao;
-import cn.edu.nju.software.entity.SoundEffectTag;
 import cn.edu.nju.software.entity.SoundEffectTagRelation;
-import cn.edu.nju.software.entity.TagRelation;
 import cn.edu.nju.software.service.SoundEffectTagRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,6 +51,10 @@ public class SoundEffectTagRelationServiceImpl implements SoundEffectTagRelation
         return soundEffectTagRelationDao.getSoundEffectIdListByTagIdList(tagIds);
     }
 
+    @Override
+    public boolean updateRelation(int soundEffectId, Integer tagId, Date updateTime) {
+        return soundEffectTagRelationDao.updateSoundEffectTagRelation(soundEffectId,tagId,updateTime);
+    }
 
 
 }

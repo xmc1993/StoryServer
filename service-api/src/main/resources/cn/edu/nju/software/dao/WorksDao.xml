@@ -159,9 +159,9 @@
         where
         userId = #{0}
     </update>
-    <update id="setReviewCount">
+    <update id="setDelReviewCount">
         update works
-        set reviewCount = #{reviewCount}
+        set reviewCount = reviewCount-#{delReviewCount}
         where workId = #{workId}
     </update>
 

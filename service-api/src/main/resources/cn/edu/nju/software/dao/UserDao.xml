@@ -75,7 +75,8 @@
 		email=#{email},
 		weChatOpenId=#{weChatOpenId},
 		weChatAccessToken=#{weChatAccessToken},
-		weChatRefreshToken=#{weChatRefreshToken}
+		weChatRefreshToken=#{weChatRefreshToken},
+		likeCount=#{likeCount}
 		where
 		id=#{id}
 	</update>
@@ -105,6 +106,19 @@
         <include refid="fields"></include>
         from user
         where mobile = #{0}
+    </select>
+    <select id="getLikeCountByUserId" resultType="java.lang.Integer">
+        select likeCount
+        from user
+        where id = #{userId}
+    </select>
+    <select id="getUserListByIdList" resultType="cn.edu.nju.software.entity.User">
+        select <include refid="fields"/>
+        from USER
+        WHERE id in
+        <foreach collection="idList" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </select>
 
 

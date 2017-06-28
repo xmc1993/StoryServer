@@ -37,8 +37,24 @@
     order by createTime
     limit #{offset},#{limit}
   </select>
+    <select id="getReviewIdListByParentId" resultType="java.lang.Integer">
+        select id
+        from reviews
+        where workId = #{workId} and parentId = #{parentId}
+    </select>
+    <select id="canDeleteByWorkAuthor" resultType="java.lang.Integer">
+        select reviews.id
+        from reviews left outer join works on reviews.workId = works.id
+        where reviews.id in
+        <foreach collection="idList" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        and
+        works.userId = #{userId}
 
-  <delete id="deleteById" parameterType="java.lang.Integer" >
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Integer" >
     delete from reviews
     where id = #{id,jdbcType=INTEGER}
   </delete>
@@ -47,7 +63,15 @@
     set subCommentCount=subCommentCount-1
     where workId = #{workId} and id = #{id}
   </delete>
-  <insert id="saveReview" parameterType="cn.edu.nju.software.entity.Review" >
+    <delete id="deleteByIdList">
+      delete from reviews
+      WHERE
+      id in
+      <foreach collection="idList" item="id" open="(" separator="," close=")">
+          #{id}
+      </foreach>
+    </delete>
+    <insert id="saveReview" parameterType="cn.edu.nju.software.entity.Review" >
     insert into reviews (id, worksId, parentId, 
       fromUserId, toUserId, subCommentCount, 
       createTime, updateTime, content
