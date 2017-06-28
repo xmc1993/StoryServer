@@ -11,11 +11,11 @@
   <sql id="Base_Column_List" >
     id, userId, workId, channel, accessTime
   </sql>
-  <insert id="insertWorkUserLog">
+  <insert id="insertWorkUserLog" parameterType="cn.edu.nju.software.entity.WorkUserLog">
     insert into work_user_log (
     <include refid="Base_Column_List"/>
     )
-    VALUES(#{id},#{userId},#{workId},#{channel},#{accessTime})
+    VALUES(#{workUserLog.id},#{workUserLog.userId},#{workUserLog.workId},#{workUserLog.channel},#{workUserLog.accessTime})
   </insert>
   <delete id="deleteWorkUserLogByIdList">
     delete from work_user_log

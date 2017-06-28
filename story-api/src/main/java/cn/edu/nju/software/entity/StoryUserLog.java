@@ -14,4 +14,14 @@ public class StoryUserLog {
     private Integer storyId;
     private String channel;
     private Date accessTime;
+
+    public StoryUserLog() {
+    }
+
+    public StoryUserLog(Integer userId, Integer storyId, String channel, Date accessTime) {
+        this.userId = userId;
+        this.storyId = storyId;
+        this.channel = channel;
+        this.accessTime = accessTime;
+    }
 }

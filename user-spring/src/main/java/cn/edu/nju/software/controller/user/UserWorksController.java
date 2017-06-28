@@ -2,10 +2,7 @@ package cn.edu.nju.software.controller.user;
 
 import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.*;
-import cn.edu.nju.software.service.AgreeService;
-import cn.edu.nju.software.service.CheckValidService;
-import cn.edu.nju.software.service.StoryService;
-import cn.edu.nju.software.service.WorksService;
+import cn.edu.nju.software.service.*;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UploadFileUtil;
@@ -46,6 +43,8 @@ public class UserWorksController extends BaseController {
     private CheckValidService checkValidService;
     @Autowired
     private StoryService storyService;
+    @Autowired
+    private WorkUserLogService workUserLogService;
 
     @ApiOperation(value = "获取某个用户的作品列表", notes = "需要登录")
     @RequestMapping(value = "/getWorksByUserId", method = {RequestMethod.GET})
@@ -79,6 +78,26 @@ public class UserWorksController extends BaseController {
             worksVoList.add(worksVo);
         }
         return worksVoList;
+    }
+    @ApiOperation(value = "保存Work访问记录", notes = "")
+    @RequestMapping(value = "/saveWorkUserLog", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> saveWorkUserLog(
+            @ApiParam("workId") @RequestParam("workId") int workId,
+            @ApiParam("userID") @RequestParam("userId") int userId,
+            @ApiParam("渠道") @RequestParam("channel") String channel,
+            HttpServletRequest request,HttpServletResponse response){
+        ResponseData<Boolean> result = new ResponseData<>();
+        WorkUserLog workUserLog = new WorkUserLog(userId,  workId,  channel, new Date());
+        boolean success=workUserLogService.saveWorkUserLog(workUserLog);
+        if(success==false){
+            result.jsonFill(2,"保存访问记录失败",false);
+            return result;
+        }
+        else {
+            result.jsonFill(1,null,true);
+            return result;
+        }
     }
 
     @ApiOperation(value = "获取一个故事的所有作品列表(按照点赞数降序)", notes = "需登录")

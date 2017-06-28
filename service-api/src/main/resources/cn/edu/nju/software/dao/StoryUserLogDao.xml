@@ -8,8 +8,12 @@
     <result column="channel" property="channel" jdbcType="VARCHAR" />
     <result column="accessTime" property="accessTime" jdbcType="TIMESTAMP" />
   </resultMap>
+
   <sql id="Base_Column_List" >
     id, userId, storyId, channel, accessTime
+  </sql>
+  <sql id="multilist_column" >
+    story_user_log.id, story_user_log.userId, story_user_log.storyId, story_user_log.channel, story_user_log.accessTime
   </sql>
   <insert id="insertStoryUserLog">
     insert into story_user_log (
@@ -75,5 +79,11 @@
     select count(DISTINCT id )
     from story_user_log
   </select>
-
+  <select id="getStoryLogVoByPage" resultType="cn.edu.nju.software.vo.StoryUserLogVo">
+    select  <include refid="multilist_column"/>,story.title
+    from story_user_log as storyUserLog
+    left outer join story as story on storyUserLog.storyId = story.id
+    order by storyUserLog.accessTime desc
+    limit #{offset},#{limit}
+  </select>
 </mapper>

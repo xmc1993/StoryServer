@@ -1,11 +1,9 @@
 package cn.edu.nju.software.controller.user;
 
 import cn.edu.nju.software.controller.BaseController;
-import cn.edu.nju.software.entity.ResponseData;
-import cn.edu.nju.software.entity.Story;
-import cn.edu.nju.software.entity.User;
-import cn.edu.nju.software.entity.UserRelationStory;
+import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.StoryService;
+import cn.edu.nju.software.service.StoryUserLogService;
 import cn.edu.nju.software.service.TagRelationService;
 import cn.edu.nju.software.service.UserRelationStoryService;
 import cn.edu.nju.software.util.TokenConfig;
@@ -21,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,6 +36,8 @@ public class UserStoryController extends BaseController {
     private TagRelationService tagRelationService;
     @Autowired
     private UserRelationStoryService userRelationStoryService;
+    @Autowired
+    private StoryUserLogService storyUserLogService;
 
     @ApiOperation(value = "获取ID获取故事", notes = "")
     @RequestMapping(value = "/getStoryById", method = {RequestMethod.GET})
@@ -45,6 +46,7 @@ public class UserStoryController extends BaseController {
             @ApiParam("故事ID") @RequestParam("id") Integer id,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Story> responseData = new ResponseData();
+
         Story story = storyService.getStoryById(id);
         if (story == null) {
             responseData.jsonFill(2, "该故事不存在", null);
@@ -53,6 +55,21 @@ public class UserStoryController extends BaseController {
             responseData.jsonFill(1, null, story);
         }
         return responseData;
+    }
+    @ApiOperation(value = "故事访问记录", notes = "")
+    @RequestMapping(value = "/saveStoryUserLog", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> getStoryById(
+            @ApiParam("故事ID") @RequestParam("storyId") Integer storyId,
+            @ApiParam("用户Id") @RequestParam("userId") Integer userId,
+            @ApiParam("访问渠道") @RequestParam(value = "channel") String channel,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Boolean> result = new ResponseData();
+        if(storyService.getStoryById(storyId)==null) throw new RuntimeException("无效的故事ID");
+        StoryUserLog log = new StoryUserLog(userId,storyId,channel,new Date());
+        storyUserLogService.saveLog(log);
+        result.jsonFill(1,null,true);
+        return result;
     }
 
     @ApiOperation(value = "分页得到故事列表", notes = "分页得到故事列表")
