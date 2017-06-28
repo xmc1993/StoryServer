@@ -2,6 +2,7 @@ package cn.edu.nju.software.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import cn.edu.nju.software.entity.User;
@@ -32,5 +33,7 @@ public interface UserDao {
 
     Integer getLikeCountByUserId(int userId);
 
-    List<User> getUserListByIdList(List<Integer> idList, int offset, int limit);
+    List<User> getUserListByIdList(@Param("idList") List<Integer> idList, @Param("offset") int offset, @Param("limit") int limit);
+
+	User getUserByPrimaryKey(int userId);
 }

@@ -3,6 +3,7 @@ package cn.edu.nju.software.service;
 import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.entity.StoryUserLog;
 import cn.edu.nju.software.entity.User;
+import cn.edu.nju.software.vo.StoryUserLogVo;
 
 import java.util.List;
 
@@ -27,4 +28,6 @@ public interface StoryUserLogService {
     List<User> getUserListByStoryIdTimeDesc(int storyId, int offset, int limit);
 
     int getUserCountByStoryID(int storyId);
+
+    List<StoryUserLogVo> getStoryUserLogVoByPageTimeDesc(int offset, int limit);
 }

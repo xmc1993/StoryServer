@@ -10,7 +10,8 @@ import lombok.Data;
  */
 @Data
 public class StoryUserLogVo {
-    private StoryUserLog storyUserLog;
-    private Story story;
-    private User user;
+    private Integer id;
+    private String storyName;
+    private Integer storyId;
+    private Integer userId;
 }

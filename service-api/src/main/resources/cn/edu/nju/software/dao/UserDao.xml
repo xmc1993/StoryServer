@@ -120,6 +120,11 @@
             #{id}
         </foreach>
     </select>
+    <select id="getUserByPrimaryKey" resultType="cn.edu.nju.software.entity.User">
+        select <include refid="fields"/>
+        from user
+        where id = #{userId}
+    </select>
 
 
 </mapper>

@@ -8,6 +8,7 @@ import cn.edu.nju.software.entity.StoryUserLog;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.service.StoryUserLogService;
 import cn.edu.nju.software.util.Const;
+import cn.edu.nju.software.vo.StoryUserLogVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,6 +58,7 @@ public class StoryUserLogServiceImpl implements StoryUserLogService{
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         List<Integer> idList = storyUserLogDao.getStoryIdListByUserIdTimeDesc(userId,offset,limit);
+        if(idList==null||idList.size()<1) return null;
         List<Story> storyList = storyDao.getStoryListByIdList(idList,offset,limit);
         return storyList;
     }
@@ -69,6 +71,7 @@ public class StoryUserLogServiceImpl implements StoryUserLogService{
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         List<Integer> idList = storyUserLogDao.getUserIdListByStoryIdTimeDesc(storyId,offset,limit);
+        if(idList==null||idList.size()<1) return null;
         List<User> userList = userDao.getUserListByIdList(idList,offset,limit);
         return userList;
     }
@@ -76,5 +79,10 @@ public class StoryUserLogServiceImpl implements StoryUserLogService{
     public int getUserCountByStoryID(int storyId){
         return storyUserLogDao.getUserCountByStoryId(storyId);
     }
-
+    @Override
+    public List<StoryUserLogVo> getStoryUserLogVoByPageTimeDesc(int offset, int limit){
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        return storyUserLogDao.getStoryLogVoByPage(offset,limit);
+    }
 }

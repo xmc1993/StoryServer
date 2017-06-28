@@ -1,6 +1,7 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.StoryUserLog;
+import cn.edu.nju.software.vo.StoryUserLogVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -25,4 +26,6 @@ public interface StoryUserLogDao {
     List<StoryUserLog> getStoryUserLogByPageTimeDesc(int offset, int limit);
 
     int getStoryUserLogCount();
+
+    List<StoryUserLogVo> getStoryLogVoByPage(@Param("offset") int offset, @Param("limit") int limit);
 }

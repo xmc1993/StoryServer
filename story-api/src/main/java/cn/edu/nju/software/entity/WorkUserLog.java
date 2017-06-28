@@ -14,4 +14,14 @@ public class WorkUserLog {
     private Integer workId;
     private String channel;
     private Date accessTime;
+
+    public WorkUserLog() {
+    }
+
+    public WorkUserLog(Integer userId, Integer workId, String channel, Date accessTime) {
+        this.userId = userId;
+        this.workId = workId;
+        this.channel = channel;
+        this.accessTime = accessTime;
+    }
 }

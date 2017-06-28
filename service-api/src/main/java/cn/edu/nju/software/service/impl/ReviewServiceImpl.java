@@ -1,6 +1,7 @@
 package cn.edu.nju.software.service.impl;
 
 import cn.edu.nju.software.dao.ReviewDao;
+import cn.edu.nju.software.dao.UserDao;
 import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.entity.Review;
 import cn.edu.nju.software.entity.Works;
@@ -21,11 +22,12 @@ public class ReviewServiceImpl implements ReviewService {
     private ReviewDao reviewDao;
     @Autowired
     private WorksDao worksDao;
+    @Autowired
+    private UserDao userDao;
     @Override
     public boolean insertReview(int workId, Integer parentId, int fromUserId,
                                 Integer toUserId, String content){
-        if(content==null||content.trim().equals("")) return false;
-        Review review= new Review(workId,fromUserId,content);
+        Review review= new Review(workId,fromUserId,content.trim());
         if(parentId!=null) {
             reviewDao.addSubCommentCount(workId,parentId);
         }
@@ -144,4 +146,10 @@ public class ReviewServiceImpl implements ReviewService {
         worksDao.delReviewCount(review.getWorkId());
         return reviewDao.deleteById(reviewId);
     }
+
+    @Override
+    public Review getReviewById(Integer id) {
+        return reviewDao.getReviewById(id);
+    }
+
 }

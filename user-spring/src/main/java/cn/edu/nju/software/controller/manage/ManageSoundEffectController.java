@@ -47,53 +47,53 @@ public class ManageSoundEffectController {
     @ApiOperation(value = "增加音效", notes = "")
     @RequestMapping(value = "/soundEffects", method = {RequestMethod.POST})
     @ResponseBody
-    public SoundEffect publishSoundEffect(
+    public ResponseData<Boolean> publishSoundEffect(
             @ApiParam("音效标签ID") @RequestParam("tagId") int tagId,
-            @ApiParam("音效文件") @RequestParam("uploadFile") MultipartFile uploadFile,
+            @ApiParam("音效文件") @RequestParam("uploadFile") MultipartFile[] uploadFiles,
             @ApiParam("音效描述") @RequestParam("description") String description,
             HttpServletRequest request, HttpServletResponse response) {
-
+        ResponseData<Boolean> result = new ResponseData<>();
         if(soundEffectTagService.getSoundEffectTagById(tagId)==null){
             throw new RuntimeException("错误的音效标签");
         }
-        if (uploadFile.isEmpty()) {
+        if (uploadFiles==null||uploadFiles.length==0) {
             throw new RuntimeException("请选择文件上传");
         }
         logger.info("开始上传音效文件!");
-        String realPath = UploadFileUtil.getBaseUrl() + SOUND_EFFECT_ROOT;
-        String fileName = RandCharsUtils.getRandomString(16) + "." + UploadFileUtil.getSuffix(uploadFile.getOriginalFilename());
-        boolean success = UploadFileUtil.mvFile(uploadFile, realPath, fileName);
-        if (!success) {
-            throw new RuntimeException("文件上传失败");
-        }
-        SoundEffect soundEffect = new SoundEffect();
-        soundEffect.setDescription(description);
-        String url = UploadFileUtil.SOURCE_BASE_URL + SOUND_EFFECT_ROOT + fileName;//拼接音频文件的地址
-        soundEffect.setUrl(url);
-        Date date = new Date();
-        soundEffect.setCreateTime(date);
-        soundEffect.setUpdateTime(date);
-        boolean saveEffectBoolean = soundEffectService.saveSoundEffect(soundEffect);
-        if (!saveEffectBoolean){
-            throw new RuntimeException("发布失败。");
-        }
+        for(MultipartFile uploadFile:uploadFiles) {
+            String realPath = UploadFileUtil.getBaseUrl() + SOUND_EFFECT_ROOT;
+            String fileName = RandCharsUtils.getRandomString(16) + "." + UploadFileUtil.getSuffix(uploadFile.getOriginalFilename());
+            boolean success = UploadFileUtil.mvFile(uploadFile, realPath, fileName);
+            if (!success) {
+                throw new RuntimeException("文件上传失败");
+            }
+            SoundEffect soundEffect = new SoundEffect();
+            soundEffect.setDescription(description);
+            String url = UploadFileUtil.SOURCE_BASE_URL + SOUND_EFFECT_ROOT + fileName;//拼接音频文件的地址
+            soundEffect.setUrl(url);
+            Date date = new Date();
+            soundEffect.setCreateTime(date);
+            soundEffect.setUpdateTime(date);
+            boolean saveEffectBoolean = soundEffectService.saveSoundEffect(soundEffect);
+            if (!saveEffectBoolean) {
+                throw new RuntimeException("发布失败。");
+            }
         /*boolean res = soundEffectService.saveSoundEffect(soundEffect);
         if (!res){
             throw new RuntimeException("发布失败。");
         }*/
-        SoundEffectTagRelation soundEffectTagRelation = new SoundEffectTagRelation();
-        soundEffectTagRelation.setCreateTime(date);
-        soundEffectTagRelation.setUpdateTime(date);
-        soundEffectTagRelation.setSoundEffectId(soundEffect.getId());
-        soundEffectTagRelation.setTagId(tagId);
-        boolean saveTagRelation = soundEffectTagRelationService.saveTagRelation(soundEffectTagRelation);
-        if (!saveTagRelation) {
-            throw new RuntimeException("发布失败");
+            SoundEffectTagRelation soundEffectTagRelation = new SoundEffectTagRelation();
+            soundEffectTagRelation.setCreateTime(date);
+            soundEffectTagRelation.setUpdateTime(date);
+            soundEffectTagRelation.setSoundEffectId(soundEffect.getId());
+            soundEffectTagRelation.setTagId(tagId);
+            boolean saveTagRelation = soundEffectTagRelationService.saveTagRelation(soundEffectTagRelation);
+            if (!saveTagRelation) {
+                throw new RuntimeException("发布失败");
+            }
         }
-        else{
-            return soundEffect;
-        }
-
+        result.jsonFill(1,null,true);
+        return result;
     }
 
     @RequestMapping(value = "/testSoundEffect",method = {RequestMethod.POST})

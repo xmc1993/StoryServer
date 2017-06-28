@@ -3,8 +3,8 @@ package cn.edu.nju.software.controller.manage;
 import cn.edu.nju.software.entity.Discovery;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.DiscoveryService;
+import cn.edu.nju.software.util.AntZipUtil;
 import cn.edu.nju.software.util.FileUtil;
-import cn.edu.nju.software.util.UnZipUtil;
 import cn.edu.nju.software.util.UploadFileUtil;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -186,8 +186,7 @@ public class ManageDiscoveryController {
         String upZipPath =UploadFileUtil.getRealPathFromUrl(zipUrl.substring(0,zipUrl.lastIndexOf(".")));
         String upZipName = zipUrl.substring(zipUrl.lastIndexOf("/")+1);
         try {
-            UnZipUtil.unzip(zipPath+"/"+upZipName,upZipPath);
-            //UnZipUtil.unZip(zipPath+"/"+upZipName,upZipPath);
+            AntZipUtil.unZip(zipPath+"/"+upZipName,upZipPath);
         } catch (Exception e) {
             e.printStackTrace();
             result.jsonFill(2,"解压失败，请检查压缩文件",false);

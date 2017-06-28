@@ -11,7 +11,7 @@ import java.util.List;
  */
 @Repository
 public interface WorkUserLogDao {
-    public boolean insertWorkUserLog(WorkUserLog workUserLog);
+    public boolean insertWorkUserLog(@Param("workUserLog") WorkUserLog workUserLog);
     public Integer deleteWorkUserLogByIdList(@Param("idList") List<Integer> idList);
     public List<Integer> getUserIdListByWorkId(@Param("workId") int workId, @Param("offset") int offset, @Param("limit") int limit);
     public List<Integer> getWorkIdListByUserId(@Param("userId") int userId, @Param("offset") int offset, @Param("limit") int limit);

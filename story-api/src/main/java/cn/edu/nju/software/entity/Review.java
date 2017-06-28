@@ -35,4 +35,14 @@ public class Review {
         this.fromUserId = fromUserId;
         this.content = content;
     }
+
+    public Review(Integer workId, Integer parentId, Integer fromUserId, Integer toUserId, Date createTime, Date updateTime, String content) {
+        this.workId = workId;
+        this.parentId = parentId;
+        this.fromUserId = fromUserId;
+        this.toUserId = toUserId;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+        this.content = content;
+    }
 }
