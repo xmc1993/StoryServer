@@ -140,7 +140,7 @@ public class ControllerAssist {
 //		}
 		ResponseData<?> result = new ResponseData<>();
 		result.jsonFill(0, message, null);
-		return ResponseEntity.status(401).body(exception.getMessage());
+		return ResponseEntity.status(401).body(result);
 	}
 
 	/**
