@@ -376,6 +376,7 @@
         <include refid="fields"></include>
         from story
         where valid = 1
+        order by createTime desc
         limit #{0},#{1}
     </select>
     <select id="getStoryCountIncludeDrafts" resultType="java.lang.Integer">

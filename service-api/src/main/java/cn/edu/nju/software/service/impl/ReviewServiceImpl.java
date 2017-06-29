@@ -28,16 +28,21 @@ public class ReviewServiceImpl implements ReviewService {
     public boolean insertReview(int workId, Integer parentId, int fromUserId,
                                 Integer toUserId, String content){
         Review review= new Review(workId,fromUserId,content.trim());
+        if(toUserId!=null&&parentId==null) throw new RuntimeException("回复必须有parentId");
+        if(toUserId!=null&&reviewDao.getReviewById(parentId).getFromUserId()!=toUserId) throw new RuntimeException("错误的回复UserId");
         if(parentId!=null) {
+            review.setParentId(parentId);
             reviewDao.addSubCommentCount(workId,parentId);
+        }else{
+            review.setParentId(0);
         }
-        review.setParentId(parentId);
+        review.setSubCommentCount(0);
         review.setToUserId(toUserId);
         Date date = new Date();
         review.setCreateTime(date);
         review.setUpdateTime(date);
-        if(reviewDao.saveReview(review)) return false;
-        if(worksDao.addReviewCount(workId)) return false;
+        if(!reviewDao.saveReview(review)) return false;
+        if(!worksDao.addReviewCount(workId)) return false;
         return true;
     }
     @Override
@@ -50,10 +55,11 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public boolean updateReview(int reviewId, int fromUserId, String content){
         Review review = reviewDao.getReviewById(reviewId);
-        if(review.getFromUserId()==fromUserId) return false;
-        if(content==null||content.trim().equals("")) return false;
+        if(review==null) throw new RuntimeException("错误的评论id");
+        if(review.getFromUserId()!=fromUserId) throw new RuntimeException("用户ID不符");
+        if(content==null||content.trim().equals("")) throw new RuntimeException("内容不能为空");
         if(content==review.getContent()) return false;
-        review.setContent(content);
+        review.setContent(content.trim());
         review.setUpdateTime(new Date());
         return reviewDao.updateById(review);
     }
@@ -149,7 +155,14 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public Review getReviewById(Integer id) {
-        return reviewDao.getReviewById(id);
+        Review review = reviewDao.getReviewById(id);
+        if(review==null) throw new RuntimeException("错误的评论Id");
+        return review;
+    }
+
+    @Override
+    public Integer getReviewCountByWorkId(int workId) {
+        return reviewDao.getReviewCountByWorkId(workId);
     }
 
 }

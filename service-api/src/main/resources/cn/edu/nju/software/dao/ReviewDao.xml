@@ -13,8 +13,9 @@
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="All_Column_List" >
-    id, worksId, parentId, fromUserId, toUserId, content,subCommentCount, createTime, updateTime
+    id, workId, parentId, fromUserId, toUserId, content,subCommentCount, createTime, updateTime
   </sql>
+
 
   <select id="getReviewById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -53,8 +54,14 @@
         works.userId = #{userId}
 
     </select>
+    <select id="getReviewCountByWorkId" resultType="java.lang.Integer">
+      select count(DISTINCT id)
+      from reviews
+      where workId = #{workId}
+    </select>
 
-    <delete id="deleteById" parameterType="java.lang.Integer" >
+
+  <delete id="deleteById" parameterType="java.lang.Integer" >
     delete from reviews
     where id = #{id,jdbcType=INTEGER}
   </delete>
@@ -72,13 +79,8 @@
       </foreach>
     </delete>
     <insert id="saveReview" parameterType="cn.edu.nju.software.entity.Review" >
-    insert into reviews (id, worksId, parentId, 
-      fromUserId, toUserId, subCommentCount, 
-      createTime, updateTime, content
-      )
-    values (#{id,jdbcType=INTEGER}, #{worksid,jdbcType=INTEGER}, #{parentid,jdbcType=INTEGER}, 
-      #{fromuserid,jdbcType=INTEGER}, #{touserid,jdbcType=INTEGER}, #{subcommentcount,jdbcType=INTEGER}, 
-      #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
+    insert into reviews (<include refid="All_Column_List"/>)
+    values (#{id}, #{workId}, #{parentId}, #{fromUserId}, #{toUserId}, #{content},#{subCommentCount}, #{createTime}, #{updateTime}
       )
   </insert>
   <insert id="addSubCommentCount">

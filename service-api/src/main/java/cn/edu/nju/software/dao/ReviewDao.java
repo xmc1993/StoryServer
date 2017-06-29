@@ -27,4 +27,6 @@ public interface ReviewDao {
     boolean delSubCommentCount(@Param("workId") Integer workId, @Param("id") Integer id);
 
     List<Integer> canDeleteByWorkAuthor(List<Integer> idList, Integer userId);
+
+    Integer getReviewCountByWorkId(int workId);
 }
