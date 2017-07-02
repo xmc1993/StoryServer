@@ -1,6 +1,7 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.Review;
+import cn.edu.nju.software.vo.ReviewVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -29,4 +30,6 @@ public interface ReviewDao {
     List<Integer> canDeleteByWorkAuthor(List<Integer> idList, Integer userId);
 
     Integer getReviewCountByWorkId(int workId);
+
+    List<ReviewVo> getReviewVoLisntByWorkId(@Param("workId") int workId, @Param("offset") int offset, @Param("limit") int limit);
 }

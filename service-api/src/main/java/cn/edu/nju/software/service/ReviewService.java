@@ -36,4 +36,6 @@ public interface ReviewService {
     Review getReviewById(Integer id);
 
     Integer getReviewCountByWorkId(int workId);
+
+
 }

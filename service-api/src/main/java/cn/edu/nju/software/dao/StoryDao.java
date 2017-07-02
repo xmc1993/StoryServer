@@ -95,6 +95,7 @@ public interface StoryDao {
 
     List<StoryVo> getStoryVoByIdList(@Param("idList") List<Integer> idList);
 
+
     List<Integer> getRecommendedStoryIdListByPage(@Param("offset") int offset, @Param("limit") int limit);
 
 }

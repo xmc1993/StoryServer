@@ -37,8 +37,11 @@ public class ManageSoundEffectTagController {
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
     public SoundEffectTag publishSoundEffectTag(
-            @ApiParam("分类") @RequestBody SoundEffectTag soundEffectTag,
+            @ApiParam("分类内容") @RequestParam(value = "content") String content,
             HttpServletRequest request, HttpServletResponse response) {
+        if(content.trim().equals("")) throw new RuntimeException("内容不能为空");
+        SoundEffectTag soundEffectTag = new SoundEffectTag();
+        soundEffectTag.setContent(content.trim());
         soundEffectTag.setCreateTime(new Date());
         soundEffectTag.setUpdateTime(new Date());
         soundEffectTag.setValid(1);
@@ -51,13 +54,12 @@ public class ManageSoundEffectTagController {
     @ResponseBody
     public SoundEffectTag updateSoundEffectTag(
             @ApiParam("分类ID") @PathVariable int id,
-            @ApiParam("分类") @RequestBody SoundEffectTag soundEffectTag,
+            @ApiParam("分类内容") @RequestParam(value = "content") String content,
             HttpServletRequest request, HttpServletResponse response) {
-        if (!checkValidService.isSoundEffectTagExist(id)) {
-            logger.error("无效的id");
-            throw new RuntimeException("无效的id");
-        }
-        soundEffectTag.setId(id);
+        SoundEffectTag soundEffectTag = soundEffectTagService.getSoundEffectTagById(id);
+        if(soundEffectTag==null) throw new RuntimeException("无效的ID");
+        if(content.trim().equals("")) throw new RuntimeException("内容不能为空");
+        soundEffectTag.setContent(content.trim());
         soundEffectTag.setUpdateTime(new Date());
         return soundEffectTagService.updateSoundEffectTag(soundEffectTag);
 

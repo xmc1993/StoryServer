@@ -12,10 +12,40 @@
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
   </resultMap>
+  <resultMap id="ReviewVoResultMap" type="cn.edu.nju.software.vo.ReviewVo">
+    <id column="review.id" property="review.id"  />
+    <result column="review.workId" property="review.workId"  />
+    <result column="review.parentId" property="review.parentId" />
+    <result column="review.fromUserId" property="review.fromUserId"/>
+    <result column="review.toUserId" property="review.toUserId"  />
+    <result column="review.subCommentCount" property="review.subCommentCount" />
+    <result column="review.createTime" property="review.createTime" />
+    <result column="review.updateTime" property="review.updateTime"  />
+    <result column="review.content" property="review.content"  />
+    <association property="fromUser" javaType="cn.edu.nju.software.entity.User">
+      <id property="id" column="fromUser.id"/>
+      <result property="nickname" column="fromUser.workId"/>
+      <result property="sex" column="fromUser.sex"/>
+      <result property="city" column="fromUser.city"/>
+      <result property="company" column="fromUser.company"/>
+      <result property="email" column="fromUser.company"/>
+    </association>
+    <association property="toUser" javaType="cn.edu.nju.software.entity.User">
+      <id property="id" column="toUser.id"/>
+      <result property="nickname" column="toUser.workId"/>
+      <result property="sex" column="toUser.sex"/>
+      <result property="city" column="toUser.city"/>
+      <result property="company" column="toUser.company"/>
+      <result property="email" column="toUser.company"/>
+    </association>
+  </resultMap>
   <sql id="All_Column_List" >
     id, workId, parentId, fromUserId, toUserId, content,subCommentCount, createTime, updateTime
   </sql>
-
+  <sql id="ReviewVoFields" >
+    review.id, review.workId, review.parentId, review.fromUserId, review.toUserId, review.content,review.subCommentCount,review.createTime,review.updateTime,
+    user.id,user.nickname,user.sex,user.city,user.company,user.email
+  </sql>
 
   <select id="getReviewById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -59,6 +89,11 @@
       from reviews
       where workId = #{workId}
     </select>
+  <select id="getReviewVoListByWorkId" resultMap="ReviewVoResultMap">
+    select <include refid="ReviewVoFields"/>
+    from (select * from reviews where workId = #{workId}) as review
+    left outer join (select * from user) as user on review.id =
+  </select>
 
 
   <delete id="deleteById" parameterType="java.lang.Integer" >

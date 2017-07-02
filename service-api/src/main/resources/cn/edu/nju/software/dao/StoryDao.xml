@@ -50,34 +50,34 @@
        story.draft
     </sql>
     <sql id="storyVoFields">
-       story.id as story_id,
-       story.title as story_title,
-       story.author as  story_author,
-       story.content as story_content,
-       story.press as story_press,
-       story.guide as  story_guide,
-       story.coverUrl as story_coverUrl,
-       story.preCoverUrl as story_preCoverUrl,
-       story.backgroundUrl as story_backgroundUrl,
-       story.originSoundUrl as story_originSoundUrl,
-       story.readGuide as story_readGuide,
-       story.price as story_price,
-       story.createTime as story_createTime,
-       story.updateTime as story_updateTime,
-       story.valid as story_valid,
-       story.recommend as story_recommend,
-       story.tellCount as story_tellCount,
-       story.defaultBackGroundMusicId as story_defaultBackGroundMusicId,
-       story.duration as story_duration,
-       story.likeCount as story_likeCount,
-       story.draft as story_draft,
-      story_tag.id as  story_tag_id,
-      story_tag.parentId as  story_tag_parentId,
-      story_tag.content as  story_tag_content,
-      story_tag.createTime as  story_tag_createTime,
-      story_tag.updateTime as  story_tag_updateTime,
-      story_tag.valid as  story_tag_valid,
-      story_tag.iconUrl  as  story_tag_iconUrl
+      <include refid="story_fields"/>,
+      <include refid="story_tag_fields"/>
+    </sql>
+    <sql id="story_fields">
+        story.id as story_id,
+        story.title as story_title,
+        story.author as  story_author,
+        story.content as story_content,
+        story.press as story_press,
+        story.guide as  story_guide,
+        story.coverUrl as story_coverUrl,
+        story.preCoverUrl as story_preCoverUrl,
+        story.backgroundUrl as story_backgroundUrl,
+        story.originSoundUrl as story_originSoundUrl,
+        story.readGuide as story_readGuide,
+        story.price as story_price,
+        story.createTime as story_createTime,
+        story.updateTime as story_updateTime,
+        story.valid as story_valid
+    </sql>
+    <sql id="story_tag_fields">
+        story_tag.id as  story_tag_id,
+        story_tag.parentId as  story_tag_parentId,
+        story_tag.content as  story_tag_content,
+        story_tag.createTime as  story_tag_createTime,
+        story_tag.updateTime as  story_tag_updateTime,
+        story_tag.valid as  story_tag_valid,
+        story_tag.iconUrl  as  story_tag_iconUrl
     </sql>
     <resultMap id="story" type="cn.edu.nju.software.entity.Story">
         <id column="id" property="id"/>
@@ -461,14 +461,11 @@
     </select>
     <select id="getStoryVoByIdList" resultMap="storyVo">
         select <include refid="storyVoFields"/>
-        from story
-        left outer join tag_relation on story.id = tag_relation.storyId
-        left outer join story_tag on tag_relation.tagId = story_tag.id
-        where story.id in
-        <foreach collection="idList" item="id" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-        and story_tag.parentId = 100038
+        from (select * from story where id in
+        <foreach collection="idList" item="id" open="(" separator="," close=")">#{id}</foreach>) as story
+        left outer join (SELECT storyId,tagId FROM tag_relation ) AS tag_relation ON tag_relation.storyId=story.id
+        left outer join (SELECT id,parentId,content,createTIme,updateTime,valid,iconUrl FROM story_tag WHERE parentId = 100038 AND valid = 1)
+        AS story_tag ON story_tag.id = tag_relation.tagId
     </select>
     <select id="getRecommendedStoryIdListByPage" resultType="java.lang.Integer">
         select id
@@ -476,6 +473,7 @@
         where valid = 1 and recommend = 1
         limit #{offset},#{limit}
     </select>
+
 
     <update id="newTell">
         update story

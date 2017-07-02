@@ -6,8 +6,8 @@ import cn.edu.nju.software.service.ReviewService;
 import cn.edu.nju.software.service.UserService;
 import cn.edu.nju.software.service.WorksService;
 import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.apache.xpath.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 import java.util.List;
-import java.util.TreeMap;
 
 /**
  * Created by Kt on 2017/6/28.
@@ -75,6 +73,42 @@ public class UserReviewController {
         boolean flag = reviewService.updateReview(reviewId,fromUserId,content);
         if(flag==true) result.jsonFill(1,null,true);
         else result.jsonFill(2,null,false);
+        return result;
+    }
+    @RequestMapping(value = "/deleteReview", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> deleteReview(@RequestParam("reviewId") int reviewId,
+                                              @RequestParam("fromUserId") int userId){
+        ResponseData<Boolean> result = new ResponseData<>();
+        Review review = reviewService.getReviewById(reviewId);
+        if(review==null) throw new RuntimeException("错误的评论Id");
+        Boolean temp = null;
+        if (review.getParentId() == 0 && review.getFromUserId() == userId) {
+             temp = reviewService.deleteReviewByUser(reviewId, userId);
+        }
+        else if(review.getParentId() != 0 && reviewService.getReviewById(review.getParentId()).getFromUserId()==userId){
+             temp = reviewService.deleteSubReviewByParentUser(reviewId, userId);
+        }
+        else if (userId == review.getFromUserId()) {
+            temp = reviewService.deleteSubReviewByUser(reviewId, userId);
+        }
+        if(temp!=null){
+            if(workService.getWorksById(review.getWorkId()).getUserId()==userId){
+                if(review.getParentId()==0){
+                    reviewService.deleteReviewByWorkAuthor(reviewId,userId);
+                }
+                else {
+                    reviewService.deleteSubReviewByWorkAuthor(reviewId, userId);
+                }
+            }
+            else throw new RuntimeException("无效的userId");
+        }
+        if(temp==null) throw new RuntimeException("错误的删除");
+        else if(temp==true){
+            result.jsonFill(1,null,true);
+        }else {
+            result.jsonFill(2,null,false);
+        }
         return result;
     }
 }

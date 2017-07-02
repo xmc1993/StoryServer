@@ -4,6 +4,7 @@ import cn.edu.nju.software.dao.ReviewDao;
 import cn.edu.nju.software.dao.UserDao;
 import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.entity.Review;
+import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.service.ReviewService;
 import cn.edu.nju.software.util.Const;
@@ -68,7 +69,7 @@ public class ReviewServiceImpl implements ReviewService {
     public boolean deleteByWorkAuthor(int[] reviewIdList, int userId){
         for(int reviewId:reviewIdList) {
             Review review = reviewDao.getReviewById(reviewId);
-            if (review == null) return false;
+            if (review == null) continue;
             if (review.getParentId() == 0) {
                 boolean temp=this.deleteReviewByWorkAuthor(reviewId, userId);
                 if(temp==false) return false;
@@ -83,7 +84,7 @@ public class ReviewServiceImpl implements ReviewService {
     public boolean deleteByUser(int[] reviewIdList,int userId){
         for(int reviewId:reviewIdList) {
             Review review = reviewDao.getReviewById(reviewId);
-            if (review == null) return false;
+            if (review == null) continue;
             if (review.getParentId() == 0) {
                 boolean temp = this.deleteReviewByUser(reviewId, userId);
                 if(temp==false) return false;
@@ -164,5 +165,7 @@ public class ReviewServiceImpl implements ReviewService {
     public Integer getReviewCountByWorkId(int workId) {
         return reviewDao.getReviewCountByWorkId(workId);
     }
+
+
 
 }
