@@ -9,7 +9,7 @@ import java.util.List;
  * Created by xmc1993 on 2017/5/12.
  */
 public interface StoryService {
-    boolean saveStory(Story story);
+    Story saveStory(Story story);
 
     boolean deleteStoryById(int id);
 

@@ -33,8 +33,13 @@ public class StoryServiceImpl implements StoryService {
     @Autowired
     private UserRelationStoryDao userRelationStoryDao;
     @Override
-    public boolean saveStory(Story story) {
-        return storyDao.saveStory(story);
+    public Story saveStory(Story story) {
+        boolean res = storyDao.saveStory(story);
+        if (res){
+            return story;
+        }else {
+            return null;
+        }
     }
 
     @Override

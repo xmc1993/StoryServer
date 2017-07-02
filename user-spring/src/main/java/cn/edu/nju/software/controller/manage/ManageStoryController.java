@@ -2,8 +2,10 @@ package cn.edu.nju.software.controller.manage;
 
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.Story;
+import cn.edu.nju.software.entity.TagRelation;
 import cn.edu.nju.software.service.CheckValidService;
 import cn.edu.nju.software.service.StoryService;
+import cn.edu.nju.software.service.TagRelationService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.UploadFileUtil;
 import com.wordnik.swagger.annotations.Api;
@@ -35,6 +37,8 @@ public class ManageStoryController {
     @Autowired
     private StoryService storyService;
     @Autowired
+    private TagRelationService tagRelationService;
+    @Autowired
     private CheckValidService checkValidService;
 
     @ApiOperation(value = "新增故事", notes = "草稿状态1为草稿0为完成")
@@ -55,6 +59,7 @@ public class ManageStoryController {
             @ApiParam("预览封面") @RequestParam(value = "preCoverFile", required = false) MultipartFile preCoverFile,
             @ApiParam("录制背景") @RequestParam(value = "backgroundFile", required = false) MultipartFile backgroundFile,
             @ApiParam("原音") @RequestParam(value = "originSoundFile", required = false) MultipartFile originSoundFile,
+            @ApiParam("标签列表") @RequestParam(value = "tagList", required = false) String tagList,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Story> result = new ResponseData<>();
         Story dbStory=storyService.getExactStoryByTitle(title);
@@ -89,9 +94,20 @@ public class ManageStoryController {
         story.setUpdateTime(new Date());
         story.setDraft(draft);
         story.setLikeCount(0);
-        boolean res = storyService.saveStory(story);
-        if (!res) {
+        Story res = storyService.saveStory(story);
+        if (res == null) {
             throw new RuntimeException("发布故事失败");
+        }
+        if (tagList != null) {
+            String[] tags = tagList.split(",");
+            for (String tag : tags) {
+                TagRelation tagRelation = new TagRelation();
+                tagRelation.setStoryId(story.getId());
+                tagRelation.setTagId(Integer.parseInt(tag));
+                tagRelation.setCreateTime(new Date());
+                tagRelation.setUpdateTime(new Date());
+                tagRelationService.saveTagRelation(tagRelation);
+            }
         }
         result.jsonFill(1,null,story);
         return result;
