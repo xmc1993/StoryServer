@@ -288,7 +288,7 @@ public class ManageStoryController {
             @ApiParam("offset") @RequestParam(value = "offset") int offset,
             @ApiParam("limit") @RequestParam(value = "limit") int limit){
         ResponseData<List<Story>> result=new ResponseData<>();
-        List<Story> stories= storyService.getStoryByClassifyFuzzyQueryInludeDrafts(title,author,content,press,tag,offset,limit);
+        List<Story> stories= storyService.getStoryByClassifyFuzzyQueryIncludeDrafts(title,author,content,press,tag,offset,limit);
         if(stories==null){
             result.jsonFill(2,"模糊查询失败",null);
             return result;

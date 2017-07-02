@@ -7,6 +7,7 @@ import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.util.Const;
+import cn.edu.nju.software.vo.StoryVo;
 import it.sauronsoftware.jave.Encoder;
 import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.MultimediaInfo;
@@ -211,7 +212,7 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public List<Story> getStoryByClassifyFuzzyQueryInludeDrafts(String title, String author, String content, String press, String tag, Integer offset, Integer limit){
+    public List<Story> getStoryByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, String tag, Integer offset, Integer limit){
         if(title!=null&&title.trim().equals("")) title=null;
         else if(title!=null) title=title.trim();
         if(author!=null&&author.trim().equals("")) author=null;
@@ -274,5 +275,15 @@ public class StoryServiceImpl implements StoryService {
     @Override
     public Story getExactStoryByTitle(String title){
         return storyDao.getExactStoryByTitle(title);
+    }
+
+    @Override
+    public List<StoryVo> getRecommendedStoryVoList(int offset,int limit){
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        List<Integer> idList = storyDao.getRecommendedStoryIdListByPage(offset,limit);
+        if(idList==null) return null;
+        List<StoryVo> storyVoList = storyDao.getStoryVoByIdList(idList);
+        return storyVoList;
     }
 }

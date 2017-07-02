@@ -1,6 +1,7 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.Story;
+import cn.edu.nju.software.vo.StoryVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -91,5 +92,9 @@ public interface StoryDao {
     Integer getStoryCountByTitleIncludeDrafts(String query);
 
     Story getExactStoryByTitle(@Param("title") String title);
-    
+
+    List<StoryVo> getStoryVoByIdList(@Param("idList") List<Integer> idList);
+
+    List<Integer> getRecommendedStoryIdListByPage(@Param("offset") int offset, @Param("limit") int limit);
+
 }

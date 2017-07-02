@@ -14,7 +14,7 @@ public class Story {
     private String author;
     private String content;
     private String press;//出版社
-    private String guide;//阅读分级
+    private String guide;//故事说明
     private String coverUrl;
     private String preCoverUrl;
     private String backgroundUrl;//录制背景图url

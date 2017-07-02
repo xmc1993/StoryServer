@@ -1,6 +1,7 @@
 package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.entity.Story;
+import cn.edu.nju.software.vo.StoryVo;
 
 import java.io.File;
 import java.util.List;
@@ -57,7 +58,7 @@ public interface StoryService {
 
     List <Story>  getStoryByFuzzyQuery(String query, Integer offset, Integer limit);
 
-    List<Story> getStoryByClassifyFuzzyQueryInludeDrafts(String title, String author, String content, String press, String tag, Integer offset, Integer limit);
+    List<Story> getStoryByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, String tag, Integer offset, Integer limit);
 
     Integer getStoryCountByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, String tag);
 
@@ -70,4 +71,6 @@ public interface StoryService {
     Integer getStoryCountByFuzzyQuery(String query);
 
     Story getExactStoryByTitle(String title);
+
+    List<StoryVo> getRecommendedStoryVoList(int offset, int limit);
 }

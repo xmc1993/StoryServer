@@ -7,6 +7,7 @@ import cn.edu.nju.software.service.StoryUserLogService;
 import cn.edu.nju.software.service.TagRelationService;
 import cn.edu.nju.software.service.UserRelationStoryService;
 import cn.edu.nju.software.util.TokenConfig;
+import cn.edu.nju.software.vo.StoryVo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -136,15 +137,16 @@ public class UserStoryController extends BaseController {
     @ApiOperation(value = "获得推荐故事列表", notes = "")
     @RequestMapping(value = "/getRecommendedStoryListByPage", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<Story>> getRecommendedStoryListByPage(
-            @ApiParam("OFFSET") @RequestParam int offset,
-            @ApiParam("LIMIT") @RequestParam int limit,
-            HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<Story>> responseData = new ResponseData<>();
-        List<Story> storyList = storyService.getRecommendedStoryListByPage(offset, limit);
-        responseData.jsonFill(1, null, storyList);
-        responseData.setCount(storyService.getRecommendedStoryCount());
-        return responseData;
+    public ResponseData<List<StoryVo>> getRecommendedStoryVoByPage(
+            @ApiParam("offset") @RequestParam("offset") int offset,
+            @ApiParam("limit") @RequestParam("limit") int limit
+    ){
+        ResponseData<List<StoryVo>> result = new ResponseData<>();
+        List<StoryVo> storyVoList =storyService.getRecommendedStoryVoList(offset,limit);
+        int count = storyService.getRecommendedStoryCount();
+        result.jsonFill(1,null,storyVoList);
+        result.setCount(count);
+        return result;
     }
     @ApiOperation(value = "模糊查询获取故事", notes = "")
     @RequestMapping(value = "/storiesByFuzzyQuery", method = {RequestMethod.GET})
@@ -239,4 +241,5 @@ public class UserStoryController extends BaseController {
         result.setCount(storyService.getDraftCount());
         return result;
     }
+
 }
