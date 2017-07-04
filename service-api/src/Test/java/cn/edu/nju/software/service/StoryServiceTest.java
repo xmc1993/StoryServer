@@ -45,10 +45,6 @@ public class StoryServiceTest {
         story.setTitle("故事标题");
     }
 
-    @Test
-    public void test1Save() {
-        assert storyService.saveStory(story);
-    }
 
     @Test
     public void test2Get() {

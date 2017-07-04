@@ -33,22 +33,23 @@ public class StoryServiceImpl implements StoryService {
     private UserDao userDao;
     @Autowired
     private UserRelationStoryDao userRelationStoryDao;
+
     @Override
     public Story saveStory(Story story) {
         boolean res = storyDao.saveStory(story);
-        if (res){
+        if (res) {
             return story;
-        }else {
+        } else {
             return null;
         }
     }
 
     @Override
     public boolean deleteStoryById(int id) {
-        List<Integer> userIdList=userRelationStoryDao.getUserIdListByStoryId(id);
-        for(Integer userId:userIdList){
+        List<Integer> userIdList = userRelationStoryDao.getUserIdListByStoryId(id);
+        for (Integer userId : userIdList) {
             userDao.delLikeStoryCount(userId);
-            userRelationStoryDao.delete(id,userId);
+            userRelationStoryDao.delete(id, userId);
         }
         return storyDao.deleteStoryById(id);
     }
@@ -81,12 +82,15 @@ public class StoryServiceImpl implements StoryService {
         if (!res) {
             return null;
         }
-        //如果故事的名字发生改变，那么更新冗余字段
-        if (!_story.getTitle().equals(story.getTitle())) {
-            worksDao.updateStoryTitle(story.getId(), story.getTitle());
+        if (_story.getTitle() != null) {
+            if (!_story.getTitle().equals(story.getTitle())) {
+                worksDao.updateStoryTitle(story.getId(), story.getTitle());
+            }
         }
-        if (!_story.getCoverUrl().equals(story.getCoverUrl())) {
-            worksDao.updateCoverUrl(story.getId(), story.getCoverUrl());
+        if (_story.getCoverUrl() != null) {
+            if (!_story.getCoverUrl().equals(story.getCoverUrl())) {
+                worksDao.updateCoverUrl(story.getId(), story.getCoverUrl());
+            }
         }
         return storyDao.getStoryById(story.getId());
 
@@ -111,7 +115,7 @@ public class StoryServiceImpl implements StoryService {
         idList.add(-1);//防止mybatis查询出错
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
-        return storyDao.getStoryListByIdList(idList,offset,limit);
+        return storyDao.getStoryListByIdList(idList, offset, limit);
     }
 
     @Override
@@ -152,12 +156,12 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public Integer getStoryCount(){
+    public Integer getStoryCount() {
         return storyDao.getStoryCount();
     }
 
     @Override
-    public Integer getStoryCountIncludeDrafts(){
+    public Integer getStoryCountIncludeDrafts() {
         return storyDao.getStoryCountIncludeDrafts();
     }
 
@@ -167,16 +171,16 @@ public class StoryServiceImpl implements StoryService {
         MultimediaInfo m = null;
         try {
             m = encoder.getInfo(file);
-            long length = m.getDuration()/1000;
-            int hours= (int) (length/3600);
-            int minutes= (int) ((length%3600)/60);
-            int seconds= (int) (length%60);
-            StringBuilder stringBuilder=new StringBuilder();
-            stringBuilder.append(hours==0?"0":String.valueOf(hours));
+            long length = m.getDuration() / 1000;
+            int hours = (int) (length / 3600);
+            int minutes = (int) ((length % 3600) / 60);
+            int seconds = (int) (length % 60);
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(hours == 0 ? "0" : String.valueOf(hours));
             stringBuilder.append(":");
-            stringBuilder.append(minutes==0?"0":String.valueOf(minutes));
+            stringBuilder.append(minutes == 0 ? "0" : String.valueOf(minutes));
             stringBuilder.append(":");
-            stringBuilder.append(seconds==0?"0":String.valueOf(seconds));
+            stringBuilder.append(seconds == 0 ? "0" : String.valueOf(seconds));
             return stringBuilder.toString();
         } catch (EncoderException e) {
             e.printStackTrace();
@@ -188,6 +192,7 @@ public class StoryServiceImpl implements StoryService {
     public Integer getStoryCountByTitle(String query) {
         return storyDao.getStoryCountByTitle(query);
     }
+
     @Override
     public Integer getStoryCountByTitleIncludeDrafts(String query) {
         return storyDao.getStoryCountByTitleIncludeDrafts(query);
@@ -198,91 +203,93 @@ public class StoryServiceImpl implements StoryService {
         idList.add(-1);//防止mybatis查询出错
         return storyDao.getStoryCountByIdList(idList);
     }
+
     @Override
-    public List <Story>  getStoryByFuzzyQuery(String query, Integer offset, Integer limit){
-        if(query !=null&& query.trim()=="") return null;
-        String[] queries=query.split(" ");
-        List<String> queryList=new ArrayList<String>();
-        for(String temp:queries){
-            if(!temp.trim().equals(""))  queryList.add(temp.trim());
+    public List<Story> getStoryByFuzzyQuery(String query, Integer offset, Integer limit) {
+        if (query != null && query.trim() == "") return null;
+        String[] queries = query.split(" ");
+        List<String> queryList = new ArrayList<String>();
+        for (String temp : queries) {
+            if (!temp.trim().equals("")) queryList.add(temp.trim());
         }
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
-        return storyDao.getStoryByFuzzyQuery(queryList,offset,limit);
+        return storyDao.getStoryByFuzzyQuery(queryList, offset, limit);
     }
 
     @Override
-    public List<Story> getStoryByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, String tag, Integer offset, Integer limit){
-        if(title!=null&&title.trim().equals("")) title=null;
-        else if(title!=null) title=title.trim();
-        if(author!=null&&author.trim().equals("")) author=null;
-        else if(author!=null) author=author.trim();
-        if(content!=null&&content.trim().equals("")) content=null;
-        else if(content!=null) content=content.trim();
-        if(press!=null&&press.trim().equals("")) press=null;
-        else if(press!=null) press=press.trim();
-        if(tag!=null&&tag.trim().equals("")) tag=null;
-        else if(tag!=null) tag=tag.trim();
+    public List<Story> getStoryByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, String tag, Integer offset, Integer limit) {
+        if (title != null && title.trim().equals("")) title = null;
+        else if (title != null) title = title.trim();
+        if (author != null && author.trim().equals("")) author = null;
+        else if (author != null) author = author.trim();
+        if (content != null && content.trim().equals("")) content = null;
+        else if (content != null) content = content.trim();
+        if (press != null && press.trim().equals("")) press = null;
+        else if (press != null) press = press.trim();
+        if (tag != null && tag.trim().equals("")) tag = null;
+        else if (tag != null) tag = tag.trim();
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         return storyDao.getStoryListByClassifyFuzzyQueryIncludeDrafts(
-                title, author, content, press, tag, offset,  limit);
+                title, author, content, press, tag, offset, limit);
     }
+
     @Override
-    public Integer getStoryCountByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, String tag){
-        if(title!=null&&title.trim().equals("")) title=null;
-        else if(title!=null) title=title.trim();
-        if(author!=null&&author.trim().equals("")) author=null;
-        else if(author!=null) author=author.trim();
-        if(content!=null&&content.trim().equals("")) content=null;
-        else if(content!=null) content=content.trim();
-        if(press!=null&&press.trim().equals("")) press=null;
-        else if(press!=null) press=press.trim();
-        if(tag!=null&&tag.trim().equals("")) tag=null;
-        else if(tag!=null) tag=tag.trim();
+    public Integer getStoryCountByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, String tag) {
+        if (title != null && title.trim().equals("")) title = null;
+        else if (title != null) title = title.trim();
+        if (author != null && author.trim().equals("")) author = null;
+        else if (author != null) author = author.trim();
+        if (content != null && content.trim().equals("")) content = null;
+        else if (content != null) content = content.trim();
+        if (press != null && press.trim().equals("")) press = null;
+        else if (press != null) press = press.trim();
+        if (tag != null && tag.trim().equals("")) tag = null;
+        else if (tag != null) tag = tag.trim();
         return storyDao.getStoryCountByClassifyFuzzyQueryIncludeDrafts(title, author, content, press, tag);
     }
 
     @Override
-    public boolean setDraftComplete(Integer storyId){
-        if(storyDao.getStoryById(storyId).getDraft()==0) return false;
+    public boolean setDraftComplete(Integer storyId) {
+        if (storyDao.getStoryById(storyId).getDraft() == 0) return false;
         return storyDao.setDraftCompleteByStoryId(storyId);
     }
 
     @Override
-    public Integer getDraftCount(){
+    public Integer getDraftCount() {
         return storyDao.getDraftCount();
     }
 
     @Override
-    public List<Story> getDraftList(Integer offset, Integer limit){
+    public List<Story> getDraftList(Integer offset, Integer limit) {
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
-        return storyDao.getDraftList(offset,limit);
+        return storyDao.getDraftList(offset, limit);
     }
 
     @Override
     public Integer getStoryCountByFuzzyQuery(String query) {
-        if(query !=null&& query.trim().equals("")) return null;
-        String[] queries=query.split(" ");
-        List<String> queryList=new ArrayList<String>();
-        for(String temp:queries){
-            if(!temp.trim().equals(""))  queryList.add(temp.trim());
+        if (query != null && query.trim().equals("")) return null;
+        String[] queries = query.split(" ");
+        List<String> queryList = new ArrayList<String>();
+        for (String temp : queries) {
+            if (!temp.trim().equals("")) queryList.add(temp.trim());
         }
         return storyDao.getStoryCountByFuzzyQuery(queryList);
     }
 
     @Override
-    public Story getExactStoryByTitle(String title){
+    public Story getExactStoryByTitle(String title) {
         return storyDao.getExactStoryByTitle(title);
     }
 
     @Override
-    public List<StoryVo> getRecommendedStoryVoList(int offset,int limit){
+    public List<StoryVo> getRecommendedStoryVoList(int offset, int limit) {
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
-        List<Integer> idList = storyDao.getRecommendedStoryIdListByPage(offset,limit);
-        if(idList==null) return null;
+        List<Integer> idList = storyDao.getRecommendedStoryIdListByPage(offset, limit);
+        if (idList == null) return null;
         List<StoryVo> storyVoList = storyDao.getStoryVoByIdList(idList);
         return storyVoList;
     }

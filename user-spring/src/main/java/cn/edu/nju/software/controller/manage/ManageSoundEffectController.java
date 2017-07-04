@@ -140,8 +140,7 @@ public class ManageSoundEffectController {
             throw new RuntimeException("错误的音效标签");
         }
         SoundEffect soundEffect = soundEffectService.getSoundEffectById(id);
-        if (!uploadFile.isEmpty()) {
-            logger.info("开始上传音效文件!");
+        if (uploadFile != null && !uploadFile.isEmpty()) {
             String realPath = UploadFileUtil.getBaseUrl() + SOUND_EFFECT_ROOT;
             String fileName = RandCharsUtils.getRandomString(16) + "." + UploadFileUtil.getSuffix(uploadFile.getOriginalFilename());
             boolean success = UploadFileUtil.mvFile(uploadFile, realPath, fileName);
