@@ -175,6 +175,7 @@
 		author=#{author},
 		content=#{content},
 		press=#{press},
+		guide=#{guide},
 		coverUrl=#{coverUrl},
 		preCoverUrl=#{preCoverUrl},
 		backgroundUrl=#{backgroundUrl},
