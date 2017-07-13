@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.RecordStatisticDao">
+
+    <sql id="fields">
+        id,
+        userId,
+        lastRecordTime,
+        curCount,
+        historyMaxCount,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveRecordStatistic" parameterType="cn.edu.nju.software.entity.RecordStatistic">
+        insert into record_statistic(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{worksId},
+        #{userId},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <select id="getRecordStatisticByUserId" resultType="cn.edu.nju.software.entity.RecordStatistic">
+        select
+        worksId
+        from record_statistic
+        where userId = #{0}
+    </select>
+
+    <update id="updateRecordStatistic" parameterType="cn.edu.nju.software.entity.updateRecordStatistic">
+        UPDATE record_statistic
+        SET
+        lastRecordTime=#{lastRecordTime},
+        curCount=#{curCount},
+        historyMaxCount=#{historyMaxCount},
+        updateTime=#{updateTime}
+        WHERE userId = #{userId}
+    </update>
+    
+</mapper>
