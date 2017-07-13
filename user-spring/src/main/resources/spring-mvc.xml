@@ -101,6 +101,17 @@
             <mvc:mapping path="/user/getAgreeWorksListByUserId"/>
             <mvc:mapping path="/user/getWorksById"/>
             <mvc:mapping path="/user/getFollowingStatus"/>
+
+            <mvc:mapping path="/user/getStoryById"/>
+            <mvc:mapping path="/user/getStoryListByPage"/>
+            <mvc:mapping path="/user/getStoryIdListByFirstLevelTagId"/>
+            <mvc:mapping path="/user/getStoryIdListBySecondLevelTagId"/>
+            <mvc:mapping path="/user/getStoryListByTitle"/>
+            <mvc:mapping path="/user/getStoryByFuzzyQuery"/>
+            <mvc:mapping path="/user/getFollowingStatus"/>
+            <mvc:mapping path="/user/draftStories"/>
+            <mvc:mapping path="/user/getRecommendedStoryListByPage"/>
+
             <!-- 不需要拦截的uri -->
             <!--
             <mvc:exclude-mapping path="/user/getLandingPage"/>

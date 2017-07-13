@@ -11,6 +11,7 @@ import cn.edu.nju.software.vo.StoryVo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,17 +45,22 @@ public class UserStoryController extends BaseController {
     @ApiOperation(value = "获取ID获取故事", notes = "")
     @RequestMapping(value = "/getStoryById", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<Story> getStoryById(
+    public ResponseData<StoryVo> getStoryById(
             @ApiParam("故事ID") @RequestParam("id") Integer id,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<Story> responseData = new ResponseData();
-
+        ResponseData<StoryVo> responseData = new ResponseData();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
         Story story = storyService.getStoryById(id);
         if (story == null) {
             responseData.jsonFill(2, "该故事不存在", null);
         }
         else{
-            responseData.jsonFill(1, null, story);
+            responseData.jsonFill(1, null, story2Vo(story, user.getId()));
         }
         return responseData;
     }
@@ -76,13 +83,19 @@ public class UserStoryController extends BaseController {
     @ApiOperation(value = "分页得到故事列表", notes = "分页得到故事列表")
     @RequestMapping(value = "/getStoryListByPage", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<Story>> getAllStory(
+    public ResponseData<List<StoryVo>> getAllStory(
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<Story>> responseData = new ResponseData();
+        ResponseData<List<StoryVo>> responseData = new ResponseData();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
         List<Story> storyList = storyService.getStoryListByPage(offset, limit);
-        responseData.jsonFill(1, null, storyList);
+        responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
         responseData.setCount(storyService.getStoryCount());
         return responseData;
     }
@@ -90,15 +103,21 @@ public class UserStoryController extends BaseController {
     @ApiOperation(value = "根据一级标签获得故事列表", notes = "根据一级标签获得故事列表")
     @RequestMapping(value = "/getStoryIdListByFirstLevelTagId", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<Story>> getStoryIdListByFirstLevelTagId(
+    public ResponseData<List<StoryVo>> getStoryIdListByFirstLevelTagId(
             @ApiParam("一级标签ID") @RequestParam("tagId") int tagId,
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<Story>> responseData = new ResponseData();
+        ResponseData<List<StoryVo>> responseData = new ResponseData();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
         List<Integer> idList = tagRelationService.getStoryIdListByFirstLevelTagId(tagId);
-        List<Story> storyList = storyService.getStoryListByIdList(idList,offset,limit);
-        responseData.jsonFill(1, null, storyList);
+        List<Story> storyList = storyService.getStoryListByIdList(idList, offset, limit);
+        responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
         responseData.setCount(storyService.getStoryCountByIdList(idList));
         return responseData;
     }
@@ -106,15 +125,21 @@ public class UserStoryController extends BaseController {
     @ApiOperation(value = "根据二级标签获得故事列表", notes = "根据二级标签获得故事列表")
     @RequestMapping(value = "/getStoryIdListBySecondLevelTagId", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<Story>> getStoryIdListBySecondLevelTagId(
+    public ResponseData<List<StoryVo>> getStoryIdListBySecondLevelTagId(
             @ApiParam("二级标签ID") @RequestParam("tagId") int tagId,
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<Story>> responseData = new ResponseData();
+        ResponseData<List<StoryVo>> responseData = new ResponseData();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
         List<Integer> idList = tagRelationService.getStoryIdListBySecondLevelTagId(tagId);
         List<Story> storyList = storyService.getStoryListByIdList(idList, offset, limit);
-        responseData.jsonFill(1, null, storyList);
+        responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
         responseData.setCount(storyService.getStoryCountByIdList(idList));
         return responseData;
     }
@@ -122,14 +147,20 @@ public class UserStoryController extends BaseController {
     @ApiOperation(value = "根据标题获得故事列表", notes = "")
     @RequestMapping(value = "/getStoryListByTitle", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<Story>> getStoryListByTitle(
+    public ResponseData<List<StoryVo>> getStoryListByTitle(
             @ApiParam("查询字段") @RequestParam("query") String query,
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<Story>> responseData = new ResponseData<>();
+        ResponseData<List<StoryVo>> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
         List<Story> storyList = storyService.getStoryListByTitle(query, offset, limit);
-        responseData.jsonFill(1, null, storyList);
+        responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
         responseData.setCount(storyService.getStoryCountByTitle(query));
         return responseData;
     }
@@ -139,14 +170,24 @@ public class UserStoryController extends BaseController {
     @ResponseBody
     public ResponseData<List<StoryVo>> getRecommendedStoryVoByPage(
             @ApiParam("offset") @RequestParam("offset") int offset,
-            @ApiParam("limit") @RequestParam("limit") int limit
+            @ApiParam("limit") @RequestParam("limit") int limit,
+            HttpServletRequest request, HttpServletResponse response
     ){
-        ResponseData<List<StoryVo>> result = new ResponseData<>();
+        ResponseData<List<StoryVo>> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
         List<StoryVo> storyVoList =storyService.getRecommendedStoryVoList(offset,limit);
+        for (StoryVo storyVo : storyVoList) {
+            storyVo.setLike(userRelationStoryService.isLikedByUser(user.getId(), storyVo.getId()));
+        }
         int count = storyService.getRecommendedStoryCount();
-        result.jsonFill(1,null,storyVoList);
-        result.setCount(count);
-        return result;
+        responseData.jsonFill(1, null, storyVoList);
+        responseData.setCount(count);
+        return responseData;
     }
     @ApiOperation(value = "模糊查询获取故事", notes = "")
     @RequestMapping(value = "/storiesByFuzzyQuery", method = {RequestMethod.GET})
@@ -154,18 +195,25 @@ public class UserStoryController extends BaseController {
     public ResponseData<List<Story>> getStoryByFuzzyQuery(
             @ApiParam("query") @RequestParam(value = "query") String query,
             @ApiParam("OFFSET") @RequestParam int offset,
-            @ApiParam("LIMIT") @RequestParam int limit
+            @ApiParam("LIMIT") @RequestParam int limit,
+            HttpServletRequest request, HttpServletResponse response
             ){
-        ResponseData<List<Story>> result=new ResponseData<>();
-        List<Story> stories= storyService.getStoryByFuzzyQuery(query,offset,limit);
+        ResponseData<List<Story>> responseData =new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
+        List<Story> stories= storyService.getStoryByFuzzyQuery(query, offset, limit);
         if(stories==null){
-            result.jsonFill(2,"模糊查询失败",null);
-            return result;
+            responseData.jsonFill(2, "模糊查询失败", null);
+            return responseData;
         }
         else{
-            result.jsonFill(1,null,stories);
-            result.setCount(storyService.getStoryCountByFuzzyQuery(query));
-            return result;
+            responseData.jsonFill(1, null, stories);
+            responseData.setCount(storyService.getStoryCountByFuzzyQuery(query));
+            return responseData;
         }
     }
 
@@ -177,12 +225,12 @@ public class UserStoryController extends BaseController {
             ,HttpServletRequest request, HttpServletResponse response){
         ResponseData<Boolean> result=new ResponseData<>();
         User user=(User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
-        boolean success=userRelationStoryService.addUserRelationStory(storyId,user.getId());
+        boolean success=userRelationStoryService.addUserRelationStory(storyId, user.getId());
         if(success){
             result.jsonFill(1,null,true);
         }
         else{
-            result.jsonFill(2,"设置喜爱的故事失败",false);
+            result.jsonFill(2, "设置喜爱的故事失败", false);
         }
         return result;
     }
@@ -208,8 +256,8 @@ public class UserStoryController extends BaseController {
             @ApiParam("storyId") @RequestParam int storyId,
             HttpServletRequest request, HttpServletResponse response){
         ResponseData<Boolean> result=new ResponseData<>();
-        boolean isLiked=userRelationStoryService.isLikedByUser(userId,storyId);
-        result.jsonFill(1,null,isLiked);
+        boolean isLiked=userRelationStoryService.isLikedByUser(userId, storyId);
+        result.jsonFill(1, null, isLiked);
         return result;
     }
     @ApiOperation(value = "取消喜爱的故事", notes = "")
@@ -232,14 +280,41 @@ public class UserStoryController extends BaseController {
     @ApiOperation(value = "获取草稿列表")
     @RequestMapping(value = "/draftStories",method = {RequestMethod.GET})
     @ResponseBody
-    public  ResponseData<List<Story>> getStoryByFuzzyQuery(
+    public  ResponseData<List<StoryVo>> getStoryByFuzzyQuery(
             @ApiParam("offset") @RequestParam("offset") int offset,
-            @ApiParam("limit") @RequestParam("limit") int limit){
-        ResponseData<List<Story>> result=new ResponseData<>();
+            @ApiParam("limit") @RequestParam("limit") int limit
+            ,HttpServletRequest request, HttpServletResponse response){
+        ResponseData<List<StoryVo>> responseData=new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
         List<Story> storyList = storyService.getDraftList(offset,limit);
-        result.jsonFill(1,null,storyList);
-        result.setCount(storyService.getDraftCount());
-        return result;
+        responseData.jsonFill(1,null,storyList2VoList(storyList, user.getId()));
+        responseData.setCount(storyService.getDraftCount());
+        return responseData;
+    }
+
+
+    private List<StoryVo> storyList2VoList(List<Story> list, int userId){
+        List<StoryVo> storyVoList = new ArrayList<>();
+        for (Story story : list) {
+            storyVoList.add(story2Vo(story, userId));
+        }
+        return storyVoList;
+    }
+
+    private StoryVo story2Vo(Story story, int userId){
+        if (story == null) {
+            return null;
+        }
+        StoryVo storyVo = new StoryVo();
+        BeanUtils.copyProperties(story, storyVo);
+        boolean isLiked=userRelationStoryService.isLikedByUser(userId, story.getId());
+        storyVo.setLike(isLiked);
+        return storyVo;
     }
 
 }
