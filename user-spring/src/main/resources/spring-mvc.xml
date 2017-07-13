@@ -112,6 +112,10 @@
             <mvc:mapping path="/user/draftStories"/>
             <mvc:mapping path="/user/getRecommendedStoryListByPage"/>
 
+            <mvc:mapping path="/user/newRecord"/>
+            <mvc:mapping path="/user/getCurrentCount"/>
+            <mvc:mapping path="/user/getHistoryMaxCount"/>
+
             <!-- 不需要拦截的uri -->
             <!--
             <mvc:exclude-mapping path="/user/getLandingPage"/>

@@ -46,7 +46,7 @@ public class UserRecordStatisticController extends BaseController {
         return responseData;
     }
 
-    @ApiOperation(value = "获得用户当前连续打卡天数", notes = "")
+    @ApiOperation(value = "获得用户当前连续录制天数", notes = "")
     @RequestMapping(value = "/getCurrentCount", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<Integer> getCurrentCount(
@@ -63,7 +63,7 @@ public class UserRecordStatisticController extends BaseController {
         return responseData;
     }
 
-    @ApiOperation(value = "获得用户历史最大连续打卡天数", notes = "")
+    @ApiOperation(value = "获得用户历史最大连续录制天数", notes = "")
     @RequestMapping(value = "/getHistoryMaxCount", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<Integer> getHistoryMaxCount(
