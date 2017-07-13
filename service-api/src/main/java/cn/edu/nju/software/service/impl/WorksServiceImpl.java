@@ -36,6 +36,11 @@ public class WorksServiceImpl implements WorksService {
     }
 
     @Override
+    public boolean listenWorks(int worksId) {
+        return worksDao.addListenCount(worksId);
+    }
+
+    @Override
     public boolean updateWorks(Works works) {
         works.setUpdateTime(new Date());
         return worksDao.updateWorks(works);

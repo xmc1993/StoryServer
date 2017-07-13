@@ -23,4 +23,5 @@ public class Works {
     private String coverUrl;
     private String duration;
     private Integer reviewCount;
+    private Integer listenCount = 0;//收听数
 }

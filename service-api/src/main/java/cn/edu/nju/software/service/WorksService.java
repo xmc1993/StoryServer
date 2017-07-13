@@ -11,6 +11,8 @@ public interface WorksService {
 
     boolean saveWorks(Works works);
 
+    boolean listenWorks(int worksId);
+
     boolean updateWorks(Works works);
 
     boolean deleteWorksById(int id);

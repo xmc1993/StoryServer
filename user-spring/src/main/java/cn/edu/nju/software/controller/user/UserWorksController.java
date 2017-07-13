@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -371,6 +372,19 @@ public class UserWorksController extends BaseController {
         } else {
             responseData.jsonFill(2, "发布失败", null);
         }
+        return responseData;
+    }
+
+
+    @ApiOperation(value = "收听作品", notes = "")
+    @RequestMapping(value = "/listenWorks", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Boolean> listenWorks(
+            @ApiParam("作品ID") @RequestParam("worksId") int worksId,
+            HttpServletRequest request, HttpServletResponse response) throws ParseException {
+        ResponseData<Boolean> responseData = new ResponseData<>();
+        boolean res = worksService.listenWorks(worksId);
+        responseData.jsonFill(1, null, res);
         return responseData;
     }
 

@@ -48,6 +48,9 @@ public interface WorksDao {
 
     boolean delReviewCount(@Param("workId") Integer workId);
 
+    boolean addListenCount(@Param("workId") Integer workId);
+
+
     boolean setDelReviewCount(@Param("workId") Integer workId, @Param("delReviewCount") int delReviewCount);
 
 }
