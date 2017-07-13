@@ -23,7 +23,7 @@
         update works
         SET
         reviewCount=reviewCount-1
-        where id = #{workId}
+        where id = #{workId} and valid =1
     </delete>
 
     <resultMap id="works" type="cn.edu.nju.software.entity.Works">
@@ -70,7 +70,7 @@
     <insert id="addReviewCount">
         update works
         SET reviewCount=reviewCount+1
-        where id = #{workId}
+        where id = #{workId} and valid = 1
     </insert>
 
     <update id="deleteWorksById">
@@ -84,7 +84,7 @@
     <insert id="addListenCount">
         update works
         SET listenCount=listenCount+1
-        where id = #{workId}
+        where id = #{workId} and valid = 1
     </insert>
 
     <update id="updateWorks">

@@ -23,7 +23,7 @@ import java.text.ParseException;
 
 @Api("recordStatistic controller")
 @Controller
-@RequestMapping("/recordStatistic")
+@RequestMapping("/user")
 public class UserRecordStatisticController extends BaseController {
     @Autowired
     private RecordStatisticService recordStatisticService;

@@ -19,8 +19,10 @@
         VALUES
         (
         #{id},
-        #{worksId},
         #{userId},
+        #{lastRecordTime},
+        #{curCount},
+        #{historyMaxCount},
         #{createTime},
         #{updateTime}
         )
@@ -28,12 +30,12 @@
 
     <select id="getRecordStatisticByUserId" resultType="cn.edu.nju.software.entity.RecordStatistic">
         select
-        worksId
+        <include refid="fields"></include>
         from record_statistic
         where userId = #{0}
     </select>
 
-    <update id="updateRecordStatistic" parameterType="cn.edu.nju.software.entity.updateRecordStatistic">
+    <update id="updateRecordStatistic" parameterType="cn.edu.nju.software.entity.RecordStatistic">
         UPDATE record_statistic
         SET
         lastRecordTime=#{lastRecordTime},
