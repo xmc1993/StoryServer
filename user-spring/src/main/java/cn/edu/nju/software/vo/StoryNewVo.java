@@ -10,7 +10,7 @@ import java.util.List;
  * Created by xmc1993 on 2017/7/12.
  */
 @Data
-public class StoryVo extends Story {
+public class StoryNewVo extends Story {
     private List<StoryTag> tagList;
     private boolean like = false;
 }

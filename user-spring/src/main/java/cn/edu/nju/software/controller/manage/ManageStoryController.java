@@ -10,7 +10,7 @@ import cn.edu.nju.software.service.StoryTagService;
 import cn.edu.nju.software.service.TagRelationService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.UploadFileUtil;
-import cn.edu.nju.software.vo.StoryVo;
+import cn.edu.nju.software.vo.StoryNewVo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -52,7 +52,7 @@ public class ManageStoryController {
     @RequestMapping(value = "/stories", method = {RequestMethod.POST})
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseData<StoryVo> publicStory(
+    public ResponseData<StoryNewVo> publicStory(
             @ApiParam("故事标题") @RequestParam(value = "title", required = false) String title,
             @ApiParam("作者") @RequestParam(value = "author", required = false) String author,
             @ApiParam("内容") @RequestParam(value = "content", required = false) String content,
@@ -68,7 +68,7 @@ public class ManageStoryController {
             @ApiParam("原音") @RequestParam(value = "originSoundFile", required = false) MultipartFile originSoundFile,
             @ApiParam("标签列表") @RequestParam(value = "tagList", required = false) String tagList,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<StoryVo> result = new ResponseData<>();
+        ResponseData<StoryNewVo> result = new ResponseData<>();
         Story dbStory = storyService.getExactStoryByTitle(title);
         if (dbStory != null) {
             result.jsonFill(2, "重复的标题名称", story2vo(dbStory));
@@ -124,7 +124,7 @@ public class ManageStoryController {
     @ApiOperation(value = "更新故事", notes = "")
     @RequestMapping(value = "/stories/{id}", method = {RequestMethod.POST})
     @ResponseBody
-    public StoryVo updateStoryTag(
+    public StoryNewVo updateStoryTag(
             @ApiParam("故事ID") @PathVariable int id,
             @ApiParam("故事标题") @RequestParam(value = "title", required = false) String title,
             @ApiParam("作者") @RequestParam(value = "author", required = false) String author,
@@ -197,7 +197,7 @@ public class ManageStoryController {
     @ApiOperation(value = "根据ID获得故事", notes = "")
     @RequestMapping(value = "/stories/{id}", method = {RequestMethod.GET})
     @ResponseBody
-    public StoryVo getStoryId(
+    public StoryNewVo getStoryId(
             @ApiParam("故事ID") @PathVariable int id,
             HttpServletRequest request, HttpServletResponse response) {
         Story story = storyService.getStoryByIdIncludeDrafts(id);
@@ -287,7 +287,7 @@ public class ManageStoryController {
     @ApiOperation(value = "模糊查询获取故事", notes = "")
     @RequestMapping(value = "/storiesByFuzzyQuery", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<StoryVo>> getStoryByFuzzyQuery(
+    public ResponseData<List<StoryNewVo>> getStoryByFuzzyQuery(
             @ApiParam("title") @RequestParam(value = "title", required = false) String title,
             @ApiParam("author") @RequestParam(value = "author", required = false) String author,
             @ApiParam("content") @RequestParam(value = "content", required = false) String content,
@@ -295,7 +295,7 @@ public class ManageStoryController {
             @ApiParam("tag") @RequestParam(value = "tag", required = false) String tag,
             @ApiParam("offset") @RequestParam(value = "offset") int offset,
             @ApiParam("limit") @RequestParam(value = "limit") int limit) {
-        ResponseData<List<StoryVo>> result = new ResponseData<>();
+        ResponseData<List<StoryNewVo>> result = new ResponseData<>();
         List<Story> stories = storyService.getStoryByClassifyFuzzyQueryIncludeDrafts(title, author, content, press, tag, offset, limit);
         if (stories == null) {
             result.jsonFill(2, "模糊查询失败", null);
@@ -326,8 +326,8 @@ public class ManageStoryController {
      * @param list
      * @return
      */
-    private List<StoryVo> storyList2VoList(List<Story> list) {
-        List<StoryVo> voList = new ArrayList<>();
+    private List<StoryNewVo> storyList2VoList(List<Story> list) {
+        List<StoryNewVo> voList = new ArrayList<>();
         if (list == null) {
             return voList;
         }
@@ -342,11 +342,11 @@ public class ManageStoryController {
      * @param story
      * @return
      */
-    private StoryVo story2vo(Story story) {
+    private StoryNewVo story2vo(Story story) {
         if (story == null) {
             return null;
         }
-        StoryVo storyVo = new StoryVo();
+        StoryNewVo storyVo = new StoryNewVo();
         BeanUtils.copyProperties(story, storyVo);
         List<Integer> idList = tagRelationService.getTagIdListByStoryId(storyVo.getId());
         List<StoryTag> storyTagList = storyTagService.getStoryTagListByIdList(idList);

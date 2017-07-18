@@ -1,12 +1,16 @@
 package cn.edu.nju.software.controller.user;
 
 import cn.edu.nju.software.controller.BaseController;
-import cn.edu.nju.software.entity.*;
+import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.entity.Story;
+import cn.edu.nju.software.entity.StoryUserLog;
+import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.service.StoryUserLogService;
 import cn.edu.nju.software.service.TagRelationService;
 import cn.edu.nju.software.service.UserRelationStoryService;
 import cn.edu.nju.software.util.TokenConfig;
+import cn.edu.nju.software.vo.StoryNewVo;
 import cn.edu.nju.software.vo.StoryVo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -45,10 +49,10 @@ public class UserStoryController extends BaseController {
     @ApiOperation(value = "获取ID获取故事", notes = "")
     @RequestMapping(value = "/getStoryById", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<StoryVo> getStoryById(
+    public ResponseData<StoryNewVo> getStoryById(
             @ApiParam("故事ID") @RequestParam("id") Integer id,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<StoryVo> responseData = new ResponseData();
+        ResponseData<StoryNewVo> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "请先登录", null);
@@ -83,11 +87,11 @@ public class UserStoryController extends BaseController {
     @ApiOperation(value = "分页得到故事列表", notes = "分页得到故事列表")
     @RequestMapping(value = "/getStoryListByPage", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<StoryVo>> getAllStory(
+    public ResponseData<List<StoryNewVo>> getAllStory(
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<StoryVo>> responseData = new ResponseData();
+        ResponseData<List<StoryNewVo>> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "请先登录", null);
@@ -103,12 +107,12 @@ public class UserStoryController extends BaseController {
     @ApiOperation(value = "根据一级标签获得故事列表", notes = "根据一级标签获得故事列表")
     @RequestMapping(value = "/getStoryIdListByFirstLevelTagId", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<StoryVo>> getStoryIdListByFirstLevelTagId(
+    public ResponseData<List<StoryNewVo>> getStoryIdListByFirstLevelTagId(
             @ApiParam("一级标签ID") @RequestParam("tagId") int tagId,
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<StoryVo>> responseData = new ResponseData();
+        ResponseData<List<StoryNewVo>> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "请先登录", null);
@@ -125,12 +129,12 @@ public class UserStoryController extends BaseController {
     @ApiOperation(value = "根据二级标签获得故事列表", notes = "根据二级标签获得故事列表")
     @RequestMapping(value = "/getStoryIdListBySecondLevelTagId", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<StoryVo>> getStoryIdListBySecondLevelTagId(
+    public ResponseData<List<StoryNewVo>> getStoryIdListBySecondLevelTagId(
             @ApiParam("二级标签ID") @RequestParam("tagId") int tagId,
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<StoryVo>> responseData = new ResponseData();
+        ResponseData<List<StoryNewVo>> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "请先登录", null);
@@ -147,12 +151,12 @@ public class UserStoryController extends BaseController {
     @ApiOperation(value = "根据标题获得故事列表", notes = "")
     @RequestMapping(value = "/getStoryListByTitle", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<StoryVo>> getStoryListByTitle(
+    public ResponseData<List<StoryNewVo>> getStoryListByTitle(
             @ApiParam("查询字段") @RequestParam("query") String query,
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<StoryVo>> responseData = new ResponseData<>();
+        ResponseData<List<StoryNewVo>> responseData = new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "请先登录", null);
@@ -176,13 +180,15 @@ public class UserStoryController extends BaseController {
         ResponseData<List<StoryVo>> responseData = new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
-            responseData.jsonFill(2, "请先登录", null);
-            response.setStatus(401);
-            return responseData;
+//            responseData.jsonFill(2, "请先登录", null);
+//            response.setStatus(401);
+//            return responseData;
+            user = new User();
+            user.setId(-1);
         }
         List<StoryVo> storyVoList =storyService.getRecommendedStoryVoList(offset,limit);
         for (StoryVo storyVo : storyVoList) {
-            storyVo.setLike(userRelationStoryService.isLikedByUser(user.getId(), storyVo.getId()));
+            storyVo.setLike(userRelationStoryService.isLikedByUser(user.getId(), storyVo.getStory().getId()));
         }
         int count = storyService.getRecommendedStoryCount();
         responseData.jsonFill(1, null, storyVoList);
@@ -280,11 +286,11 @@ public class UserStoryController extends BaseController {
     @ApiOperation(value = "获取草稿列表")
     @RequestMapping(value = "/draftStories",method = {RequestMethod.GET})
     @ResponseBody
-    public  ResponseData<List<StoryVo>> getStoryByFuzzyQuery(
+    public  ResponseData<List<StoryNewVo>> getStoryByFuzzyQuery(
             @ApiParam("offset") @RequestParam("offset") int offset,
             @ApiParam("limit") @RequestParam("limit") int limit
             ,HttpServletRequest request, HttpServletResponse response){
-        ResponseData<List<StoryVo>> responseData=new ResponseData<>();
+        ResponseData<List<StoryNewVo>> responseData=new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "请先登录", null);
@@ -298,22 +304,24 @@ public class UserStoryController extends BaseController {
     }
 
 
-    private List<StoryVo> storyList2VoList(List<Story> list, int userId){
-        List<StoryVo> storyVoList = new ArrayList<>();
+    private List<StoryNewVo> storyList2VoList(List<Story> list, int userId){
+        List<StoryNewVo> storyVoList = new ArrayList<>();
         for (Story story : list) {
             storyVoList.add(story2Vo(story, userId));
         }
         return storyVoList;
     }
 
-    private StoryVo story2Vo(Story story, int userId){
+    private StoryNewVo story2Vo(Story story, int userId){
         if (story == null) {
             return null;
         }
-        StoryVo storyVo = new StoryVo();
+        StoryNewVo storyVo = new StoryNewVo();
         BeanUtils.copyProperties(story, storyVo);
-        boolean isLiked=userRelationStoryService.isLikedByUser(userId, story.getId());
-        storyVo.setLike(isLiked);
+        if (userId > 0) {
+            boolean isLiked = userRelationStoryService.isLikedByUser(userId, story.getId());
+            storyVo.setLike(isLiked);
+        }
         return storyVo;
     }
 

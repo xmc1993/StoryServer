@@ -12,6 +12,8 @@ import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -32,12 +34,24 @@ import javax.servlet.http.HttpServletResponse;
 public class AccessTokenValidationInterceptor extends HandlerInterceptorAdapter {
 
     private static Logger logger = LoggerFactory.getLogger(AccessTokenValidationInterceptor.class);
-
+    //白名单
+    private static List<String> whileList = new ArrayList();
+    static {
+        whileList.add("/user/getRecommendedStoryListByPage");
+    }
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         logger.info("************:" + request.getRequestURI());
-        this.checkLogin(request, response, handler);
+        //白名单的uri可以过滤
+        if(whileList.contains(request.getRequestURI())){
+            String AccessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
+            if (AccessToken != null) {
+                this.checkLogin(request, response, handler);
+            }
+        }else {
+            this.checkLogin(request, response, handler);
+        }
         return super.preHandle(request, response, handler);
     }
 

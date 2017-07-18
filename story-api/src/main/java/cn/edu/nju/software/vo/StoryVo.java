@@ -13,4 +13,5 @@ import java.util.List;
 public class StoryVo {
     private Story story;
     private List<TagRelation> tagRelationList;
+    private boolean like = false;
 }
