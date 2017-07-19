@@ -26,9 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by xmc1993 on 2017/5/15.
@@ -39,6 +37,12 @@ import java.util.List;
 public class ManageStoryController {
     private static final Logger logger = LoggerFactory.getLogger(ManageStoryController.class);
     private static final String COVER_ROOT = "/cover/"; //头像的基础路径
+//    private static final Map<String, Integer> deleteMap = new HashMap();
+//    static {
+//        deleteMap.put("coverUrl", 1);
+//        deleteMap.put("preCoverUrl", 1);
+//        deleteMap.put("backgroundUrl", 1);
+//    }
     @Autowired
     private StoryService storyService;
     @Autowired
@@ -178,6 +182,48 @@ public class ManageStoryController {
             throw new RuntimeException("更新失败");
         }
         return story2vo(result);
+    }
+
+
+    @ApiOperation(value = "删除封面", notes = "")
+    @RequestMapping(value = "/deleteCover", method = {RequestMethod.POST})
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseData<Boolean> deleteCover(
+            @ApiParam("故事ID")int id,
+            @ApiParam("要清除的字段")String query,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Boolean> responseData = new ResponseData<>();
+
+        if (query == null) {
+            responseData.jsonFill(2, "query不能为", null);
+            return responseData;
+        }
+        Story story = storyService.getStoryById(id);
+        if (story == null) {
+            responseData.jsonFill(2, "故事不存在", null);
+            return responseData;
+        }
+        //TODO 删除文件 提取到一个Service里面保持原子性
+        boolean flag = true;
+        if (query.equals("preCoverUrl")) {
+            story.setPreCoverUrl("");
+        }else if (query.equals("coverUrl")) {
+            story.setCoverUrl("");
+        }else if (query.equals("backgroundUrl")) {
+            story.setBackgroundUrl("");
+        }else {
+            flag = false;
+        }
+
+        if (flag) {
+            storyService.updateStory(story);
+            responseData.jsonFill(1, null ,true);
+        }else {
+            responseData.jsonFill(2, "要清理的资源不存在", null);
+        }
+
+        return responseData;
     }
 
     @ApiOperation(value = "删除故事", notes = "")

@@ -11,7 +11,6 @@ import cn.edu.nju.software.service.TagRelationService;
 import cn.edu.nju.software.service.UserRelationStoryService;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.vo.StoryNewVo;
-import cn.edu.nju.software.vo.StoryVo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -172,26 +171,20 @@ public class UserStoryController extends BaseController {
     @ApiOperation(value = "获得推荐故事列表", notes = "")
     @RequestMapping(value = "/getRecommendedStoryListByPage", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<StoryVo>> getRecommendedStoryVoByPage(
+    public ResponseData<List<StoryNewVo>> getRecommendedStoryVoByPage(
             @ApiParam("offset") @RequestParam("offset") int offset,
             @ApiParam("limit") @RequestParam("limit") int limit,
             HttpServletRequest request, HttpServletResponse response
     ){
-        ResponseData<List<StoryVo>> responseData = new ResponseData<>();
+        ResponseData<List<StoryNewVo>> responseData = new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
-//            responseData.jsonFill(2, "请先登录", null);
-//            response.setStatus(401);
-//            return responseData;
             user = new User();
             user.setId(-1);
         }
-        List<StoryVo> storyVoList =storyService.getRecommendedStoryVoList(offset,limit);
-        for (StoryVo storyVo : storyVoList) {
-            storyVo.setLike(userRelationStoryService.isLikedByUser(user.getId(), storyVo.getStory().getId()));
-        }
+        List<Story> storyList = storyService.getRecommendedStoryListByPage(offset, limit);
         int count = storyService.getRecommendedStoryCount();
-        responseData.jsonFill(1, null, storyVoList);
+        responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
         responseData.setCount(count);
         return responseData;
     }
@@ -302,6 +295,7 @@ public class UserStoryController extends BaseController {
         responseData.setCount(storyService.getDraftCount());
         return responseData;
     }
+
 
 
     private List<StoryNewVo> storyList2VoList(List<Story> list, int userId){
