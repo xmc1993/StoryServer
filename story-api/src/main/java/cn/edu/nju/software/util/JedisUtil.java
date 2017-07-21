@@ -19,8 +19,11 @@ public class JedisUtil {
 
     static {
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-        jedisPoolConfig.setMaxIdle(100);
-        jedisPoolConfig.setMaxTotal(300);
+        jedisPoolConfig.setMaxIdle(10);
+        jedisPoolConfig.setMaxTotal(100);
+        // 每1小时扫描去除无效连接
+        jedisPoolConfig.setTestWhileIdle(true);
+        jedisPoolConfig.setTimeBetweenEvictionRunsMillis(60*60*1000L);
         jedisPoolConfig.setTestOnBorrow(true);
         new JedisUtil(jedisPoolConfig);
     }
