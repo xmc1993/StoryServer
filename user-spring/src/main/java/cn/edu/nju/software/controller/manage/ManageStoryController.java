@@ -137,6 +137,7 @@ public class ManageStoryController {
             @ApiParam("阅读指导") @RequestParam(value = "guide", required = false) String guide,
             @ApiParam("价格") @RequestParam(value = "price", required = false) String price,
             @ApiParam("草稿状态") @RequestParam("draft") int draft,
+            @ApiParam("默认背景音ID") @RequestParam Integer defaultBackGroundMusicId,
             @ApiParam("朗读指导") @RequestParam(value = "readGuide", required = false) String readGuide,
             @ApiParam("封面") @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
             @ApiParam("预览封面") @RequestParam(value = "preCoverFile", required = false) MultipartFile preCoverFile,
@@ -175,6 +176,7 @@ public class ManageStoryController {
         if (guide != null) story.setGuide(guide);
         if (price != null) story.setPrice(price);
         if (readGuide != null) story.setReadGuide(readGuide);
+        story.setDefaultBackGroundMusicId(defaultBackGroundMusicId);
         story.setUpdateTime(new Date());
         story.setDraft(draft);
         Story result = storyService.updateStory(story);
