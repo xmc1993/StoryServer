@@ -68,6 +68,7 @@ public class AccessTokenValidationInterceptor extends HandlerInterceptorAdapter 
                 throw new LoginException("登录失效");
             } else {
                 User user = (User) ObjectAndByte.toObject(bytes);
+                user.setAccessToken(AccessToken);
                 if (user == null) {
                     response.setStatus(401);
                     throw new LoginException("登录失效");

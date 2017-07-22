@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
@@ -73,10 +72,15 @@ public class UserUserController extends BaseController {
             responseData.jsonFill(2, "用户尚未登录。", false);
             return responseData;
         }
+        user = userService.loginByUnionId(user.getWxUnionId());
+        Jedis jedis = JedisUtil.getJedis();
+        jedis.set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
+        jedis.close();
         user.setVerifyCode(null);
         user.setExpireTime(null);
         user.setWxUnionId(null);
         user.setPassword(null);
+
         responseData.jsonFill(1, null, user);
         return responseData;
     }
@@ -205,8 +209,10 @@ public class UserUserController extends BaseController {
             return responseData;
         }
         //登录信息写入缓存
-        JedisUtil.getJedis().set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
-        JedisUtil.getJedis().expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);//缓存用户信息30天
+        Jedis jedis = JedisUtil.getJedis();
+        jedis.set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
+        jedis.expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);//缓存用户信息30天
+        jedis.close();
 
         LoginResponseVo loginResponseVo = new LoginResponseVo();
         loginResponseVo.setAccessToken(user.getAccessToken());
