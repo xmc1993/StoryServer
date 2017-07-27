@@ -50,8 +50,8 @@
        story.draft
     </sql>
     <sql id="storyVoFields">
-      <include refid="story_fields"/>,
-      <include refid="story_tag_fields"/>
+        <include refid="story_fields"/>,
+        <include refid="story_tag_fields"/>
     </sql>
     <sql id="story_fields">
         story.id as story_id,
@@ -123,7 +123,7 @@
         <result column="story_duration" property="story.duration"/>
         <result column="story_likeCount" property="story.likeCount"/>
         <result column="story_draft" property="story.draft"/>
-        <collection property="tagRelationList"  ofType="cn.edu.nju.software.entity.StoryTag">
+        <collection property="tagRelationList" ofType="cn.edu.nju.software.entity.StoryTag">
             <id column="story_tag_id" property="id"/>
             <result column="story_tag_parentId" property="parentId"/>
             <result column="story_tag_content" property="content"/>
@@ -296,12 +296,12 @@
         where title like CONCAT('%', #{0} ,'%') and valid = 1 and draft = 0
     </select>
     <select id="getStoryIdCountByTagIdList" resultType="java.lang.Integer">
-            select count(id)
-            from story
-            where valid = 1 and draft = 0 and id in
-            <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
-                #{id}
-            </foreach>
+        select count(id)
+        from story
+        where valid = 1 and draft = 0 and id in
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
     </select>
     <select id="getRecommendedStoryCount" resultType="java.lang.Integer">
         select
@@ -322,10 +322,10 @@
         select
         <include refid="multiTableFields"/>
         From story
-            LEFT JOIN tag_relation ON story.id = tag_relation.storyId
-            LEFT JOIN story_tag ON tag_relation.tagId = story_tag.id
+        LEFT JOIN tag_relation ON story.id = tag_relation.storyId
+        LEFT JOIN story_tag ON tag_relation.tagId = story_tag.id
         where story.valid = 1 and draft = 0
-            AND
+        AND
         <foreach collection="queryList" item="query" index="index" open="(" separator=" OR " close=")">
             story.title like CONCAT('%', #{query} ,'%')
 
@@ -333,7 +333,7 @@
 
             OR story.press like CONCAT('%', #{query} ,'%')
 
-            OR story_tag.content  like CONCAT('%', #{query} ,'%')
+            OR story_tag.content like CONCAT('%', #{query} ,'%')
         </foreach>
         GROUP BY story.id
         limit #{offset},#{limit}
@@ -343,8 +343,8 @@
         <include refid="multiTableFields"/>
         From story
         <if test=" tag!=null">
-        LEFT JOIN tag_relation ON story.id = tag_relation.storyId
-        LEFT JOIN story_tag ON tag_relation.tagId = story_tag.id
+            LEFT JOIN tag_relation ON story.id = tag_relation.storyId
+            LEFT JOIN story_tag ON tag_relation.tagId = story_tag.id
         </if>
         <where>
             story.valid = 1
@@ -395,7 +395,7 @@
         </where>
     </select>
     <select id="getDraftList" resultType="cn.edu.nju.software.entity.Story">
-        SELECT 
+        SELECT
         <include refid="fields"/>
         from story
         where valid = 1 and draft = 1
@@ -422,7 +422,7 @@
 
             OR story.press like CONCAT('%', #{query} ,'%')
 
-            OR story_tag.content  like CONCAT('%', #{query} ,'%')
+            OR story_tag.content like CONCAT('%', #{query} ,'%')
         </foreach>
 
     </select>
@@ -456,19 +456,29 @@
         where title like CONCAT('%', #{0} ,'%') and valid = 1
     </select>
     <select id="getExactStoryByTitle" resultType="cn.edu.nju.software.entity.Story">
-        select <include refid="fields"/>
+        select
+        <include refid="fields"/>
         from story
         where title = #{title} and valid = 1
     </select>
     <select id="getStoryVoByIdList" resultMap="storyVo">
-        select <include refid="storyVoFields"/>
+        select
+        <include refid="storyVoFields"/>
         from (select * from story where id in
         <foreach collection="idList" item="id" open="(" separator="," close=")">#{id}</foreach>) as story
         left outer join (SELECT storyId,tagId FROM tag_relation ) AS tag_relation ON tag_relation.storyId=story.id
-        left outer join (SELECT id,parentId,content,createTIme,updateTime,valid,iconUrl FROM story_tag WHERE parentId = 100038 AND valid = 1)
+        left outer join (SELECT id,parentId,content,createTIme,updateTime,valid,iconUrl FROM story_tag WHERE parentId =
+        100038 AND valid = 1)
         AS story_tag ON story_tag.id = tag_relation.tagId
     </select>
     <select id="getRecommendedStoryIdListByPage" resultType="java.lang.Integer">
+        select id
+        from story
+        where valid = 1 and recommend = 1
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="getRecommendStoryListByPage" resultType="java.lang.Integer">
         select id
         from story
         where valid = 1 and recommend = 1

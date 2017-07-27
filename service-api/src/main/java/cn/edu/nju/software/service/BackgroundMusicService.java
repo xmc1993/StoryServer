@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface BackgroundMusicService {
 
-    boolean saveBackgroundMusic(BackgroundMusic backgroundMusic);
+    BackgroundMusic saveBackgroundMusic(BackgroundMusic backgroundMusic);
 
     boolean deleteBackgroundMusic(int id);
 

@@ -1,14 +1,12 @@
 package cn.edu.nju.software.controller.manage;
 
-import cn.edu.nju.software.entity.ResponseData;
-import cn.edu.nju.software.entity.Story;
-import cn.edu.nju.software.entity.StoryTag;
-import cn.edu.nju.software.entity.TagRelation;
+import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.CheckValidService;
 import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.service.StoryTagService;
 import cn.edu.nju.software.service.TagRelationService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
+import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UploadFileUtil;
 import cn.edu.nju.software.vo.StoryNewVo;
 import com.wordnik.swagger.annotations.Api;
@@ -366,6 +364,26 @@ public class ManageStoryController {
         result.jsonFill(1, null, storyList);
         result.setCount(storyService.getDraftCount());
         return result;
+    }
+
+    @ApiOperation(value = "推荐列表")
+    @RequestMapping(value = "/getRecommendStoryListByPage",method = {RequestMethod.GET})
+    @ResponseBody
+    public  ResponseData<List<StoryNewVo>> getRecommendStoryListByPage(
+            @ApiParam("offset") @RequestParam("offset") int offset,
+            @ApiParam("limit") @RequestParam("limit") int limit
+            ,HttpServletRequest request, HttpServletResponse response){
+        ResponseData<List<StoryNewVo>> responseData=new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
+        List<Story> storyList = storyService.getRecommendedStoryListByPage(offset, limit);
+        responseData.jsonFill(1,null,storyList2VoList(storyList));
+        responseData.setCount(storyService.getDraftCount());
+        return responseData;
     }
 
 

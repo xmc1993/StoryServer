@@ -79,7 +79,7 @@ public class UserStoryController extends BaseController {
         if(storyService.getStoryById(storyId)==null) throw new RuntimeException("无效的故事ID");
         StoryUserLog log = new StoryUserLog(userId,storyId,channel,new Date());
         storyUserLogService.saveLog(log);
-        result.jsonFill(1,null,true);
+        result.jsonFill(1, null, true);
         return result;
     }
 
@@ -93,9 +93,8 @@ public class UserStoryController extends BaseController {
         ResponseData<List<StoryNewVo>> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
-            responseData.jsonFill(2, "请先登录", null);
-            response.setStatus(401);
-            return responseData;
+            user = new User();
+            user.setId(-1);
         }
         List<Story> storyList = storyService.getStoryListByPage(offset, limit);
         responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
@@ -242,7 +241,7 @@ public class UserStoryController extends BaseController {
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response){
         ResponseData<List<Story>> result=new ResponseData<>();
-        List<Story> storyList=userRelationStoryService.getLikeStories(userId,offset,limit);
+        List<Story> storyList=userRelationStoryService.getLikeStories(userId, offset, limit);
         result.jsonFill(1,null,storyList);
         result.setCount(userRelationStoryService.getLikeStoriesCount(userId));
         return result;
@@ -267,7 +266,7 @@ public class UserStoryController extends BaseController {
             ,HttpServletRequest request, HttpServletResponse response){
         ResponseData<Boolean> result=new ResponseData<>();
         User user=(User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
-        boolean success=userRelationStoryService.deleteUserRelationStory(storyId,user.getId());
+        boolean success=userRelationStoryService.deleteUserRelationStory(storyId, user.getId());
         if(success){
             result.jsonFill(1,null,true);
         }
@@ -290,7 +289,7 @@ public class UserStoryController extends BaseController {
             response.setStatus(401);
             return responseData;
         }
-        List<Story> storyList = storyService.getDraftList(offset,limit);
+        List<Story> storyList = storyService.getDraftList(offset, limit);
         responseData.jsonFill(1,null,storyList2VoList(storyList, user.getId()));
         responseData.setCount(storyService.getDraftCount());
         return responseData;

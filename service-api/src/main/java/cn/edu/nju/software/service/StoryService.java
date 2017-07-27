@@ -73,4 +73,6 @@ public interface StoryService {
     Story getExactStoryByTitle(String title);
 
     List<StoryVo> getRecommendedStoryVoList(int offset, int limit);
+
+    List<Story> getRecommendStoryListByPage(int offset, int limit);
 }

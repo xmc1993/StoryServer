@@ -19,8 +19,13 @@ public class BackgroundMusicServiceImpl implements BackgroundMusicService {
     private BackgroundMusicDao backgroundMusicDao;
 
     @Override
-    public boolean saveBackgroundMusic(BackgroundMusic backgroundMusic) {
-        return backgroundMusicDao.saveBackgroundMusic(backgroundMusic);
+    public BackgroundMusic saveBackgroundMusic(BackgroundMusic backgroundMusic) {
+        boolean res = backgroundMusicDao.saveBackgroundMusic(backgroundMusic);
+        if (res) {
+            return backgroundMusic;
+        }else {
+            return null;
+        }
     }
 
     @Override

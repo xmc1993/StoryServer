@@ -1,9 +1,11 @@
 package cn.edu.nju.software.controller.manage;
 
-import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.BackgroundMusic;
-import cn.edu.nju.software.service.CheckValidService;
+import cn.edu.nju.software.entity.BackgroundMusicTagRelation;
+import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.BackgroundMusicService;
+import cn.edu.nju.software.service.BackgroundMusicTagRelationService;
+import cn.edu.nju.software.service.CheckValidService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.UploadFileUtil;
 import com.wordnik.swagger.annotations.Api;
@@ -34,6 +36,8 @@ public class ManageBackgroundMusicController {
     private BackgroundMusicService backgroundMusicService;
     @Autowired
     private CheckValidService checkValidService;
+    @Autowired
+    private BackgroundMusicTagRelationService backgroundMusicTagRelationService;
 
     private static final String SOUND_EFFECT_ROOT = "/backgroundMusic/"; //头像的基础路径
 
@@ -43,6 +47,7 @@ public class ManageBackgroundMusicController {
     public BackgroundMusic publishBackgroundMusic(
             @ApiParam("背景音乐文件") @RequestParam("uploadFile") MultipartFile uploadFile,
             @ApiParam("背景音乐描述") @RequestParam("description") String description,
+            @ApiParam("标签列表") @RequestParam(value = "tagList", required = false) String tagList,
             HttpServletRequest request, HttpServletResponse response) {
 
         if (uploadFile.isEmpty()) {
@@ -63,8 +68,21 @@ public class ManageBackgroundMusicController {
         backgroundMusic.setUrl(url);
         backgroundMusic.setCreateTime(new Date());
         backgroundMusic.setUpdateTime(new Date());
-        boolean res = backgroundMusicService.saveBackgroundMusic(backgroundMusic);
-        if (res) {
+        BackgroundMusic res = backgroundMusicService.saveBackgroundMusic(backgroundMusic);
+        if (res != null) {
+            if (tagList != null) {
+                String[] tags = tagList.split(",");
+                for (String tag : tags) {
+                    BackgroundMusicTagRelation tagRelation = new BackgroundMusicTagRelation();
+                    tagRelation.setBackgroundMusicId(res.getId());
+                    tagRelation.setTagId(Integer.parseInt(tag));
+                    tagRelation.setCreateTime(new Date());
+                    tagRelation.setUpdateTime(new Date());
+                    backgroundMusicTagRelationService.saveTagRelation(tagRelation);
+                }
+            }
+        }
+        if (res != null) {
             return backgroundMusic;
         } else {
             throw new RuntimeException("发布失败。");
@@ -113,10 +131,10 @@ public class ManageBackgroundMusicController {
     }
 
     @ApiOperation(value = "删除背景音乐", notes = "")
-         @RequestMapping(value = "/backgroundMusics/{id}", method = {RequestMethod.DELETE})
-         @ResponseBody
-         @ResponseStatus(HttpStatus.NO_CONTENT)
-         public void deleteBackgroundMusic(
+    @RequestMapping(value = "/backgroundMusics/{id}", method = {RequestMethod.DELETE})
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteBackgroundMusic(
             @ApiParam("背景音乐ID") @PathVariable int id,
             HttpServletRequest request, HttpServletResponse response) {
         if (!checkValidService.isBackgroundMusicExist(id)) {
@@ -124,7 +142,7 @@ public class ManageBackgroundMusicController {
         }
         boolean success = backgroundMusicService.deleteBackgroundMusic(id);
 
-        if (!success){
+        if (!success) {
             throw new RuntimeException("删除失败。");
         }
     }
@@ -137,9 +155,9 @@ public class ManageBackgroundMusicController {
             @ApiParam("背景音乐ID") @PathVariable int id,
             HttpServletRequest request, HttpServletResponse response) {
         BackgroundMusic backgroundMusic = backgroundMusicService.getBackgroundMusicById(id);
-        if (null == backgroundMusic ){
+        if (null == backgroundMusic) {
             throw new RuntimeException("获取背景音乐失败。");
-        }else {
+        } else {
             return backgroundMusic;
         }
     }
@@ -152,22 +170,21 @@ public class ManageBackgroundMusicController {
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         List<BackgroundMusic> backgroundMusicList = backgroundMusicService.getBackgroundMusicListByPage(offset, limit);
-        ResponseData<List<BackgroundMusic>> result=new ResponseData<>();
-        if(backgroundMusicList==null)
-        {
-            result.jsonFill(2,"获取背景音乐列表失败",null);
+        ResponseData<List<BackgroundMusic>> result = new ResponseData<>();
+        if (backgroundMusicList == null) {
+            result.jsonFill(2, "获取背景音乐列表失败", null);
             return result;
-        }
-        else{
-            result.jsonFill(1,null,backgroundMusicList);
+        } else {
+            result.jsonFill(1, null, backgroundMusicList);
             result.setCount(backgroundMusicService.getBackgroundMusicCount());
             return result;
         }
     }
+
     @ApiOperation(value = "获取背景音乐数量", notes = "")
     @RequestMapping(value = "/backgroundMusicCount", method = {RequestMethod.GET})
     @ResponseBody
-    public Integer getBackgroundMusicCount(){
+    public Integer getBackgroundMusicCount() {
         return backgroundMusicService.getBackgroundMusicCount();
     }
 }

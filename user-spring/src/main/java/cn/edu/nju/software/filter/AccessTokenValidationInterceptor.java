@@ -38,6 +38,7 @@ public class AccessTokenValidationInterceptor extends HandlerInterceptorAdapter 
     private static List<String> whileList = new ArrayList();
     static {
         whileList.add("/user/getRecommendedStoryListByPage");
+        whileList.add("/user/getStoryListByPage");
     }
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
