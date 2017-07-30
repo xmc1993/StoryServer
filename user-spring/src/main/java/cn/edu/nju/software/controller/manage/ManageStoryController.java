@@ -1,12 +1,14 @@
 package cn.edu.nju.software.controller.manage;
 
-import cn.edu.nju.software.entity.*;
+import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.entity.Story;
+import cn.edu.nju.software.entity.StoryTag;
+import cn.edu.nju.software.entity.TagRelation;
 import cn.edu.nju.software.service.CheckValidService;
 import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.service.StoryTagService;
 import cn.edu.nju.software.service.TagRelationService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
-import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UploadFileUtil;
 import cn.edu.nju.software.vo.StoryNewVo;
 import com.wordnik.swagger.annotations.Api;
@@ -24,7 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by xmc1993 on 2017/5/15.
@@ -35,12 +39,7 @@ import java.util.*;
 public class ManageStoryController {
     private static final Logger logger = LoggerFactory.getLogger(ManageStoryController.class);
     private static final String COVER_ROOT = "/cover/"; //头像的基础路径
-//    private static final Map<String, Integer> deleteMap = new HashMap();
-//    static {
-//        deleteMap.put("coverUrl", 1);
-//        deleteMap.put("preCoverUrl", 1);
-//        deleteMap.put("backgroundUrl", 1);
-//    }
+
     @Autowired
     private StoryService storyService;
     @Autowired
@@ -374,15 +373,9 @@ public class ManageStoryController {
             @ApiParam("limit") @RequestParam("limit") int limit
             ,HttpServletRequest request, HttpServletResponse response){
         ResponseData<List<StoryNewVo>> responseData=new ResponseData<>();
-        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
-        if (user == null) {
-            responseData.jsonFill(2, "请先登录", null);
-            response.setStatus(401);
-            return responseData;
-        }
         List<Story> storyList = storyService.getRecommendedStoryListByPage(offset, limit);
         responseData.jsonFill(1,null,storyList2VoList(storyList));
-        responseData.setCount(storyService.getDraftCount());
+        responseData.setCount(storyService.getRecommendedStoryCount());
         return responseData;
     }
 

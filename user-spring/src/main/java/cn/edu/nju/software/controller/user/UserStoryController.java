@@ -1,14 +1,8 @@
 package cn.edu.nju.software.controller.user;
 
 import cn.edu.nju.software.controller.BaseController;
-import cn.edu.nju.software.entity.ResponseData;
-import cn.edu.nju.software.entity.Story;
-import cn.edu.nju.software.entity.StoryUserLog;
-import cn.edu.nju.software.entity.User;
-import cn.edu.nju.software.service.StoryService;
-import cn.edu.nju.software.service.StoryUserLogService;
-import cn.edu.nju.software.service.TagRelationService;
-import cn.edu.nju.software.service.UserRelationStoryService;
+import cn.edu.nju.software.entity.*;
+import cn.edu.nju.software.service.*;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.vo.StoryNewVo;
 import com.wordnik.swagger.annotations.Api;
@@ -44,6 +38,8 @@ public class UserStoryController extends BaseController {
     private UserRelationStoryService userRelationStoryService;
     @Autowired
     private StoryUserLogService storyUserLogService;
+    @Autowired
+    private StoryTagService storyTagService;
 
     @ApiOperation(value = "获取ID获取故事", notes = "")
     @RequestMapping(value = "/getStoryById", method = {RequestMethod.GET})
@@ -54,9 +50,8 @@ public class UserStoryController extends BaseController {
         ResponseData<StoryNewVo> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
-            responseData.jsonFill(2, "请先登录", null);
-            response.setStatus(401);
-            return responseData;
+            user = new User();
+            user.setId(-1);
         }
         Story story = storyService.getStoryById(id);
         if (story == null) {
@@ -113,9 +108,8 @@ public class UserStoryController extends BaseController {
         ResponseData<List<StoryNewVo>> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
-            responseData.jsonFill(2, "请先登录", null);
-            response.setStatus(401);
-            return responseData;
+            user = new User();
+            user.setId(-1);
         }
         List<Integer> idList = tagRelationService.getStoryIdListByFirstLevelTagId(tagId);
         List<Story> storyList = storyService.getStoryListByIdList(idList, offset, limit);
@@ -125,7 +119,8 @@ public class UserStoryController extends BaseController {
     }
 
     @ApiOperation(value = "根据二级标签获得故事列表", notes = "根据二级标签获得故事列表")
-    @RequestMapping(value = "/getStoryIdListBySecondLevelTagId", method = {RequestMethod.GET})
+    @RequestMapping(value = "/" +
+            "", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<StoryNewVo>> getStoryIdListBySecondLevelTagId(
             @ApiParam("二级标签ID") @RequestParam("tagId") int tagId,
@@ -135,9 +130,8 @@ public class UserStoryController extends BaseController {
         ResponseData<List<StoryNewVo>> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
-            responseData.jsonFill(2, "请先登录", null);
-            response.setStatus(401);
-            return responseData;
+            user = new User();
+            user.setId(-1);
         }
         List<Integer> idList = tagRelationService.getStoryIdListBySecondLevelTagId(tagId);
         List<Story> storyList = storyService.getStoryListByIdList(idList, offset, limit);
@@ -157,9 +151,8 @@ public class UserStoryController extends BaseController {
         ResponseData<List<StoryNewVo>> responseData = new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
-            responseData.jsonFill(2, "请先登录", null);
-            response.setStatus(401);
-            return responseData;
+            user = new User();
+            user.setId(-1);
         }
         List<Story> storyList = storyService.getStoryListByTitle(query, offset, limit);
         responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
@@ -199,9 +192,8 @@ public class UserStoryController extends BaseController {
         ResponseData<List<Story>> responseData =new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
-            responseData.jsonFill(2, "请先登录", null);
-            response.setStatus(401);
-            return responseData;
+            user = new User();
+            user.setId(-1);
         }
         List<Story> stories= storyService.getStoryByFuzzyQuery(query, offset, limit);
         if(stories==null){
@@ -285,9 +277,8 @@ public class UserStoryController extends BaseController {
         ResponseData<List<StoryNewVo>> responseData=new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
-            responseData.jsonFill(2, "请先登录", null);
-            response.setStatus(401);
-            return responseData;
+            user = new User();
+            user.setId(-1);
         }
         List<Story> storyList = storyService.getDraftList(offset, limit);
         responseData.jsonFill(1,null,storyList2VoList(storyList, user.getId()));
@@ -310,6 +301,9 @@ public class UserStoryController extends BaseController {
             return null;
         }
         StoryNewVo storyVo = new StoryNewVo();
+        List<Integer> idList = tagRelationService.getTagIdListByStoryId(storyVo.getId());
+        List<StoryTag> storyTagList = storyTagService.getStoryTagListByIdList(idList);
+        storyVo.setTagList(storyTagList);
         BeanUtils.copyProperties(story, storyVo);
         if (userId > 0) {
             boolean isLiked = userRelationStoryService.isLikedByUser(userId, story.getId());

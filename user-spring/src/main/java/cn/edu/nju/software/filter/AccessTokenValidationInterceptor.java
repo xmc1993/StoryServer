@@ -39,6 +39,12 @@ public class AccessTokenValidationInterceptor extends HandlerInterceptorAdapter 
     static {
         whileList.add("/user/getRecommendedStoryListByPage");
         whileList.add("/user/getStoryListByPage");
+        whileList.add("/user/getStoryById");
+        whileList.add("/user/storiesByFuzzyQuery");
+        whileList.add("/user/getStoryListByTitle");
+        whileList.add("/user/getStoryIdListBySecondLevelTagId");
+        whileList.add("/user/getStoryIdListByFirstLevelTagId");
+        whileList.add("/user/draftStories");
     }
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
