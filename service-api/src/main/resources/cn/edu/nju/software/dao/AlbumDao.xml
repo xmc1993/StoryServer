@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.AlbumDao">
+
+    <sql id="fields">
+        id,
+        name,
+        description,
+        icon,
+        extra,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveAlbum" parameterType="cn.edu.nju.software.entity.Album" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into album(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{name},
+        #{description},
+        #{icon},
+        #{extra},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <update id="updateAlbum" parameterType="cn.edu.nju.software.entity.Album">
+        UPDATE album
+        SET
+        name=#{name},
+        description=#{description},
+        icon=#{icon},
+        extra=#{extra},
+        updateTime=#{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteAlbum">
+        DELETE FROM album
+        WHERE id = #{0}
+    </delete>
+
+
+    <select id="getAllAlbumByPage" resultType="cn.edu.nju.software.entity.Album">
+        select
+        <include refid="fields"></include>
+        from album
+        limit #{0},#{1}
+    </select>
+
+    <select id="getAlbumById" resultType="cn.edu.nju.software.entity.Album">
+        select
+        <include refid="fields"></include>
+        from album
+        WHERE id = #{0}
+    </select>
+
+</mapper>

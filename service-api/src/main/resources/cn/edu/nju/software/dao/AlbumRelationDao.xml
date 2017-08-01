@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.AlbumRelationDao">
+
+    <sql id="fields">
+        id,
+        storyId,
+        albumId,
+        createTime,
+        updateTime
+    </sql>
+
+    <resultMap id="albumRelation" type="cn.edu.nju.software.entity.AlbumRelation">
+        <id column="id" property="id"/>
+        <id column="storyId" property="storyId"/>
+        <id column="albumId" property="albumId"/>
+        <id column="createTime" property="createTime"/>
+        <id column="updateTime" property="updateTime"/>
+    </resultMap>
+
+    <insert id="saveAlbumRelation" parameterType="cn.edu.nju.software.entity.AlbumRelation" keyProperty="id" useGeneratedKeys="true">
+        insert into album_relation(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{storyId},
+        #{albumId},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <delete id="deleteAlbumRelationById">
+        DELETE FROM album_relation
+        WHERE id = #{0}
+    </delete>
+
+    <delete id="deleteAlbumRelationByStoryIdAndAlbumId">
+        DELETE FROM album_relation
+        WHERE storyId = #{0} and albumId = #{1}
+    </delete>
+
+
+    <select id="getStoryAlbumById" resultType="cn.edu.nju.software.entity.AlbumRelation">
+        select
+        <include refid="fields"></include>
+        from album_relation
+        where id = #{0}
+    </select>
+
+    <select id="getStoryIdListByAlbumId" resultType="java.lang.Integer">
+        select distinct
+        storyId
+        from album_relation
+        where albumId = #{0}
+    </select>
+
+    <select id="getAlbumIdListByStoryId" resultType="java.lang.Integer">
+        select distinct
+        albumId
+        from album_relation
+        where storyId = #{0}
+    </select>
+
+    <select id="getStoryIdListByAlbumIdList" resultType="java.lang.Integer">
+        select distinct
+        storyId
+        from album_relation
+        where albumId in
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+</mapper>
