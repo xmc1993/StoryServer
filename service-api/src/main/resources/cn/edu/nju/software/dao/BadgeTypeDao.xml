@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.BadgeTypeDao">
+
+    <sql id="fields">
+        id,
+        name,
+        description,
+        extra,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveBadgeType" parameterType="cn.edu.nju.software.entity.BadgeType" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into badge_type(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{name},
+        #{description},
+        #{extra},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <update id="updateBadgeType" parameterType="cn.edu.nju.software.entity.BadgeType">
+        UPDATE badge_type
+        SET
+        name=#{name},
+        description=#{description},
+        extra=#{extra},
+        updateTime=#{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteBadgeType">
+        DELETE FROM badge_type
+        WHERE id = #{0}
+    </delete>
+
+    <select id="getAllBadgeTypeByPage" resultType="cn.edu.nju.software.entity.BadgeType">
+        select
+        <include refid="fields"></include>
+        from badge_type
+        limit #{0},#{1}
+    </select>
+
+    <select id="getBadgeTypeById" resultType="cn.edu.nju.software.entity.BadgeType">
+        select
+        <include refid="fields"></include>
+        from badge_type
+        WHERE id = #{0}
+    </select>
+
+</mapper>

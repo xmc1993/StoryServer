@@ -55,7 +55,7 @@
     </update>
 
     <delete id="deleteBaby">
-        DELETE FROM bady
+        DELETE FROM baby
         WHERE id = #{0}
     </delete>
 

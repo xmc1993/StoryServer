@@ -119,8 +119,7 @@ public class UserStoryController extends BaseController {
     }
 
     @ApiOperation(value = "根据二级标签获得故事列表", notes = "根据二级标签获得故事列表")
-    @RequestMapping(value = "/" +
-            "", method = {RequestMethod.GET})
+    @RequestMapping(value = "getStoryIdListBySecondLevelTagId", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<StoryNewVo>> getStoryIdListBySecondLevelTagId(
             @ApiParam("二级标签ID") @RequestParam("tagId") int tagId,
@@ -301,7 +300,7 @@ public class UserStoryController extends BaseController {
             return null;
         }
         StoryNewVo storyVo = new StoryNewVo();
-        List<Integer> idList = tagRelationService.getTagIdListByStoryId(storyVo.getId());
+        List<Integer> idList = tagRelationService.getTagIdListByStoryId(story.getId());
         List<StoryTag> storyTagList = storyTagService.getStoryTagListByIdList(idList);
         storyVo.setTagList(storyTagList);
         BeanUtils.copyProperties(story, storyVo);

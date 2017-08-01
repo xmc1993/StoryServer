@@ -293,4 +293,12 @@ public class StoryServiceImpl implements StoryService {
         List<StoryVo> storyVoList = storyDao.getStoryVoByIdList(idList);
         return storyVoList;
     }
+
+    @Override
+    public List<Story> getRecommendStoryListByPage(int offset, int limit) {
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        List<Story> storyList = storyDao.getRecommendedStoryListByPage(offset, limit);
+        return storyList;
+    }
 }

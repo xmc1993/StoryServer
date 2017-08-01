@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.BadgeDao">
+
+    <sql id="fields">
+        id,
+        badgeTypeId,
+        name,
+        description,
+        icon,
+        measure,
+        extra,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveBadge" parameterType="cn.edu.nju.software.entity.Badge" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into badge(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{badgeTypeId},
+        #{name},
+        #{description},
+        #{icon},
+        #{measure},
+        #{extra},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <update id="updateBadge" parameterType="cn.edu.nju.software.entity.Badge">
+        UPDATE badge
+        SET
+        name=#{name},
+        description=#{description},
+        icon=#{icon},
+        measure=#{measure},
+        extra=#{extra},
+        updateTime=#{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteBadge">
+        DELETE FROM badge
+        WHERE id = #{0}
+    </delete>
+
+    <select id="getBadgeListByTypeId" resultType="cn.edu.nju.software.entity.Badge">
+        select
+        <include refid="fields"></include>
+        from badge
+        where badgeTypeId = #{0}
+        ORDER by measure ASC
+    </select>
+
+    <select id="getAllBadgeByPage" resultType="cn.edu.nju.software.entity.Badge">
+        select
+        <include refid="fields"></include>
+        from badge
+        limit #{0},#{1}
+    </select>
+
+    <select id="getBadgeById" resultType="cn.edu.nju.software.entity.Badge">
+        select
+        <include refid="fields"></include>
+        from badge
+        WHERE id = #{0}
+    </select>
+
+</mapper>
