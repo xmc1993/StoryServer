@@ -34,4 +34,8 @@ public interface WorksService {
     Integer getWorksCountByStoryId(Integer storyId);
 
     Integer getWorksCountByIdList(List<Integer> idList);
+
+    List<Works> getLatestWorksByPage(int page, int pageSize);
+
+    List<Works> getMostPopularByPage(int page, int pageSize);
 }

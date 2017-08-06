@@ -108,4 +108,14 @@ public class WorksServiceImpl implements WorksService {
         return worksDao.getWorksCountByIdList(idList);
     }
 
+    @Override
+    public List<Works> getLatestWorksByPage(int page, int pageSize) {
+        return worksDao.getLatestWorksByPage(page*pageSize, pageSize);
+    }
+
+    @Override
+    public List<Works> getMostPopularByPage(int page, int pageSize) {
+        return worksDao.getMostPopularByPage(page*pageSize, pageSize);
+    }
+
 }

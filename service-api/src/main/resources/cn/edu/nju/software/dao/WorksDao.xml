@@ -209,4 +209,23 @@
         </foreach>
     </select>
 
+    <select id="getLatestWorksByPage" resultType="cn.edu.nju.software.entity.Works">
+        select
+        <include refid="fields"></include>
+        from works
+        where valid = 1
+        ORDER By createTime DESC
+        limit #{0},#{1}
+    </select>
+
+    <select id="getMostPopularByPage" resultType="cn.edu.nju.software.entity.Works">
+        select
+        <include refid="fields"></include>
+        from works
+        where valid = 1
+        ORDER by likeCount DESC
+        limit #{0},#{1}
+    </select>
+
+
 </mapper>

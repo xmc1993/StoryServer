@@ -47,6 +47,46 @@ public class UserWorksController extends BaseController {
     @Autowired
     private WorkUserLogService workUserLogService;
 
+
+    @ApiOperation(value = "获得最新的作品列表", notes = "需要登录")
+    @RequestMapping(value = "/getLatestWorksByPage", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<WorksVo>> getLatestWorksByPage(
+            @ApiParam("页") @RequestParam int page,
+            @ApiParam("页大小") @RequestParam int pageSize,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<WorksVo>> responseData = new ResponseData();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
+        List<Works> worksList = worksService.getLatestWorksByPage(page, pageSize);
+        responseData.jsonFill(1, null, worksList2VoList(worksList, user.getId()));
+        return responseData;
+    }
+
+    @ApiOperation(value = "获得最受欢迎的作品列表", notes = "需要登录")
+    @RequestMapping(value = "/getMostPopularByPage", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<WorksVo>> getMostPopularByPage(
+            @ApiParam("页") @RequestParam int page,
+            @ApiParam("页大小") @RequestParam int pageSize,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<WorksVo>> responseData = new ResponseData();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
+        List<Works> worksList = worksService.getMostPopularByPage(page, pageSize);
+        responseData.jsonFill(1, null, worksList2VoList(worksList, user.getId()));
+        return responseData;
+    }
+
+
     @ApiOperation(value = "获取某个用户的作品列表", notes = "需要登录")
     @RequestMapping(value = "/getWorksByUserId", method = {RequestMethod.GET})
     @ResponseBody

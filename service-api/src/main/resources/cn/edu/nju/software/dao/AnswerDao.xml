@@ -55,7 +55,7 @@
         <include refid="fields"></include>
         from answer
         where userId = #{0}
-        limit #(0),#(1)
+        limit #{0},#{1}
     </select>
 
     <select id="getAnswerListByQuestionId" resultType="cn.edu.nju.software.entity.Answer">
@@ -63,7 +63,7 @@
         <include refid="fields"></include>
         from answer
         where question = #{0}
-        limit #(0),#(1)
+        limit #{0},#{1}
     </select>
 
     <select id="getAllAnswerByPage" resultType="cn.edu.nju.software.entity.Answer">

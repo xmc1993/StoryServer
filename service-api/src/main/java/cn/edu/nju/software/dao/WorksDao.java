@@ -12,6 +12,11 @@ import java.util.List;
 @Repository
 public interface WorksDao {
 
+
+    List<Works> getLatestWorksByPage(int offset, int limit);
+
+    List<Works> getMostPopularByPage(int offset, int limit);
+
     boolean saveWorks(Works works);
 
     List<Works> getWorksListByUserId(int userId, int offset, int limit);
@@ -49,7 +54,6 @@ public interface WorksDao {
     boolean delReviewCount(@Param("workId") Integer workId);
 
     boolean addListenCount(@Param("workId") Integer workId);
-
 
     boolean setDelReviewCount(@Param("workId") Integer workId, @Param("delReviewCount") int delReviewCount);
 
