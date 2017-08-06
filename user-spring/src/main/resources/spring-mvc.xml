@@ -116,6 +116,8 @@
             <mvc:mapping path="/user/getCurrentCount"/>
             <mvc:mapping path="/user/getHistoryMaxCount"/>
 
+            <mvc:mapping path="/user/getStoryListOfAlbum"/>
+
             <!-- 不需要拦截的uri -->
             <!--
             <mvc:exclude-mapping path="/user/getLandingPage"/>

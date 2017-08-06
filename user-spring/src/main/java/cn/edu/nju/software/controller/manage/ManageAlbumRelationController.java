@@ -11,10 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -111,13 +108,15 @@ public class ManageAlbumRelationController {
     @ResponseBody
     public ResponseData<List<StoryNewVo>> getStoryListOfAlbum(
             @ApiParam("专辑ID") @PathVariable Integer id,
+            @ApiParam("OFFSET") @RequestParam int offset,
+            @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         if (!checkValidService.isStoryExist(id)) {
             logger.error("无效的故事Id");
             throw new RuntimeException("无效的故事ID");
         }
         List<Integer> idList = albumRelationService.getStoryIdListByAlbumId(id);
-        List<Story> storyList = storyService.getStoryListByIdList(idList, 0, 9999);
+        List<Story> storyList = storyService.getStoryListByIdList(idList, offset, limit);
         ResponseData<List<StoryNewVo>> result=new ResponseData<>();
         if(storyList==null){
             result.jsonFill(2,"获得一个故事的所有专辑失败",null);
@@ -126,7 +125,7 @@ public class ManageAlbumRelationController {
         else{
             List<StoryNewVo> storyNewVoList = storyList2VoList(storyList);
             result.jsonFill(1,null, storyNewVoList);
-            result.setCount(storyNewVoList.size());
+            result.setCount(idList.size());
             return result;
         }
     }

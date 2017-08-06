@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.QuestionDao">
+
+    <sql id="fields">
+        id,
+        name,
+        icon,
+        pic,
+        content,
+        extra,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveQuestion" parameterType="cn.edu.nju.software.entity.Question" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into question(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{name},
+        #{icon},
+        #{pic},
+        #{content},
+        #{extra},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <update id="updateQuestion" parameterType="cn.edu.nju.software.entity.Question">
+        UPDATE question
+        SET
+        name=#{name},
+        icon=#{icon},
+        pic=#{pic},
+        pic=#{pic},
+        content=#{content},
+        updateTime=#{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteQuestion">
+        DELETE FROM question
+        WHERE id = #{0}
+    </delete>
+
+    <select id="getAllQuestionByPage" resultType="cn.edu.nju.software.entity.Question">
+        select
+        <include refid="fields"></include>
+        from question
+        limit #{0},#{1}
+    </select>
+
+    <select id="getQuestionById" resultType="cn.edu.nju.software.entity.Question">
+        select
+        <include refid="fields"></include>
+        from question
+        WHERE id = #{0}
+    </select>
+
+    <select id="getAllQuestionCount" resultType="java.lang.Integer">
+        select
+        count(*)
+        from question
+    </select>
+
+</mapper>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.AnswerDao">
+
+    <sql id="fields">
+        id,
+        answerTypeId,
+        name,
+        description,
+        icon,
+        measure,
+        extra,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveAnswer" parameterType="cn.edu.nju.software.entity.Answer" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into answer(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{answerTypeId},
+        #{name},
+        #{description},
+        #{icon},
+        #{measure},
+        #{extra},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <update id="updateAnswer" parameterType="cn.edu.nju.software.entity.Answer">
+        UPDATE answer
+        SET
+        name=#{name},
+        description=#{description},
+        icon=#{icon},
+        measure=#{measure},
+        extra=#{extra},
+        updateTime=#{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteAnswer">
+        DELETE FROM answer
+        WHERE id = #{0}
+    </delete>
+
+    <select id="getAnswerListByUserId" resultType="cn.edu.nju.software.entity.Answer">
+        select
+        <include refid="fields"></include>
+        from answer
+        where userId = #{0}
+        limit #(0),#(1)
+    </select>
+
+    <select id="getAnswerListByQuestionId" resultType="cn.edu.nju.software.entity.Answer">
+        select
+        <include refid="fields"></include>
+        from answer
+        where question = #{0}
+        limit #(0),#(1)
+    </select>
+
+    <select id="getAllAnswerByPage" resultType="cn.edu.nju.software.entity.Answer">
+        select
+        <include refid="fields"></include>
+        from answer
+        limit #{0},#{1}
+    </select>
+
+    <select id="getAnswerById" resultType="cn.edu.nju.software.entity.Answer">
+        select
+        <include refid="fields"></include>
+        from answer
+        WHERE id = #{0}
+    </select>
+
+</mapper>
