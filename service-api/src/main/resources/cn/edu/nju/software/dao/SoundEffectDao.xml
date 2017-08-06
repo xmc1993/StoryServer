@@ -5,6 +5,7 @@
     <sql id="fields">
         id,
         description,
+        icon,
         url,
         createTime,
         updateTime,
@@ -15,6 +16,7 @@
     <resultMap id="soundEffect" type="cn.edu.nju.software.entity.SoundEffect">
         <id column="id" property="id"/>
         <id column="description" property="description"/>
+        <id column="icon" property="icon"/>
         <id column="url" property="url"/>
         <id column="createTime" property="createTime"/>
         <id column="updateTime" property="updateTime"/>
@@ -29,6 +31,7 @@
         (
         #{id},
         #{description},
+        #{icon},
         #{url},
         #{createTime},
         #{updateTime},
@@ -47,6 +50,7 @@
         UPDATE sound_effect
         SET
         description=#{description},
+        icon=#{icon},
         url=#{url}
         WHERE id = #{id} and valid = 1
     </update>

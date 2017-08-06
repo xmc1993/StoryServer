@@ -19,4 +19,6 @@ public interface AlbumService {
 
     List<Album> getAllAlbumByPage(int page, int pageSize);
 
+    List<Album> getAlbumListByIdList(List<Integer> idList);
+
 }

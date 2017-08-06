@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.StoryRoleDao">
+
+    <sql id="fields">
+        id,
+        storyId,
+        name,
+        icon,
+        audio,
+        extra,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveStoryRole" parameterType="cn.edu.nju.software.entity.StoryRole" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into story_role(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{storyId},
+        #{name},
+        #{icon},
+        #{audio},
+        #{extra},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <update id="updateStoryRole" parameterType="cn.edu.nju.software.entity.StoryRole">
+        UPDATE story_role
+        SET
+        name=#{name},
+        icon=#{icon},
+        audio=#{audio},
+        extra=#{extra},
+        updateTime=#{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteStoryRole">
+        DELETE FROM story_role
+        WHERE id = #{0}
+    </delete>
+
+    <select id="getStoryRoleListByStoryId" resultType="cn.edu.nju.software.entity.StoryRole">
+        select
+        <include refid="fields"></include>
+        from story_role
+        where storyId = #{0}
+        ORDER by measure ASC
+    </select>
+
+
+    <select id="getStoryRoleById" resultType="cn.edu.nju.software.entity.StoryRole">
+        select
+        <include refid="fields"></include>
+        from story_role
+        WHERE id = #{0}
+    </select>
+
+</mapper>

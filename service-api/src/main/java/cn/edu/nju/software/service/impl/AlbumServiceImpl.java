@@ -48,4 +48,9 @@ public class AlbumServiceImpl implements AlbumService {
         int limit = pageSize;
         return albumDao.getAllAlbumByPage(offset, limit);
     }
+
+    @Override
+    public List<Album> getAlbumListByIdList(List<Integer> idList) {
+        return albumDao.getAlbumListByIdList(idList);
+    }
 }

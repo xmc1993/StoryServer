@@ -84,7 +84,7 @@ public class ManageBadgeTypeController {
         }
     }
 
-    @ApiOperation(value = "根据徽章类型徽章类型项列表", notes = "")
+    @ApiOperation(value = "分页获得徽章类型列表", notes = "")
     @RequestMapping(value = "/getBadgeTypeListByPage", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<BadgeType>> getBadgeTypeListByPage(

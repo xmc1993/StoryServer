@@ -1,6 +1,7 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.Album;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,5 +22,7 @@ public interface AlbumDao {
     Album getAlbumById(int id);
 
     List<Album> getAllAlbumByPage(int offset, int limit);
+
+    List<Album> getAlbumListByIdList(@Param("idList")List<Integer> idList);
 
 }

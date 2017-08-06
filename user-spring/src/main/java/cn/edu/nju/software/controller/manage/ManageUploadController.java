@@ -27,15 +27,34 @@ import javax.servlet.http.HttpServletResponse;
 public class ManageUploadController {
 
     private static final String ICON_ROOT = "/icons/";
+    private static final String AUDIO_ROOT = "/audios/";
 
     @ApiOperation(value = "上传icon", notes = "")
     @RequestMapping(value = "/uploadIcon", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<UploadResVo> logout(
+    public ResponseData<UploadResVo> uploadIcon(
             @ApiParam("ICON") @RequestParam(value = "icon", required = true) MultipartFile icon,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<UploadResVo> responseData = new ResponseData<>();
-        String url = uploadFile(icon);
+        String url = uploadFile(icon, ICON_ROOT);
+        if (url == null){
+            responseData.jsonFill(2, "上传失败", null);
+        }else {
+            UploadResVo uploadResVo = new UploadResVo();
+            uploadResVo.setUrl(url);
+            responseData.jsonFill(1, null, uploadResVo);
+        }
+        return responseData;
+    }
+
+    @ApiOperation(value = "上传icon", notes = "")
+    @RequestMapping(value = "/uploadAudio", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<UploadResVo> uploadAudio(
+            @ApiParam("ICON") @RequestParam(value = "audio", required = true) MultipartFile audio,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<UploadResVo> responseData = new ResponseData<>();
+        String url = uploadFile(audio, AUDIO_ROOT);
         if (url == null){
             responseData.jsonFill(2, "上传失败", null);
         }else {
@@ -52,14 +71,14 @@ public class ManageUploadController {
      * @param file
      * @return
      */
-    private String uploadFile(MultipartFile file) {
-        String realPath = UploadFileUtil.getBaseUrl() + ICON_ROOT;
+    private String uploadFile(MultipartFile file, String root) {
+        String realPath = UploadFileUtil.getBaseUrl() + root;
         String fileName = RandCharsUtils.getRandomString(16) + "." + UploadFileUtil.getSuffix(file.getOriginalFilename());
         boolean success = UploadFileUtil.mvFile(file, realPath, fileName);
         if (!success) {
             throw new RuntimeException("文件上传失败");
         }
-        String url = UploadFileUtil.SOURCE_BASE_URL + ICON_ROOT + fileName;
+        String url = UploadFileUtil.SOURCE_BASE_URL + root + fileName;
         return url;
     }
 }

@@ -1,13 +1,7 @@
 package cn.edu.nju.software.controller.manage;
 
-import cn.edu.nju.software.entity.ResponseData;
-import cn.edu.nju.software.entity.Story;
-import cn.edu.nju.software.entity.StoryTag;
-import cn.edu.nju.software.entity.TagRelation;
-import cn.edu.nju.software.service.CheckValidService;
-import cn.edu.nju.software.service.StoryService;
-import cn.edu.nju.software.service.StoryTagService;
-import cn.edu.nju.software.service.TagRelationService;
+import cn.edu.nju.software.entity.*;
+import cn.edu.nju.software.service.*;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.UploadFileUtil;
 import cn.edu.nju.software.vo.StoryNewVo;
@@ -48,6 +42,8 @@ public class ManageStoryController {
     private StoryTagService storyTagService;
     @Autowired
     private CheckValidService checkValidService;
+    @Autowired
+    private StoryRoleService storyRoleService;
 
     @ApiOperation(value = "新增故事", notes = "草稿状态1为草稿0为完成")
     @RequestMapping(value = "/stories", method = {RequestMethod.POST})
@@ -68,6 +64,10 @@ public class ManageStoryController {
             @ApiParam("录制背景") @RequestParam(value = "backgroundFile", required = false) MultipartFile backgroundFile,
             @ApiParam("原音") @RequestParam(value = "originSoundFile", required = false) MultipartFile originSoundFile,
             @ApiParam("标签列表") @RequestParam(value = "tagList", required = false) String tagList,
+            @ApiParam("角色名") @RequestParam(value = "roleName", required = false) String roleName,
+            @ApiParam("角色图标") @RequestParam(value = "roleIconFile", required = false) MultipartFile roleIconFile,
+            @ApiParam("角色音频") @RequestParam(value = "roleAudioFile", required = false) MultipartFile roleAudioFile,
+            @ApiParam("角色其他信息") @RequestParam(value = "roleExtra", required = false) String roleExtra,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<StoryNewVo> result = new ResponseData<>();
         Story dbStory = storyService.getExactStoryByTitle(title);
@@ -117,6 +117,20 @@ public class ManageStoryController {
                 tagRelationService.saveTagRelation(tagRelation);
             }
         }
+
+        StoryRole storyRole = new StoryRole();
+        if (!roleIconFile.isEmpty()) {
+            storyRole.setIcon(uploadFile(roleIconFile));
+        }
+        if (!roleAudioFile.isEmpty()) {
+            storyRole.setAudio(uploadFile(roleAudioFile));
+        }
+        storyRole.setCreateTime(new Date());
+        storyRole.setExtra(roleExtra);
+        storyRole.setStoryId(story.getId());
+        storyRole.setName(roleName);
+        // 保存角色信息
+        storyRoleService.saveStoryRole(storyRole);
         result.jsonFill(1, null, story2vo(story));
         return result;
     }
