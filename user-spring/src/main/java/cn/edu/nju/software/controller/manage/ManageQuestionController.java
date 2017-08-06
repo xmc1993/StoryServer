@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by xmc1993 on 2017/5/15.
@@ -81,6 +82,20 @@ public class ManageQuestionController {
         } else {
             return question;
         }
+    }
+
+    @ApiOperation(value = "分页获得问题", notes = "")
+    @RequestMapping(value = "/getQuestionListByPage", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<Question>> getQuestionListByPage(
+            @ApiParam("页") @RequestParam int page,
+            @ApiParam("页大小") @RequestParam int pageSize,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<Question>> responseData = new ResponseData();
+        List<Question> questionList = questionService.getAllQuestionByPage(page, pageSize);
+        responseData.jsonFill(1, null, questionList);
+        responseData.setCount(questionService.getAllQuestionCount());
+        return responseData;
     }
 
 

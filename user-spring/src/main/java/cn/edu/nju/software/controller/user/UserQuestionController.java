@@ -37,7 +37,7 @@ public class UserQuestionController extends BaseController {
 
 
     @ApiOperation(value = "提交问题答案", notes = "")
-    @RequestMapping(value = "/submitAnser", method = {RequestMethod.GET})
+    @RequestMapping(value = "/submitAnswer", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<Answer> getAlbumListOfStory(
             @ApiParam("问题ID") @RequestParam("questionId") int questionId,
