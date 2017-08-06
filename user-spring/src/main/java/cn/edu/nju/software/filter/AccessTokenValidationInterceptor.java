@@ -37,7 +37,6 @@ public class AccessTokenValidationInterceptor extends HandlerInterceptorAdapter 
     //白名单
     private static List<String> whileList = new ArrayList();
     static {
-        whileList.add("/user/getRecommendedStoryListByPage");
         whileList.add("/user/getStoryListByPage");
         whileList.add("/user/getStoryById");
         whileList.add("/user/storiesByFuzzyQuery");

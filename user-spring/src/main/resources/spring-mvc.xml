@@ -110,7 +110,6 @@
             <mvc:mapping path="/user/getStoryByFuzzyQuery"/>
             <mvc:mapping path="/user/getFollowingStatus"/>
             <mvc:mapping path="/user/draftStories"/>
-            <mvc:mapping path="/user/getRecommendedStoryListByPage"/>
 
             <mvc:mapping path="/user/newRecord"/>
             <mvc:mapping path="/user/getCurrentCount"/>
