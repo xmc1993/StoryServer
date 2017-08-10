@@ -12,9 +12,7 @@ import java.util.Date;
 public class PlayList implements Serializable{
     private Integer id;
     private String name;
-    private String description;
-    private String icon;
-    private String extra;//其余信息值
+    private Integer userId;
     private Date createTime;
     private Date updateTime;
 }

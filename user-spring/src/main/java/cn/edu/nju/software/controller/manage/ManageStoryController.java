@@ -75,16 +75,16 @@ public class ManageStoryController {
             result.jsonFill(2, "重复的标题名称", story2vo(dbStory));
         }
         Story story = new Story();
-        if (!coverFile.isEmpty()) {
+        if (coverFile != null &&!coverFile.isEmpty()) {
             story.setCoverUrl(uploadFile(coverFile));
         }
-        if (!preCoverFile.isEmpty()) {
+        if (preCoverFile != null && !preCoverFile.isEmpty()) {
             story.setPreCoverUrl(uploadFile(preCoverFile));
         }
-        if (!backgroundFile.isEmpty()) {
+        if (backgroundFile!=null && !backgroundFile.isEmpty()) {
             story.setBackgroundUrl(uploadFile(backgroundFile));
         }
-        if (!originSoundFile.isEmpty()) {
+        if (originSoundFile != null &&!originSoundFile.isEmpty()) {
             story.setOriginSoundUrl(uploadFile(originSoundFile));
             String duration = storyService.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(story.getOriginSoundUrl())));
             story.setDuration(duration);
@@ -119,10 +119,10 @@ public class ManageStoryController {
         }
 
         StoryRole storyRole = new StoryRole();
-        if (!roleIconFile.isEmpty()) {
+        if (roleIconFile != null && !roleIconFile.isEmpty()) {
             storyRole.setIcon(uploadFile(roleIconFile));
         }
-        if (!roleAudioFile.isEmpty()) {
+        if (roleAudioFile != null && !roleAudioFile.isEmpty()) {
             storyRole.setAudio(uploadFile(roleAudioFile));
         }
         storyRole.setCreateTime(new Date());

@@ -1,74 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.edu.nju.software.dao.PlayListDao">
+<mapper namespace="cn.edu.nju.software.dao.PlayListRelationDao">
 
     <sql id="fields">
         id,
-        name,
-        description,
-        icon,
-        extra,
+        worksId,
+        playListId,
+        userId,
         createTime,
         updateTime
     </sql>
 
-    <insert id="savePlayList" parameterType="cn.edu.nju.software.entity.PlayList" keyProperty="id"
-            useGeneratedKeys="true">
-        insert into play_list(
+    <insert id="savePlayListRelation" parameterType="cn.edu.nju.software.entity.PlayListRelation" keyProperty="id" useGeneratedKeys="true">
+        insert into playList_relation(
         <include refid="fields"></include>
         )
         VALUES
         (
         #{id},
-        #{name},
-        #{description},
-        #{icon},
-        #{extra},
+        #{worksId},
+        #{playListId},
+        #{userId},
         #{createTime},
         #{updateTime}
         )
     </insert>
 
-    <update id="updatePlayList" parameterType="cn.edu.nju.software.entity.PlayList">
-        UPDATE play_list
-        SET
-        name=#{name},
-        description=#{description},
-        icon=#{icon},
-        extra=#{extra},
-        updateTime=#{updateTime}
-        WHERE id = #{id}
-    </update>
-
-    <delete id="deletePlayList">
-        DELETE FROM play_list
+    <delete id="deletePlayListRelationById">
+        DELETE FROM playList_relation
         WHERE id = #{0}
     </delete>
 
+    <delete id="deletePlayListRelationByPrimaryId">
+        DELETE FROM playList_relation
+        WHERE worksId = #{0} and playListId = #{1} and userId = #{2}
+    </delete>
 
-    <select id="getAllPlayListByPage" resultType="cn.edu.nju.software.entity.PlayList">
+
+    <select id="getWorksPlayListIdAndUserById" resultType="cn.edu.nju.software.entity.PlayListRelation">
         select
         <include refid="fields"></include>
-        from play_list
-        limit #{0},#{1}
+        from playList_relation
+        where id=#{0} and playListId = #{1} and userId=#{2}
     </select>
 
-    <select id="getPlayListById" resultType="cn.edu.nju.software.entity.PlayList">
-        select
-        <include refid="fields"></include>
-        from play_list
-        WHERE id = #{0}
+    <select id="getWorksIdListByPlayListIdAndUserId" resultType="java.lang.Integer">
+        select distinct
+        storyId
+        from playList_relation
+        where playListId = #{0} and userId=#{1}
     </select>
 
+    <select id="getPlayListIdAndUserIdListByWorksId" resultType="java.lang.Integer">
+        select distinct
+        albumId
+        from playList_relation
+        where storyId = #{0}
+    </select>
 
-    <select id="getPlayListListByIdList" resultType="cn.edu.nju.software.entity.PlayList">
-        select
-        <include refid="fields"/>
-        from play_list
-        where id in
-        <foreach collection="idList" item="id" open="(" separator="," close=")">
+    <select id="getWorksIdListByPlayListIdAndUserIdList" resultType="java.lang.Integer">
+        select distinct
+        storyId
+        from playList_relation
+        where albumId in
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
             #{id}
         </foreach>
     </select>
+
 
 </mapper>
