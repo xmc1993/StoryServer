@@ -50,6 +50,7 @@ public class ManageSoundEffectController {
     public ResponseData<Boolean> publishSoundEffect(
             @ApiParam("音效标签ID") @RequestParam("tagId") int tagId,
             @ApiParam("音效文件") @RequestParam("uploadFile") MultipartFile[] uploadFiles,
+            @ApiParam("图标") @RequestParam(value = "icon", required = false) MultipartFile icon,
             @ApiParam("音效描述") @RequestParam("description") String description,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Boolean> result = new ResponseData<>();
@@ -60,6 +61,11 @@ public class ManageSoundEffectController {
             throw new RuntimeException("请选择文件上传");
         }
         logger.info("开始上传音效文件!");
+        String iconUrl = null;
+        if (icon != null && !icon.isEmpty()) {
+            iconUrl = uploadFile(icon, SOUND_EFFECT_ROOT);
+        }
+
         for(MultipartFile uploadFile:uploadFiles) {
             String realPath = UploadFileUtil.getBaseUrl() + SOUND_EFFECT_ROOT;
             String fileName = RandCharsUtils.getRandomString(16) + "." + UploadFileUtil.getSuffix(uploadFile.getOriginalFilename());
@@ -74,6 +80,7 @@ public class ManageSoundEffectController {
             Date date = new Date();
             soundEffect.setCreateTime(date);
             soundEffect.setUpdateTime(date);
+            soundEffect.setIcon(iconUrl);
             boolean saveEffectBoolean = soundEffectService.saveSoundEffect(soundEffect);
             if (!saveEffectBoolean) {
                 throw new RuntimeException("发布失败。");
@@ -101,6 +108,7 @@ public class ManageSoundEffectController {
     public SoundEffect testSoundEffect( @ApiParam("音效ID") @RequestParam(value = "id") int id,
                                         @ApiParam("音效标签ID") @RequestParam(value = "tagId",required = false) Integer tagId,
                                         @ApiParam("音效描述") @RequestParam("description") String description,
+                                        @ApiParam("图标") @RequestParam(value = "icon", required = false) MultipartFile icon,
                                         HttpServletRequest request, HttpServletResponse response
     ){
         if (!checkValidService.isSoundEffectExist(id)) {
@@ -110,6 +118,11 @@ public class ManageSoundEffectController {
             throw new RuntimeException("错误的音效标签");
         }
         SoundEffect soundEffect = soundEffectService.getSoundEffectById(id);
+        String iconUrl = null;
+        if (icon != null && !icon.isEmpty()) {
+            iconUrl = uploadFile(icon, SOUND_EFFECT_ROOT);
+            soundEffect.setIcon(iconUrl);
+        }
         soundEffect.setDescription(description);
         Date date = new Date();
         soundEffect.setUpdateTime(date);
@@ -224,5 +237,23 @@ public class ManageSoundEffectController {
     @ResponseBody
     public Integer getSoundEffectCount(){
         return soundEffectService.getSoundEffectCount();
+    }
+
+
+    /**
+     * 上传ICON文件
+     *
+     * @param file
+     * @return
+     */
+    private String uploadFile(MultipartFile file, String root) {
+        String realPath = UploadFileUtil.getBaseUrl() + root;
+        String fileName = RandCharsUtils.getRandomString(16) + "." + UploadFileUtil.getSuffix(file.getOriginalFilename());
+        boolean success = UploadFileUtil.mvFile(file, realPath, fileName);
+        if (!success) {
+            throw new RuntimeException("文件上传失败");
+        }
+        String url = UploadFileUtil.SOURCE_BASE_URL + root + fileName;
+        return url;
     }
 }

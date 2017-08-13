@@ -285,6 +285,28 @@ public class UserStoryController extends BaseController {
         return responseData;
     }
 
+    @ApiOperation(value = "根据推荐故事列表", notes = "")
+    @RequestMapping(value = "/getRecommendedStoryVoByBabyByPage", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<StoryNewVo>> getRecommendedStoryVoByBabyByPage(
+            @ApiParam("offset") @RequestParam("offset") int offset,
+            @ApiParam("Baby的ID") @RequestParam("babyId") int babyId,
+            @ApiParam("limit") @RequestParam("limit") int limit,
+            HttpServletRequest request, HttpServletResponse response
+    ){
+        ResponseData<List<StoryNewVo>> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            user = new User();
+            user.setId(-1);
+        }
+        List<Story> storyList = storyService.getRecommendedStoryListByPage(offset, limit);
+        int count = storyService.getRecommendedStoryCount();
+        responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
+        responseData.setCount(count);
+        return responseData;
+    }
+
 
 
     private List<StoryNewVo> storyList2VoList(List<Story> list, int userId){

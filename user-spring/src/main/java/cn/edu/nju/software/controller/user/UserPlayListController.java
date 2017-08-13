@@ -163,7 +163,7 @@ public class UserPlayListController extends BaseController {
             responseData.jsonFill(2, "列表不存在。", null);
             return responseData;
         }
-        if (user.getId() != playList.getUserId()) {
+        if (user.getId().compareTo(playList.getUserId())!=0) {
             responseData.jsonFill(2, "非法请求。", null);
             return responseData;
         }

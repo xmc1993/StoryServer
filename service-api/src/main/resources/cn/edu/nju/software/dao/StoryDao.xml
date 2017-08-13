@@ -23,7 +23,8 @@
         defaultBackGroundMusicId,
         duration,
         likeCount,
-        draft
+        draft,
+        suggestedReadingDuration
     </sql>
 
     <sql id="multiTableFields">
@@ -47,7 +48,8 @@
        story.defaultBackGroundMusicId,
        story.duration,
        story.likeCount,
-       story.draft
+       story.draft,
+       story.suggestedReadingDuration
     </sql>
     <sql id="storyVoFields">
         <include refid="story_fields"/>,
@@ -101,6 +103,7 @@
         <id column="duration" property="duration"/>
         <id column="likeCount" property="likeCount"/>
         <id column="draft" property="draft"/>
+        <id column="suggestedReadingDuration" property="suggestedReadingDuration"/>
     </resultMap>
     <resultMap id="storyVo" type="cn.edu.nju.software.vo.StoryVo">
         <id column="story_id" property="story.id"/>
@@ -159,7 +162,8 @@
         #{defaultBackGroundMusicId},
         #{duration},
         #{likeCount},
-        #{draft}
+        #{draft},
+        #{suggestedReadingDuration}
         )
     </insert>
     <insert id="addStoryLikeCount">
@@ -185,7 +189,8 @@
 		updateTime=#{updateTime},
 		defaultBackGroundMusicId=#{defaultBackGroundMusicId},
 		duration=#{duration},
-		draft=#{draft}
+		draft=#{draft},
+		suggestedReadingDuration=#{suggestedReadingDuration}
 		where
 		id=#{id}
 	</update>

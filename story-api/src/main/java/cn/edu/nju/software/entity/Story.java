@@ -30,4 +30,5 @@ public class Story {
     private Integer defaultBackGroundMusicId;//
     private Integer likeCount;
     private Integer draft;
+    private Integer suggestedReadingDuration;//建议阅读时长 单位是秒
 }

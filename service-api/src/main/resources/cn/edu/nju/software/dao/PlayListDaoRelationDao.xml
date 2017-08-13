@@ -11,7 +11,8 @@
         updateTime
     </sql>
 
-    <insert id="savePlayListRelation" parameterType="cn.edu.nju.software.entity.PlayListRelation" keyProperty="id" useGeneratedKeys="true">
+    <insert id="savePlayListRelation" parameterType="cn.edu.nju.software.entity.PlayList" keyProperty="id"
+            useGeneratedKeys="true">
         insert into play_list_relation(
         <include refid="fields"></include>
         )
@@ -41,7 +42,8 @@
         worksId
         from play_list_relation
         where playListId = #{0} and userId=#{1}
-        limit #{0},#{1}
+        limit #{2},#{3}
     </select>
+
 
 </mapper>

@@ -119,6 +119,14 @@
             <mvc:mapping path="/user/getLatestWorksByPage"/>
             <mvc:mapping path="/user/getMostPopularByPage"/>
 
+            <mvc:mapping path="/user/playList/getPlayListsByPage"/>
+            <mvc:mapping path="/user/playList/getWorksListByPlayListIdByPage"/>
+            <mvc:mapping path="/user/playList/addWorksToPlayList"/>
+            <mvc:mapping path="/user/playList/removeWorksFromPlayList"/>
+            <mvc:mapping path="/user/playList/newPlayList"/>
+            <mvc:mapping path="/user/playList/removePlayList"/>
+
+
             <!-- 不需要拦截的uri -->
             <!--
             <mvc:exclude-mapping path="/user/getLandingPage"/>

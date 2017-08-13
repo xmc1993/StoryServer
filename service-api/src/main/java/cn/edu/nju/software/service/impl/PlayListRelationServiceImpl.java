@@ -23,7 +23,7 @@ public class PlayListRelationServiceImpl implements PlayListRelationService {
 
     @Override
     public boolean deletePlayListRelationByPrimaryKey(int worksId, int playListId, int userId) {
-        return deletePlayListRelationByPrimaryKey(worksId, playListId, userId);
+        return playListRelationDao.deletePlayListRelationByPrimaryKey(worksId, playListId, userId);
     }
 
     @Override
