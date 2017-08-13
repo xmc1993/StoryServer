@@ -43,10 +43,17 @@ public class PlayListServiceImpl implements PlayListService {
 
 
     @Override
-    public List<PlayList> getAllPlayListByPage(int page, int pageSize) {
+    public List<PlayList> getAllPlayListByUserIdByPage(int userId, int page, int pageSize) {
         int offset = page*pageSize;
         int limit = pageSize;
-        return playListDao.getAllPlayListByPage(offset, limit);
+        List<PlayList> list = playListDao.getAllPlayListByUserIdByPage(userId, offset, limit);
+        //默认的我喜欢的文件夹每个用户都有
+        PlayList playList = new PlayList();
+        playList.setUserId(userId);
+        playList.setId(0);
+        playList.setName("我喜欢");
+        list.add(playList);
+        return list;
     }
 
     @Override

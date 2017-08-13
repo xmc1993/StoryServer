@@ -21,7 +21,7 @@ public interface PlayListDao {
 
     PlayList getPlayListById(int id);
 
-    List<PlayList> getAllPlayListByPage(int offset, int limit);
+    List<PlayList> getAllPlayListByUserIdByPage(int userId, int offset, int limit);
 
     List<PlayList> getPlayListListByIdList(@Param("idList") List<Integer> idList);
 

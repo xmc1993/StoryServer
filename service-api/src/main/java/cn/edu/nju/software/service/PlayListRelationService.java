@@ -1,16 +1,13 @@
-package cn.edu.nju.software.dao;
+package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.entity.PlayListRelation;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * Created by xmc1993 on 2017/5/12.
  */
-
-@Repository
-public interface PlayListRelationDao {
+public interface PlayListRelationService {
 
     boolean savePlayListRelation(PlayListRelation playListRelation);
 
@@ -18,6 +15,6 @@ public interface PlayListRelationDao {
 
     boolean deletePlayListRelationById(int id);
 
-    List<Integer> getWorksIdListByPlayListIdAndUserIdByPage(int playListId, int userId, int limit, int offset);
+    List<Integer> getWorksIdListByPlayListIdAndUserIdByPage(int playListId, int userId, int page, int pageSize);
 
 }

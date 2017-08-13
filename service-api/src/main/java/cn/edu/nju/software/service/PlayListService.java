@@ -17,7 +17,7 @@ public interface PlayListService {
 
     PlayList getPlayListById(int id);
 
-    List<PlayList> getAllPlayListByPage(int page, int pageSize);
+    List<PlayList> getAllPlayListByUserIdByPage(int userId, int page, int pageSize);
 
     List<PlayList> getPlayListListByIdList(List<Integer> idList);
 

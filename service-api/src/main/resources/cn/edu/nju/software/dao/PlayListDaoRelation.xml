@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.PlayListRelationDao">
+
+    <sql id="fields">
+        id,
+        worksId,
+        playListId,
+        userId,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="savePlayListRelation" parameterType="cn.edu.nju.software.entity.PlayListRelation" keyProperty="id" useGeneratedKeys="true">
+        insert into play_list_relation(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{worksId},
+        #{playListId},
+        #{userId},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <delete id="deletePlayListRelationById">
+        DELETE FROM play_list_relation
+        WHERE id = #{0}
+    </delete>
+
+    <delete id="deletePlayListRelationByPrimaryKey">
+        DELETE FROM play_list_relation
+        WHERE worksId = #{0} and playListId = #{1} and userId = #{2}
+    </delete>
+
+    <select id="getWorksIdListByPlayListIdAndUserIdByPage" resultType="java.lang.Integer">
+        select distinct
+        worksId
+        from play_list_relation
+        where playListId = #{0} and userId=#{1}
+        limit #{0},#{1}
+    </select>
+
+</mapper>
