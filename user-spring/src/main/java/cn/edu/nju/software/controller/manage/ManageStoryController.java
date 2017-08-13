@@ -68,6 +68,7 @@ public class ManageStoryController {
             @ApiParam("角色图标") @RequestParam(value = "roleIconFile", required = false) MultipartFile roleIconFile,
             @ApiParam("角色音频") @RequestParam(value = "roleAudioFile", required = false) MultipartFile roleAudioFile,
             @ApiParam("角色其他信息") @RequestParam(value = "roleExtra", required = false) String roleExtra,
+            @ApiParam("建议阅读时间（单位s）") @RequestParam(value = "suggestedReadingDuration", required = false) int suggestedReadingDuration,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<StoryNewVo> result = new ResponseData<>();
         Story dbStory = storyService.getExactStoryByTitle(title);
@@ -102,6 +103,7 @@ public class ManageStoryController {
         story.setUpdateTime(new Date());
         story.setDraft(draft);
         story.setLikeCount(0);
+        story.setSuggestedReadingDuration(suggestedReadingDuration);
         Story res = storyService.saveStory(story);
         if (res == null) {
             throw new RuntimeException("发布故事失败");
@@ -154,6 +156,7 @@ public class ManageStoryController {
             @ApiParam("预览封面") @RequestParam(value = "preCoverFile", required = false) MultipartFile preCoverFile,
             @ApiParam("录制背景") @RequestParam(value = "backgroundFile", required = false) MultipartFile backgroundFile,
             @ApiParam("原音") @RequestParam(value = "originSoundFile", required = false) MultipartFile originSoundFile,
+            @ApiParam("建议阅读时间（单位s）") @RequestParam(value = "suggestedReadingDuration", required = false) Integer suggestedReadingDuration,
             HttpServletRequest request, HttpServletResponse response) {
         Story story = storyService.getStoryById(id);
         if (story == null) {
@@ -187,6 +190,7 @@ public class ManageStoryController {
         if (guide != null) story.setGuide(guide);
         if (price != null) story.setPrice(price);
         if (readGuide != null) story.setReadGuide(readGuide);
+        if (suggestedReadingDuration != null) story.setSuggestedReadingDuration(suggestedReadingDuration);
         story.setDefaultBackGroundMusicId(defaultBackGroundMusicId);
         story.setUpdateTime(new Date());
         story.setDraft(draft);
