@@ -65,6 +65,7 @@
         </property> <property name="order" value="0" /> </bean> <mvc:resources mapping="/company/**"
         location="/company/" /> -->
 
+
     <!-- mvc校验器 -->
     <bean id="validator"
           class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">

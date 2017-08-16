@@ -355,7 +355,7 @@ public class ManageStoryController {
             @ApiParam("author") @RequestParam(value = "author", required = false) String author,
             @ApiParam("content") @RequestParam(value = "content", required = false) String content,
             @ApiParam("press") @RequestParam(value = "press", required = false) String press,
-            @ApiParam("tag") @RequestParam(value = "tag", required = false) String tag,
+            @ApiParam("tag") @RequestParam(value = "tag", required = false) Integer tag,
             @ApiParam("offset") @RequestParam(value = "offset") int offset,
             @ApiParam("limit") @RequestParam(value = "limit") int limit) {
         ResponseData<List<StoryNewVo>> result = new ResponseData<>();
