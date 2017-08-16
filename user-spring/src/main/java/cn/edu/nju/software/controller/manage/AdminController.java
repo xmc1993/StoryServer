@@ -53,8 +53,6 @@ public class AdminController {
         boolean res = adminService.updateAccessToken(admin);
         if (!res) {
             throw new RuntimeException("登录失败，服务器错误。");
-
-
         }
 
         //在缓存中存入登录信息
