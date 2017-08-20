@@ -119,6 +119,8 @@
             <mvc:mapping path="/user/getStoryListOfAlbum"/>
             <mvc:mapping path="/user/getLatestWorksByPage"/>
             <mvc:mapping path="/user/getMostPopularByPage"/>
+            
+            <mvc:mapping path="/user/getAllBageOfUser"/>
 
             <!-- 不需要拦截的uri -->
             <!--
