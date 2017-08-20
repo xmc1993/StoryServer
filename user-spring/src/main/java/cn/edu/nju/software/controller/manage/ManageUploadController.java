@@ -59,6 +59,7 @@ public class ManageUploadController {
         UploadResVo uploadResVo = new UploadResVo();
         ArrayList<String> urls = new ArrayList<>();
         uploadResVo.setMultiUrls(urls);
+        responseData.jsonFill(1, null, uploadResVo);
         if (files != null){
             for (MultipartFile file : files) {
                 if (!file.isEmpty()){
