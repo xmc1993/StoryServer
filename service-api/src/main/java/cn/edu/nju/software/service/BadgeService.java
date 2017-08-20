@@ -20,5 +20,6 @@ public interface BadgeService {
     List<Badge> getBadgeListByTypeId(int typeId);
 
     List<Badge> getAllBadgeByPage(int page, int pageSize);
-
+    
+    List<Badge> getBadgeOfUser(Integer userId);
 }

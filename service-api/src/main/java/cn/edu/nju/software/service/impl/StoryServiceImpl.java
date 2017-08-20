@@ -96,11 +96,16 @@ public class StoryServiceImpl implements StoryService {
 
     }
 
+    
     @Override
-    public List<Story> getStoryListByPage(int offset, int limit) {
+    public List<Story> getStoryListByPage(int offset, int limit,String sortByCreateTime) {
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
-        return storyDao.getStoryListByPage(offset, limit);
+        String trimSortByCreateTime = sortByCreateTime.trim();
+        if(!trimSortByCreateTime.equals("asc") && !trimSortByCreateTime.equals("desc")){
+        	sortByCreateTime = "desc";//默认降序
+        }
+        return storyDao.getStoryListByPage(offset, limit,trimSortByCreateTime);
     }
 
     @Override
@@ -218,7 +223,7 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public List<Story> getStoryByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, String tag, Integer offset, Integer limit) {
+    public List<Story> getStoryByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, Integer tag, Integer offset, Integer limit) {
         if (title != null && title.trim().equals("")) title = null;
         else if (title != null) title = title.trim();
         if (author != null && author.trim().equals("")) author = null;
@@ -227,8 +232,8 @@ public class StoryServiceImpl implements StoryService {
         else if (content != null) content = content.trim();
         if (press != null && press.trim().equals("")) press = null;
         else if (press != null) press = press.trim();
-        if (tag != null && tag.trim().equals("")) tag = null;
-        else if (tag != null) tag = tag.trim();
+       // if (tag != null && tag.trim().equals("")) tag = null;
+       // else if (tag != null) tag = tag.trim();
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         return storyDao.getStoryListByClassifyFuzzyQueryIncludeDrafts(
@@ -236,7 +241,7 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public Integer getStoryCountByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, String tag) {
+    public Integer getStoryCountByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, Integer tag) {
         if (title != null && title.trim().equals("")) title = null;
         else if (title != null) title = title.trim();
         if (author != null && author.trim().equals("")) author = null;
@@ -245,8 +250,8 @@ public class StoryServiceImpl implements StoryService {
         else if (content != null) content = content.trim();
         if (press != null && press.trim().equals("")) press = null;
         else if (press != null) press = press.trim();
-        if (tag != null && tag.trim().equals("")) tag = null;
-        else if (tag != null) tag = tag.trim();
+        //if (tag != null && tag.trim().equals("")) tag = null;
+        //else if (tag != null) tag = tag.trim();
         return storyDao.getStoryCountByClassifyFuzzyQueryIncludeDrafts(title, author, content, press, tag);
     }
 

@@ -21,7 +21,7 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
-			 <plugin>  
+			 <plugin>  			 
                 <groupId>org.apache.maven.plugins</groupId>  
                 <artifactId>maven-resources-plugin</artifactId>  
                 <version>2.7</version>  
@@ -42,6 +42,7 @@
 
 	<dependencies>
 		<!-- 单元测试依赖 -->
+		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -286,14 +287,16 @@
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-xml</artifactId>
 			<version>2.4.6</version>
-		</dependency>
+		</dependency>		
 		<!--IDEA basedir有问题 自己安装-->
+		<!-- 无法直接下载，自己安装依赖 -->
 		<dependency>
 			<groupId>com.jave</groupId>
 			<artifactId>jave</artifactId>
 			<version>1.02</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/jave-1.02.jar</systemPath>
+			
+			<!-- <scope>system</scope>
+			<systemPath>${basedir}/lib/jave-1.02.jar</systemPath> -->
 		</dependency>
 		<!--压缩实现依赖-->
 		<!-- https://mvnrepository.com/artifact/org.apache.ant/ant -->
