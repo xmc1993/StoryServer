@@ -84,6 +84,7 @@ public class UserStoryController extends BaseController {
     public ResponseData<List<StoryNewVo>> getAllStory(
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
+            @ApiParam("排序:asc升序／desc降序(不输入时默认)") @RequestParam(required = false, defaultValue = "desc")  String sortByCreateTime,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<StoryNewVo>> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
@@ -91,7 +92,7 @@ public class UserStoryController extends BaseController {
             user = new User();
             user.setId(-1);
         }
-        List<Story> storyList = storyService.getStoryListByPage(offset, limit);
+        List<Story> storyList = storyService.getStoryListByPage(offset, limit,sortByCreateTime);
         responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
         responseData.setCount(storyService.getStoryCount());
         return responseData;

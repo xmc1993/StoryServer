@@ -3,9 +3,9 @@
 
 	<Properties>
 		<!-- 服务器日志地址 -->
-		<Property name="LOG_DIR">/usr/share/apache-tomcat-8.5.9/logs/log4j</Property> 
+		<!-- <Property name="LOG_DIR">/usr/share/apache-tomcat-8.5.9/logs/log4j</Property>  -->
 		<!-- 本机日志地址 -->
-		<!-- <Property name="LOG_DIR">/Library/Tomcat/logs/log4j</Property> -->
+		<Property name="LOG_DIR">/Library/Tomcat/logs/log4j</Property>
 		<Property name="ARCHIVE">${LOG_DIR}/archive</Property>
 		<Property name="PATTERN">%-5level %d [%t] %c:%M(%L): %m%n</Property>
 	</Properties>
