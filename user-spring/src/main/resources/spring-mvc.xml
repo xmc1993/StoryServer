@@ -65,6 +65,7 @@
         </property> <property name="order" value="0" /> </bean> <mvc:resources mapping="/company/**"
         location="/company/" /> -->
 
+
     <!-- mvc校验器 -->
     <bean id="validator"
           class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
@@ -118,6 +119,8 @@
             <mvc:mapping path="/user/getStoryListOfAlbum"/>
             <mvc:mapping path="/user/getLatestWorksByPage"/>
             <mvc:mapping path="/user/getMostPopularByPage"/>
+            
+            <mvc:mapping path="/user/getAllBageOfUser"/>
 
             <mvc:mapping path="/user/playList/getPlayListsByPage"/>
             <mvc:mapping path="/user/playList/getWorksListByPlayListIdByPage"/>

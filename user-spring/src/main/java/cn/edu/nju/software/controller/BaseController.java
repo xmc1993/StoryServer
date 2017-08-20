@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class BaseController {
-
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = LoggerFactory.getLogger(BaseController.class);
 
