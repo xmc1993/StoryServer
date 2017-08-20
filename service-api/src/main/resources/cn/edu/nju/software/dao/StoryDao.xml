@@ -224,6 +224,7 @@
         <include refid="fields"></include>
         from story
         where valid = 1 and draft = 0
+        order by createTime ${sortByCreateTime}
         limit #{0},#{1}
     </select>
 
@@ -361,7 +362,7 @@
                 AND story.press like CONCAT('%', #{press} ,'%')
             </if>
             <if test="tag!=null">
-                AND story_tag.content like CONCAT('%', #{tag} ,'%')
+                AND story_tag.id = #{tag}
             </if>
         </where>
         GROUP BY story.id
@@ -390,7 +391,7 @@
                 AND story.press like CONCAT('%', #{press} ,'%')
             </if>
             <if test="tag!=null">
-                AND story_tag.content like CONCAT('%', #{tag} ,'%')
+                AND story_tag.id = #{tag} 
             </if>
         </where>
     </select>

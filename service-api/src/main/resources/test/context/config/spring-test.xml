@@ -7,5 +7,4 @@
 
     <import resource="applicationContext-database.xml"/>
 
-
 </beans>

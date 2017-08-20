@@ -30,4 +30,5 @@ public class Story {
     private Integer defaultBackGroundMusicId;//
     private Integer likeCount;
     private Integer draft;
+    
 }

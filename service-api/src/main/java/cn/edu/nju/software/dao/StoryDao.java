@@ -37,7 +37,7 @@ public interface StoryDao {
 
     List<Story> getStoryListByTitle(String title, int offset, int limit);
 
-    List<Story> getStoryListByPage(int offset, int limit);
+    List<Story> getStoryListByPage(int offset, int limit,@Param("sortByCreateTime") String sortByCreateTime);
 
     List<Story> getStoryListByIdList(@Param("idList") List<Integer> idList, @Param("offset")Integer offset,@Param("limit") Integer limit);
 
@@ -71,11 +71,11 @@ public interface StoryDao {
 
 
     List<Story> getStoryListByClassifyFuzzyQueryIncludeDrafts(@Param("title") String title, @Param("author") String author, @Param("content") String content,
-                                                              @Param("press") String press, @Param("tag") String tag, @Param("offset") Integer offset,
+                                                              @Param("press") String press, @Param("tag") Integer tag, @Param("offset") Integer offset,
                                                               @Param("limit") Integer limit);
 
     Integer getStoryCountByClassifyFuzzyQueryIncludeDrafts(@Param("title") String title, @Param("author") String author, @Param("content") String content,
-                                                           @Param("press") String press, @Param("tag") String tag);
+                                                           @Param("press") String press, @Param("tag") Integer tag);
 
     List<Story> getDraftList(Integer offset,Integer limit);
 
