@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 
 /**
  * Created by xmc1993 on 2017/5/15.
@@ -33,17 +34,39 @@ public class ManageUploadController {
     @RequestMapping(value = "/uploadIcon", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<UploadResVo> uploadIcon(
-            @ApiParam("ICON") @RequestParam(value = "icon", required = true) MultipartFile icon,
+            @ApiParam("ICON") @RequestParam(value = "文件列表", required = true) MultipartFile icon,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<UploadResVo> responseData = new ResponseData<>();
         String url = uploadFile(icon, ICON_ROOT);
-        if (url == null){
+        if (url == null) {
             responseData.jsonFill(2, "上传失败", null);
-        }else {
+        } else {
             UploadResVo uploadResVo = new UploadResVo();
             uploadResVo.setUrl(url);
             responseData.jsonFill(1, null, uploadResVo);
         }
+        return responseData;
+    }
+
+
+    @ApiOperation(value = "批量上传文件", notes = "")
+    @RequestMapping(value = "/uploadMulti", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<UploadResVo> uploadMulti(
+            @ApiParam("多文件") @RequestParam(value = "files", required = true) MultipartFile[] files,
+                                    HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<UploadResVo> responseData = new ResponseData<>();
+        UploadResVo uploadResVo = new UploadResVo();
+        ArrayList<String> urls = new ArrayList<>();
+        uploadResVo.setMultiUrls(urls);
+        if (files != null){
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()){
+                    urls.add(uploadFile(file, ICON_ROOT));
+                }
+            }
+        }
+
         return responseData;
     }
 
@@ -55,9 +78,9 @@ public class ManageUploadController {
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<UploadResVo> responseData = new ResponseData<>();
         String url = uploadFile(audio, AUDIO_ROOT);
-        if (url == null){
+        if (url == null) {
             responseData.jsonFill(2, "上传失败", null);
-        }else {
+        } else {
             UploadResVo uploadResVo = new UploadResVo();
             uploadResVo.setUrl(url);
             responseData.jsonFill(1, null, uploadResVo);
