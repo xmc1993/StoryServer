@@ -2,12 +2,11 @@ package cn.edu.nju.software.controller.manage;
 
 import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.Admin;
+import cn.edu.nju.software.entity.AdminPower;
 import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.service.AdminPowerService;
 import cn.edu.nju.software.service.AdminService;
-import cn.edu.nju.software.util.JedisUtil;
-import cn.edu.nju.software.util.ObjectAndByte;
-import cn.edu.nju.software.util.StringUtil;
-import cn.edu.nju.software.util.Util;
+import cn.edu.nju.software.util.*;
 import cn.edu.nju.software.vo.response.LoginResponseVo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -34,6 +33,8 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private AdminPowerService adminPowerService;
 
     @ApiOperation(value = "登录", notes = "")
     @RequestMapping(value = "/auth", method = {RequestMethod.POST})
@@ -63,14 +64,36 @@ public class AdminController {
         Jedis jedis = JedisUtil.getJedis();
         jedis.set(admin.getAccessToken().getBytes(), ObjectAndByte.toByteArray(admin));
         jedis.expire(admin.getAccessToken().getBytes(), 60 * 60 * 6);//缓存用户信息6小时
+
+        String key = "PowerCodes-" + admin.getId();
+        byte[] bytes = jedis.get(key.getBytes());
+        List<Integer> powerCodeList;
+        if (bytes == null) {
+            powerCodeList = adminPowerService.getAdminPowerCodeListByAdminId(admin.getId());
+            jedis.set(key.getBytes(), ObjectAndByte.toByteArray(powerCodeList));
+        }else {
+            powerCodeList = (List<Integer>) ObjectAndByte.toObject(bytes);
+        }
         jedis.close();
 
         LoginResponseVo loginResponseVo = new LoginResponseVo();
+        loginResponseVo.setPowerCodeList(powerCodeList);
         loginResponseVo.setId(admin.getId());
         loginResponseVo.setAccessToken(admin.getAccessToken());
-
         return loginResponseVo;
     }
+
+    @ApiOperation(value = "获得用户所有权限", notes = "")
+    @RequestMapping(value = "/getSelfPowerList", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<AdminPower>> getSelfPowerList(HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<AdminPower>> responseData = new ResponseData<>();
+        Admin admin = (Admin)request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        List<AdminPower> adminPowerList = adminPowerService.getAdminPowerListByAdminId(admin.getId());
+        responseData.jsonFill(1, null , adminPowerList);
+        return responseData;
+    }
+
 
     @ApiOperation(value = "登出", notes = "")
     @RequestMapping(value = "/auth", method = {RequestMethod.DELETE})
