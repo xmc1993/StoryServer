@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.OperationLogDao">
+
+    <sql id="fields">
+        id,
+        adminId,
+        adminName,
+        operation,
+        extra,
+        operationTime,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveOperationLog" parameterType="cn.edu.nju.software.entity.OperationLog" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into operation_log(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{adminId},
+        #{adminName},
+        #{operation},
+        #{extra},
+        #{operationTime},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <delete id="deleteOperationLog">
+        DELETE FROM operation_log
+        WHERE id = #{0}
+    </delete>
+
+    <select id="getOperationLogListByPage" resultType="cn.edu.nju.software.entity.OperationLog">
+        select
+        <include refid="fields"></include>
+        from operation_log
+        limit #{0},#{1}
+    </select>
+
+    <select id="getOperationLogById" resultType="cn.edu.nju.software.entity.OperationLog">
+        select
+        <include refid="fields"></include>
+        from operation_log
+        WHERE id = #{0}
+    </select>
+
+</mapper>
