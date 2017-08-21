@@ -6,6 +6,7 @@ import cn.edu.nju.software.service.AdminPowerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,7 +37,17 @@ public class AdminPowerServiceImpl implements AdminPowerService {
     }
 
     @Override
-    public List<AdminPower> getAdminPowerListAdminId(int id) {
+    public List<AdminPower> getAdminPowerListByAdminId(int id) {
         return adminPowerDao.getAdminPowerListAdminId(id);
+    }
+
+    @Override
+    public List<Integer> getAdminPowerCodeListByAdminId(int id) {
+        List<AdminPower> list = getAdminPowerListByAdminId(id);
+        List<Integer> res = new ArrayList<Integer>();
+        for (AdminPower adminPower : list) {
+            res.add(adminPower.getId());
+        }
+        return res;
     }
 }

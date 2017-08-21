@@ -11,7 +11,7 @@ import java.util.Date;
 @Data
 public class OperationLog implements Serializable{
     private Integer id;
-    private String adminId;//操作人的id
+    private Integer adminId;//操作人的id
     private String adminName;//操作人的姓名
     private String operation;//具体的操作
     private String extra;//表单信息

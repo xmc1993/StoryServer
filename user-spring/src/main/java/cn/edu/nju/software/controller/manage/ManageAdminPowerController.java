@@ -77,7 +77,7 @@ public class ManageAdminPowerController {
             @ApiParam("后台用户id") @RequestParam int id,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<AdminPower>> responseData = new ResponseData<>();
-        List<AdminPower> adminPowerList = adminPowerService.getAdminPowerListAdminId(id);
+        List<AdminPower> adminPowerList = adminPowerService.getAdminPowerListByAdminId(id);
         responseData.jsonFill(1, null, adminPowerList);
         return responseData;
     }

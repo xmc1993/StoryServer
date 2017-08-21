@@ -1,6 +1,8 @@
 package cn.edu.nju.software.controller.manage;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.Admin;
+import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.AdminService;
 import cn.edu.nju.software.util.*;
 import cn.edu.nju.software.vo.response.LoginResponseVo;
@@ -80,5 +82,14 @@ public class AdminController {
             jedis.del(accessToken.getBytes());
             jedis.close();
         }
+    }
+
+    @RequiredPermissions({1, 5})
+    @RequestMapping(value = "/test", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<String> test(){
+        ResponseData<String> responseData = new ResponseData<>();
+        responseData.jsonFill(1, null, "测试数据");
+        return responseData;
     }
 }

@@ -28,6 +28,8 @@ public class TokenConfig {
    * 在校验身份通过后，会设置请求属性，记录用户id。该属性定义了默认的请求属性名
    */
   public static final String DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME = "user";
+
+  public static final String DEFAULT_USERID_REQUEST_ATTRIBUTE_POWERCODES = "powerCodes";
   /**
    * 默认的上传Token的HTTP请求头的名字
    */

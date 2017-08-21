@@ -9,6 +9,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RequiredPermissions {
 
+    int[] value() default {};
+
     public int[] affair() default {};
 
     public int[] alliance() default {};
