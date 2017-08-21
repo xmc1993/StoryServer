@@ -119,6 +119,7 @@ public class AdminController {
         return responseData;
     }
 
+    @RequiredPermissions({1,15})
     @ApiOperation(value = "新增后台用户", notes = "")
     @RequestMapping(value = "/admins", method = {RequestMethod.POST})
     @ResponseBody
@@ -133,6 +134,7 @@ public class AdminController {
         return admin;
     }
 
+    @RequiredPermissions({2,15})
     @ApiOperation(value = "删除后台用户", notes = "")
     @RequestMapping(value = "/admins/{id}", method = {RequestMethod.DELETE})
     @ResponseBody
@@ -147,6 +149,7 @@ public class AdminController {
         }
     }
 
+    @RequiredPermissions({4,15})
     @ApiOperation(value = "分页获得后台用户", notes = "")
     @RequestMapping(value = "/getAdminListByPage", method = {RequestMethod.GET})
     @ResponseBody

@@ -141,7 +141,7 @@ public class ManageStoryController {
         return result;
     }
 
-
+    @RequiredPermissions({3, 5})
     @ApiOperation(value = "更新故事", notes = "")
     @RequestMapping(value = "/stories/{id}", method = {RequestMethod.POST})
     @ResponseBody
@@ -205,7 +205,7 @@ public class ManageStoryController {
         return story2vo(result);
     }
 
-
+    @RequiredPermissions({3, 5})
     @ApiOperation(value = "删除封面", notes = "")
     @RequestMapping(value = "/deleteCover", method = {RequestMethod.POST})
     @ResponseBody
@@ -247,6 +247,7 @@ public class ManageStoryController {
         return responseData;
     }
 
+    @RequiredPermissions({2, 5})
     @ApiOperation(value = "删除故事", notes = "")
     @RequestMapping(value = "/stories/{id}", method = {RequestMethod.DELETE})
     @ResponseBody
@@ -261,6 +262,7 @@ public class ManageStoryController {
         }
     }
 
+    @RequiredPermissions({4, 5})
     @ApiOperation(value = "根据ID获得故事", notes = "")
     @RequestMapping(value = "/stories/{id}", method = {RequestMethod.GET})
     @ResponseBody
@@ -275,6 +277,7 @@ public class ManageStoryController {
         }
     }
 
+    @RequiredPermissions({4, 5})
     @ApiOperation(value = "故事列表", notes = "")
     @RequestMapping(value = "/stories", method = {RequestMethod.GET})
     @ResponseBody
@@ -294,6 +297,7 @@ public class ManageStoryController {
         }
     }
 
+    @RequiredPermissions({3, 5})
     @ApiOperation(value = "推荐故事", notes = "")
     @RequestMapping(value = "/stories/{id}/recommendations", method = {RequestMethod.POST})
     @ResponseBody
@@ -306,6 +310,7 @@ public class ManageStoryController {
         }
     }
 
+    @RequiredPermissions({3, 5})
     @ApiOperation(value = "取消推荐故事", notes = "")
     @RequestMapping(value = "/stories/{id}/recommendations", method = {RequestMethod.DELETE})
     @ResponseBody
@@ -344,6 +349,7 @@ public class ManageStoryController {
         return "" + offset + limit;
     }
 
+    @RequiredPermissions({4, 5})
     @ApiOperation(value = "获取故事数量", notes = "")
     @RequestMapping(value = "/storyCount", method = {RequestMethod.GET})
     @ResponseBody
@@ -351,6 +357,7 @@ public class ManageStoryController {
         return storyService.getStoryCountIncludeDrafts();
     }
 
+    @RequiredPermissions({4, 5})
     @ApiOperation(value = "模糊查询获取故事", notes = "")
     @RequestMapping(value = "/storiesByFuzzyQuery", method = {RequestMethod.GET})
     @ResponseBody
@@ -374,6 +381,7 @@ public class ManageStoryController {
         }
     }
 
+    @RequiredPermissions({4, 5})
     @ApiOperation(value = "获取草稿列表")
     @RequestMapping(value = "/draftStories", method = {RequestMethod.GET})
     @ResponseBody
@@ -387,6 +395,7 @@ public class ManageStoryController {
         return result;
     }
 
+    @RequiredPermissions({4, 5})
     @ApiOperation(value = "推荐列表")
     @RequestMapping(value = "/getRecommendStoryListByPage", method = {RequestMethod.GET})
     @ResponseBody

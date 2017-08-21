@@ -1,5 +1,6 @@
 package cn.edu.nju.software.controller.manage;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.App;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.AppService;
@@ -18,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Formatter;
@@ -34,6 +34,8 @@ public class ManageAppController {
     @Autowired
     private AppService appService;
     private static String APP_ROOT = "/apps/";
+
+    @RequiredPermissions({1,10})
     @ApiOperation(value = "发布App", notes = "")
     @RequestMapping(value = "/publishApp", method = {RequestMethod.POST})
     @ResponseBody
@@ -69,6 +71,8 @@ public class ManageAppController {
         result.jsonFill(1,null,true);
         return result;
     }
+
+    @RequiredPermissions({3,10})
     @ApiOperation(value = "修改已发布的App", notes = "除appId外都可为空")
     @RequestMapping(value = "/updateApp", method = {RequestMethod.POST})
     @ResponseBody
@@ -113,6 +117,8 @@ public class ManageAppController {
         result.jsonFill(1,null,true);
         return result;
     }
+
+    @RequiredPermissions({2,10})
     @ApiOperation(value = "删除已发布的App", notes = "")
     @RequestMapping(value = "/deleteApp", method = {RequestMethod.POST})
     @ResponseBody
@@ -130,6 +136,8 @@ public class ManageAppController {
         result.jsonFill(1,null,true);
         return result;
     }
+
+    @RequiredPermissions({2,10})
     @ApiOperation(value = "批量删除已发布的App", notes = "")
     @RequestMapping(value = "/deleteApps", method = {RequestMethod.POST})
     @ResponseBody
@@ -149,6 +157,8 @@ public class ManageAppController {
         result.jsonFill(1,null,true);
         return result;
     }
+
+    @RequiredPermissions({4,10})
     @ApiOperation(value = "APP分页查询按创建时间倒序", notes = "")
     @RequestMapping(value = "/getApps", method = {RequestMethod.GET})
     @ResponseBody

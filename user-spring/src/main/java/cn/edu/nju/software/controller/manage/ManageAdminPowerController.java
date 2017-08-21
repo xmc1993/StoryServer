@@ -1,5 +1,6 @@
 package cn.edu.nju.software.controller.manage;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.AdminPower;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.AdminPowerService;
@@ -29,6 +30,7 @@ public class ManageAdminPowerController {
     @Autowired
     private AdminPowerService adminPowerService;
 
+    @RequiredPermissions({4,15})
     @ApiOperation(value = "新增后台用户权限项", notes = "")
     @RequestMapping(value = "/adminPowers", method = {RequestMethod.POST})
     @ResponseBody
@@ -42,6 +44,7 @@ public class ManageAdminPowerController {
         return adminPower;
     }
 
+    @RequiredPermissions({2,15})
     @ApiOperation(value = "删除后台用户权限项", notes = "")
     @RequestMapping(value = "/adminPowers/{id}", method = {RequestMethod.DELETE})
     @ResponseBody
@@ -56,6 +59,7 @@ public class ManageAdminPowerController {
         }
     }
 
+    @RequiredPermissions({2,15})
     @ApiOperation(value = "删除后台用户权限项", notes = "")
     @RequestMapping(value = "/deleteAdminPower", method = {RequestMethod.POST})
     @ResponseBody
@@ -70,6 +74,7 @@ public class ManageAdminPowerController {
         }
     }
 
+    @RequiredPermissions({4,15})
     @ApiOperation(value = "根据ID获得后台用户权限项", notes = "")
     @RequestMapping(value = "/adminPowers/{id}", method = {RequestMethod.GET})
     @ResponseBody
@@ -84,6 +89,7 @@ public class ManageAdminPowerController {
         }
     }
 
+    @RequiredPermissions({4,15})
     @ApiOperation(value = "分页获得后台用户权限", notes = "")
     @RequestMapping(value = "/getAdminPowerListByPage", method = {RequestMethod.GET})
     @ResponseBody

@@ -1,5 +1,6 @@
 package cn.edu.nju.software.controller.manage;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.PowerCode;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.PowerCodeService;
@@ -29,6 +30,7 @@ public class ManagePowerCodeController {
     @Autowired
     private PowerCodeService powerCodeService;
 
+    @RequiredPermissions({1,15})
     @ApiOperation(value = "新增权限码项", notes = "")
     @RequestMapping(value = "/powerCodes", method = {RequestMethod.POST})
     @ResponseBody
@@ -42,6 +44,7 @@ public class ManagePowerCodeController {
         return powerCode;
     }
 
+    @RequiredPermissions({3,15})
     @ApiOperation(value = "更新权限码项", notes = "")
     @RequestMapping(value = "/powerCodes/{id}", method = {RequestMethod.PUT})
     @ResponseBody
@@ -55,6 +58,7 @@ public class ManagePowerCodeController {
 
     }
 
+    @RequiredPermissions({2,15})
     @ApiOperation(value = "删除权限码项", notes = "")
     @RequestMapping(value = "/powerCodes/{id}", method = {RequestMethod.DELETE})
     @ResponseBody
@@ -70,6 +74,7 @@ public class ManagePowerCodeController {
     }
 
 
+    @RequiredPermissions({4,15})
     @ApiOperation(value = "根据ID获得权限码项", notes = "")
     @RequestMapping(value = "/powerCodes/{id}", method = {RequestMethod.GET})
     @ResponseBody
@@ -84,6 +89,7 @@ public class ManagePowerCodeController {
         }
     }
 
+    @RequiredPermissions({4,15})
     @ApiOperation(value = "分页获得权限码", notes = "")
     @RequestMapping(value = "/getPowerCodeListByPage", method = {RequestMethod.GET})
     @ResponseBody

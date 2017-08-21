@@ -1,5 +1,6 @@
 package cn.edu.nju.software.controller.manage;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.StoryTag;
 import cn.edu.nju.software.service.CheckValidService;
@@ -37,7 +38,7 @@ public class ManageStoryTagController {
 
     private static final String ICON_ROOT = "/icon/"; //头像的基础路径
 
-
+    @RequiredPermissions({1, 6})
     @ApiOperation(value = "新增标签", notes = "")
     @RequestMapping(value = "/storyTags", method = {RequestMethod.POST})
     @ResponseBody
@@ -68,6 +69,7 @@ public class ManageStoryTagController {
         return storyTag;
     }
 
+    @RequiredPermissions({3, 6})
     @ApiOperation(value = "更新标签", notes = "")
     @RequestMapping(value = "/storyTags/{id}", method = {RequestMethod.POST})
     @ResponseBody
@@ -96,6 +98,7 @@ public class ManageStoryTagController {
 
     }
 
+    @RequiredPermissions({2, 6})
     @ApiOperation(value = "删除标签", notes = "")
     @RequestMapping(value = "/storyTags/{id}", method = {RequestMethod.DELETE})
     @ResponseBody
@@ -114,6 +117,7 @@ public class ManageStoryTagController {
         }
     }
 
+    @RequiredPermissions({4, 6})
     @ApiOperation(value = "获得一个标签的子标签列表", notes = "")
     @RequestMapping(value = "/storyTags/{id}/storyTags", method = {RequestMethod.GET})
     @ResponseBody
@@ -137,6 +141,7 @@ public class ManageStoryTagController {
         }
     }
 
+    @RequiredPermissions({4, 6})
     @ApiOperation(value = "根据ID获得标签", notes = "")
     @RequestMapping(value = "/storyTags/{id}", method = {RequestMethod.GET})
     @ResponseBody
@@ -151,6 +156,7 @@ public class ManageStoryTagController {
         }
     }
 
+    @RequiredPermissions({4, 6})
     @ApiOperation(value = "标签列表", notes = "")
     @RequestMapping(value = "/storyTags", method = {RequestMethod.GET})
     @ResponseBody
@@ -181,6 +187,8 @@ public class ManageStoryTagController {
         String url = UploadFileUtil.SOURCE_BASE_URL + ICON_ROOT + fileName;
         return url;
     }
+
+    @RequiredPermissions({4, 6})
     @ApiOperation(value = "获取故事标签数量", notes = "")
     @RequestMapping(value = "/storyTagCount", method = {RequestMethod.GET})
     @ResponseBody

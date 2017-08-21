@@ -1,5 +1,6 @@
 package cn.edu.nju.software.controller.manage;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.SoundEffect;
 import cn.edu.nju.software.entity.SoundEffectTag;
@@ -41,7 +42,7 @@ public class ManageSoundEffectTagRelationController {
     @Autowired
     private SoundEffectService soundEffectService;
 
-
+    @RequiredPermissions({1,7})
     @ApiOperation(value = "给音效添加分类", notes = "")
     @RequestMapping(value = "/soundEffects/{soundEffectId}/soundEffectTags/{tagId}", method = {RequestMethod.POST})
     @ResponseBody
@@ -67,6 +68,7 @@ public class ManageSoundEffectTagRelationController {
         return success;
     }
 
+    @RequiredPermissions({2,7})
     @ApiOperation(value = "删除音效的一个分类", notes = "")
     @RequestMapping(value = "/soundEffects/{soundEffectId}/soundEffectTags/{tagId}", method = {RequestMethod.DELETE})
     @ResponseBody
@@ -86,6 +88,7 @@ public class ManageSoundEffectTagRelationController {
         return success;
     }
 
+    @RequiredPermissions({4,7})
     @ApiOperation(value = "获得一个音效的所有分类", notes = "")
     @RequestMapping(value = "/soundEffects/{id}/soundEffectTags", method = {RequestMethod.GET})
     @ResponseBody
@@ -110,6 +113,7 @@ public class ManageSoundEffectTagRelationController {
         }
     }
 
+    @RequiredPermissions({4,7})
     @ApiOperation(value = "获得一个分类下的所有音效", notes = "")
     @RequestMapping(value = "/soundEffectTags/{id}/soundEffects", method = {RequestMethod.GET})
     @ResponseBody
