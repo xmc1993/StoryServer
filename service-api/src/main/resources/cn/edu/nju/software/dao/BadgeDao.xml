@@ -71,5 +71,10 @@
         from badge
         WHERE id = #{0}
     </select>
-
+	
+	<select id="getBadgeOfUser" resultType="cn.edu.nju.software.entity.Badge">
+		select b.id,b.badgeTypeId,b.name,b.description,b.icon,b.measure,b.extra,b.createTime,b.updateTime from Badge as b 
+			left join user_badge_mappings as ubm on b.id = ubm.badgeId
+		where ubm.userId = #{userId}
+	</select>
 </mapper>

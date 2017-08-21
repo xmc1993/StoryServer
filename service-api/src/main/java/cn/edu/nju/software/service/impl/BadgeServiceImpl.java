@@ -52,4 +52,9 @@ public class BadgeServiceImpl implements BadgeService {
         int limit = pageSize;
         return badgeDao.getAllBadgeByPage(offset, limit);
     }
+
+	@Override
+	public List<Badge> getBadgeOfUser(Integer userId) {
+		return badgeDao.getBadgeOfUser(userId);
+	}
 }

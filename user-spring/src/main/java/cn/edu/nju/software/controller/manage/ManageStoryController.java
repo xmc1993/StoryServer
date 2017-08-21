@@ -68,7 +68,7 @@ public class ManageStoryController {
             @ApiParam("角色图标") @RequestParam(value = "roleIconFile", required = false) MultipartFile roleIconFile,
             @ApiParam("角色音频") @RequestParam(value = "roleAudioFile", required = false) MultipartFile roleAudioFile,
             @ApiParam("角色其他信息") @RequestParam(value = "roleExtra", required = false) String roleExtra,
-            @ApiParam("建议阅读时间（单位s）") @RequestParam(value = "suggestedReadingDuration", required = false) int suggestedReadingDuration,
+            @ApiParam("建议阅读时间（单位s）") @RequestParam(value = "suggestedReadingDuration", required = false) Integer suggestedReadingDuration,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<StoryNewVo> result = new ResponseData<>();
         Story dbStory = storyService.getExactStoryByTitle(title);
@@ -103,7 +103,9 @@ public class ManageStoryController {
         story.setUpdateTime(new Date());
         story.setDraft(draft);
         story.setLikeCount(0);
-        story.setSuggestedReadingDuration(suggestedReadingDuration);
+        if (suggestedReadingDuration != null) {
+            story.setSuggestedReadingDuration(suggestedReadingDuration);
+        }
         Story res = storyService.saveStory(story);
         if (res == null) {
             throw new RuntimeException("发布故事失败");

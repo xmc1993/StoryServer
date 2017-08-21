@@ -24,7 +24,7 @@ public interface StoryService {
 
     Story updateStory(Story story);
 
-    List<Story> getStoryListByPage(int offset, int limit);
+    List<Story> getStoryListByPage(int offset, int limit,String sortByCreateTime);
 
     List<Story> getStoryListByPageIncludeDrafts(int offset, int limit);
 
@@ -58,9 +58,9 @@ public interface StoryService {
 
     List <Story>  getStoryByFuzzyQuery(String query, Integer offset, Integer limit);
 
-    List<Story> getStoryByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, String tag, Integer offset, Integer limit);
+    List<Story> getStoryByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, Integer tag, Integer offset, Integer limit);
 
-    Integer getStoryCountByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, String tag);
+    Integer getStoryCountByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, Integer tag);
 
     boolean setDraftComplete(Integer storyId);
 

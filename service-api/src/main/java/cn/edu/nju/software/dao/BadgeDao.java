@@ -23,5 +23,7 @@ public interface BadgeDao {
     List<Badge> getBadgeListByTypeId(int typeId);
 
     List<Badge> getAllBadgeByPage(int offset, int limit);
+    
+    List<Badge> getBadgeOfUser(Integer userId);
 
 }
