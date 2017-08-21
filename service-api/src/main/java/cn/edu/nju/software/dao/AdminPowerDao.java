@@ -20,4 +20,6 @@ public interface AdminPowerDao {
 
     List<AdminPower> getAdminPowerListAdminId(int id);
 
+    boolean deleteAdminPowerWithPrimaryKey(int adminId, int code);
+
 }

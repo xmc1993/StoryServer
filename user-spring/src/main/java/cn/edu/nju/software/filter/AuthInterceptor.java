@@ -1,10 +1,16 @@
 package cn.edu.nju.software.filter;
 
 import cn.edu.nju.software.annotation.RequiredPermissions;
+import cn.edu.nju.software.entity.Admin;
+import cn.edu.nju.software.entity.OperationLog;
+import cn.edu.nju.software.service.OperationLogService;
 import cn.edu.nju.software.util.TokenConfig;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.wordnik.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -13,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +35,11 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
     private static final Map<String, Object> serviceMethodRequiredPermissionsMapping = new HashMap<>();
     private static final Lock serviceMethodRequiredPermissionsLock = new ReentrantLock();
+    private static final Map<String, Object> serviceMethodApiOperationInfoMapping = new HashMap<>();
+    private static final Lock serviceMethodApiOperationInfoLock = new ReentrantLock();
+
+    @Autowired
+    private OperationLogService operationLogService;
 
     private static String getHandlerMethodSignature(HandlerMethod handlerMethod) {
         StringBuilder builder = new StringBuilder();
@@ -85,6 +97,10 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         return getAnnotationFromHandlerMethodWithCache(handlerMethod, RequiredPermissions.class, serviceMethodRequiredPermissionsMapping, serviceMethodRequiredPermissionsLock);
     }
 
+    private ApiOperation getApiOperationFromHandlerMethodWithCache(HandlerMethod handlerMethod) {
+        return getAnnotationFromHandlerMethodWithCache(handlerMethod, ApiOperation.class, serviceMethodApiOperationInfoMapping, serviceMethodApiOperationInfoLock);
+    }
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //TODO 检查权限的入口
@@ -131,7 +147,10 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     protected int checkPermissions(HttpServletRequest request, HttpServletResponse response, Object handler) {
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         RequiredPermissions requiredPermissions = getRequiredPermissionsFromHandlerMethodWithCache(handlerMethod);
+
+
         if (requiredPermissions == null) {
+            generateLog(request, response, handler);
             return hasPermission; // 不做检查
         }
 
@@ -141,7 +160,31 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         }
         int[] requirePowerCodes = requiredPermissions.value();
         boolean res = isPermitted(requirePowerCodes, powerCodeList);
+        if (res){
+            generateLog(request, response, handler);
+        }
         return res ? hasPermission : notPermitted;
+    }
+
+    /**
+     * 打日志
+     */
+    private void generateLog(HttpServletRequest request, HttpServletResponse response, Object handler){
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        ApiOperation apiOperation = getApiOperationFromHandlerMethodWithCache(handlerMethod);
+        Admin admin = (Admin) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        OperationLog operationLog = new OperationLog();
+        operationLog.setCreateTime(new Date());
+        operationLog.setUpdateTime(new Date());
+        operationLog.setOperationTime(new Date());
+        operationLog.setAdminId(admin.getId());
+        operationLog.setAdminName(admin.getUsername());
+        operationLog.setOperation(request.getRequestURI());
+        //设置描述信息
+        operationLog.setDescription(apiOperation == null ? null : apiOperation.value());
+        operationLog.setExtra(JSON.toJSONString(request.getParameterMap()));
+        operationLogService.saveOperationLog(operationLog);
+
     }
 
     private boolean isPermitted(int[] permissions,List<Integer> curPermissions){

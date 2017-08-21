@@ -13,6 +13,8 @@ public interface AdminPowerService {
 
     boolean deleteAdminPower(int id);
 
+    boolean deleteAdminPowerWithPrimaryKey(int adminId, int code);
+
     AdminPower getAdminPowerById(int id);
 
     List<AdminPower> getAdminPowerListByAdminId(int id);

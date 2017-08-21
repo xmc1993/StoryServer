@@ -79,7 +79,11 @@ public class AdminAccessTokenValidationInterceptor extends HandlerInterceptorAda
         return true;
     }
 
-
+    /**
+     * 在request中设置权限码
+     * @param request
+     * @param admin
+     */
     private void setPowerCodes(HttpServletRequest request, Admin admin){
         String key = "PowerCodes-" + admin.getId();
         Jedis jedis = JedisUtil.getJedis();

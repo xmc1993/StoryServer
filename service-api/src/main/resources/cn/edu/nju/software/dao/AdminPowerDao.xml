@@ -30,6 +30,11 @@
         WHERE id = #{0}
     </delete>
 
+    <delete id="deleteAdminPowerWithPrimaryKey">
+        DELETE FROM admin_power
+        WHERE adminId = #{0} and codeId = #{1}
+    </delete>
+
     <select id="getAdminPowerListAdminId" resultType="cn.edu.nju.software.entity.AdminPower">
         select
         <include refid="fields"></include>

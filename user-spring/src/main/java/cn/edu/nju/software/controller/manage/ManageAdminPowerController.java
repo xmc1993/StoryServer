@@ -56,6 +56,20 @@ public class ManageAdminPowerController {
         }
     }
 
+    @ApiOperation(value = "删除后台用户权限项", notes = "")
+    @RequestMapping(value = "/deleteAdminPower", method = {RequestMethod.POST})
+    @ResponseBody
+    public void deleteAdminPowerWithPrimaryKey(
+            @ApiParam("后台用户id") @PathVariable int adminId,
+            @ApiParam("权限code") @PathVariable int code,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Boolean> responseData = new ResponseData<>();
+        boolean success = adminPowerService.deleteAdminPowerWithPrimaryKey(adminId, code);
+        if (!success) {
+            throw new RuntimeException("删除失败");
+        }
+    }
+
     @ApiOperation(value = "根据ID获得后台用户权限项", notes = "")
     @RequestMapping(value = "/adminPowers/{id}", method = {RequestMethod.GET})
     @ResponseBody

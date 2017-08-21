@@ -14,6 +14,7 @@ public class OperationLog implements Serializable{
     private Integer adminId;//操作人的id
     private String adminName;//操作人的姓名
     private String operation;//具体的操作
+    private String description;//具体的操作
     private String extra;//表单信息
     private Date operationTime;
     private Date createTime;

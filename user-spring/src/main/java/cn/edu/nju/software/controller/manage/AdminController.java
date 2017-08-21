@@ -4,22 +4,24 @@ import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.Admin;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.AdminService;
-import cn.edu.nju.software.util.*;
+import cn.edu.nju.software.util.JedisUtil;
+import cn.edu.nju.software.util.ObjectAndByte;
+import cn.edu.nju.software.util.StringUtil;
+import cn.edu.nju.software.util.Util;
 import cn.edu.nju.software.vo.response.LoginResponseVo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by xmc1993 on 2017/5/15.
@@ -85,11 +87,53 @@ public class AdminController {
     }
 
     @RequiredPermissions({1, 5})
+    @ApiOperation(value = "测试权限接口", notes = "")
     @RequestMapping(value = "/test", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<String> test(){
+    public ResponseData<String> test() {
         ResponseData<String> responseData = new ResponseData<>();
         responseData.jsonFill(1, null, "测试数据");
+        return responseData;
+    }
+
+    @ApiOperation(value = "新增后台用户", notes = "")
+    @RequestMapping(value = "/admins", method = {RequestMethod.POST})
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
+    public Admin publishAdmin(
+            @ApiParam("徽章类型项") @RequestBody Admin admin,
+            HttpServletRequest request, HttpServletResponse response) {
+        admin.setPassword(Util.getMd5(admin.getPassword()));
+        admin.setCreateTime(new Date());
+        admin.setUpdateTime(new Date());
+        adminService.saveAdmin(admin);
+        return admin;
+    }
+
+    @ApiOperation(value = "删除后台用户", notes = "")
+    @RequestMapping(value = "/admins/{id}", method = {RequestMethod.DELETE})
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAdmin(
+            @ApiParam("ID") @PathVariable int id,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Boolean> responseData = new ResponseData<>();
+        boolean success = adminService.deleteAdmin(id);
+        if (!success) {
+            throw new RuntimeException("删除失败");
+        }
+    }
+
+    @ApiOperation(value = "分页获得后台用户", notes = "")
+    @RequestMapping(value = "/getAdminListByPage", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<Admin>> getAdminListByPage(
+            @ApiParam("PAGE") @RequestParam int page,
+            @ApiParam("SIZE") @RequestParam int pageSize,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<Admin>> responseData = new ResponseData<>();
+        List<Admin> adminList = adminService.getAdminListByPage(page, pageSize);
+        responseData.jsonFill(1, null, adminList);
         return responseData;
     }
 }

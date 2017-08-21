@@ -14,12 +14,4 @@ public class AdminPower {
     private Integer codeId;
     private Date createTime;
     private Date updateTime;
-    /**
-     * 1 增
-     * 2 删
-     * 3 改
-     * 4 查
-     * 6 故事标签分类
-     * 7 故事标签
-     */
 }
