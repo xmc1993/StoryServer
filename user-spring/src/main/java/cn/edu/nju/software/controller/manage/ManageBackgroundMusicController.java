@@ -1,5 +1,6 @@
 package cn.edu.nju.software.controller.manage;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.BackgroundMusic;
 import cn.edu.nju.software.entity.BackgroundMusicTagRelation;
 import cn.edu.nju.software.entity.ResponseData;
@@ -41,6 +42,7 @@ public class ManageBackgroundMusicController {
 
     private static final String SOUND_EFFECT_ROOT = "/backgroundMusic/"; //头像的基础路径
 
+    @RequiredPermissions({1, 9})
     @ApiOperation(value = "增加背景音乐", notes = "")
     @RequestMapping(value = "/backgroundMusics", method = {RequestMethod.POST})
     @ResponseBody
@@ -89,6 +91,7 @@ public class ManageBackgroundMusicController {
         }
     }
 
+    @RequiredPermissions({3, 9})
     @ApiOperation(value = "更新背景音乐", notes = "")
     @RequestMapping(value = "/backgroundMusics/{id}", method = {RequestMethod.POST})
     @ResponseBody
@@ -130,6 +133,7 @@ public class ManageBackgroundMusicController {
         }
     }
 
+    @RequiredPermissions({2, 9})
     @ApiOperation(value = "删除背景音乐", notes = "")
     @RequestMapping(value = "/backgroundMusics/{id}", method = {RequestMethod.DELETE})
     @ResponseBody
@@ -148,6 +152,7 @@ public class ManageBackgroundMusicController {
     }
 
 
+    @RequiredPermissions({4, 9})
     @ApiOperation(value = "根据ID得到背景音乐", notes = "")
     @RequestMapping(value = "/backgroundMusics/{id}", method = {RequestMethod.GET})
     @ResponseBody
@@ -162,6 +167,7 @@ public class ManageBackgroundMusicController {
         }
     }
 
+    @RequiredPermissions({4, 9})
     @ApiOperation(value = "得到所有背景音乐", notes = "")
     @RequestMapping(value = "/backgroundMusics", method = {RequestMethod.GET})
     @ResponseBody
@@ -181,6 +187,7 @@ public class ManageBackgroundMusicController {
         }
     }
 
+    @RequiredPermissions({4, 9})
     @ApiOperation(value = "获取背景音乐数量", notes = "")
     @RequestMapping(value = "/backgroundMusicCount", method = {RequestMethod.GET})
     @ResponseBody

@@ -23,6 +23,36 @@
     </resultMap>
 
 
+    <insert id="saveAdmin" parameterType="cn.edu.nju.software.entity.Admin" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into admin(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{username},
+        #{password},
+        #{accessToken},
+        #{expireTime},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <delete id="deleteAdmin">
+        DELETE FROM admin
+        WHERE id = #{0}
+    </delete>
+
+    <select id="getAdminListByPage" resultType="cn.edu.nju.software.entity.Admin">
+        SELECT
+        <include refid="fields"></include>
+        FROM admin
+        limit #{0},#{1}
+    </select>
+
+
     <select id="getAdminByUsername" resultType="cn.edu.nju.software.entity.Admin">
         SELECT
         <include refid="fields"></include>

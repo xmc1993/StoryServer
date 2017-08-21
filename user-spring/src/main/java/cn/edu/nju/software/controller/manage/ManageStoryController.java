@@ -1,5 +1,6 @@
 package cn.edu.nju.software.controller.manage;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.*;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
@@ -45,6 +46,7 @@ public class ManageStoryController {
     @Autowired
     private StoryRoleService storyRoleService;
 
+    @RequiredPermissions({1, 5})
     @ApiOperation(value = "新增故事", notes = "草稿状态1为草稿0为完成")
     @RequestMapping(value = "/stories", method = {RequestMethod.POST})
     @ResponseBody
@@ -77,16 +79,16 @@ public class ManageStoryController {
             result.jsonFill(2, "重复的标题名称", story2vo(dbStory));
         }
         Story story = new Story();
-        if (coverFile != null &&!coverFile.isEmpty()) {
+        if (coverFile != null && !coverFile.isEmpty()) {
             story.setCoverUrl(uploadFile(coverFile));
         }
         if (preCoverFile != null && !preCoverFile.isEmpty()) {
             story.setPreCoverUrl(uploadFile(preCoverFile));
         }
-        if (backgroundFile!=null && !backgroundFile.isEmpty()) {
+        if (backgroundFile != null && !backgroundFile.isEmpty()) {
             story.setBackgroundUrl(uploadFile(backgroundFile));
         }
-        if (originSoundFile != null &&!originSoundFile.isEmpty()) {
+        if (originSoundFile != null && !originSoundFile.isEmpty()) {
             story.setOriginSoundUrl(uploadFile(originSoundFile));
             String duration = storyService.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(story.getOriginSoundUrl())));
             story.setDuration(duration);
@@ -141,7 +143,7 @@ public class ManageStoryController {
         return result;
     }
 
-
+    @RequiredPermissions({3, 5})
     @ApiOperation(value = "更新故事", notes = "")
     @RequestMapping(value = "/stories/{id}", method = {RequestMethod.POST})
     @ResponseBody
@@ -207,14 +209,14 @@ public class ManageStoryController {
         return story2vo(result);
     }
 
-
+    @RequiredPermissions({3, 5})
     @ApiOperation(value = "删除封面", notes = "")
     @RequestMapping(value = "/deleteCover", method = {RequestMethod.POST})
     @ResponseBody
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseData<Boolean> deleteCover(
-            @ApiParam("故事ID")int id,
-            @ApiParam("要清除的字段")String query,
+            @ApiParam("故事ID") int id,
+            @ApiParam("要清除的字段") String query,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Boolean> responseData = new ResponseData<>();
 
@@ -231,24 +233,25 @@ public class ManageStoryController {
         boolean flag = true;
         if (query.equals("preCoverUrl")) {
             story.setPreCoverUrl("");
-        }else if (query.equals("coverUrl")) {
+        } else if (query.equals("coverUrl")) {
             story.setCoverUrl("");
-        }else if (query.equals("backgroundUrl")) {
+        } else if (query.equals("backgroundUrl")) {
             story.setBackgroundUrl("");
-        }else {
+        } else {
             flag = false;
         }
 
         if (flag) {
             storyService.updateStory(story);
-            responseData.jsonFill(1, null ,true);
-        }else {
+            responseData.jsonFill(1, null, true);
+        } else {
             responseData.jsonFill(2, "要清理的资源不存在", null);
         }
 
         return responseData;
     }
 
+    @RequiredPermissions({2, 5})
     @ApiOperation(value = "删除故事", notes = "")
     @RequestMapping(value = "/stories/{id}", method = {RequestMethod.DELETE})
     @ResponseBody
@@ -263,6 +266,7 @@ public class ManageStoryController {
         }
     }
 
+    @RequiredPermissions({4, 5})
     @ApiOperation(value = "根据ID获得故事", notes = "")
     @RequestMapping(value = "/stories/{id}", method = {RequestMethod.GET})
     @ResponseBody
@@ -277,6 +281,7 @@ public class ManageStoryController {
         }
     }
 
+    @RequiredPermissions({4, 5})
     @ApiOperation(value = "故事列表", notes = "")
     @RequestMapping(value = "/stories", method = {RequestMethod.GET})
     @ResponseBody
@@ -296,6 +301,7 @@ public class ManageStoryController {
         }
     }
 
+    @RequiredPermissions({3, 5})
     @ApiOperation(value = "推荐故事", notes = "")
     @RequestMapping(value = "/stories/{id}/recommendations", method = {RequestMethod.POST})
     @ResponseBody
@@ -308,6 +314,7 @@ public class ManageStoryController {
         }
     }
 
+    @RequiredPermissions({3, 5})
     @ApiOperation(value = "取消推荐故事", notes = "")
     @RequestMapping(value = "/stories/{id}/recommendations", method = {RequestMethod.DELETE})
     @ResponseBody
@@ -346,6 +353,7 @@ public class ManageStoryController {
         return "" + offset + limit;
     }
 
+    @RequiredPermissions({4, 5})
     @ApiOperation(value = "获取故事数量", notes = "")
     @RequestMapping(value = "/storyCount", method = {RequestMethod.GET})
     @ResponseBody
@@ -353,6 +361,7 @@ public class ManageStoryController {
         return storyService.getStoryCountIncludeDrafts();
     }
 
+    @RequiredPermissions({4, 5})
     @ApiOperation(value = "模糊查询获取故事", notes = "")
     @RequestMapping(value = "/storiesByFuzzyQuery", method = {RequestMethod.GET})
     @ResponseBody
@@ -376,6 +385,7 @@ public class ManageStoryController {
         }
     }
 
+    @RequiredPermissions({4, 5})
     @ApiOperation(value = "获取草稿列表")
     @RequestMapping(value = "/draftStories", method = {RequestMethod.GET})
     @ResponseBody
@@ -389,16 +399,17 @@ public class ManageStoryController {
         return result;
     }
 
+    @RequiredPermissions({4, 5})
     @ApiOperation(value = "推荐列表")
-    @RequestMapping(value = "/getRecommendStoryListByPage",method = {RequestMethod.GET})
+    @RequestMapping(value = "/getRecommendStoryListByPage", method = {RequestMethod.GET})
     @ResponseBody
-    public  ResponseData<List<StoryNewVo>> getRecommendStoryListByPage(
+    public ResponseData<List<StoryNewVo>> getRecommendStoryListByPage(
             @ApiParam("offset") @RequestParam("offset") int offset,
             @ApiParam("limit") @RequestParam("limit") int limit
-            ,HttpServletRequest request, HttpServletResponse response){
-        ResponseData<List<StoryNewVo>> responseData=new ResponseData<>();
+            , HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<StoryNewVo>> responseData = new ResponseData<>();
         List<Story> storyList = storyService.getRecommendedStoryListByPage(offset, limit);
-        responseData.jsonFill(1,null,storyList2VoList(storyList));
+        responseData.jsonFill(1, null, storyList2VoList(storyList));
         responseData.setCount(storyService.getRecommendedStoryCount());
         return responseData;
     }
@@ -406,6 +417,7 @@ public class ManageStoryController {
 
     /**
      * Story列表转Vo列表
+     *
      * @param list
      * @return
      */
@@ -422,6 +434,7 @@ public class ManageStoryController {
 
     /**
      * Story转Vo
+     *
      * @param story
      * @return
      */

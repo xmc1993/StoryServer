@@ -1,5 +1,6 @@
 package cn.edu.nju.software.controller.manage;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.StoryRole;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.StoryRoleService;
@@ -29,6 +30,7 @@ public class ManageStoryRoleController {
     @Autowired
     private StoryRoleService storyRoleService;
 
+    @RequiredPermissions({1, 5})
     @ApiOperation(value = "新增故事角色项", notes = "")
     @RequestMapping(value = "/storyRoles", method = {RequestMethod.POST})
     @ResponseBody
@@ -42,6 +44,7 @@ public class ManageStoryRoleController {
         return storyRole;
     }
 
+    @RequiredPermissions({3, 5})
     @ApiOperation(value = "更新故事角色项", notes = "")
     @RequestMapping(value = "/storyRoles/{id}", method = {RequestMethod.PUT})
     @ResponseBody
@@ -55,6 +58,7 @@ public class ManageStoryRoleController {
 
     }
 
+    @RequiredPermissions({2, 5})
     @ApiOperation(value = "删除故事角色项", notes = "")
     @RequestMapping(value = "/storyRoles/{id}", method = {RequestMethod.DELETE})
     @ResponseBody
@@ -69,7 +73,7 @@ public class ManageStoryRoleController {
         }
     }
 
-
+    @RequiredPermissions({4, 5})
     @ApiOperation(value = "根据ID获得故事角色项", notes = "")
     @RequestMapping(value = "/storyRoles/{id}", method = {RequestMethod.GET})
     @ResponseBody
@@ -84,6 +88,7 @@ public class ManageStoryRoleController {
         }
     }
 
+    @RequiredPermissions({4, 5})
     @ApiOperation(value = "根据故事角色类型故事角色项列表", notes = "")
     @RequestMapping(value = "/getStoryRoleListByStoryId", method = {RequestMethod.GET})
     @ResponseBody

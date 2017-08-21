@@ -1,5 +1,6 @@
 package cn.edu.nju.software.controller.manage;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.Discovery;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.DiscoveryService;
@@ -35,6 +36,8 @@ public class ManageDiscoveryController {
     private DiscoveryService discoveryService;
     private static String DISCOVERY_PICTURE_ROOT = "/discovery/picture/";
     private static String DISCOVERY_ZIP_ROOT = "/discovery/";
+
+    @RequiredPermissions({1,11})
     @ApiOperation(value = "新增发现", notes = "")
     @RequestMapping(value = "/saveDiscovery", method = {RequestMethod.POST})
     @ResponseBody
@@ -65,6 +68,8 @@ public class ManageDiscoveryController {
         result.jsonFill(1,null,true);
         return result;
     }
+
+    @RequiredPermissions({3,11})
     @ApiOperation(value = "修改发现", notes = "")
     @RequestMapping(value = "/updateDiscovery", method = {RequestMethod.POST})
     @ResponseBody
@@ -101,6 +106,8 @@ public class ManageDiscoveryController {
         result.jsonFill(1,null,true);
         return result;
     }
+
+    @RequiredPermissions({2,11})
     @ApiOperation(value = "删除发现", notes = "")
     @RequestMapping(value = "/deleteDiscovery", method = {RequestMethod.POST})
     @ResponseBody
@@ -123,6 +130,8 @@ public class ManageDiscoveryController {
             return result;
         }
     }
+
+    @RequiredPermissions({2,11})
     @ApiOperation(value = "批量删除发现", notes = "")
     @RequestMapping(value = "/deleteDiscoveryList", method = {RequestMethod.POST})
     @ResponseBody
@@ -146,6 +155,8 @@ public class ManageDiscoveryController {
         result.jsonFill(1,null,true);
         return result;
     }
+
+    @RequiredPermissions({4,11})
     @ApiOperation(value = "分页获取发现时间排序", notes = "")
     @RequestMapping(value = "/Discoveries", method = {RequestMethod.GET})
     @ResponseBody

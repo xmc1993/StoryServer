@@ -1,5 +1,6 @@
 package cn.edu.nju.software.controller.manage;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.SoundEffect;
 import cn.edu.nju.software.entity.SoundEffectTagRelation;
@@ -44,6 +45,7 @@ public class ManageSoundEffectController {
 
     private static final String SOUND_EFFECT_ROOT = "/soundEffect/"; //头像的基础路径
 
+    @RequiredPermissions({1,7})
     @ApiOperation(value = "增加音效", notes = "")
     @RequestMapping(value = "/soundEffects", method = {RequestMethod.POST})
     @ResponseBody
@@ -103,6 +105,7 @@ public class ManageSoundEffectController {
         return result;
     }
 
+
     @RequestMapping(value = "/testSoundEffect",method = {RequestMethod.POST})
     @ResponseBody
     public SoundEffect testSoundEffect( @ApiParam("音效ID") @RequestParam(value = "id") int id,
@@ -137,6 +140,8 @@ public class ManageSoundEffectController {
             throw new RuntimeException("更新失败。");
         }
     }
+
+    @RequiredPermissions({3,7})
     @ApiOperation(value = "更新音效", notes = "")
     @RequestMapping(value = "/soundEffects/{id}", method = {RequestMethod.POST})
     @ResponseBody
@@ -180,6 +185,7 @@ public class ManageSoundEffectController {
 
     }
 
+    @RequiredPermissions({2,7})
     @ApiOperation(value = "删除音效", notes = "")
          @RequestMapping(value = "/soundEffects/{id}", method = {RequestMethod.DELETE})
          @ResponseBody
@@ -197,7 +203,7 @@ public class ManageSoundEffectController {
         }
     }
 
-
+    @RequiredPermissions({4,7})
     @ApiOperation(value = "根据ID得到音效", notes = "")
     @RequestMapping(value = "/soundEffects/{id}", method = {RequestMethod.GET})
     @ResponseBody
@@ -212,6 +218,7 @@ public class ManageSoundEffectController {
         }
     }
 
+    @RequiredPermissions({4,7})
     @ApiOperation(value = "得到所有音效", notes = "")
     @RequestMapping(value = "/soundEffects", method = {RequestMethod.GET})
     @ResponseBody
@@ -232,6 +239,7 @@ public class ManageSoundEffectController {
         }
     }
 
+    @RequiredPermissions({4,7})
     @ApiOperation(value = "获取背景音效数量", notes = "")
     @RequestMapping(value = "/soundEffectCount", method = {RequestMethod.GET})
     @ResponseBody

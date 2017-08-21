@@ -1,5 +1,6 @@
 package cn.edu.nju.software.controller.manage;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.SoundEffectTag;
 import cn.edu.nju.software.service.CheckValidService;
@@ -32,6 +33,7 @@ public class ManageSoundEffectTagController {
     @Autowired
     private SoundEffectTagService soundEffectTagService;
 
+    @RequiredPermissions({1,8})
     @ApiOperation(value = "新增音效分类", notes = "")
     @RequestMapping(value = "/soundEffectTags", method = {RequestMethod.POST})
     @ResponseBody
@@ -49,6 +51,7 @@ public class ManageSoundEffectTagController {
         return soundEffectTag;
     }
 
+    @RequiredPermissions({3,8})
     @ApiOperation(value = "更新音效分类", notes = "")
     @RequestMapping(value = "/soundEffectTags/{id}", method = {RequestMethod.PUT})
     @ResponseBody
@@ -65,6 +68,7 @@ public class ManageSoundEffectTagController {
 
     }
 
+    @RequiredPermissions({2,8})
     @ApiOperation(value = "删除音效分类", notes = "")
     @RequestMapping(value = "/soundEffectTags/{id}", method = {RequestMethod.DELETE})
     @ResponseBody
@@ -79,7 +83,7 @@ public class ManageSoundEffectTagController {
         }
     }
 
-
+    @RequiredPermissions({4,8})
     @ApiOperation(value = "根据ID获得音效分类", notes = "")
     @RequestMapping(value = "/soundEffectTags/{id}", method = {RequestMethod.GET})
     @ResponseBody
@@ -94,6 +98,7 @@ public class ManageSoundEffectTagController {
         }
     }
 
+    @RequiredPermissions({4,8})
     @ApiOperation(value = "音效分类列表", notes = "")
     @RequestMapping(value = "/soundEffectTags", method = {RequestMethod.GET})
     @ResponseBody
@@ -114,6 +119,7 @@ public class ManageSoundEffectTagController {
         }
     }
 
+    @RequiredPermissions({4,8})
     @ApiOperation(value = "获取背景音乐分类数量", notes = "")
     @RequestMapping(value = "/soundEffectTagCount", method = {RequestMethod.GET})
     @ResponseBody

@@ -1,6 +1,10 @@
 package cn.edu.nju.software.controller.manage;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.Admin;
+import cn.edu.nju.software.entity.AdminPower;
+import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.service.AdminPowerService;
 import cn.edu.nju.software.service.AdminService;
 import cn.edu.nju.software.util.*;
 import cn.edu.nju.software.vo.response.LoginResponseVo;
@@ -8,16 +12,15 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by xmc1993 on 2017/5/15.
@@ -30,6 +33,8 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private AdminPowerService adminPowerService;
 
     @ApiOperation(value = "登录", notes = "")
     @RequestMapping(value = "/auth", method = {RequestMethod.POST})
@@ -59,14 +64,36 @@ public class AdminController {
         Jedis jedis = JedisUtil.getJedis();
         jedis.set(admin.getAccessToken().getBytes(), ObjectAndByte.toByteArray(admin));
         jedis.expire(admin.getAccessToken().getBytes(), 60 * 60 * 6);//缓存用户信息6小时
+
+        String key = "PowerCodes-" + admin.getId();
+        byte[] bytes = jedis.get(key.getBytes());
+        List<Integer> powerCodeList;
+        if (bytes == null) {
+            powerCodeList = adminPowerService.getAdminPowerCodeListByAdminId(admin.getId());
+            jedis.set(key.getBytes(), ObjectAndByte.toByteArray(powerCodeList));
+        }else {
+            powerCodeList = (List<Integer>) ObjectAndByte.toObject(bytes);
+        }
         jedis.close();
 
         LoginResponseVo loginResponseVo = new LoginResponseVo();
+        loginResponseVo.setPowerCodeList(powerCodeList);
         loginResponseVo.setId(admin.getId());
         loginResponseVo.setAccessToken(admin.getAccessToken());
-
         return loginResponseVo;
     }
+
+    @ApiOperation(value = "获得用户所有权限", notes = "")
+    @RequestMapping(value = "/getSelfPowerList", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<AdminPower>> getSelfPowerList(HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<AdminPower>> responseData = new ResponseData<>();
+        Admin admin = (Admin)request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        List<AdminPower> adminPowerList = adminPowerService.getAdminPowerListByAdminId(admin.getId());
+        responseData.jsonFill(1, null , adminPowerList);
+        return responseData;
+    }
+
 
     @ApiOperation(value = "登出", notes = "")
     @RequestMapping(value = "/auth", method = {RequestMethod.DELETE})
@@ -80,5 +107,59 @@ public class AdminController {
             jedis.del(accessToken.getBytes());
             jedis.close();
         }
+    }
+
+    @RequiredPermissions({1, 5})
+    @ApiOperation(value = "测试权限接口", notes = "")
+    @RequestMapping(value = "/test", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<String> test() {
+        ResponseData<String> responseData = new ResponseData<>();
+        responseData.jsonFill(1, null, "测试数据");
+        return responseData;
+    }
+
+    @RequiredPermissions({1,15})
+    @ApiOperation(value = "新增后台用户", notes = "")
+    @RequestMapping(value = "/admins", method = {RequestMethod.POST})
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
+    public Admin publishAdmin(
+            @ApiParam("徽章类型项") @RequestBody Admin admin,
+            HttpServletRequest request, HttpServletResponse response) {
+        admin.setPassword(Util.getMd5(admin.getPassword()));
+        admin.setCreateTime(new Date());
+        admin.setUpdateTime(new Date());
+        adminService.saveAdmin(admin);
+        return admin;
+    }
+
+    @RequiredPermissions({2,15})
+    @ApiOperation(value = "删除后台用户", notes = "")
+    @RequestMapping(value = "/admins/{id}", method = {RequestMethod.DELETE})
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAdmin(
+            @ApiParam("ID") @PathVariable int id,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Boolean> responseData = new ResponseData<>();
+        boolean success = adminService.deleteAdmin(id);
+        if (!success) {
+            throw new RuntimeException("删除失败");
+        }
+    }
+
+    @RequiredPermissions({4,15})
+    @ApiOperation(value = "分页获得后台用户", notes = "")
+    @RequestMapping(value = "/getAdminListByPage", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<Admin>> getAdminListByPage(
+            @ApiParam("PAGE") @RequestParam int page,
+            @ApiParam("SIZE") @RequestParam int pageSize,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<Admin>> responseData = new ResponseData<>();
+        List<Admin> adminList = adminService.getAdminListByPage(page, pageSize);
+        responseData.jsonFill(1, null, adminList);
+        return responseData;
     }
 }
