@@ -138,7 +138,7 @@
     </resultMap>
     <insert id="saveStory" parameterType="cn.edu.nju.software.entity.Story" keyProperty="id" useGeneratedKeys="true">
         insert into story(
-        <include refid="fields"></include>
+        <include refid="fields"></include>,albumId
         )
         VALUES
         (
@@ -163,7 +163,8 @@
         #{duration},
         #{likeCount},
         #{draft},
-        #{suggestedReadingDuration}
+        #{suggestedReadingDuration},
+        #{albumId}
         )
     </insert>
     <insert id="addStoryLikeCount">
@@ -190,7 +191,8 @@
 		defaultBackGroundMusicId=#{defaultBackGroundMusicId},
 		duration=#{duration},
 		draft=#{draft},
-		suggestedReadingDuration=#{suggestedReadingDuration}
+		suggestedReadingDuration=#{suggestedReadingDuration},
+		albumId=#{albumId}
 		where
 		id=#{id}
 	</update>

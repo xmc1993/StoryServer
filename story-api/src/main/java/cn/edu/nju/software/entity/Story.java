@@ -31,5 +31,5 @@ public class Story {
     private Integer likeCount;
     private Integer draft;
     private Integer suggestedReadingDuration;//建议阅读时长 单位是秒
-
+    private Integer albumId;
 }

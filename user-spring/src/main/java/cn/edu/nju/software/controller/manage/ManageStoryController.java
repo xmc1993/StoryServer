@@ -56,7 +56,7 @@ public class ManageStoryController {
             @ApiParam("出版社") @RequestParam(value = "press", required = false) String press,
             @ApiParam("阅读指导") @RequestParam(value = "guide", required = false) String guide,
             @ApiParam("价格") @RequestParam(value = "price", required = false) String price,
-            @ApiParam("草稿状态") @RequestParam("draft") int draft,
+            @ApiParam("草稿状态") @RequestParam(value="draft") int draft,
             @ApiParam("朗读指导") @RequestParam(value = "readGuide", required = false) String readGuide,
             @ApiParam("默认背景音ID") @RequestParam Integer defaultBackGroundMusicId,
             @ApiParam("封面") @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
@@ -69,6 +69,7 @@ public class ManageStoryController {
             @ApiParam("角色音频") @RequestParam(value = "roleAudioFile", required = false) MultipartFile roleAudioFile,
             @ApiParam("角色其他信息") @RequestParam(value = "roleExtra", required = false) String roleExtra,
             @ApiParam("建议阅读时间（单位s）") @RequestParam(value = "suggestedReadingDuration", required = false) Integer suggestedReadingDuration,
+            @ApiParam("所属专辑id") @RequestParam(value = "albumId", required = false) Integer albumId,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<StoryNewVo> result = new ResponseData<>();
         Story dbStory = storyService.getExactStoryByTitle(title);
@@ -103,6 +104,7 @@ public class ManageStoryController {
         story.setUpdateTime(new Date());
         story.setDraft(draft);
         story.setLikeCount(0);
+        story.setAlbumId(albumId);
         if (suggestedReadingDuration != null) {
             story.setSuggestedReadingDuration(suggestedReadingDuration);
         }
@@ -159,27 +161,28 @@ public class ManageStoryController {
             @ApiParam("录制背景") @RequestParam(value = "backgroundFile", required = false) MultipartFile backgroundFile,
             @ApiParam("原音") @RequestParam(value = "originSoundFile", required = false) MultipartFile originSoundFile,
             @ApiParam("建议阅读时间（单位s）") @RequestParam(value = "suggestedReadingDuration", required = false) Integer suggestedReadingDuration,
+            @ApiParam("所属专辑id") @RequestParam(value = "albumId", required = false) Integer albumId,
             HttpServletRequest request, HttpServletResponse response) {
         Story story = storyService.getStoryById(id);
         if (story == null) {
             throw new RuntimeException("无效的故事id");
         }
-        if (!coverFile.isEmpty()) {
+        if (coverFile !=null && !coverFile.isEmpty()) {
             //删除旧的封面
             if (story.getCoverUrl() != null) UploadFileUtil.deleteFileByUrl(story.getCoverUrl());
             story.setCoverUrl(uploadFile(coverFile));
         }
-        if (!preCoverFile.isEmpty()) {
+        if (preCoverFile !=null && !preCoverFile.isEmpty()) {
             //删除旧
             if (story.getPreCoverUrl() != null) UploadFileUtil.deleteFileByUrl(story.getPreCoverUrl());
             story.setPreCoverUrl(uploadFile(preCoverFile));
         }
-        if (!backgroundFile.isEmpty()) {
+        if (backgroundFile !=null && !backgroundFile.isEmpty()) {
             //删除旧
             if (story.getBackgroundUrl() != null) UploadFileUtil.deleteFileByUrl(story.getBackgroundUrl());
             story.setBackgroundUrl(uploadFile(backgroundFile));
         }
-        if (!originSoundFile.isEmpty()) {
+        if (originSoundFile !=null && !originSoundFile.isEmpty()) {
             if (story.getOriginSoundUrl() != null) UploadFileUtil.deleteFileByUrl(story.getOriginSoundUrl());
             story.setOriginSoundUrl(uploadFile(originSoundFile));
             String duration = storyService.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(story.getOriginSoundUrl())));
@@ -196,6 +199,7 @@ public class ManageStoryController {
         story.setDefaultBackGroundMusicId(defaultBackGroundMusicId);
         story.setUpdateTime(new Date());
         story.setDraft(draft);
+        story.setAlbumId(albumId);
         Story result = storyService.updateStory(story);
         if (result == null) {
             throw new RuntimeException("更新失败");

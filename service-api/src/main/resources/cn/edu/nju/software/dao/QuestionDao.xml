@@ -37,7 +37,7 @@
         name=#{name},
         icon=#{icon},
         pic=#{pic},
-        pic=#{pic},
+        extra=#{extra},
         content=#{content},
         updateTime=#{updateTime}
         WHERE id = #{id}

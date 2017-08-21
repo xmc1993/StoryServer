@@ -34,7 +34,7 @@ public class ManageUploadController {
     @RequestMapping(value = "/uploadIcon", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<UploadResVo> uploadIcon(
-            @ApiParam("ICON") @RequestParam(value = "文件列表", required = true) MultipartFile icon,
+            @ApiParam("ICON") @RequestParam(value = "icon", required = true) MultipartFile icon,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<UploadResVo> responseData = new ResponseData<>();
         String url = uploadFile(icon, ICON_ROOT);
