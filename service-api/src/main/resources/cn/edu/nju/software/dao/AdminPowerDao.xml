@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.AdminPowerDao">
+
+    <sql id="fields">
+        id,
+        adminId,
+        codeId,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveAdminPower" parameterType="cn.edu.nju.software.entity.AdminPower" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into admin_power(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{adminId},
+        #{codeId},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <delete id="deleteAdminPower">
+        DELETE FROM admin_power
+        WHERE id = #{0}
+    </delete>
+
+    <select id="getAdminPowerListAdminId" resultType="cn.edu.nju.software.entity.AdminPower">
+        select
+        <include refid="fields"></include>
+        from admin_power
+        where adminId = #{0}
+    </select>
+
+    <select id="getAdminPowerById" resultType="cn.edu.nju.software.entity.AdminPower">
+        select
+        <include refid="fields"></include>
+        from admin_power
+        WHERE id = #{0}
+    </select>
+
+</mapper>
