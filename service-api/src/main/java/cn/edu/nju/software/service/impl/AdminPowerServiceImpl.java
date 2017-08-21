@@ -44,9 +44,9 @@ public class AdminPowerServiceImpl implements AdminPowerService {
     @Override
     public List<Integer> getAdminPowerCodeListByAdminId(int id) {
         List<AdminPower> list = getAdminPowerListByAdminId(id);
-        List<Integer> res = new ArrayList<Integer>();
+        List<Integer> res = new ArrayList<>();
         for (AdminPower adminPower : list) {
-            res.add(adminPower.getId());
+            res.add(adminPower.getCodeId());
         }
         return res;
     }

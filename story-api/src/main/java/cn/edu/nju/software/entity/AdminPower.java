@@ -11,7 +11,7 @@ import java.util.Date;
 public class AdminPower {
     private Integer id;
     private Integer adminId;
-    private String codeId;
+    private Integer codeId;
     private Date createTime;
     private Date updateTime;
     /**
