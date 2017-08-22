@@ -77,4 +77,6 @@
 			left join user_badge_mappings as ubm on b.id = ubm.badgeId
 		where ubm.userId = #{userId}
 	</select>
+	
+	
 </mapper>

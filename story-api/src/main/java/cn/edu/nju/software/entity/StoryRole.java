@@ -18,4 +18,5 @@ public class StoryRole implements Serializable{
     private String extra;//其余信息值
     private Date createTime;
     private Date updateTime;
+    private String roleReadGuide;
 }

@@ -323,6 +323,7 @@ public class UserStoryController extends BaseController {
             return null;
         }
         StoryNewVo storyVo = new StoryNewVo();
+        storyVo.setStory(story);
         List<Integer> idList = tagRelationService.getTagIdListByStoryId(story.getId());
         List<StoryTag> storyTagList = storyTagService.getStoryTagListByIdList(idList);
         storyVo.setTagList(storyTagList);

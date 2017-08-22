@@ -55,12 +55,25 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="mapperLocations">
             <list>
-
                 <value>classpath*:cn/edu/nju/software/dao/*Dao.xml</value>
                 <value>classpath*:cn/edu/nju/software/dao/user/*Dao.xml</value>
-
             </list>
         </property>
+        <property name="plugins">
+		    <array>
+		      <bean class="com.github.pagehelper.PageInterceptor">
+		        <property name="properties">
+		          <!--使用下面的方式配置参数，一行配置一个 -->
+		          <value>
+		          helperDialect=mysql
+                  reasonable=true
+                  supportMethodsArguments=true
+                  autoRuntimeDialect=true
+		          </value>
+		        </property>
+		      </bean>
+		    </array>
+  		</property>
     </bean>
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer" p:sqlSessionFactoryBeanName="sqlSessionFactory"
           p:basePackage="cn.edu.nju.software.dao"/>

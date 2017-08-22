@@ -13,4 +13,5 @@ import java.util.List;
 public class StoryNewVo extends Story {
     private List<StoryTag> tagList;
     private boolean like = false;
+    private Story story;
 }

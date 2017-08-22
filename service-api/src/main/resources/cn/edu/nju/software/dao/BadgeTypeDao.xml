@@ -56,4 +56,19 @@
         WHERE id = #{0}
     </select>
 
+	<select id="getBadgeTypeByBadgeId" resultType="cn.edu.nju.software.entity.BadgeType">
+		select
+        	bt.id,
+        	bt.name,
+        	bt.description,
+        	bt.extra,
+        	bt.createTime,
+        	bt.updateTime
+        from badge_type as bt left join badge as b on bt.id=b.badgeTypeId
+        where b.id = #{badgeId}
+	</select>
+	
+	<select id="getBadgeTypeList" resultType="cn.edu.nju.software.entity.BadgeType">
+		select * from badge_type
+	</select>
 </mapper>

@@ -294,8 +294,8 @@
 			<groupId>com.jave</groupId>
 			<artifactId>jave</artifactId>
 			<version>1.02</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/jave-1.02.jar</systemPath>
+			<!-- <scope>system</scope>
+			<systemPath>${basedir}/lib/jave-1.02.jar</systemPath>  -->
 		</dependency>
 		<!--压缩实现依赖-->
 		<!-- https://mvnrepository.com/artifact/org.apache.ant/ant -->
@@ -304,6 +304,13 @@
 			<artifactId>ant</artifactId>
 			<version>1.8.2</version>
 		</dependency>
+		
+		<!-- 分页插件 -->
+		<dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.0.4</version>
+        </dependency>
 
 	</dependencies>
 </project>

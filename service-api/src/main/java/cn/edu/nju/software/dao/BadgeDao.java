@@ -1,6 +1,7 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.Badge;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,5 +26,6 @@ public interface BadgeDao {
     List<Badge> getAllBadgeByPage(int offset, int limit);
     
     List<Badge> getBadgeOfUser(Integer userId);
+
 
 }

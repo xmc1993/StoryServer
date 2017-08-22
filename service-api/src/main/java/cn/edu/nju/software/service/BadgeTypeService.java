@@ -1,6 +1,7 @@
 package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.entity.BadgeType;
+import cn.edu.nju.software.entity.ResponseData;
 
 import java.util.List;
 
@@ -19,4 +20,7 @@ public interface BadgeTypeService {
 
     List<BadgeType> getAllBadgeTypeByPage(int page, int pageSize);
 
+    BadgeType  getBadgeTypeByBadgeId(Integer badgeId);
+
+	ResponseData<List<BadgeType>> getBadgeTypeListByPage(Integer page, Integer pageSize, ResponseData<List<BadgeType>> responseData);
 }

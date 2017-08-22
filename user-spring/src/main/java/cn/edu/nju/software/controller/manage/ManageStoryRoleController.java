@@ -46,7 +46,7 @@ public class ManageStoryRoleController {
 
     @RequiredPermissions({3, 5})
     @ApiOperation(value = "更新故事角色项", notes = "")
-    @RequestMapping(value = "/storyRoles/{id}", method = {RequestMethod.PUT})
+    @RequestMapping(value = "/storyRoles/{id}", method = {RequestMethod.POST})
     @ResponseBody
     public StoryRole updateStoryRole(
             @ApiParam("ID") @PathVariable int id,

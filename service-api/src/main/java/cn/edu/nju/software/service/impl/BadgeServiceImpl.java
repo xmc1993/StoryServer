@@ -57,4 +57,5 @@ public class BadgeServiceImpl implements BadgeService {
 	public List<Badge> getBadgeOfUser(Integer userId) {
 		return badgeDao.getBadgeOfUser(userId);
 	}
+
 }

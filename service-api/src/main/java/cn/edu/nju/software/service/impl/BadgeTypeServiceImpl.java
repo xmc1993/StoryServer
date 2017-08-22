@@ -2,9 +2,13 @@ package cn.edu.nju.software.service.impl;
 
 import cn.edu.nju.software.dao.BadgeTypeDao;
 import cn.edu.nju.software.entity.BadgeType;
+import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.BadgeTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
@@ -47,4 +51,19 @@ public class BadgeTypeServiceImpl implements BadgeTypeService {
         int limit = pageSize;
         return badgeTypeDao.getAllBadgeTypeByPage(offset, limit);
     }
+    
+	@Override
+	public BadgeType getBadgeTypeByBadgeId(Integer badgeId) {
+		return badgeTypeDao.getBadgeTypeByBadgeId(badgeId);
+	}
+
+	@Override
+	public ResponseData<List<BadgeType>> getBadgeTypeListByPage(Integer page, Integer pageSize,ResponseData<List<BadgeType>> responseData) {
+		PageHelper.startPage(page, pageSize);
+		List<BadgeType> bageTypeList = badgeTypeDao.getBadgeTypeList();
+		PageInfo<BadgeType> pageInfo= new PageInfo<BadgeType>(bageTypeList);
+		responseData.setCount((int)pageInfo.getTotal());
+		responseData.jsonFill(1, null,bageTypeList );
+		return responseData;
+	}
 }

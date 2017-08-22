@@ -24,7 +24,8 @@
         duration,
         likeCount,
         draft,
-        suggestedReadingDuration
+        suggestedReadingDuration,
+        albumId
     </sql>
 
     <sql id="multiTableFields">
@@ -49,7 +50,8 @@
        story.duration,
        story.likeCount,
        story.draft,
-       story.suggestedReadingDuration
+       story.suggestedReadingDuration,
+       story.albumId
     </sql>
     <sql id="storyVoFields">
         <include refid="story_fields"/>,

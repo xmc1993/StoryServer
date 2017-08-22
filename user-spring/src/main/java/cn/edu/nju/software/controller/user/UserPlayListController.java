@@ -173,5 +173,37 @@ public class UserPlayListController extends BaseController {
         return responseData;
     }
 
-
+    @ApiOperation(value = "修改播放列表", notes = "")
+    @RequestMapping(value = "/updatePlayList", method = {RequestMethod.PUT})
+    @ResponseBody
+    public ResponseData<Boolean> updatePlayList(
+    		@ApiParam("播放列表的名字") @RequestParam(value="name") String name,
+    		@ApiParam("PlayList的ID") @RequestParam(value="playListId") int playListId,
+            HttpServletRequest request, HttpServletResponse response){
+    	ResponseData<Boolean> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "用户尚未登录。", null);
+            return responseData;
+        }
+        PlayList playList = playListService.getPlayListById(playListId);
+        if (playList == null) {
+            responseData.jsonFill(2, "列表不存在。", null);
+            return responseData;
+        }
+        if (user.getId().compareTo(playList.getUserId())!=0) {
+            responseData.jsonFill(2, "非法请求。", null);
+            return responseData;
+        }
+        
+        PlayList pl = new PlayList();
+        pl.setUpdateTime(new Date());
+        pl.setName(name);
+        pl.setId(playListId);
+        
+        boolean res = playListService.updatePlayList(pl);
+        responseData.jsonFill(res ? 1 : 2, null, res);
+        return responseData;
+    }
+    		
 }
