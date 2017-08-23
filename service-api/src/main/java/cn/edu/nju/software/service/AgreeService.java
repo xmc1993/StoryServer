@@ -2,6 +2,7 @@ package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.entity.Agree;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,5 +21,7 @@ public interface AgreeService {
     List<Integer> getAgreeWorksIdListByUserId(int userId, int offset, int limit);
 
     Agree getAgree(int userId, int worksId);
+
+    List<Agree> extractNewRecords(Date lastExtractTime);
 
 }

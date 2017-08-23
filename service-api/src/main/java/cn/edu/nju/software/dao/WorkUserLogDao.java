@@ -4,6 +4,7 @@ import cn.edu.nju.software.entity.WorkUserLog;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,8 +12,14 @@ import java.util.List;
  */
 @Repository
 public interface WorkUserLogDao {
-    public boolean insertWorkUserLog(@Param("workUserLog") WorkUserLog workUserLog);
-    public Integer deleteWorkUserLogByIdList(@Param("idList") List<Integer> idList);
-    public List<Integer> getUserIdListByWorkId(@Param("workId") int workId, @Param("offset") int offset, @Param("limit") int limit);
-    public List<Integer> getWorkIdListByUserId(@Param("userId") int userId, @Param("offset") int offset, @Param("limit") int limit);
+
+    boolean insertWorkUserLog(@Param("workUserLog") WorkUserLog workUserLog);
+
+    Integer deleteWorkUserLogByIdList(@Param("idList") List<Integer> idList);
+
+    List<Integer> getUserIdListByWorkId(@Param("workId") int workId, @Param("offset") int offset, @Param("limit") int limit);
+
+    List<Integer> getWorkIdListByUserId(@Param("userId") int userId, @Param("offset") int offset, @Param("limit") int limit);
+
+    List<WorkUserLog> extractNewRecords(Date lastExtractTime);
 }

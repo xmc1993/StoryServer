@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.edu.nju.software.dao.WorkUserLogDao" >
+
   <resultMap id="BaseResultMap" type="cn.edu.nju.software.entity.WorkUserLog" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="userId" property="userId" jdbcType="INTEGER" />
     <result column="workId" property="workId" jdbcType="INTEGER" />
+    <result column="storyId" property="storyId" jdbcType="INTEGER" />
     <result column="channel" property="channel" jdbcType="VARCHAR" />
     <result column="accessTime" property="accessTime" jdbcType="TIMESTAMP" />
   </resultMap>
+
   <sql id="Base_Column_List" >
-    id, userId, workId, channel, accessTime
+    id, userId, workId, channel, accessTime, storyId
   </sql>
+
   <insert id="insertWorkUserLog" parameterType="cn.edu.nju.software.entity.WorkUserLog">
     insert into work_user_log (
     <include refid="Base_Column_List"/>
     )
-    VALUES(#{workUserLog.id},#{workUserLog.userId},#{workUserLog.workId},#{workUserLog.channel},#{workUserLog.accessTime})
+    VALUES(#{workUserLog.id},#{workUserLog.userId},#{workUserLog.workId},#{workUserLog.channel},#{workUserLog.accessTime}, #{workUserLog.storyId})
   </insert>
+
   <delete id="deleteWorkUserLogByIdList">
     delete from work_user_log
     where id in
@@ -24,15 +29,23 @@
       #{id}
     </foreach>
   </delete>
+
   <select id="getUserIdListByWorkId" resultType="java.lang.Integer">
     select userId
     from work_user_log
     where workId = #{workId}
   </select>
+
   <select id="getWorkIdListByUserId" resultType="java.lang.Integer">
     select workId
     from work_user_log
     where userId = #{userId}
+  </select>
+
+  <select id="extractNewRecords" resultType="cn.edu.nju.software.entity.WorkUserLog">
+    select <include refid="Base_Column_List"/>
+    from work_user_log
+    WHERE accessTime &gt; #{0}
   </select>
 
 </mapper>

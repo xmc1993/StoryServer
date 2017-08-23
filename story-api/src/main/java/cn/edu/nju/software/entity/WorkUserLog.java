@@ -12,10 +12,12 @@ public class WorkUserLog {
     private Integer id;
     private Integer userId;
     private Integer workId;
+    private Integer storyId;
     private String channel;
     private Date accessTime;
 
     public WorkUserLog() {
+
     }
 
     public WorkUserLog(Integer userId, Integer workId, String channel, Date accessTime) {

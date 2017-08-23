@@ -66,4 +66,11 @@
         from agree
         where userId = #{0} and worksId = #{1}
     </select>
+
+    <select id="extractNewRecords" resultType="cn.edu.nju.software.entity.Agree">
+        select
+        <include refid="fields"></include>
+        from agree
+        where createTime &gt; #{0}
+    </select>
 </mapper>

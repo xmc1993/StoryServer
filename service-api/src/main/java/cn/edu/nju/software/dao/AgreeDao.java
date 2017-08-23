@@ -3,6 +3,7 @@ package cn.edu.nju.software.dao;
 import cn.edu.nju.software.entity.Agree;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,5 +23,7 @@ public interface AgreeDao {
     List<Integer> getAgreeWorksListByUserId(int userId, int offset, int limit);
 
     Agree getAgree(int userId, int worksId);
+
+    List<Agree> extractNewRecords(Date lastExtractTime);
 
 }

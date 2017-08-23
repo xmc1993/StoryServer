@@ -12,9 +12,11 @@
   <sql id="Base_Column_List" >
     id, userId, storyId, channel, accessTime
   </sql>
+
   <sql id="multilist_column" >
     story_user_log.id, story_user_log.userId, story_user_log.storyId, story_user_log.channel, story_user_log.accessTime
   </sql>
+
   <insert id="insertStoryUserLog">
     insert into story_user_log (
     <include refid="Base_Column_List"/>
@@ -27,6 +29,7 @@
     #{storyUserLog.accessTime}
     )
   </insert>
+
   <delete id="deleteStoryUserLogByIdList">
     delete from story_user_log
       where id in
@@ -34,10 +37,12 @@
         #{id}
       </foreach>
   </delete>
+
   <delete id="deleteStoryUserLogById">
     delete from story_user_log
     where id = #{id}
   </delete>
+
   <select id="getUserIdListByStoryIdTimeDesc" resultType="java.lang.Integer">
     select
     userId
@@ -46,6 +51,7 @@
     order by accessTime desc
     limit #{offset},#{limit}
   </select>
+
   <select id="getStoryIdListByUserIdTimeDesc" resultType="java.lang.Integer">
     select
     storyId
@@ -54,31 +60,37 @@
     order by accessTime desc
     limit #{offset},#{limit}
   </select>
+
   <select id="getStoryUserLogById" resultType="cn.edu.nju.software.entity.StoryUserLog">
     select <include refid="Base_Column_List"/>
     from story_user_log
     where id = #{id}
   </select>
+
   <select id="getUserCountByStoryId" resultType="java.lang.Integer">
     select count(id)
     from story_user_log
     where storyId = #{storyId}
   </select>
+
   <select id="getStoryCountByUserId" resultType="java.lang.Integer">
     select count(id)
     from story_user_log
     where userId = #{userId}
   </select>
+
   <select id="getStoryUserLogByPageTimeDesc" resultType="cn.edu.nju.software.entity.StoryUserLog">
     select <include refid="Base_Column_List"/>
     from story_user_log
     order by accessTime desc
     limit #{offset},#{limit}
   </select>
+
   <select id="getStoryUserLogCount" resultType="java.lang.Integer">
     select count(DISTINCT id )
     from story_user_log
   </select>
+
   <select id="getStoryLogVoByPage" resultType="cn.edu.nju.software.vo.StoryUserLogVo">
     select  <include refid="multilist_column"/>,story.title
     from story_user_log as storyUserLog
@@ -86,4 +98,12 @@
     order by storyUserLog.accessTime desc
     limit #{offset},#{limit}
   </select>
+
+  <select id="extractNewRecords" resultType="cn.edu.nju.software.entity.StoryUserLog">
+    select <include refid="Base_Column_List"/>
+    from story_user_log
+    WHERE accessTime &gt; #{0}
+  </select>
+
+
 </mapper>

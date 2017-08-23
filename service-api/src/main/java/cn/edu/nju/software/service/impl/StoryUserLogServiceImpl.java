@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -84,5 +85,10 @@ public class StoryUserLogServiceImpl implements StoryUserLogService{
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
         return storyUserLogDao.getStoryLogVoByPage(offset,limit);
+    }
+
+    @Override
+    public List<StoryUserLog> extractNewRecords(Date lastExtractTime) {
+        return storyUserLogDao.extractNewRecords(lastExtractTime);
     }
 }

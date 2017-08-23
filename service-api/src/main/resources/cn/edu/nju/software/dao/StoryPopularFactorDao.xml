@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.StoryPopularFactorDao">
+
+    <sql id="fields">
+        id,
+        storyId,
+        factor,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveStoryPopularFactor" parameterType="cn.edu.nju.software.entity.StoryPopularFactor" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into story_popular_factor(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{storyId},
+        #{factor},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <update id="updateStoryPopularFactor" parameterType="cn.edu.nju.software.entity.StoryPopularFactor">
+        UPDATE story_popular_factor
+        SET
+        factor=#{factor},
+        updateTime=#{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteStoryPopularFactor">
+        DELETE FROM story_popular_factor
+        WHERE id = #{0}
+    </delete>
+
+    <select id="getStoryPopularFactorListByTypeId" resultType="cn.edu.nju.software.entity.StoryPopularFactor">
+        select
+        <include refid="fields"></include>
+        from story_popular_factor
+        where story_popular_factorTypeId = #{0}
+        ORDER by measure ASC
+    </select>
+
+    <select id="getAllStoryPopularFactorByPage" resultType="cn.edu.nju.software.entity.StoryPopularFactor">
+        select
+        <include refid="fields"></include>
+        from story_popular_factor
+        limit #{0},#{1}
+    </select>
+
+    <select id="getStoryPopularFactorById" resultType="cn.edu.nju.software.entity.StoryPopularFactor">
+        select
+        <include refid="fields"></include>
+        from story_popular_factor
+        WHERE id = #{0}
+    </select>
+	
+	<select id="getStoryPopularFactorOfUser" resultType="cn.edu.nju.software.entity.StoryPopularFactor">
+		select b.id,b.story_popular_factorTypeId,b.name,b.description,b.icon,b.measure,b.extra,b.createTime,b.updateTime from StoryPopularFactor as b 
+			left join user_story_popular_factor_mappings as ubm on b.id = ubm.story_popular_factorId
+		where ubm.userId = #{userId}
+	</select>
+	
+	
+</mapper>

@@ -9,6 +9,7 @@ import cn.edu.nju.software.util.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -63,5 +64,10 @@ public class AgreeServiceImpl implements AgreeService {
     @Override
     public Agree getAgree(int userId, int worksId) {
         return agreeDao.getAgree(userId, worksId);
+    }
+
+    @Override
+    public List<Agree> extractNewRecords(Date lastExtractTime) {
+        return agreeDao.extractNewRecords(lastExtractTime);
     }
 }

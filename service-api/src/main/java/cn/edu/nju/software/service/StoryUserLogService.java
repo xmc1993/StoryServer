@@ -5,6 +5,7 @@ import cn.edu.nju.software.entity.StoryUserLog;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.vo.StoryUserLogVo;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,4 +31,7 @@ public interface StoryUserLogService {
     int getUserCountByStoryID(int storyId);
 
     List<StoryUserLogVo> getStoryUserLogVoByPageTimeDesc(int offset, int limit);
+
+    List<StoryUserLog> extractNewRecords(Date lastExtractTime);
+
 }
