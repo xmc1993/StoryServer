@@ -38,7 +38,7 @@ public class UserSoundEffectController extends BaseController {
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<SoundEffect>> responseData = new ResponseData();
+        ResponseData<List<SoundEffect>> responseData = new ResponseData<>();
         List<SoundEffect> soundEffectList = soundEffectService.getSoundEffectListByPage(offset, limit);
         responseData.jsonFill(1, null, soundEffectList);
         responseData.setCount(soundEffectService.getSoundEffectCount());

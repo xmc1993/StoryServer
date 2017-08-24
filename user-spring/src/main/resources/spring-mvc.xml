@@ -102,6 +102,7 @@
             <mvc:mapping path="/user/getAgreeWorksListByUserId"/>
             <mvc:mapping path="/user/getWorksById"/>
             <mvc:mapping path="/user/getFollowingStatus"/>
+            <mvc:mapping path="/user/getWorksByUser"/>            
 
             <mvc:mapping path="/user/getStoryById"/> 
             <mvc:mapping path="/user/getStoryListByPage"/>

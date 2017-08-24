@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.StoryAlbumDao">
+	<insert id="saveStoryAlbumRel">
+		insert into album_relation (storyId,albumId,createTime,updateTime)
+		values
+		<foreach collection="albumIdList" item="item" index="index" separator=",">
+			(#{storyId},#{item},NOW(),NOW())
+		</foreach>
+	</insert>
+	
+	<delete id="delStoryAlbumRel">
+		delete from album_relation where storyId=#{id}
+	</delete>
+</mapper>

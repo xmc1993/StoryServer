@@ -1,8 +1,11 @@
 package cn.edu.nju.software.service;
 
+import cn.edu.nju.software.entity.TwoTuple;
 import cn.edu.nju.software.entity.Works;
 
 import java.util.List;
+
+import com.github.pagehelper.PageInfo;
 
 /**
  * Created by xmc1993 on 2017/5/14.
@@ -38,4 +41,8 @@ public interface WorksService {
     List<Works> getLatestWorksByPage(int page, int pageSize);
 
     List<Works> getMostPopularByPage(int page, int pageSize);
+
+	List<TwoTuple<Integer,String>> getFirstWorkByPlayIdList(List<Integer> playIdList);
+
+	PageInfo<Works> getWorksListByStoryIdListByPage(List<Integer> storyIdList, int page, int pageSize);
 }

@@ -36,4 +36,5 @@ public interface StoryTagService {
     List<StoryTag> getAllSecondLevelTags();
 
     Integer getStoryTagCount();
+
 }

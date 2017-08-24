@@ -120,5 +120,5 @@
         select count(id)
         from story_tag where valid = 1
     </select>
-
+	
 </mapper>

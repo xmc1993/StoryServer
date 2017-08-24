@@ -1,5 +1,6 @@
 package cn.edu.nju.software.dao;
 
+import cn.edu.nju.software.entity.TwoTuple;
 import cn.edu.nju.software.entity.Works;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -56,5 +57,9 @@ public interface WorksDao {
     boolean addListenCount(@Param("workId") Integer workId);
 
     boolean setDelReviewCount(@Param("workId") Integer workId, @Param("delReviewCount") int delReviewCount);
+
+	List<TwoTuple<Integer,String>> getFirstWorkByPlayIdList(@Param("playIdList") List<Integer> playIdList);
+
+	List<Works> getWorksListByStoryIdList(@Param("storyIdList") List<Integer> storyIdList);
 
 }

@@ -27,7 +27,7 @@ public class UserStoryRoleController {
 	@Autowired
 	private StoryRoleService storyRoleService;
 	
-	@ApiOperation(value = "根据故事角色类型故事角色项列表", notes = "")
+	@ApiOperation(value = "根据故事id获取故事角色项列表")
     @RequestMapping(value = "/getStoryRoleListByStoryId", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<StoryRole>> getStoryRoleListByTypeId(

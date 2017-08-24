@@ -12,6 +12,6 @@ import java.util.List;
 @Data
 public class StoryNewVo extends Story {
     private List<StoryTag> tagList;
+    private List<Integer> albumIdList;
     private boolean like = false;
-    private Story story;
 }

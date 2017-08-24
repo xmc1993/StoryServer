@@ -6,7 +6,10 @@ import cn.edu.nju.software.service.*;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UploadFileUtil;
+import cn.edu.nju.software.util.UserChecker;
 import cn.edu.nju.software.vo.WorksVo;
+
+import com.github.pagehelper.PageInfo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -46,16 +49,20 @@ public class UserWorksController extends BaseController {
     private StoryService storyService;
     @Autowired
     private WorkUserLogService workUserLogService;
+    @Autowired
+    StoryTagService storyTagService;
+    @Autowired
+    TagRelationService tagRelationService;
 
 
-    @ApiOperation(value = "获得最新的作品列表", notes = "需要登录")
+    @ApiOperation(value = "获得最新的作品列表(第一页page=1)", notes = "需要登录")
     @RequestMapping(value = "/getLatestWorksByPage", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<WorksVo>> getLatestWorksByPage(
             @ApiParam("页") @RequestParam int page,
             @ApiParam("页大小") @RequestParam int pageSize,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<WorksVo>> responseData = new ResponseData();
+        ResponseData<List<WorksVo>> responseData = new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "请先登录", null);
@@ -67,14 +74,14 @@ public class UserWorksController extends BaseController {
         return responseData;
     }
 
-    @ApiOperation(value = "获得最受欢迎的作品列表", notes = "需要登录")
+    @ApiOperation(value = "获得最受欢迎的作品列表(第一页page=1)", notes = "需要登录")
     @RequestMapping(value = "/getMostPopularByPage", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<WorksVo>> getMostPopularByPage(
             @ApiParam("页") @RequestParam int page,
             @ApiParam("页大小") @RequestParam int pageSize,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<WorksVo>> responseData = new ResponseData();
+        ResponseData<List<WorksVo>> responseData = new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "请先登录", null);
@@ -427,7 +434,7 @@ public class UserWorksController extends BaseController {
         responseData.jsonFill(1, null, res);
         return responseData;
     }
-
+    
     /**
      * 上传作品的音频文件
      *
@@ -445,4 +452,5 @@ public class UserWorksController extends BaseController {
         return url;
     }
 
+    
 }

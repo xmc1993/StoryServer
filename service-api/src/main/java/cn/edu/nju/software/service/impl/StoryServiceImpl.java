@@ -14,6 +14,9 @@ import it.sauronsoftware.jave.MultimediaInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
@@ -306,4 +309,12 @@ public class StoryServiceImpl implements StoryService {
         List<Story> storyList = storyDao.getRecommendedStoryListByPage(offset, limit);
         return storyList;
     }
+
+	@Override
+	public PageInfo<Story> getStoryListByIdListByPage(List<Integer> storyIdList,Integer page,Integer pageSize) {
+		PageHelper.startPage(page, pageSize);		
+		List<Story> storyList = storyDao.getStoryListByIdListByPage(storyIdList);
+		PageInfo<Story> pageInfo = new PageInfo<>(storyList);
+		return pageInfo;
+	}
 }

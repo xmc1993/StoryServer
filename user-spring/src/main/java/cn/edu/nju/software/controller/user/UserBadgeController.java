@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.github.pagehelper.PageInfo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -74,7 +75,9 @@ public class UserBadgeController {
     		@ApiParam("页面大小") @RequestParam(value="pageSize") Integer pageSize,
     		HttpServletRequest request, HttpServletResponse response){
 		ResponseData<List<BadgeType>> responseData = new ResponseData<>();
-		responseData = badgeTypeService.getBadgeTypeListByPage(page,pageSize,responseData);
+		PageInfo<BadgeType> pageInfo = badgeTypeService.getBadgeTypeListByPage(page,pageSize);
+		responseData.jsonFill(1, null,pageInfo.getList());
+		responseData.setCount((int)pageInfo.getTotal());
 		return responseData;
 	}
 	

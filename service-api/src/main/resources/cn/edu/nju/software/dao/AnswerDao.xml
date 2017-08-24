@@ -4,12 +4,9 @@
 
     <sql id="fields">
         id,
-        answerTypeId,
-        name,
-        description,
-        icon,
-        measure,
-        extra,
+        userId,
+        questionId,
+        content,
         createTime,
         updateTime
     </sql>
@@ -22,12 +19,9 @@
         VALUES
         (
         #{id},
-        #{answerTypeId},
-        #{name},
-        #{description},
-        #{icon},
-        #{measure},
-        #{extra},
+        #{userId},
+        #{questionId},
+        #{content},
         #{createTime},
         #{updateTime}
         )
@@ -36,11 +30,10 @@
     <update id="updateAnswer" parameterType="cn.edu.nju.software.entity.Answer">
         UPDATE answer
         SET
-        name=#{name},
-        description=#{description},
-        icon=#{icon},
-        measure=#{measure},
-        extra=#{extra},
+        userId=#{userId},
+        questionId=#{questionId},
+        content=#{content},
+        createTime=#{createTime},
         updateTime=#{updateTime}
         WHERE id = #{id}
     </update>
@@ -55,7 +48,7 @@
         <include refid="fields"></include>
         from answer
         where userId = #{0}
-        limit #{0},#{1}
+        limit #{1},#{2}
     </select>
 
     <select id="getAnswerListByQuestionId" resultType="cn.edu.nju.software.entity.Answer">
@@ -63,7 +56,7 @@
         <include refid="fields"></include>
         from answer
         where question = #{0}
-        limit #{0},#{1}
+        limit #{1},#{2}
     </select>
 
     <select id="getAllAnswerByPage" resultType="cn.edu.nju.software.entity.Answer">

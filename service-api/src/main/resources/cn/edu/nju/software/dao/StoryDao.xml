@@ -24,8 +24,7 @@
         duration,
         likeCount,
         draft,
-        suggestedReadingDuration,
-        albumId
+        suggestedReadingDuration
     </sql>
 
     <sql id="multiTableFields">
@@ -50,8 +49,7 @@
        story.duration,
        story.likeCount,
        story.draft,
-       story.suggestedReadingDuration,
-       story.albumId
+       story.suggestedReadingDuration
     </sql>
     <sql id="storyVoFields">
         <include refid="story_fields"/>,
@@ -140,7 +138,7 @@
     </resultMap>
     <insert id="saveStory" parameterType="cn.edu.nju.software.entity.Story" keyProperty="id" useGeneratedKeys="true">
         insert into story(
-        <include refid="fields"></include>,albumId
+        <include refid="fields"></include>
         )
         VALUES
         (
@@ -165,8 +163,7 @@
         #{duration},
         #{likeCount},
         #{draft},
-        #{suggestedReadingDuration},
-        #{albumId}
+        #{suggestedReadingDuration}
         )
     </insert>
     <insert id="addStoryLikeCount">
@@ -193,8 +190,7 @@
 		defaultBackGroundMusicId=#{defaultBackGroundMusicId},
 		duration=#{duration},
 		draft=#{draft},
-		suggestedReadingDuration=#{suggestedReadingDuration},
-		albumId=#{albumId}
+		suggestedReadingDuration=#{suggestedReadingDuration}
 		where
 		id=#{id}
 	</update>
@@ -515,6 +511,14 @@
         dratf=0
         where valid=1 and id=#{storyId}
     </update>
-
+	
+	<select id="getStoryListByIdListByPage" resultType="cn.edu.nju.software.entity.Story">
+		select 
+		<include refid="fields"></include>
+        from story where id in
+        <foreach collection="storyIdList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+	</select>
 
 </mapper>
