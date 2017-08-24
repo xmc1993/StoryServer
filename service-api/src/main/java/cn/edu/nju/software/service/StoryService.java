@@ -6,6 +6,8 @@ import cn.edu.nju.software.vo.StoryVo;
 import java.io.File;
 import java.util.List;
 
+import com.github.pagehelper.PageInfo;
+
 /**
  * Created by xmc1993 on 2017/5/12.
  */
@@ -75,4 +77,6 @@ public interface StoryService {
     List<StoryVo> getRecommendedStoryVoList(int offset, int limit);
 
     List<Story> getRecommendStoryListByPage(int offset, int limit);
+
+	PageInfo<Story> getStoryListByIdListByPage(List<Integer> storyIdList,Integer page,Integer pageSize);
 }

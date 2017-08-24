@@ -3,11 +3,15 @@ package cn.edu.nju.software.service.impl;
 import cn.edu.nju.software.dao.StoryDao;
 import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.dao.user.AppUserDao;
+import cn.edu.nju.software.entity.TwoTuple;
 import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.service.WorksService;
 import cn.edu.nju.software.util.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 import java.util.Date;
 import java.util.List;
@@ -117,5 +121,18 @@ public class WorksServiceImpl implements WorksService {
     public List<Works> getMostPopularByPage(int page, int pageSize) {
         return worksDao.getMostPopularByPage(page*pageSize, pageSize);
     }
+
+	@Override
+	public List<TwoTuple<Integer,String>> getFirstWorkByPlayIdList(List<Integer> playIdList) {
+		return worksDao.getFirstWorkByPlayIdList(playIdList);
+	}
+
+	@Override
+	public PageInfo<Works> getWorksListByStoryIdListByPage(List<Integer> storyIdList, int page, int pageSize) {
+		PageHelper.startPage(page+1, pageSize);
+		List<Works> workList  = worksDao.getWorksListByStoryIdList(storyIdList);
+		PageInfo<Works> pageInfo = new PageInfo<>(workList);
+		return pageInfo;
+	}
 
 }

@@ -19,6 +19,23 @@
         reviewCount,
         listenCount
     </sql>
+    <sql id="multiTableFields">
+    	works.id,
+        works.storyId,
+        works.storyTitle,
+        works.userId,
+        works.username,
+        works.url,
+        works.likeCount,
+        works.createTime,
+        works.updateTime,
+        works.valid,
+        works.headImgUrl,
+        works.coverUrl,
+        works.duration,
+        works.reviewCount,
+        works.listenCount
+    </sql>
     <delete id="delReviewCount">
         update works
         SET
@@ -43,6 +60,7 @@
         <id column="reviewCount" property="reviewCount"/>
         <id column="listenCount" property="listenCount"/>
     </resultMap>
+    
 
     <insert id="saveWorks" parameterType="cn.edu.nju.software.entity.Works" keyProperty="id" useGeneratedKeys="true">
         insert into works(
@@ -226,5 +244,28 @@
         ORDER by likeCount DESC
         limit #{0},#{1}
     </select>
+
+	<select id="getFirstWorkByPlayIdList" resultType="cn.edu.nju.software.entity.TwoTuple">
+		select 
+		w.coverUrl as value,plr.playListId as id
+		from works as w
+		left join play_list_relation as plr on w.id = plr.worksId
+		where valid = 1
+		and plr.playListId in
+		<foreach collection="playIdList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        and plr.worksId = (select worksId from play_list_relation  where playListId = plr.playListId limit 1)        
+	</select>
+	
+	<select id="getWorksListByStoryIdList" resultType="cn.edu.nju.software.entity.Works">
+		select  
+		<include refid="fields"></include>
+		from works where storyId in 
+		<foreach collection="storyIdList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        order by updateTime
+	</select>
 
 </mapper>

@@ -41,7 +41,7 @@ public class UserQuestionController extends BaseController {
     @ResponseBody
     public ResponseData<Answer> getAlbumListOfStory(
             @ApiParam("问题ID") @RequestParam("questionId") int questionId,
-            @ApiParam("答案") @RequestParam("content") String content,
+            @ApiParam("答案") @RequestParam("content") Integer content,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Answer> responseData = new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);

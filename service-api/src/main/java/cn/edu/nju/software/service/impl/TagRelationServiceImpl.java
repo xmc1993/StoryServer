@@ -68,5 +68,4 @@ public class TagRelationServiceImpl implements TagRelationService {
         return tagRelationDao.getStoryIdListByTagId(tagId);
     }
 
-
 }

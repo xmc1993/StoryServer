@@ -1,9 +1,10 @@
 package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.entity.BadgeType;
-import cn.edu.nju.software.entity.ResponseData;
 
 import java.util.List;
+
+import com.github.pagehelper.PageInfo;
 
 /**
  * Created by xmc1993 on 2017/5/12.
@@ -22,5 +23,5 @@ public interface BadgeTypeService {
 
     BadgeType  getBadgeTypeByBadgeId(Integer badgeId);
 
-	ResponseData<List<BadgeType>> getBadgeTypeListByPage(Integer page, Integer pageSize, ResponseData<List<BadgeType>> responseData);
+	PageInfo<BadgeType> getBadgeTypeListByPage(Integer page, Integer pageSize);
 }

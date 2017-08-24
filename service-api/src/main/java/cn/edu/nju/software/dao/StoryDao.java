@@ -5,6 +5,8 @@ import cn.edu.nju.software.vo.StoryVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import com.github.pagehelper.PageInfo;
+
 import java.util.List;
 
 /**
@@ -97,5 +99,7 @@ public interface StoryDao {
 
 
     List<Integer> getRecommendedStoryIdListByPage(@Param("offset") int offset, @Param("limit") int limit);
+
+	List<Story> getStoryListByIdListByPage(@Param("storyIdList")List<Integer> storyIdList);
 
 }

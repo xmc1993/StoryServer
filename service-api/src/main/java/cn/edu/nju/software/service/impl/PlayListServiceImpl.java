@@ -2,6 +2,7 @@ package cn.edu.nju.software.service.impl;
 
 import cn.edu.nju.software.dao.PlayListDao;
 import cn.edu.nju.software.entity.PlayList;
+import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.service.PlayListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class PlayListServiceImpl implements PlayListService {
 
     @Override
     public List<PlayList> getAllPlayListByUserIdByPage(int userId, int page, int pageSize) {
-        int offset = page*pageSize;
+        int offset = (page-1)*pageSize;
         int limit = pageSize;
         List<PlayList> list = playListDao.getAllPlayListByUserIdByPage(userId, offset, limit);
         //默认的我喜欢的文件夹每个用户都有
@@ -60,4 +61,5 @@ public class PlayListServiceImpl implements PlayListService {
     public List<PlayList> getPlayListListByIdList(List<Integer> idList) {
         return playListDao.getPlayListListByIdList(idList);
     }
+
 }

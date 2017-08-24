@@ -78,4 +78,5 @@ public class StoryTagServiceImpl implements StoryTagService {
     public Integer getStoryTagCount(){
         return storyTagDao.getStoryTagCount();
     }
+
 }

@@ -36,4 +36,5 @@ public interface TagRelationService {
      */
     List<Integer> getStoryIdListBySecondLevelTagId(int tagId);
 
+
 }

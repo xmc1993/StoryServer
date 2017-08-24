@@ -42,4 +42,5 @@ public interface StoryTagDao {
 
     Integer getStoryTagCount();
 
+
 }

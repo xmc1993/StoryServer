@@ -4,7 +4,10 @@ import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.*;
 import cn.edu.nju.software.util.TokenConfig;
+import cn.edu.nju.software.util.UserChecker;
 import cn.edu.nju.software.vo.StoryNewVo;
+
+import com.github.pagehelper.PageInfo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -40,6 +43,8 @@ public class UserStoryController extends BaseController {
     private StoryUserLogService storyUserLogService;
     @Autowired
     private StoryTagService storyTagService;
+    @Autowired
+    private AnswerService answerService;
 
     @ApiOperation(value = "获取ID获取故事", notes = "")
     @RequestMapping(value = "/getStoryById", method = {RequestMethod.GET})
@@ -307,8 +312,29 @@ public class UserStoryController extends BaseController {
         responseData.setCount(count);
         return responseData;
     }
-
-
+    
+    @ApiOperation(value = "讲故事页面", notes = "需登录")
+    @RequestMapping(value = "/getStorysByUser", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<Story>> getStorysByUser(
+    		@ApiParam("页") @RequestParam int page,
+            @ApiParam("页大小") @RequestParam int pageSize,
+    		HttpServletRequest request, HttpServletResponse response){
+    	ResponseData<List<Story>> responseData = new ResponseData<>();
+    	User user = UserChecker.checkUser(request);
+    	List<Answer> answerList = answerService.getAnswerListByUserId(user.getId(), 0, 50);
+    	//获取content的tagId
+    	List<Integer> contentList = new ArrayList<>();
+    	for(Answer a : answerList){
+    		contentList.add(a.getContent());
+    	}
+    	List<Integer> storyIdList = tagRelationService.getStoryIdListByTagIdList(contentList);
+    	PageInfo<Story> pageInfo = storyService.getStoryListByIdListByPage(storyIdList,page,pageSize);
+    	
+    	responseData.setCount((int)pageInfo.getTotal());
+    	responseData.jsonFill(1, null, pageInfo.getList());
+        return responseData;
+    }
 
     private List<StoryNewVo> storyList2VoList(List<Story> list, int userId){
         List<StoryNewVo> storyVoList = new ArrayList<>();
@@ -323,7 +349,6 @@ public class UserStoryController extends BaseController {
             return null;
         }
         StoryNewVo storyVo = new StoryNewVo();
-        storyVo.setStory(story);
         List<Integer> idList = tagRelationService.getTagIdListByStoryId(story.getId());
         List<StoryTag> storyTagList = storyTagService.getStoryTagListByIdList(idList);
         storyVo.setTagList(storyTagList);

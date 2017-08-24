@@ -3,7 +3,9 @@ package cn.edu.nju.software.controller.manage;
 import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.*;
+import cn.edu.nju.software.service.impl.StoryAlbumServiceImpl;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
+import cn.edu.nju.software.util.MyStringUtil;
 import cn.edu.nju.software.util.UploadFileUtil;
 import cn.edu.nju.software.vo.StoryNewVo;
 import com.wordnik.swagger.annotations.Api;
@@ -42,9 +44,9 @@ public class ManageStoryController {
     @Autowired
     private StoryTagService storyTagService;
     @Autowired
-    private CheckValidService checkValidService;
-    @Autowired
     private StoryRoleService storyRoleService;
+    @Autowired
+    private StoryAlbumService storyAlbumService;
 
     @RequiredPermissions({1, 5})
     @ApiOperation(value = "新增故事", notes = "草稿状态1为草稿0为完成")
@@ -71,12 +73,13 @@ public class ManageStoryController {
             @ApiParam("角色音频") @RequestParam(value = "roleAudioFile", required = false) MultipartFile roleAudioFile,
             @ApiParam("角色其他信息") @RequestParam(value = "roleExtra", required = false) String roleExtra,
             @ApiParam("建议阅读时间（单位s）") @RequestParam(value = "suggestedReadingDuration", required = false) Integer suggestedReadingDuration,
-            @ApiParam("所属专辑id") @RequestParam(value = "albumId", required = false) Integer albumId,
+            @ApiParam("所属专辑id(传多个用逗号分隔)") @RequestParam(value = "albumId", required = false) String albumIdStr,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<StoryNewVo> result = new ResponseData<>();
         Story dbStory = storyService.getExactStoryByTitle(title);
         if (dbStory != null) {
             result.jsonFill(2, "重复的标题名称", story2vo(dbStory));
+            return result;
         }
         Story story = new Story();
         if (coverFile != null && !coverFile.isEmpty()) {
@@ -106,7 +109,6 @@ public class ManageStoryController {
         story.setUpdateTime(new Date());
         story.setDraft(draft);
         story.setLikeCount(0);
-        story.setAlbumId(albumId);
         if (suggestedReadingDuration != null) {
             story.setSuggestedReadingDuration(suggestedReadingDuration);
         }
@@ -137,9 +139,17 @@ public class ManageStoryController {
         storyRole.setExtra(roleExtra);
         storyRole.setStoryId(story.getId());
         storyRole.setName(roleName);
+        
+        //保存故事专辑对应关系
+        List<Integer> albumIdList = MyStringUtil.strToIntList(albumIdStr, ",");
+        if(albumIdList.size()!=0){
+        	storyAlbumService.saveStoryAlbumRel(res.getId(), albumIdList);
+        }        
         // 保存角色信息
         storyRoleService.saveStoryRole(storyRole);
-        result.jsonFill(1, null, story2vo(story));
+        StoryNewVo snv = story2vo(story);
+        snv.setAlbumIdList(albumIdList);
+        result.jsonFill(1, null, snv);
         return result;
     }
 
@@ -163,7 +173,7 @@ public class ManageStoryController {
             @ApiParam("录制背景") @RequestParam(value = "backgroundFile", required = false) MultipartFile backgroundFile,
             @ApiParam("原音") @RequestParam(value = "originSoundFile", required = false) MultipartFile originSoundFile,
             @ApiParam("建议阅读时间（单位s）") @RequestParam(value = "suggestedReadingDuration", required = false) Integer suggestedReadingDuration,
-            @ApiParam("所属专辑id") @RequestParam(value = "albumId", required = false) Integer albumId,
+            @ApiParam("所属专辑id(传多个用逗号分隔)") @RequestParam(value = "albumId", required = false) String albumIdStr,
             HttpServletRequest request, HttpServletResponse response) {
         Story story = storyService.getStoryById(id);
         if (story == null) {
@@ -201,12 +211,20 @@ public class ManageStoryController {
         story.setDefaultBackGroundMusicId(defaultBackGroundMusicId);
         story.setUpdateTime(new Date());
         story.setDraft(draft);
-        story.setAlbumId(albumId);
         Story result = storyService.updateStory(story);
         if (result == null) {
             throw new RuntimeException("更新失败");
         }
-        return story2vo(result);
+        //跟新专辑和故事对应关系
+        List<Integer> albumIdList = MyStringUtil.strToIntList(albumIdStr, ",");
+        storyAlbumService.delStoryAlbumRel(id);
+        if(albumIdList.size()!=0){
+        	storyAlbumService.saveStoryAlbumRel(id, albumIdList);
+        }      
+        
+        StoryNewVo snv = story2vo(result);
+        snv.setAlbumIdList(albumIdList);
+        return snv;
     }
 
     @RequiredPermissions({3, 5})

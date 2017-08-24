@@ -13,7 +13,7 @@ public class Answer implements Serializable{
     private Integer id;
     private Integer userId;//对应的勋章种类
     private Integer questionId;
-    private String content;
+    private Integer content;
     private Date createTime;
     private Date updateTime;
 }
