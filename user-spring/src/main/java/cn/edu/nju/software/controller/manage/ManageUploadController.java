@@ -60,10 +60,13 @@ public class ManageUploadController {
         ArrayList<String> urls = new ArrayList<>();
         uploadResVo.setMultiUrls(urls);
         responseData.jsonFill(1, null, uploadResVo);
+        String type = request.getHeader("Content-Type");
+        String[] strs = type.split("/");
+        String suffix = strs[strs.length -1];
         if (files != null){
             for (MultipartFile file : files) {
                 if (!file.isEmpty()){
-                    urls.add(uploadFile(file, ICON_ROOT));
+                    urls.add(uploadFile(file, ICON_ROOT, suffix));
                 }
             }
         }
@@ -105,4 +108,16 @@ public class ManageUploadController {
         String url = UploadFileUtil.SOURCE_BASE_URL + root + fileName;
         return url;
     }
+
+    private String uploadFile(MultipartFile file, String root, String suffix) {
+        String realPath = UploadFileUtil.getBaseUrl() + root;
+        String fileName = RandCharsUtils.getRandomString(16) + "." + suffix;
+        boolean success = UploadFileUtil.mvFile(file, realPath, fileName);
+        if (!success) {
+            throw new RuntimeException("文件上传失败");
+        }
+        String url = UploadFileUtil.SOURCE_BASE_URL + root + fileName;
+        return url;
+    }
+
 }

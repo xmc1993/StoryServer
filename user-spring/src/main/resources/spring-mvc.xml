@@ -74,7 +74,7 @@
         <property name="validationMessageSource" ref="messageSource"/>
     </bean>
 
-    <!--<mvc:resources mapping="/**" location="/WEB-INF/"/>-->
+    <mvc:resources mapping="/**" location="/WEB-INF/"/>
     <mvc:resources mapping="/swagger/**" location="/WEB-INF/swagger/**"/>
 
     <mvc:interceptors>
@@ -143,7 +143,7 @@
         </mvc:interceptor>
 
         <mvc:interceptor>
-            <mvc:mapping path="/manage/**"/>
+            <mvc:mapping path="/manage/xx"/>
             <!-- 不需要拦截的uri -->
             <mvc:exclude-mapping path="/swagger/**"/>
             <mvc:exclude-mapping path="/api-docs/**"/>
@@ -154,17 +154,17 @@
             <bean class="cn.edu.nju.software.filter.AdminAccessTokenValidationInterceptor"/>
         </mvc:interceptor>
 
-        <mvc:interceptor>
-            <mvc:mapping path="/manage/**"/>
-            <!-- 不需要拦截的uri -->
-            <mvc:exclude-mapping path="/swagger/**"/>
-            <mvc:exclude-mapping path="/api-docs/**"/>
-            <!--只有登录接口不需要Auth验证-->
-            <mvc:exclude-mapping path="/manage/auth"/>
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/manage/**"/>-->
+            <!--&lt;!&ndash; 不需要拦截的uri &ndash;&gt;-->
+            <!--<mvc:exclude-mapping path="/swagger/**"/>-->
+            <!--<mvc:exclude-mapping path="/api-docs/**"/>-->
+            <!--&lt;!&ndash;只有登录接口不需要Auth验证&ndash;&gt;-->
+            <!--<mvc:exclude-mapping path="/manage/auth"/>-->
 
-            <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
-            <bean class="cn.edu.nju.software.filter.AuthInterceptor"/>
-        </mvc:interceptor>
+            <!--&lt;!&ndash; 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 &ndash;&gt;-->
+            <!--<bean class="cn.edu.nju.software.filter.AuthInterceptor"/>-->
+        <!--</mvc:interceptor>-->
     </mvc:interceptors>
 
 
