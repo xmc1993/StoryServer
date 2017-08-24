@@ -114,12 +114,12 @@ public class WorksServiceImpl implements WorksService {
 
     @Override
     public List<Works> getLatestWorksByPage(int page, int pageSize) {
-        return worksDao.getLatestWorksByPage((page-1)*pageSize, pageSize);
+        return worksDao.getLatestWorksByPage(page*pageSize, pageSize);
     }
 
     @Override
     public List<Works> getMostPopularByPage(int page, int pageSize) {
-        return worksDao.getMostPopularByPage((page-1)*pageSize, pageSize);
+        return worksDao.getMostPopularByPage(page*pageSize, pageSize);
     }
 
 	@Override
@@ -129,7 +129,7 @@ public class WorksServiceImpl implements WorksService {
 
 	@Override
 	public PageInfo<Works> getWorksListByStoryIdListByPage(List<Integer> storyIdList, int page, int pageSize) {
-		PageHelper.startPage(page, pageSize);
+		PageHelper.startPage(page+1, pageSize);
 		List<Works> workList  = worksDao.getWorksListByStoryIdList(storyIdList);
 		PageInfo<Works> pageInfo = new PageInfo<>(workList);
 		return pageInfo;
