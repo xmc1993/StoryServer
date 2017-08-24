@@ -313,7 +313,7 @@ public class UserStoryController extends BaseController {
         return responseData;
     }
     
-    @ApiOperation(value = "讲故事页面(第一页page=1)", notes = "需登录")
+    @ApiOperation(value = "讲故事页面", notes = "需登录")
     @RequestMapping(value = "/getStorysByUser", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<Story>> getStorysByUser(

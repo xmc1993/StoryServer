@@ -312,7 +312,7 @@ public class StoryServiceImpl implements StoryService {
 
 	@Override
 	public PageInfo<Story> getStoryListByIdListByPage(List<Integer> storyIdList,Integer page,Integer pageSize) {
-		PageHelper.startPage(page, pageSize);		
+		PageHelper.startPage(page+1, pageSize);		
 		List<Story> storyList = storyDao.getStoryListByIdListByPage(storyIdList);
 		PageInfo<Story> pageInfo = new PageInfo<>(storyList);
 		return pageInfo;

@@ -59,7 +59,7 @@ public class BadgeTypeServiceImpl implements BadgeTypeService {
 
 	@Override
 	public PageInfo<BadgeType> getBadgeTypeListByPage(Integer page, Integer pageSize) {
-		PageHelper.startPage(page, pageSize);
+		PageHelper.startPage(page+1, pageSize);
 		List<BadgeType> bageTypeList = badgeTypeDao.getBadgeTypeList();
 		PageInfo<BadgeType> pageInfo= new PageInfo<BadgeType>(bageTypeList);
 		return pageInfo;

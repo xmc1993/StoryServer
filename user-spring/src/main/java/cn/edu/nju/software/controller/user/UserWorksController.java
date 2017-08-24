@@ -55,7 +55,7 @@ public class UserWorksController extends BaseController {
     TagRelationService tagRelationService;
 
 
-    @ApiOperation(value = "获得最新的作品列表(第一页page=1)", notes = "需要登录")
+    @ApiOperation(value = "获得最新的作品列表", notes = "需要登录")
     @RequestMapping(value = "/getLatestWorksByPage", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<WorksVo>> getLatestWorksByPage(
@@ -74,7 +74,7 @@ public class UserWorksController extends BaseController {
         return responseData;
     }
 
-    @ApiOperation(value = "获得最受欢迎的作品列表(第一页page=1)", notes = "需要登录")
+    @ApiOperation(value = "获得最受欢迎的作品列表", notes = "需要登录")
     @RequestMapping(value = "/getMostPopularByPage", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<WorksVo>> getMostPopularByPage(
