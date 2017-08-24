@@ -423,7 +423,22 @@ public class UserWorksController extends BaseController {
             @ApiParam("作品ID") @RequestParam("worksId") int worksId,
             HttpServletRequest request, HttpServletResponse response) throws ParseException {
         ResponseData<Boolean> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
         boolean res = worksService.listenWorks(worksId);
+        Works works = worksService.getWorksById(worksId);
+        if (works != null) {
+            WorkUserLog workUserLog = new WorkUserLog();
+            workUserLog.setAccessTime(new Date());
+            workUserLog.setStoryId(works.getStoryId());
+            workUserLog.setWorkId(worksId);
+            workUserLog.setUserId(user.getId());
+            workUserLogService.saveWorkUserLog(workUserLog);
+        }
         responseData.jsonFill(1, null, res);
         return responseData;
     }
