@@ -3,6 +3,7 @@ package cn.edu.nju.software.controller.user;
 import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.*;
+import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UploadFileUtil;
@@ -53,6 +54,10 @@ public class UserWorksController extends BaseController {
     StoryTagService storyTagService;
     @Autowired
     TagRelationService tagRelationService;
+    @Autowired
+    AppUserService appUserService;
+    @Autowired
+    BadgeService badgeService;
 
 
     @ApiOperation(value = "获得最新的作品列表", notes = "需要登录")
@@ -364,6 +369,11 @@ public class UserWorksController extends BaseController {
         boolean res = worksService.saveWorks(works);
         if (res) {
             responseData.jsonFill(1, null, works);
+            //发布成功,用户发布作品数加一
+            user.setWorkCount(user.getWorkCount()+1);
+            appUserService.updateUser(user);
+            //判断是否需要给用户增加新徽章
+            
         } else {
             responseData.jsonFill(2, "发布失败", null);
         }
@@ -421,7 +431,6 @@ public class UserWorksController extends BaseController {
         }
         return responseData;
     }
-
 
     @ApiOperation(value = "收听作品", notes = "")
     @RequestMapping(value = "/listenWorks", method = {RequestMethod.GET})

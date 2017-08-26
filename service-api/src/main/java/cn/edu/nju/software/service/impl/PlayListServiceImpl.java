@@ -45,7 +45,7 @@ public class PlayListServiceImpl implements PlayListService {
 
     @Override
     public List<PlayList> getAllPlayListByUserIdByPage(int userId, int page, int pageSize) {
-        int offset = (page-1)*pageSize;
+        int offset = page*pageSize;
         int limit = pageSize;
         List<PlayList> list = playListDao.getAllPlayListByUserIdByPage(userId, offset, limit);
         //默认的我喜欢的文件夹每个用户都有
