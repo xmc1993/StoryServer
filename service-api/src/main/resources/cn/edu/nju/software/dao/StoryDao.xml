@@ -73,6 +73,7 @@
         story.createTime as story_createTime,
         story.updateTime as story_updateTime,
         story.valid as story_valid
+        story.isSet as story_isSet
     </sql>
     <sql id="story_tag_fields">
         story_tag.id as  story_tag_id,
@@ -105,6 +106,8 @@
         <id column="duration" property="duration"/>
         <id column="likeCount" property="likeCount"/>
         <id column="draft" property="draft"/>
+        <id column="isSet" property="isSet"/>
+        <id column="setId" property="setId"/>
         <id column="suggestedReadingDuration" property="suggestedReadingDuration"/>
     </resultMap>
     <resultMap id="storyVo" type="cn.edu.nju.software.vo.StoryVo">

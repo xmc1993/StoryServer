@@ -179,7 +179,7 @@ public class UserStoryController extends BaseController {
             user = new User();
             user.setId(-1);
         }
-        List<Story> storyList = storyService.getRecommendedStoryListByPage(offset, limit);
+        List<Story> storyList = storyService.getSetRecommendedStoryListByPage(offset, limit);
         int count = storyService.getRecommendedStoryCount();
         responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
         responseData.setCount(count);
@@ -306,7 +306,7 @@ public class UserStoryController extends BaseController {
             user = new User();
             user.setId(-1);
         }
-        List<Story> storyList = storyService.getRecommendedStoryListByPage(offset, limit);
+        List<Story> storyList = storyService.getSetRecommendedStoryListByPage(offset, limit);
         int count = storyService.getRecommendedStoryCount();
         responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
         responseData.setCount(count);
