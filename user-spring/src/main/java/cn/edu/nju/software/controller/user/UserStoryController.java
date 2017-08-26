@@ -312,6 +312,25 @@ public class UserStoryController extends BaseController {
         responseData.setCount(count);
         return responseData;
     }
+
+    @ApiOperation(value = "分页获得一个数据集下所有故事", notes = "")
+    @RequestMapping(value = "/getStoryListBySetId", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<StoryNewVo>> getStoryListBySetId(
+            @ApiParam("故事集ID") @RequestParam int setId,
+            @ApiParam("PAGE") @RequestParam int page,
+            @ApiParam("SIZE") @RequestParam int pageSize,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<StoryNewVo>> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            user = new User();
+            user.setId(-1);
+        }
+        List<Story> storyList = storyService.getStoryListBySetId(setId, page, pageSize);
+        responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
+        return responseData;
+    }
     
     @ApiOperation(value = "讲故事页面", notes = "需登录")
     @RequestMapping(value = "/getStorysByUser", method = {RequestMethod.GET})
@@ -337,7 +356,7 @@ public class UserStoryController extends BaseController {
     		responseData.jsonFill(1, null, null);
     		return responseData;
     	}
-    	PageInfo<Story> pageInfo = storyService.getStoryListByIdListByPage(storyIdList,page,pageSize);
+    	PageInfo<Story> pageInfo = storyService.getStoryListByIdListByPage(storyIdList, page, pageSize);
     	
     	responseData.setCount((int)pageInfo.getTotal());
     	responseData.jsonFill(1, null, pageInfo.getList());
