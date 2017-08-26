@@ -108,7 +108,18 @@ public class StoryServiceImpl implements StoryService {
         if(!trimSortByCreateTime.equals("asc") && !trimSortByCreateTime.equals("desc")){
         	sortByCreateTime = "desc";//默认降序
         }
-        return storyDao.getStoryListByPage(offset, limit,trimSortByCreateTime);
+        return storyDao.getStoryListByPage(offset, limit, trimSortByCreateTime);
+    }
+
+    @Override
+    public List<Story> getSetStoryListByPage(int offset, int limit,String sortByCreateTime) {
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        String trimSortByCreateTime = sortByCreateTime.trim();
+        if(!trimSortByCreateTime.equals("asc") && !trimSortByCreateTime.equals("desc")){
+            sortByCreateTime = "desc";//默认降序
+        }
+        return storyDao.getSetStoryListByPage(offset, limit, trimSortByCreateTime);
     }
 
     @Override
@@ -146,6 +157,11 @@ public class StoryServiceImpl implements StoryService {
     @Override
     public List<Story> getRecommendedStoryListByPage(int offset, int limit) {
         return storyDao.getRecommendedStoryListByPage(offset, limit);
+    }
+
+    @Override
+    public List<Story> getSetRecommendedStoryListByPage(int offset, int limit) {
+        return storyDao.getSetRecommendedStoryListByPage(offset, limit);
     }
 
     @Override
@@ -312,9 +328,29 @@ public class StoryServiceImpl implements StoryService {
 
 	@Override
 	public PageInfo<Story> getStoryListByIdListByPage(List<Integer> storyIdList,Integer page,Integer pageSize) {
-		PageHelper.startPage(page+1, pageSize);		
+		PageHelper.startPage(page+1, pageSize);
 		List<Story> storyList = storyDao.getStoryListByIdListByPage(storyIdList);
 		PageInfo<Story> pageInfo = new PageInfo<>(storyList);
 		return pageInfo;
 	}
+
+    @Override
+    public PageInfo<Story> getSetStoryListByIdListByPage(List<Integer> storyIdList,Integer page,Integer pageSize) {
+        PageHelper.startPage(page+1, pageSize);
+        List<Story> storyList = storyDao.getSetStoryListByIdListByPage(storyIdList);
+        PageInfo<Story> pageInfo = new PageInfo<>(storyList);
+        return pageInfo;
+    }
+
+    @Override
+    public List<Story> getStoryListBySetId(int setId, int page, int pageSize) {
+        int offset = page*pageSize;
+        int limit = pageSize;
+        return storyDao.getStoryListBySetId(setId, offset, limit);
+    }
+
+    @Override
+    public List<Story> getSetStoryListByIdList(List<Integer> idList, Integer offset, Integer limit) {
+        return storyDao.getSetStoryListByIdList(idList, offset, limit);
+    }
 }

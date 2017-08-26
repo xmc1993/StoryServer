@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.StorySetDao">
+
+    <sql id="fields">
+        id,
+        title,
+        guide,
+        coverUrl,
+        recommend,
+        tellCount,
+        likeCount,
+        isSet,
+        valid,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveStorySet" parameterType="cn.edu.nju.software.entity.StorySet" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into story(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{title},
+        #{guide},
+        #{coverUrl},
+        #{recommend},
+        #{tellCount},
+        #{likeCount},
+        #{isSet},
+        #{valid},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <update id="updateStorySet" parameterType="cn.edu.nju.software.entity.StorySet">
+        UPDATE story
+        SET
+        title=#{title},
+        guide=#{guide},
+        coverUrl=#{coverUrl},
+        recommend=#{recommend},
+        updateTime=#{updateTime}
+        WHERE id = #{id} and valid = 1 and isSet = 1
+    </update>
+
+
+    <update id="deleteStorySet">
+        UPDATE story
+        SET valid=0
+        WHERE id=#{id} and isSet = 1
+    </update>
+
+
+    <select id="getAllStorySetByPage" resultType="cn.edu.nju.software.entity.StorySet">
+        select
+        <include refid="fields"></include>
+        from story
+        WHERE isSet = 1 and valid = 1
+        limit #{0},#{1}
+    </select>
+
+    <select id="getStorySetById" resultType="cn.edu.nju.software.entity.StorySet">
+        select
+        <include refid="fields"></include>
+        from story
+        WHERE id = #{0} and isSet = 1 and valid = 1
+    </select>
+
+    <select id="getStorySetIdByStoryId" resultType="java.lang.Integer">
+        select
+        setId
+        from story
+        WHERE id = #{0} and isSet = 0 and valid = 1
+    </select>
+
+</mapper>

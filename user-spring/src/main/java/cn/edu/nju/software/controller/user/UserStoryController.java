@@ -97,7 +97,7 @@ public class UserStoryController extends BaseController {
             user = new User();
             user.setId(-1);
         }
-        List<Story> storyList = storyService.getStoryListByPage(offset, limit,sortByCreateTime);
+        List<Story> storyList = storyService.getSetStoryListByPage(offset, limit,sortByCreateTime);
         responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
         responseData.setCount(storyService.getStoryCount());
         return responseData;
@@ -139,7 +139,7 @@ public class UserStoryController extends BaseController {
             user.setId(-1);
         }
         List<Integer> idList = tagRelationService.getStoryIdListBySecondLevelTagId(tagId);
-        List<Story> storyList = storyService.getStoryListByIdList(idList, offset, limit);
+        List<Story> storyList = storyService.getSetStoryListByIdList(idList, offset, limit);
         responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
         responseData.setCount(storyService.getStoryCountByIdList(idList));
         return responseData;

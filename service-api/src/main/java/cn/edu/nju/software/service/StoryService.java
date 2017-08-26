@@ -2,11 +2,10 @@ package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.vo.StoryVo;
+import com.github.pagehelper.PageInfo;
 
 import java.io.File;
 import java.util.List;
-
-import com.github.pagehelper.PageInfo;
 
 /**
  * Created by xmc1993 on 2017/5/12.
@@ -28,6 +27,8 @@ public interface StoryService {
 
     List<Story> getStoryListByPage(int offset, int limit,String sortByCreateTime);
 
+    List<Story> getSetStoryListByPage(int offset, int limit,String sortByCreateTime);
+
     List<Story> getStoryListByPageIncludeDrafts(int offset, int limit);
 
     List<Story> getStoryListByIdList(List<Integer> idList, Integer offset, Integer limit);
@@ -39,6 +40,8 @@ public interface StoryService {
     boolean cancelRecommendStory(int id);
 
     List<Story> getRecommendedStoryListByPage(int offset, int limit);
+
+    List<Story> getSetRecommendedStoryListByPage(int offset, int limit);
 
     Integer getRecommendedStoryCount();
 
@@ -79,4 +82,12 @@ public interface StoryService {
     List<Story> getRecommendStoryListByPage(int offset, int limit);
 
 	PageInfo<Story> getStoryListByIdListByPage(List<Integer> storyIdList,Integer page,Integer pageSize);
+
+	PageInfo<Story> getSetStoryListByIdListByPage(List<Integer> storyIdList,Integer page,Integer pageSize);
+
+    List<Story> getStoryListBySetId(int setId, int page, int pageSize);
+
+    List<Story> getSetStoryListByIdList(List<Integer> idList, Integer offset, Integer limit);
+
+
 }

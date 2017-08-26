@@ -5,8 +5,6 @@ import cn.edu.nju.software.vo.StoryVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import com.github.pagehelper.PageInfo;
-
 import java.util.List;
 
 /**
@@ -41,6 +39,8 @@ public interface StoryDao {
 
     List<Story> getStoryListByPage(int offset, int limit,@Param("sortByCreateTime") String sortByCreateTime);
 
+    List<Story> getSetStoryListByPage(int offset, int limit,@Param("sortByCreateTime") String sortByCreateTime);
+
     List<Story> getStoryListByIdList(@Param("idList") List<Integer> idList, @Param("offset")Integer offset,@Param("limit") Integer limit);
 
     boolean recommendStory(int id);
@@ -48,6 +48,8 @@ public interface StoryDao {
     boolean cancelRecommendStory(int id);
 
     List<Story> getRecommendedStoryListByPage(int offset, int limit);
+
+    List<Story> getSetRecommendedStoryListByPage(int offset, int limit);
 
     boolean newTell(int id);
 
@@ -101,5 +103,11 @@ public interface StoryDao {
     List<Integer> getRecommendedStoryIdListByPage(@Param("offset") int offset, @Param("limit") int limit);
 
 	List<Story> getStoryListByIdListByPage(@Param("storyIdList")List<Integer> storyIdList);
+
+	List<Story> getSetStoryListByIdListByPage(@Param("storyIdList")List<Integer> storyIdList);
+
+    List<Story> getStoryListBySetId(int setId, int offset, int limit);
+
+    List<Story> getSetStoryListByIdList(List<Integer> idList, Integer offset, Integer limit);
 
 }
