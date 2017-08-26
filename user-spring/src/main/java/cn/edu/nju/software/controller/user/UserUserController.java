@@ -243,9 +243,10 @@ public class UserUserController extends BaseController {
         LoginResponseVo loginResponseVo = new LoginResponseVo();
         loginResponseVo.setAccessToken(user.getAccessToken());
         loginResponseVo.setId(user.getId());
-        responseData.jsonFill(1, null, loginResponseVo);
+        responseData.jsonFill(1, null, loginResponseVo);   
         return responseData;
     }
+    
     @RequestMapping(value = "/testError", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public boolean testError() {

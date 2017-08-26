@@ -328,7 +328,15 @@ public class UserStoryController extends BaseController {
     	for(Answer a : answerList){
     		contentList.add(a.getContent());
     	}
+    	if(contentList.size()==0){
+    		responseData.jsonFill(1, null, null);
+    		return responseData;
+    	}
     	List<Integer> storyIdList = tagRelationService.getStoryIdListByTagIdList(contentList);
+    	if(storyIdList.size()==0){
+    		responseData.jsonFill(1, null, null);
+    		return responseData;
+    	}
     	PageInfo<Story> pageInfo = storyService.getStoryListByIdListByPage(storyIdList,page,pageSize);
     	
     	responseData.setCount((int)pageInfo.getTotal());
