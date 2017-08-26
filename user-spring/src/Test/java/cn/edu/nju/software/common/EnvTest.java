@@ -3,7 +3,7 @@ package cn.edu.nju.software.common;
 import cn.edu.nju.software.util.UploadFileUtil;
 import org.junit.Test;
 
-import java.util.Iterator;
+
 import java.util.Map;
 
 /**

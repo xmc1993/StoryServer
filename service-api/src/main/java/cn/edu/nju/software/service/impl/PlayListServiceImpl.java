@@ -2,7 +2,6 @@ package cn.edu.nju.software.service.impl;
 
 import cn.edu.nju.software.dao.PlayListDao;
 import cn.edu.nju.software.entity.PlayList;
-import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.service.PlayListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
