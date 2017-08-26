@@ -44,6 +44,10 @@ public class UserAlbumController extends BaseController {
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<Album>> responseData = new ResponseData<>();
         List<Integer> idList = albumRelationService.getAlbumIdListByStoryId(storyId);
+        if(idList.size()==0){
+        	responseData.jsonFill(1, null, null);
+        	return responseData;
+        }
         List<Album> storyAlbumList = albumService.getAlbumListByIdList(idList);
         responseData.jsonFill(1, null, storyAlbumList);
         responseData.setCount(storyAlbumList.size());
