@@ -1,7 +1,8 @@
 package cn.edu.nju.software.controller.manage;
 
-import cn.edu.nju.software.entity.StorySet;
 import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.entity.Story;
+import cn.edu.nju.software.entity.StorySet;
 import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.service.StorySetService;
 import com.wordnik.swagger.annotations.Api;
@@ -138,6 +139,20 @@ public class ManageStorySetController {
         if (!res) {
             throw new RuntimeException("取消推荐失败");
         }
+    }
+
+    @ApiOperation(value = "分页获得一个数据集下所有故事", notes = "")
+    @RequestMapping(value = "/getStoryListBySetId", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<Story>> getStoryListBySetId(
+            @ApiParam("故事集ID") @RequestParam int setId,
+            @ApiParam("PAGE") @RequestParam int page,
+            @ApiParam("SIZE") @RequestParam int pageSize,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<Story>> responseData = new ResponseData<>();
+        List<Story> storyList = storyService.getStoryListBySetId(setId, page, pageSize);
+        responseData.jsonFill(1, null, storyList);
+        return responseData;
     }
 
 }
