@@ -1,12 +1,11 @@
 package cn.edu.nju.software.entity;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
-
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiModelProperty;
 
 /**
  * Created by xmc1993 on 2017/5/12.
@@ -57,4 +56,8 @@ public class Story {
     private Integer suggestedReadingDuration;//建议阅读时长 单位是秒
     @ApiModelProperty(value="专辑id列表")
     private List<Integer> albumIdList;
+    @ApiModelProperty(value="是否是故事集 1 是 0 不是")
+    private Integer isSet = 0;
+    @ApiModelProperty(value="所属故事集ID")
+    private Integer setId = 0;
 }

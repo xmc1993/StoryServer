@@ -1,9 +1,11 @@
 package cn.edu.nju.software.controller.manage;
 
 import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.entity.StoryTag;
 import cn.edu.nju.software.entity.TagRelation;
 import cn.edu.nju.software.service.CheckValidService;
+import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.service.StoryTagService;
 import cn.edu.nju.software.service.TagRelationService;
 import com.wordnik.swagger.annotations.Api;
@@ -13,7 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +39,8 @@ public class ManageTagRelationController {
     private CheckValidService checkValidService;
     @Autowired
     private StoryTagService storyTagService;
-
+    @Autowired
+    private StoryService storyService;
 
     @ApiOperation(value = "添加标签", notes = "")
     @RequestMapping(value = "/stories/{storyId}/storyTags/{tagId}", method = {RequestMethod.POST})
@@ -47,7 +53,8 @@ public class ManageTagRelationController {
             logger.error("无效的tagId");
             throw new RuntimeException("无效的tagId");
         }
-        if (!checkValidService.isStoryExist(storyId)) {
+        Story story = storyService.getStoryById(storyId);
+        if (story == null) {
             logger.error("无效的storyId");
             throw new RuntimeException("无效的storyId");
         }
@@ -57,6 +64,17 @@ public class ManageTagRelationController {
         tagRelation.setStoryId(storyId);
         tagRelation.setCreateTime(new Date());
         tagRelation.setUpdateTime(new Date());
+        if (story.getSetId() != 0) {
+            Story setStory = storyService.getStoryById(story.getSetId());
+            if (setStory != null) {
+                TagRelation tagRelation1 = new TagRelation();
+                tagRelation1.setTagId(tagId);
+                tagRelation1.setStoryId(setStory.getId());
+                tagRelation1.setCreateTime(new Date());
+                tagRelation1.setUpdateTime(new Date());
+                tagRelationService.saveTagRelation(tagRelation1);
+            }
+        }
         boolean success = tagRelationService.saveTagRelation(tagRelation);
         return success;
     }
@@ -78,6 +96,14 @@ public class ManageTagRelationController {
             logger.error("无效的storyId");
             responseData.jsonFill(2, "无效的storyId", null);
             return responseData;
+        }
+
+        Story story = storyService.getStoryById(storyId);
+        if (story.getSetId() != 0) {
+            Story setStory = storyService.getStoryById(story.getSetId());
+            if (setStory != null) {
+                tagRelationService.deleteTagRelationByStoryIdAndTagId(setStory.getId(), tagId);
+            }
         }
         boolean success = tagRelationService.deleteTagRelationByStoryIdAndTagId(storyId, tagId);
         responseData.jsonFill(success ? 1 : 2, null, success);

@@ -3,7 +3,6 @@ package cn.edu.nju.software.controller.manage;
 import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.*;
-import cn.edu.nju.software.service.impl.StoryAlbumServiceImpl;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.MyStringUtil;
 import cn.edu.nju.software.util.UploadFileUtil;
@@ -74,6 +73,7 @@ public class ManageStoryController {
             @ApiParam("角色其他信息") @RequestParam(value = "roleExtra", required = false) String roleExtra,
             @ApiParam("建议阅读时间（单位s）") @RequestParam(value = "suggestedReadingDuration", required = false) Integer suggestedReadingDuration,
             @ApiParam("所属专辑id(传多个用逗号分隔)") @RequestParam(value = "albumId", required = false) String albumIdStr,
+            @ApiParam("故事集ID") @RequestParam(value = "setId", required = false) int setId,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<StoryNewVo> result = new ResponseData<>();
         Story dbStory = storyService.getExactStoryByTitle(title);
@@ -103,6 +103,8 @@ public class ManageStoryController {
         if (guide != null) story.setGuide(guide);
         if (price != null) story.setPrice(price);
         if (readGuide != null) story.setReadGuide(readGuide);
+
+        story.setSetId(setId);
         story.setValid(1);
         story.setDefaultBackGroundMusicId(defaultBackGroundMusicId);
         story.setCreateTime(new Date());
@@ -174,6 +176,7 @@ public class ManageStoryController {
             @ApiParam("原音") @RequestParam(value = "originSoundFile", required = false) MultipartFile originSoundFile,
             @ApiParam("建议阅读时间（单位s）") @RequestParam(value = "suggestedReadingDuration", required = false) Integer suggestedReadingDuration,
             @ApiParam("所属专辑id(传多个用逗号分隔)") @RequestParam(value = "albumId", required = false) String albumIdStr,
+            @ApiParam("故事集ID") @RequestParam(value = "setId", required = false) int setId,
             HttpServletRequest request, HttpServletResponse response) {
         Story story = storyService.getStoryById(id);
         if (story == null) {
@@ -208,6 +211,7 @@ public class ManageStoryController {
         if (price != null) story.setPrice(price);
         if (readGuide != null) story.setReadGuide(readGuide);
         if (suggestedReadingDuration != null) story.setSuggestedReadingDuration(suggestedReadingDuration);
+        story.setSetId(setId);
         story.setDefaultBackGroundMusicId(defaultBackGroundMusicId);
         story.setUpdateTime(new Date());
         story.setDraft(draft);
