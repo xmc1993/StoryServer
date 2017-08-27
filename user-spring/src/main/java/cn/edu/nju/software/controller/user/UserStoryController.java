@@ -132,13 +132,17 @@ public class UserStoryController extends BaseController {
             @ApiParam("OFFSET") @RequestParam int offset,
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<StoryNewVo>> responseData = new ResponseData();
+        ResponseData<List<StoryNewVo>> responseData = new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             user = new User();
             user.setId(-1);
         }
         List<Integer> idList = tagRelationService.getStoryIdListBySecondLevelTagId(tagId);
+        if(idList.size()==0){
+        	responseData.jsonFill(1, null, null);
+        	return responseData;
+        }
         List<Story> storyList = storyService.getSetStoryListByIdList(idList, offset, limit);
         responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
         responseData.setCount(storyService.getStoryCountByIdList(idList));

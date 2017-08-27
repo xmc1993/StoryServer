@@ -119,7 +119,6 @@
             <mvc:mapping path="/user/getCurrentCount"/>
             <mvc:mapping path="/user/getHistoryMaxCount"/>
 
-            <mvc:mapping path="/user/getStoryListOfAlbum"/>
             <mvc:mapping path="/user/getLatestWorksByPage"/>
             <mvc:mapping path="/user/getMostPopularByPage"/>
             

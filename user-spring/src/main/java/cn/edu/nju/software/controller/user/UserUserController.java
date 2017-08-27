@@ -1,11 +1,14 @@
 package cn.edu.nju.software.controller.user;
 
 import cn.edu.nju.software.controller.BaseController;
+import cn.edu.nju.software.entity.Badge;
 import cn.edu.nju.software.entity.Business;
 import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.entity.TwoTuple;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.entity.UserBase;
 import cn.edu.nju.software.enums.GrantType;
+import cn.edu.nju.software.service.BadgeService;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.service.user.UserWeChatLoginService;
 import cn.edu.nju.software.util.*;
@@ -43,6 +46,8 @@ public class UserUserController extends BaseController {
     private UserWeChatLoginService weChatLoginService;
     @Autowired
     private Business business;
+    @Autowired
+    private BadgeService badgeService;
 
 
     @ApiOperation(value = "获取用户信息", notes = "获取用户信息")
@@ -175,7 +180,24 @@ public class UserUserController extends BaseController {
         //登录信息写入缓存
         JedisUtil.getJedis().set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
         JedisUtil.getJedis().expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);//缓存用户信息30天
-
+        
+      //对用户连续登陆天数处理
+        TwoTuple<Integer, Boolean> tt = userService.addContinusLandDay(user.getId());
+        int[] prizeDay = {1,3,7,15,21,30,50,100,200,365,500,1000};
+        Badge badge = null;
+        //今天的第一次登陆，获取badge对象
+        if(!tt.getValue()){
+        	for(int i=prizeDay.length;i>0;i--){
+            	if(tt.getId() == prizeDay[i]){
+            		badge = badgeService.getBadgeByMeasureAndType(prizeDay[i],2);
+            		break;
+            	}
+        	}
+        }     
+        
+        loginResponseVo.setBadge(badge);
+        loginResponseVo.setContinuousLoginCount(tt.getId());
+        
         responseData.jsonFill(1, null, loginResponseVo);
         return responseData;
     }
@@ -239,15 +261,36 @@ public class UserUserController extends BaseController {
         //登录信息写入缓存
         JedisUtil.getJedis().set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
         JedisUtil.getJedis().expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);//缓存用户信息30天
-
+        
+        //对用户连续登陆天数处理
+        TwoTuple<Integer, Boolean> tt = userService.addContinusLandDay(user.getId());
+        int[] prizeDay = {1,3,7,15,21,30,50,100,200,365,500,1000};
+        Badge badge = null;
+        //今天的第一次登陆，获取badge对象
+        if(!tt.getValue()){
+        	for(int i=prizeDay.length;i>0;i--){
+            	if(tt.getId() == prizeDay[i]){
+            		badge = badgeService.getBadgeByMeasureAndType(prizeDay[i],2);
+            		break;
+            	}
+        	}
+        }        
+        
         LoginResponseVo loginResponseVo = new LoginResponseVo();
+        
+        loginResponseVo.setBadge(badge);
+        loginResponseVo.setContinuousLoginCount(tt.getId());
+        
         loginResponseVo.setAccessToken(user.getAccessToken());
         loginResponseVo.setId(user.getId());
-        responseData.jsonFill(1, null, loginResponseVo);   
+        responseData.jsonFill(1, null, loginResponseVo);
+                
         return responseData;
     }
     
-    @RequestMapping(value = "/testError", method = {RequestMethod.GET, RequestMethod.POST})
+
+
+	@RequestMapping(value = "/testError", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public boolean testError() {
         logger.error("ERROR");

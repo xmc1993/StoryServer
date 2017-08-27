@@ -58,4 +58,9 @@ public class BadgeServiceImpl implements BadgeService {
 		return badgeDao.getBadgeOfUser(userId);
 	}
 
+	@Override
+	public Badge getBadgeByMeasureAndType(int measure, int badgeTypeId) {
+		return badgeDao.getBadgeByMeasureAndType(measure,badgeTypeId);
+	}
+
 }

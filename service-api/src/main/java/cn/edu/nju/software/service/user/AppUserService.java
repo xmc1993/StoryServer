@@ -1,10 +1,12 @@
 package cn.edu.nju.software.service.user;
 
+import cn.edu.nju.software.entity.TwoTuple;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.entity.UserBase;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author dalec, 16/04/02
@@ -31,5 +33,8 @@ public interface AppUserService {
     List<UserBase> getUserBaseListByIdList(List<Integer> idList);
 
     User getUserByDeviceId(String deviceId);
-
+    
+    TwoTuple<Integer,Boolean> addContinusLandDay(Integer id);
+    
+    boolean isLoginTodayFirst(Integer userId);
 }

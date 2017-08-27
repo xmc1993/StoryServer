@@ -2,6 +2,7 @@ package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.Badge;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,5 +28,6 @@ public interface BadgeDao {
     
     List<Badge> getBadgeOfUser(Integer userId);
 
+	Badge getBadgeByMeasureAndType(@Param("measure")int measure,@Param("badgeTypeId") int badgeTypeId);
 
 }

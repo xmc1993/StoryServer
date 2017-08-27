@@ -108,6 +108,6 @@ public interface StoryDao {
 
     List<Story> getStoryListBySetId(int setId, int offset, int limit);
 
-    List<Story> getSetStoryListByIdList(List<Integer> idList, Integer offset, Integer limit);
+    List<Story> getSetStoryListByIdList(@Param("idList") List<Integer> idList,@Param("offset") Integer offset, @Param("limit") Integer limit);
 
 }

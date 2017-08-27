@@ -568,7 +568,7 @@
         select
         <include refid="fields"></include>
         from story
-        where valid = 1 and draft = 0 and setId = 0 id in
+        where valid = 1 and draft = 0 and setId = 0 and id in
         <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
             #{id}
         </foreach>

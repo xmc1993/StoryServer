@@ -1,11 +1,17 @@
 package cn.edu.nju.software.service.impl.user;
 
 import cn.edu.nju.software.dao.user.AppUserDao;
+import cn.edu.nju.software.entity.TwoTuple;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.entity.UserBase;
 import cn.edu.nju.software.service.user.AppUserService;
+import cn.edu.nju.software.util.DateUtil;
+import cn.edu.nju.software.util.JedisUtil;
+import cn.edu.nju.software.util.MyDateUtil;
 import cn.edu.nju.software.util.PhoneFormatCheckUtils;
 import cn.edu.nju.software.util.Util;
+import redis.clients.jedis.Jedis;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +19,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author dalec, 16/01/28
@@ -122,4 +130,48 @@ public class AppUserServiceImpl implements AppUserService {
     public User getUserByDeviceId(String deviceId) {
         return userDao.getUserByDeviceId(deviceId);
     }
+    
+    /**
+     * 
+     * @param id
+     * @return 连续登陆次数
+     */
+    public TwoTuple<Integer, Boolean> addContinusLandDay(Integer id) {
+    	Jedis jedis = JedisUtil.getJedis();
+    	String todayLoginKey = "login:" + DateUtil.dateToString(new Date(), "yyyyMMdd");
+		//创建今日登陆记录
+		if(!jedis.exists(todayLoginKey)){
+			jedis.set(todayLoginKey, "");
+			jedis.expireAt(todayLoginKey, MyDateUtil.dateToUnix(0));
+		}			
+		Boolean hasLogin = jedis.getbit(todayLoginKey, id);
+		
+		//今天未登陆过
+		if(!hasLogin){
+			jedis.setbit(todayLoginKey, id.longValue(), true);
+			String continusDays = jedis.get("logincontinus:"+id);
+			//用户没有连续登陆记录
+			if(continusDays == null){
+				jedis.set("logincontinus:"+id,"1");				
+			}else{
+				jedis.incr("logincontinus:"+id);
+			}
+			jedis.expireAt("logincontinus:"+id, MyDateUtil.dateToUnix(1));		
+		}
+		jedis.close();
+		TwoTuple<Integer,Boolean> tt = new TwoTuple<>();
+		tt.setId(Integer.parseInt(jedis.get("logincontinus:"+id)));//设置连续登陆次数
+		tt.setValue(hasLogin);		
+		return tt;
+	}
+    
+	@Override
+	public boolean isLoginTodayFirst(Integer userId) {
+		Jedis jedis = JedisUtil.getJedis();
+    	String todayLoginKey = "login:" + DateUtil.dateToString(new Date(), "yyyyMMdd");
+    	Boolean hasLogin = jedis.getbit(todayLoginKey, userId);
+    	jedis.close();
+    	return !hasLogin;
+	}
+	
 }
