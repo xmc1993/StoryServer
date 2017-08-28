@@ -73,7 +73,8 @@ public class ManageStoryController {
             @ApiParam("角色其他信息") @RequestParam(value = "roleExtra", required = false) String roleExtra,
             @ApiParam("建议阅读时间（单位s）") @RequestParam(value = "suggestedReadingDuration", required = false) Integer suggestedReadingDuration,
             @ApiParam("所属专辑id(传多个用逗号分隔)") @RequestParam(value = "albumId", required = false) String albumIdStr,
-            @ApiParam("故事集ID") @RequestParam(value = "setId", required = false) int setId,
+            @ApiParam("故事集ID") @RequestParam(value = "setId", required = false) Integer setId,
+            @ApiParam("阅读时长") @RequestParam(value = "readTime", required = false) String readTime,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<StoryNewVo> result = new ResponseData<>();
         Story dbStory = storyService.getExactStoryByTitle(title);
@@ -103,6 +104,7 @@ public class ManageStoryController {
         if (guide != null) story.setGuide(guide);
         if (price != null) story.setPrice(price);
         if (readGuide != null) story.setReadGuide(readGuide);
+        if(readTime != null)story.setReadTime(readTime);
 
         story.setSetId(setId);
         story.setValid(1);
@@ -176,7 +178,8 @@ public class ManageStoryController {
             @ApiParam("原音") @RequestParam(value = "originSoundFile", required = false) MultipartFile originSoundFile,
             @ApiParam("建议阅读时间（单位s）") @RequestParam(value = "suggestedReadingDuration", required = false) Integer suggestedReadingDuration,
             @ApiParam("所属专辑id(传多个用逗号分隔)") @RequestParam(value = "albumId", required = false) String albumIdStr,
-            @ApiParam("故事集ID") @RequestParam(value = "setId", required = false) int setId,
+            @ApiParam("故事集ID") @RequestParam(value = "setId", required = false) Integer setId,
+            @ApiParam("阅读时长") @RequestParam(value = "readTime", required = false) String readTime,
             HttpServletRequest request, HttpServletResponse response) {
         Story story = storyService.getStoryById(id);
         if (story == null) {
@@ -211,6 +214,8 @@ public class ManageStoryController {
         if (price != null) story.setPrice(price);
         if (readGuide != null) story.setReadGuide(readGuide);
         if (suggestedReadingDuration != null) story.setSuggestedReadingDuration(suggestedReadingDuration);
+        if(readTime != null)story.setReadTime(readTime);
+
         story.setSetId(setId);
         story.setDefaultBackGroundMusicId(defaultBackGroundMusicId);
         story.setUpdateTime(new Date());

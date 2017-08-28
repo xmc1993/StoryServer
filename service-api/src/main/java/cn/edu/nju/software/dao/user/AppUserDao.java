@@ -51,4 +51,5 @@ public interface AppUserDao {
 
     User getUserByDeviceId(String deviceId);
 
+    boolean updateUserWorkCount(@Param("workCount")Integer workCount,@Param("userId")Integer userId);
 }

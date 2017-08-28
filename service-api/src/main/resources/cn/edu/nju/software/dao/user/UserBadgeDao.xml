@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.UserBadgeDao">
+
+    <sql id="fields">
+        id,
+        userId,
+        badgeId
+    </sql>
+
+    <insert id="saveUserBadge" keyProperty="id" useGeneratedKeys="true">
+        insert into user_badge_mappings(
+        <include refid="fields"></include>
+        )
+        VALUES (#{id},#{userId},#{badgeId})
+    </insert>
+
+    <delete id="deleteUserBadgeByUserId">
+        delete FROM user_badge_mappings where userId=#{userId}
+    </delete>
+
+    <select id="getUserBadgeByUserId" resultType="cn.edu.nju.software.entity.UserBadge">
+        select
+        <include refid="fields"></include>
+        from user_badge_mappings
+        WHERE
+        userId = #{userId}
+    </select>
+</mapper>

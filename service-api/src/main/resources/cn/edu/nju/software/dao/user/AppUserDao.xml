@@ -131,7 +131,8 @@
 		followeeCount=#{followeeCount},
 		workCount=#{workCount},
 		likeCount=#{likeCount},
-		deviceId=#{deviceId}
+		deviceId=#{deviceId},
+		listenCount=#{listenCount}
 		where
 		id=#{id}
 	</update>
@@ -259,5 +260,10 @@
         where
         id=#{0}
     </update>
-
+    <update id="updateUserWorkCount">
+        update user
+        SET
+        workCount = #{workCount}
+        where id=#{userId}
+    </update>
 </mapper>

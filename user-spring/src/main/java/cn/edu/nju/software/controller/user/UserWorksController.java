@@ -58,6 +58,8 @@ public class UserWorksController extends BaseController {
     AppUserService appUserService;
     @Autowired
     BadgeService badgeService;
+    @Autowired
+    UserBadgeService userBadgeService;
 
 
     @ApiOperation(value = "获得最新的作品列表", notes = "需要登录")
@@ -327,12 +329,12 @@ public class UserWorksController extends BaseController {
     @ApiOperation(value = "发布作品", notes = "需登录")
     @RequestMapping(value = "/publishWorks", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<Works> publishWorks(
+    public ResponseData<WorksVo> publishWorks(
             @ApiParam("故事ID") @RequestParam("storyId") int storyId,
             @ApiParam("音频长度") @RequestParam("duration") String duration,
-            @ApiParam("音频文件") @RequestParam("uploadFile") MultipartFile uploadFile,
+            @ApiParam("音频文件") @RequestParam(value="uploadFile",required = false) MultipartFile uploadFile,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<Works> responseData = new ResponseData();
+        ResponseData<WorksVo> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "请先登录", null);
@@ -367,18 +369,46 @@ public class UserWorksController extends BaseController {
         works.setUrl(url);
         works.setHeadImgUrl(user.getHeadImgUrl());
         boolean res = worksService.saveWorks(works);
+
+        WorksVo worksVo = new WorksVo();
         if (res) {
-            responseData.jsonFill(1, null, works);
+
             //发布成功,用户发布作品数加一
             user.setWorkCount(user.getWorkCount()+1);
-            appUserService.updateUser(user);
-            //判断是否需要给用户增加新徽章
-            
+            appUserService.updateUserWorkCount(user.getWorkCount(),user.getId());
+            Badge badge = judgeUserAddBadge(user);
+            if(badge != null){
+                BeanUtils.copyProperties(works,worksVo );
+                worksVo.setBadge(badge);
+            }
+            responseData.jsonFill(1, null, worksVo);
+
         } else {
             responseData.jsonFill(2, "发布失败", null);
         }
         return responseData;
 
+    }
+
+    /**
+     * 判断是否需要给用户增加新徽章
+     * @param user
+     * @return
+     */
+    private Badge judgeUserAddBadge(User user){
+        int[] workCountBadgeArr = {5000,2000,1000,500,300,200,150,100,30,10,3};
+        for (int i = 0; i < workCountBadgeArr.length; i++) {
+            if(user.getWorkCount() == workCountBadgeArr[i]){
+                UserBadge userBadge = new UserBadge();
+                userBadge.setUserId(user.getId());
+                Badge badge = badgeService.getBadgeByMeasureAndType(workCountBadgeArr[i],5);
+                userBadge.setBadgeId(badge.getId());
+                userBadgeService.saveUserBadge(userBadge);
+                return badge;
+            }
+
+        }
+        return null;
     }
 
     @ApiOperation(value = "重新发布作品", notes = "需登录")
@@ -475,6 +505,4 @@ public class UserWorksController extends BaseController {
         String url = UploadFileUtil.SOURCE_BASE_URL + WORKS_ROOT + userId + "/" + fileName;
         return url;
     }
-
-    
 }

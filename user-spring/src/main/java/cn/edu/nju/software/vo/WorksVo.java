@@ -1,5 +1,6 @@
 package cn.edu.nju.software.vo;
 
+import cn.edu.nju.software.entity.Badge;
 import cn.edu.nju.software.entity.Works;
 import lombok.Data;
 
@@ -9,4 +10,5 @@ import lombok.Data;
 @Data
 public class WorksVo extends Works{
     private boolean like = false;
+    private Badge badge;
 }

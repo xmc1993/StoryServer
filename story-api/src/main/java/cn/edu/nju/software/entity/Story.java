@@ -60,4 +60,6 @@ public class Story {
     private Integer isSet = 0;
     @ApiModelProperty(value="所属故事集ID")
     private Integer setId = 0;
+    @ApiModelProperty(value="阅读时长")
+    private String readTime;
 }

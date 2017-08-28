@@ -181,18 +181,18 @@ public class UserUserController extends BaseController {
         JedisUtil.getJedis().set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
         JedisUtil.getJedis().expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);//缓存用户信息30天
         
-      //对用户连续登陆天数处理
+        //对用户连续登陆天数处理
         TwoTuple<Integer, Boolean> tt = userService.addContinusLandDay(user.getId());
         int[] prizeDay = {1,3,7,15,21,30,50,100,200,365,500,1000};
         Badge badge = null;
         //今天的第一次登陆，获取badge对象
         if(!tt.getValue()){
-        	for(int i=prizeDay.length;i>0;i--){
-            	if(tt.getId() == prizeDay[i]){
-            		badge = badgeService.getBadgeByMeasureAndType(prizeDay[i],2);
-            		break;
-            	}
-        	}
+            for(int i=prizeDay.length;i>0;i--){
+                if(tt.getId() == prizeDay[i-1]){
+                    badge = badgeService.getBadgeByMeasureAndType(prizeDay[i-1],2);
+                    break;
+                }
+            }
         }     
         
         loginResponseVo.setBadge(badge);
@@ -269,9 +269,9 @@ public class UserUserController extends BaseController {
         //今天的第一次登陆，获取badge对象
         if(!tt.getValue()){
         	for(int i=prizeDay.length;i>0;i--){
-            	if(tt.getId() == prizeDay[i]){
-            		badge = badgeService.getBadgeByMeasureAndType(prizeDay[i],2);
-            		break;
+            	if(tt.getId() == prizeDay[i-1]){
+            		badge = badgeService.getBadgeByMeasureAndType(prizeDay[i-1],2);
+                    break;
             	}
         	}
         }        

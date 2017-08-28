@@ -26,7 +26,8 @@
         draft,
         suggestedReadingDuration,
         isSet,
-        setId
+        setId,
+        readTime
     </sql>
 
     <sql id="multiTableFields">
@@ -168,8 +169,12 @@
         #{duration},
         #{likeCount},
         #{draft},
-        #{suggestedReadingDuration}
+        #{suggestedReadingDuration},
+        #{isSet},
+        #{setId},
+        #{readTime}
         )
+
     </insert>
     <insert id="addStoryLikeCount">
         update story
@@ -195,7 +200,8 @@
 		defaultBackGroundMusicId=#{defaultBackGroundMusicId},
 		duration=#{duration},
 		draft=#{draft},
-		suggestedReadingDuration=#{suggestedReadingDuration}
+		suggestedReadingDuration=#{suggestedReadingDuration},
+		readTime=#{readTime}
 		where
 		id=#{id}
 	</update>

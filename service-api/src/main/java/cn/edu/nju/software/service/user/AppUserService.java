@@ -37,4 +37,6 @@ public interface AppUserService {
     TwoTuple<Integer,Boolean> addContinusLandDay(Integer id);
     
     boolean isLoginTodayFirst(Integer userId);
+
+    boolean updateUserWorkCount(Integer workCount,Integer userId);
 }

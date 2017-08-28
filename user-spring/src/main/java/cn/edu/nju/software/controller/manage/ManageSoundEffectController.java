@@ -45,6 +45,8 @@ public class ManageSoundEffectController {
 
     private static final String SOUND_EFFECT_ROOT = "/soundEffect/"; //头像的基础路径
 
+    private static final String SOUND_EFFECT_ICON = "/icons/";
+
     @RequiredPermissions({1,7})
     @ApiOperation(value = "增加音效", notes = "")
     @RequestMapping(value = "/soundEffects", method = {RequestMethod.POST})
@@ -149,7 +151,8 @@ public class ManageSoundEffectController {
             @ApiParam("音效ID") @PathVariable int id,
             @ApiParam("音效标签ID") @RequestParam(value = "tagId",required = false) Integer tagId,
             @ApiParam("音效文件") @RequestParam(value = "uploadFile", required = false) MultipartFile uploadFile,
-            @ApiParam("音效描述") @RequestParam("description") String description,
+            @ApiParam("音效描述") @RequestParam(value = "description", required = false) String description,
+            @ApiParam("图标") @RequestParam(value = "icon",required = false) MultipartFile icon,
             HttpServletRequest request, HttpServletResponse response) {
         if (!checkValidService.isSoundEffectExist(id)) {
             throw new RuntimeException("无效的音效id");
@@ -169,6 +172,19 @@ public class ManageSoundEffectController {
             String url = UploadFileUtil.SOURCE_BASE_URL + SOUND_EFFECT_ROOT + fileName;//拼接音频文件的地址
             soundEffect.setUrl(url);
         }
+        //传图标
+        if (icon != null && !icon.isEmpty()) {
+            String realPath = UploadFileUtil.getBaseUrl() + SOUND_EFFECT_ICON;
+            String fileName = RandCharsUtils.getRandomString(16) + "." + UploadFileUtil.getSuffix(icon.getOriginalFilename());
+            boolean success = UploadFileUtil.mvFile(icon, realPath, fileName);
+            if (!success) {
+                throw new RuntimeException("上传图标文件失败");
+            }
+            //TODO 删除老的icon文件 TODO 原子性的问题
+            String iconUrl = UploadFileUtil.SOURCE_BASE_URL + SOUND_EFFECT_ICON + fileName;//拼接图标文件的地址
+            soundEffect.setIcon(iconUrl);
+        }
+
         soundEffect.setDescription(description);
         Date date = new Date();
         soundEffect.setUpdateTime(date);

@@ -173,5 +173,10 @@ public class AppUserServiceImpl implements AppUserService {
     	jedis.close();
     	return !hasLogin;
 	}
-	
+
+    @Override
+    public boolean updateUserWorkCount(Integer workCount,Integer userId) {
+        return userDao.updateUserWorkCount(workCount,userId);
+    }
+
 }

@@ -35,6 +35,7 @@ public class User implements Serializable {
 	private Integer followeeCount = 0;//关注的人数
 	private Integer workCount = 0;//作品数
 	private Integer likeCount = 0;//喜欢的作品数
+	private Integer listenCount = 0;//收听数
 
 	public Integer getId() {
 		return id;
