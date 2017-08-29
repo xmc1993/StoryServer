@@ -60,12 +60,12 @@ public class ManageUploadController {
         ArrayList<String> urls = new ArrayList<>();
         uploadResVo.setMultiUrls(urls);
         responseData.jsonFill(1, null, uploadResVo);
-        String type = request.getHeader("Content-Type");
-        String[] strs = type.split("/");
-        String suffix = strs[strs.length -1];
         if (files != null){
             for (MultipartFile file : files) {
                 if (!file.isEmpty()){
+                    String type = file.getContentType();
+                    String[] strs = type.split("/");
+                    String suffix = strs[strs.length -1];
                     urls.add(uploadFile(file, ICON_ROOT, suffix));
                 }
             }
