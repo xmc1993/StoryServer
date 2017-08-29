@@ -326,6 +326,11 @@
         from story WHERE valid = 1 and draft = 0 and isSet = 0
     </select>
 
+    <select id="getSetStoryCount" resultType="java.lang.Integer">
+        select count(id)
+        from story WHERE valid = 1 and draft = 0 and setId = 0
+    </select>
+
     <select id="getStoryCountByTitle" resultType="java.lang.Integer">
         select count(id)
         from story
@@ -339,12 +344,22 @@
             #{id}
         </foreach>
     </select>
+
     <select id="getRecommendedStoryCount" resultType="java.lang.Integer">
         select
         count(id)
         from story
         where valid = 1 and recommend = 1 and draft = 0 and isSet = 0
     </select>
+
+    <select id="getSet
+    RecommendedStoryCount" resultType="java.lang.Integer">
+        select
+        count(id)
+        from story
+        where valid = 1 and recommend = 1 and draft = 0 and setId = 0
+    </select>
+
     <select id="getStoryCountByIdList" resultType="java.lang.Integer">
         select
         count(id)
@@ -354,6 +369,17 @@
             #{id}
         </foreach>
     </select>
+
+    <select id="getSetStoryCountByIdList" resultType="java.lang.Integer">
+        select
+        count(id)
+        from story
+        where valid = 1 and draft = 0 and setId = 0 and id in
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
     <select id="getStoryByFuzzyQuery" resultType="cn.edu.nju.software.entity.Story">
         select
         <include refid="multiTableFields"/>

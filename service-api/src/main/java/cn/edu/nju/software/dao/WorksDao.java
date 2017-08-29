@@ -13,7 +13,6 @@ import java.util.List;
 @Repository
 public interface WorksDao {
 
-
     List<Works> getLatestWorksByPage(int offset, int limit);
 
     List<Works> getMostPopularByPage(int offset, int limit);

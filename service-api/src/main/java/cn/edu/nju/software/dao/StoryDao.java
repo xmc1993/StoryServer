@@ -57,13 +57,19 @@ public interface StoryDao {
 
     Integer getStoryCount();
 
+    Integer getSetStoryCount();
+
     Integer getStoryCountByTitle(String title);
 
     Integer getStoryIdCountByTagIdList(@Param("idList")List<Integer> idList);
 
     Integer getRecommendedStoryCount();
 
+    Integer getSetRecommendedStoryCount();
+
     Integer getStoryCountByIdList(@Param("idList") List<Integer> idList);
+
+    Integer getSetStoryCountByIdList(@Param("idList") List<Integer> idList);
 
     List<Story> getStoryByFuzzyQuery(@Param("queryList") List<String> queryList, @Param("offset")Integer offset, @Param("limit")Integer limit);
 

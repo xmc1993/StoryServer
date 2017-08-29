@@ -170,6 +170,11 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
+    public Integer getSetRecommendedStoryCount() {
+        return storyDao.getSetRecommendedStoryCount();
+    }
+
+    @Override
     public boolean newTell(int id) {
         return storyDao.newTell(id);
     }
@@ -182,6 +187,11 @@ public class StoryServiceImpl implements StoryService {
     @Override
     public Integer getStoryCount() {
         return storyDao.getStoryCount();
+    }
+
+    @Override
+    public Integer getSetStoryCount() {
+        return storyDao.getSetStoryCount();
     }
 
     @Override
@@ -226,6 +236,11 @@ public class StoryServiceImpl implements StoryService {
     public Integer getStoryCountByIdList(List<Integer> idList) {
         idList.add(-1);//防止mybatis查询出错
         return storyDao.getStoryCountByIdList(idList);
+    }
+
+    @Override
+    public Integer getSetStoryCountByIdList(List<Integer> idList) {
+        return storyDao.getSetStoryCountByIdList(idList);
     }
 
     @Override

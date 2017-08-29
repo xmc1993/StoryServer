@@ -75,6 +75,7 @@ public class UserWorksController extends BaseController {
         }
         List<Works> worksList = worksService.getLatestWorksByPage(page, pageSize);
         responseData.jsonFill(1, null, worksList2VoList(worksList, user.getId()));
+        responseData.setCount(worksService.getWorksCount());
         return responseData;
     }
 
@@ -93,7 +94,9 @@ public class UserWorksController extends BaseController {
             return responseData;
         }
         List<Works> worksList = worksService.getMostPopularByPage(page, pageSize);
+
         responseData.jsonFill(1, null, worksList2VoList(worksList, user.getId()));
+        responseData.setCount(worksService.getWorksCount());
         return responseData;
     }
 

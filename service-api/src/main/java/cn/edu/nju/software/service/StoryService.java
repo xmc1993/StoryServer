@@ -45,11 +45,15 @@ public interface StoryService {
 
     Integer getRecommendedStoryCount();
 
+    Integer getSetRecommendedStoryCount();
+
     boolean newTell(int id);
 
     boolean deleteTell(int id);
 
     Integer getStoryCount();
+
+    Integer getSetStoryCount();
 
     Integer getStoryCountIncludeDrafts();
 
@@ -60,6 +64,8 @@ public interface StoryService {
     Integer getStoryCountByTitleIncludeDrafts(String query);
 
     Integer getStoryCountByIdList(List<Integer> idList);
+
+    Integer getSetStoryCountByIdList(List<Integer> idList);
 
     List <Story>  getStoryByFuzzyQuery(String query, Integer offset, Integer limit);
 
