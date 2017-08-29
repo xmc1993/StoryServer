@@ -44,4 +44,6 @@ public interface WorksService {
 	List<TwoTuple<Integer,String>> getFirstWorkByPlayIdList(List<Integer> playIdList);
 
 	PageInfo<Works> getWorksListByStoryIdListByPage(List<Integer> storyIdList, int page, int pageSize);
+
+    Integer getUserIdByWorkId(int worksId);
 }

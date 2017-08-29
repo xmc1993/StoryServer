@@ -35,7 +35,8 @@
 		followerCount,
 		followeeCount,
 		workCount,
-		likeCount
+		likeCount,
+		listenCount
 	</sql>
 
     <resultMap id="userBase" type="cn.edu.nju.software.entity.UserBase">
@@ -47,6 +48,7 @@
         <id column="followeeCount" property="followeeCount"/>
         <id column="workCount" property="workCount"/>
         <id column="likeCount" property="likeCount"/>
+        <id column="listenCount" property="listenCount"/>
     </resultMap>
 
     <resultMap id="user" type="cn.edu.nju.software.entity.User">
@@ -265,5 +267,12 @@
         SET
         workCount = #{workCount}
         where id=#{userId}
+    </update>
+    <update id="updateListenCountByUserId">
+        update USER
+        SET
+        listenCount = listenCount+1
+        where
+        id=#{0}
     </update>
 </mapper>

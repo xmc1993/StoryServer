@@ -6,7 +6,6 @@ import cn.edu.nju.software.entity.UserBase;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author dalec, 16/04/02
@@ -39,4 +38,6 @@ public interface AppUserService {
     boolean isLoginTodayFirst(Integer userId);
 
     boolean updateUserWorkCount(Integer workCount,Integer userId);
+
+    boolean updateListenCountByUserId(Integer id);
 }

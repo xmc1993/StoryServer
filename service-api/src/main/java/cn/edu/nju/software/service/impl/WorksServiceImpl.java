@@ -135,4 +135,9 @@ public class WorksServiceImpl implements WorksService {
 		return pageInfo;
 	}
 
+    @Override
+    public Integer getUserIdByWorkId(int worksId) {
+        return worksDao.getUserIdByWorkId(worksId);
+    }
+
 }
