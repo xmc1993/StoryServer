@@ -102,8 +102,7 @@
             <mvc:mapping path="/user/getAgreeWorksListByUserId"/>
             <mvc:mapping path="/user/getWorksById"/>
             <mvc:mapping path="/user/getFollowingStatus"/>
-            <mvc:mapping path="/user/getWorksByUser"/>            
-
+            <mvc:mapping path="/user/getWorksByUser"/>
             <mvc:mapping path="/user/getStoryById"/> 
             <mvc:mapping path="/user/getStoryListByPage"/>
             <mvc:mapping path="/user/getStoryIdListByFirstLevelTagId"/>
@@ -113,17 +112,12 @@
             <mvc:mapping path="/user/getFollowingStatus"/>
             <mvc:mapping path="/user/draftStories"/>
             <mvc:mapping path="/user/getStorysByUser"/>
-            
-
             <mvc:mapping path="/user/newRecord"/>
             <mvc:mapping path="/user/getCurrentCount"/>
             <mvc:mapping path="/user/getHistoryMaxCount"/>
-
             <mvc:mapping path="/user/getLatestWorksByPage"/>
             <mvc:mapping path="/user/getMostPopularByPage"/>
-            
             <mvc:mapping path="/user/getAllBageOfUser"/>
-
             <mvc:mapping path="/user/playList/getPlayListsByPage"/>
             <mvc:mapping path="/user/playList/getWorksListByPlayListIdByPage"/>
             <mvc:mapping path="/user/playList/addWorksToPlayList"/>
@@ -131,8 +125,8 @@
             <mvc:mapping path="/user/playList/newPlayList"/>
             <mvc:mapping path="/user/playList/removePlayList"/>
             <mvc:mapping path="/user/playList/updatePlayList"/>
-
             <mvc:mapping path="/user/getBadgeListByTypeId"/>
+            <mvc:mapping path="/user/listenWorks"/>
 
             <!-- 不需要拦截的uri -->
             <!--
