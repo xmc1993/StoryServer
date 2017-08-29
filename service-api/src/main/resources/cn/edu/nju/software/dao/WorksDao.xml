@@ -267,5 +267,7 @@
         </foreach>
         order by updateTime
 	</select>
-
+    <select id="getUserIdByWorkId">
+        select userId from works where id =#{worksId}
+    </select>
 </mapper>

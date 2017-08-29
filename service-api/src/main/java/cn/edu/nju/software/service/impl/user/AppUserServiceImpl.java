@@ -5,23 +5,16 @@ import cn.edu.nju.software.entity.TwoTuple;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.entity.UserBase;
 import cn.edu.nju.software.service.user.AppUserService;
-import cn.edu.nju.software.util.DateUtil;
-import cn.edu.nju.software.util.JedisUtil;
-import cn.edu.nju.software.util.MyDateUtil;
-import cn.edu.nju.software.util.PhoneFormatCheckUtils;
-import cn.edu.nju.software.util.Util;
-import redis.clients.jedis.Jedis;
-
+import cn.edu.nju.software.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
 import java.io.File;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author dalec, 16/01/28
@@ -177,6 +170,11 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public boolean updateUserWorkCount(Integer workCount,Integer userId) {
         return userDao.updateUserWorkCount(workCount,userId);
+    }
+
+    @Override
+    public boolean updateListenCountByUserId(Integer id) {
+        return userDao.updateListenCountByUserId(id);
     }
 
 }

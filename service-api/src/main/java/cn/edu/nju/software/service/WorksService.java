@@ -45,4 +45,5 @@ public interface WorksService {
 
 	PageInfo<Works> getWorksListByStoryIdListByPage(List<Integer> storyIdList, int page, int pageSize);
 
+    Integer getUserIdByWorkId(int worksId);
 }

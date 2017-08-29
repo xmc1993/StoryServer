@@ -376,7 +376,7 @@ public class UserWorksController extends BaseController {
             //发布成功,用户发布作品数加一
             user.setWorkCount(user.getWorkCount()+1);
             appUserService.updateUserWorkCount(user.getWorkCount(),user.getId());
-            Badge badge = judgeUserAddBadge(user);
+            Badge badge = judgeUserAddBadgeByPublish(user);
             if(badge != null){
                 BeanUtils.copyProperties(works,worksVo );
                 worksVo.setBadge(badge);
@@ -395,7 +395,7 @@ public class UserWorksController extends BaseController {
      * @param user
      * @return
      */
-    private Badge judgeUserAddBadge(User user){
+    private Badge judgeUserAddBadgeByPublish(User user){
         int[] workCountBadgeArr = {5000,2000,1000,500,300,200,150,100,30,10,3};
         for (int i = 0; i < workCountBadgeArr.length; i++) {
             if(user.getWorkCount() == workCountBadgeArr[i]){
@@ -406,7 +406,6 @@ public class UserWorksController extends BaseController {
                 userBadgeService.saveUserBadge(userBadge);
                 return badge;
             }
-
         }
         return null;
     }
@@ -476,6 +475,12 @@ public class UserWorksController extends BaseController {
             return responseData;
         }
         boolean res = worksService.listenWorks(worksId);
+
+        Integer authorId = worksService.getUserIdByWorkId(worksId);
+
+       appUserService.updateListenCountByUserId(authorId);
+        judgeUserAddBadgeByListen(authorId);
+
         Works works = worksService.getWorksById(worksId);
         if (works != null) {
             WorkUserLog workUserLog = new WorkUserLog();
@@ -488,6 +493,21 @@ public class UserWorksController extends BaseController {
         responseData.jsonFill(1, null, res);
         return responseData;
     }
+
+    private void judgeUserAddBadgeByListen(Integer authorId){
+        UserBase userBase = appUserService.getUserBaseById(authorId);
+        int[] listenCounts = {1000000,500000,100000,50000,10000,5000,2000,1000,100,10};
+        for (int i = 0; i < listenCounts.length; i++) {
+            if(userBase.getListenCount()== listenCounts[i]){
+                UserBadge userBadge = new UserBadge();
+                userBadge.setUserId(authorId);
+                Badge badge = badgeService.getBadgeByMeasureAndType(listenCounts[i],4);
+                userBadge.setBadgeId(badge.getId());
+                userBadgeService.saveUserBadge(userBadge);
+            }
+        }
+    }
+
     
     /**
      * 上传作品的音频文件

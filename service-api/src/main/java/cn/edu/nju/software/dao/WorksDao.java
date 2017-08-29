@@ -61,4 +61,5 @@ public interface WorksDao {
 
 	List<Works> getWorksListByStoryIdList(@Param("storyIdList") List<Integer> storyIdList);
 
+    Integer getUserIdByWorkId(int worksId);
 }
