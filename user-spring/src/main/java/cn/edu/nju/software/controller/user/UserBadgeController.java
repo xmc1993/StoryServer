@@ -1,11 +1,16 @@
 package cn.edu.nju.software.controller.user;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import cn.edu.nju.software.entity.*;
+import cn.edu.nju.software.service.BadgeService;
+import cn.edu.nju.software.service.BadgeTypeService;
 import cn.edu.nju.software.service.UserBadgeService;
+import cn.edu.nju.software.util.UserChecker;
+import cn.edu.nju.software.vo.BadgeVo;
+import com.github.pagehelper.PageInfo;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,18 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.github.pagehelper.PageInfo;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-
-import cn.edu.nju.software.entity.Badge;
-import cn.edu.nju.software.entity.BadgeType;
-import cn.edu.nju.software.entity.ResponseData;
-import cn.edu.nju.software.entity.User;
-import cn.edu.nju.software.service.BadgeService;
-import cn.edu.nju.software.service.BadgeTypeService;
-import cn.edu.nju.software.util.UserChecker;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -41,6 +38,8 @@ public class UserBadgeController {
 	BadgeService badgeService;
 	@Autowired 
 	BadgeTypeService badgeTypeService;
+	@Autowired
+	UserBadgeService userBadgeService;
 
 	@ApiOperation("获取用户的徽章列表")
     @RequestMapping(value = "/getAllBageOfUser",method = {RequestMethod.GET})
@@ -85,12 +84,34 @@ public class UserBadgeController {
 	@ApiOperation("获取徽章系统下的徽章列表")
     @RequestMapping(value = "/getBadgeListByTypeId",method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<Badge>> getBadgeListByTypeId(
+    public ResponseData<List<BadgeVo>> getBadgeListByTypeId(
     		@ApiParam("徽章类型ID") @RequestParam(value="typeId") Integer typeId,
     		HttpServletRequest request, HttpServletResponse response){
-		ResponseData<List<Badge>> responseData = new ResponseData<>();
+		ResponseData<List<BadgeVo>> responseData = new ResponseData<>();
+		User user = UserChecker.checkUser(request);
+
 		List<Badge> badgeList = badgeService.getBadgeListByTypeId(typeId);
-        responseData.jsonFill(1, null, badgeList);
-        return responseData;
+		List<BadgeVo> badgeVoList = new ArrayList<>();
+		for (Badge badge: badgeList
+				) {
+			BadgeVo badgeVo = new BadgeVo();
+			BeanUtils.copyProperties(badge, badgeVo);
+			badgeVoList.add(badgeVo);
+		}
+
+		if(user.getId() != -1){
+			List<UserBadge> userBadgeList = userBadgeService.getUserBadgeByUserId(user.getId());
+			for (UserBadge userBadge:userBadgeList
+					) {
+				for (BadgeVo badgeVo : badgeVoList
+						) {
+					if(userBadge.getBadgeId()==badgeVo.getId()){
+						badgeVo.setHasGet(true);
+					}
+				}
+			}
+		}
+		responseData.jsonFill(1, null, badgeVoList);
+		return responseData;
 	}
 }

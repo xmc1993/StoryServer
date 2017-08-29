@@ -59,4 +59,9 @@ public class AnswerServiceImpl implements AnswerService {
         int limit = pageSize;
         return answerDao.getAllAnswerByPage(offset, limit);
     }
+
+    @Override
+    public List<Answer> getAnswersByQuestId(int id) {
+        return answerDao.getAnswersByQuestId(id);
+    }
 }

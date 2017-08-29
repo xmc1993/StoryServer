@@ -26,4 +26,5 @@ public interface AnswerDao {
 
     List<Answer> getAllAnswerByPage(int offset, int limit);
 
+    List<Answer> getAnswersByQuestId(int id);
 }

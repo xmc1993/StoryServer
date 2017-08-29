@@ -6,6 +6,8 @@ import cn.edu.nju.software.service.UserBadgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author liuyu
  * @create 2017-08-28 下午7:13
@@ -26,7 +28,7 @@ public class UserBadgeServiceImpl implements UserBadgeService {
     }
 
     @Override
-    public Boolean getUserBadgeByUserId(Integer userId) {
+    public List<UserBadge> getUserBadgeByUserId(Integer userId) {
         return userBadgeDao.getUserBadgeByUserId(userId);
     }
 }

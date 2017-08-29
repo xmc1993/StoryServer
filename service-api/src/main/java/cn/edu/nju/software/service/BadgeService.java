@@ -24,5 +24,5 @@ public interface BadgeService {
     List<Badge> getBadgeOfUser(Integer userId);
 
 	Badge getBadgeByMeasureAndType(int measure, int badgeTypeId);
-    
+
 }

@@ -23,4 +23,5 @@ public interface AnswerService {
 
     List<Answer> getAllAnswerByPage(int page, int pageSize);
 
+    List<Answer> getAnswersByQuestId(int id);
 }

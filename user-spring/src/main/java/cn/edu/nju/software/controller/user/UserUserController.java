@@ -131,6 +131,7 @@ public class UserUserController extends BaseController {
         }
 
         User user = userService.loginByUnionId(weChatOAuthVo.getUnionId());
+        Boolean isNewUser = false;
         //如果数据库没有相应的用户那么新建一个用户
         if (null == user) {
             //获取微信用户信息
@@ -165,6 +166,7 @@ public class UserUserController extends BaseController {
             currentTime += 1000 * 60 * 60 * 24 * 30;//设置为30天后失效
             user.setExpireTime(new Date(currentTime));
             user = userService.addOrUpdateUser(user);
+            isNewUser = true;
         }
 
         //如果用户创建失败
@@ -176,6 +178,7 @@ public class UserUserController extends BaseController {
         LoginResponseVo loginResponseVo = new LoginResponseVo();
         loginResponseVo.setAccessToken(user.getAccessToken());
         loginResponseVo.setId(user.getId());
+        loginResponseVo.setIsNewUser(isNewUser);
 
         //登录信息写入缓存
         JedisUtil.getJedis().set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));

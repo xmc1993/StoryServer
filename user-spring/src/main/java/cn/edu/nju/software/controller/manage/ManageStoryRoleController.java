@@ -52,7 +52,7 @@ public class ManageStoryRoleController {
             @ApiParam("ID") @PathVariable int id,
             @ApiParam("") @RequestBody StoryRole storyRole,
             HttpServletRequest request, HttpServletResponse response) {
-        storyRole.setId(id);
+        //storyRole.setId(id);
         storyRole.setUpdateTime(new Date());
         return storyRoleService.updateStoryRole(storyRole) ? storyRole : null;
 

@@ -69,7 +69,7 @@ public class UserPlayListController extends BaseController {
         	PlayListVo plv = new PlayListVo();
         	BeanUtils.copyProperties(p, plv);
         	for(TwoTuple<Integer,String> tt:workList){
-        		if(tt.getId()==p.getId()){
+        		if(tt.getId() == p.getId()){
         			plv.setCover(tt.getValue());
         			break;
         		}

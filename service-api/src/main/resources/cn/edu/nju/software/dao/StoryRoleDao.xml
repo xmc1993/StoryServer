@@ -11,7 +11,8 @@
         extra,
         createTime,
         updateTime,
-        roleReadGuide
+        roleReadGuide,
+        readTime
     </sql>
 
     <insert id="saveStoryRole" parameterType="cn.edu.nju.software.entity.StoryRole" keyProperty="id"
@@ -29,7 +30,8 @@
         #{extra},
         #{createTime},
         #{updateTime},
-        #{roleReadGuide}
+        #{roleReadGuide},
+        #{readTime}
         )
     </insert>
 
@@ -41,7 +43,8 @@
         audio=#{audio},
         extra=#{extra},
         updateTime=#{updateTime},
-        roleReadGuide=#{roleReadGuide}
+        roleReadGuide=#{roleReadGuide},
+        readTime = #{readTime}
         WHERE id = #{id}
     </update>
 

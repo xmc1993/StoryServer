@@ -79,4 +79,16 @@ public class UserQuestionController extends BaseController {
         return responseData;
     }
 
+    @ApiOperation(value = "根据问题获取答案", notes = "")
+    @RequestMapping(value = "/getAnswersByQuest", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<Answer>> getAnswersByQuestId(
+            @ApiParam("问题ID") @RequestParam int id,
+            HttpServletRequest request, HttpServletResponse response){
+        ResponseData<List<Answer>> responseData = new ResponseData();
+        List<Answer> answerList = answerService.getAnswersByQuestId(id);
+        responseData.jsonFill(1, null, answerList);
+        return responseData;
+    }
+
 }

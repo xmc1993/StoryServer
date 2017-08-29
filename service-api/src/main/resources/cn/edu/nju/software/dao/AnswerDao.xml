@@ -73,4 +73,10 @@
         WHERE id = #{0}
     </select>
 
+    <select id="getAnswersByQuestId" resultType="cn.edu.nju.software.entity.Answer">
+        select
+        <include refid="fields"></include>
+        from answer
+        WHERE questionId = #{id}
+    </select>
 </mapper>

@@ -3,6 +3,8 @@ package cn.edu.nju.software.dao;
 import cn.edu.nju.software.entity.UserBadge;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface UserBadgeDao {
 
@@ -10,5 +12,5 @@ public interface UserBadgeDao {
 
     Boolean deleteUserBadgeByUserId(Integer userId);
 
-    Boolean getUserBadgeByUserId(Integer userId);
+    List<UserBadge> getUserBadgeByUserId(Integer userId);
 }

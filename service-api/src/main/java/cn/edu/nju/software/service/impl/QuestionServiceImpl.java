@@ -1,6 +1,7 @@
 package cn.edu.nju.software.service.impl;
 
 import cn.edu.nju.software.dao.QuestionDao;
+import cn.edu.nju.software.entity.Answer;
 import cn.edu.nju.software.entity.Question;
 import cn.edu.nju.software.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,4 +53,5 @@ public class QuestionServiceImpl implements QuestionService {
     public Integer getAllQuestionCount() {
         return questionDao.getAllQuestionCount();
     }
+
 }

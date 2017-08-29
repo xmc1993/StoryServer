@@ -32,4 +32,6 @@ public class StoryRole implements Serializable{
     private Date updateTime;
 	@ApiModelProperty(value="角色阅读指导")
     private String roleReadGuide;
+    @ApiModelProperty(value="角色阅读时长")
+    private String readTime;
 }
