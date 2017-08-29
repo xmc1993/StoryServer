@@ -201,6 +201,7 @@
 		duration=#{duration},
 		draft=#{draft},
 		suggestedReadingDuration=#{suggestedReadingDuration},
+		setId=#{setId},
 		readTime=#{readTime}
 		where
 		id=#{id}
