@@ -353,8 +353,7 @@
         where valid = 1 and recommend = 1 and draft = 0 and isSet = 0
     </select>
 
-    <select id="getSet
-    RecommendedStoryCount" resultType="java.lang.Integer">
+    <select id="getSetRecommendedStoryCount" resultType="java.lang.Integer">
         select
         count(id)
         from story
