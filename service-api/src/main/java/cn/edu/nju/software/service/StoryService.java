@@ -93,6 +93,9 @@ public interface StoryService {
 
     List<Story> getStoryListBySetId(int setId, int page, int pageSize);
 
+
+    Integer getStoryCountBySetId(int setId);
+
     List<Story> getSetStoryListByIdList(List<Integer> idList, Integer offset, Integer limit);
 
 

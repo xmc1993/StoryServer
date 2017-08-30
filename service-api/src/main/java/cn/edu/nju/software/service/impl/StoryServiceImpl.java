@@ -365,6 +365,11 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
+    public Integer getStoryCountBySetId(int setId) {
+        return storyDao.getStoryCountBySetId(setId);
+    }
+
+    @Override
     public List<Story> getSetStoryListByIdList(List<Integer> idList, Integer offset, Integer limit) {
         return storyDao.getSetStoryListByIdList(idList, offset, limit);
     }

@@ -100,7 +100,9 @@ public class UserStoryController extends BaseController {
             user.setId(-1);
         }
         List<Story> storyList = storyService.getSetStoryListByPage(offset, limit,sortByCreateTime);
-        responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
+        List<StoryNewVo> preList = storyList2VoList(storyList, user.getId());
+        transformStorySetList(preList);
+        responseData.jsonFill(1, null, preList);
         responseData.setCount(storyService.getSetStoryCount());
         return responseData;
     }
@@ -146,7 +148,9 @@ public class UserStoryController extends BaseController {
         	return responseData;
         }
         List<Story> storyList = storyService.getSetStoryListByIdList(idList, offset, limit);
-        responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
+        List<StoryNewVo> preList = storyList2VoList(storyList, user.getId());
+        transformStorySetList(preList);
+        responseData.jsonFill(1, null, preList);
         responseData.setCount(storyService.getSetStoryCountByIdList(idList));
         return responseData;
     }
@@ -187,7 +191,9 @@ public class UserStoryController extends BaseController {
         }
         List<Story> storyList = storyService.getSetRecommendedStoryListByPage(offset, limit);
         int count = storyService.getSetRecommendedStoryCount();
-        responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
+        List<StoryNewVo> preList = storyList2VoList(storyList, user.getId());
+        transformStorySetList(preList);
+        responseData.jsonFill(1, null, preList);
         responseData.setCount(count);
         return responseData;
     }
@@ -335,6 +341,7 @@ public class UserStoryController extends BaseController {
         }
         List<Story> storyList = storyService.getStoryListBySetId(setId, page, pageSize);
         responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
+        responseData.setCount(storyService.getStoryCountBySetId(setId));
         return responseData;
     }
     
@@ -364,7 +371,7 @@ public class UserStoryController extends BaseController {
     	}
     	PageInfo<Story> pageInfo = storyService.getStoryListByIdListByPage(storyIdList, page, pageSize);
     	
-    	responseData.setCount((int)pageInfo.getTotal());
+    	responseData.setCount((int) pageInfo.getTotal());
     	responseData.jsonFill(1, null, pageInfo.getList());
         return responseData;
     }
@@ -406,6 +413,25 @@ public class UserStoryController extends BaseController {
             storyVo.setLike(isLiked);
         }
         return storyVo;
+    }
+
+    /**
+     * 为了让故事集有数据可展示
+     * TODO 同上面两个方法一样为丑陋的方法，之后重构抽取为service
+     * @param list
+     */
+    private void transformStorySetList(List<StoryNewVo> list){
+        for (StoryNewVo storyNewVo : list) {
+            if (storyNewVo.getIsSet() == 1) {
+                List<Story> storyList = storyService.getStoryListBySetId(storyNewVo.getId(), 0, 1);
+                if (storyList.size() > 0) {
+                    StoryNewVo mockStory = story2Vo(storyList.get(0), -1);
+                    storyNewVo.setAuthor(mockStory.getAuthor());
+                    storyNewVo.setTagList(mockStory.getTagList());
+                    storyNewVo.setContent(mockStory.getContent());
+                }
+            }
+        }
     }
 
 }

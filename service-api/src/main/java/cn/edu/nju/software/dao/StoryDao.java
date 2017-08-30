@@ -114,6 +114,9 @@ public interface StoryDao {
 
     List<Story> getStoryListBySetId(int setId, int offset, int limit);
 
+    Integer getStoryCountBySetId(int setId);
+
+
     List<Story> getSetStoryListByIdList(@Param("idList") List<Integer> idList,@Param("offset") Integer offset, @Param("limit") Integer limit);
 
 }

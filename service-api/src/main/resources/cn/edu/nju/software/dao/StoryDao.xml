@@ -593,7 +593,14 @@
         <include refid="fields"></include>
         from story
         where setId=#{0} and isSet=0 and valid=1
-        limit #{0},#{1}
+        limit #{1},#{2}
+    </select>
+
+    <select id="getStoryCountBySetId" resultType="java.lang.Integer">
+        select
+        count(id)
+        from story
+        where setId=#{0} and isSet=0 and valid=1
     </select>
 
     <select id="getSetStoryListByIdList" resultType="cn.edu.nju.software.entity.Story">
