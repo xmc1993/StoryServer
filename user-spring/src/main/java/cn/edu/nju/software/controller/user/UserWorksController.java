@@ -332,7 +332,7 @@ public class UserWorksController extends BaseController {
     public ResponseData<WorksVo> publishWorks(
             @ApiParam("故事ID") @RequestParam("storyId") int storyId,
             @ApiParam("音频长度") @RequestParam("duration") String duration,
-            @ApiParam("音频文件") @RequestParam(value="uploadFile",required = false) MultipartFile uploadFile,
+            @ApiParam("音频文件") @RequestParam(value="uploadFile") MultipartFile uploadFile,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<WorksVo> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
