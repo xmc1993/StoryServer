@@ -13,6 +13,8 @@ import lombok.Data;
 @Data
 @Api(value="故事实体类")
 public class UserBadge {
+    @ApiModelProperty(value="主键id")
+    private Integer id;
     @ApiModelProperty(value="用户id")
     private Integer userId;
     @ApiModelProperty(value="徽章id")
