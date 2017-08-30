@@ -52,4 +52,9 @@ public class StorySetServiceImpl implements StorySetService {
         int id = storySetDao.getStorySetIdByStoryId(storyId);
         return id == 0 ? null : storySetDao.getStorySetById(id);
     }
+
+    @Override
+    public int getAllStorySetCount() {
+        return storySetDao.getAllStorySetCount();
+    }
 }

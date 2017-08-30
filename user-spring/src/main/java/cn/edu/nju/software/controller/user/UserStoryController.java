@@ -45,6 +45,8 @@ public class UserStoryController extends BaseController {
     private StoryTagService storyTagService;
     @Autowired
     private AnswerService answerService;
+    @Autowired
+    private StorySetService storySetService;
 
     @ApiOperation(value = "获取ID获取故事", notes = "")
     @RequestMapping(value = "/getStoryById", method = {RequestMethod.GET})
@@ -364,6 +366,21 @@ public class UserStoryController extends BaseController {
     	
     	responseData.setCount((int)pageInfo.getTotal());
     	responseData.jsonFill(1, null, pageInfo.getList());
+        return responseData;
+    }
+
+
+    @ApiOperation(value = "分页获得集合列表", notes = "")
+    @RequestMapping(value = "/getAllStorySetByPage", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<StorySet>> getAllStorySetByPage(
+            @ApiParam("PAGE") @RequestParam int page,
+            @ApiParam("SIZE") @RequestParam int pageSize,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<StorySet>> responseData = new ResponseData<>();
+        List<StorySet> storySetList = storySetService.getAllStorySetByPage(page, pageSize);
+        responseData.jsonFill(1, null, storySetList);
+        responseData.setCount(storySetService.getAllStorySetCount());
         return responseData;
     }
 

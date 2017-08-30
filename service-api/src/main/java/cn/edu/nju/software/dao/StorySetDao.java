@@ -23,4 +23,6 @@ public interface StorySetDao {
     List<StorySet> getAllStorySetByPage(int offset, int limit);
 
     int getStorySetIdByStoryId(int storyId);
+
+    int getAllStorySetCount();
 }

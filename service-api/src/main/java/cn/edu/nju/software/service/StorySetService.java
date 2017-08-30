@@ -21,4 +21,6 @@ public interface StorySetService {
 
     StorySet getStorySetByStoryId(int storyId);
 
+    int getAllStorySetCount();
+
 }

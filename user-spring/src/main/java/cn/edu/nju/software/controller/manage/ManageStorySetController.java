@@ -100,6 +100,7 @@ public class ManageStorySetController {
         ResponseData<List<StorySet>> responseData = new ResponseData<>();
         List<StorySet> storySetList = storySetService.getAllStorySetByPage(page, pageSize);
         responseData.jsonFill(1, null, storySetList);
+        responseData.setCount(storySetService.getAllStorySetCount());
         return responseData;
     }
 
