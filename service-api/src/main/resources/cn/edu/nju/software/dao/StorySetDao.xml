@@ -64,7 +64,7 @@
         limit #{0},#{1}
     </select>
 
-    <select id="getAllStorySetCount" resultType="cn.edu.nju.software.entity.StorySet">
+    <select id="getAllStorySetCount" resultType="java.lang.Integer">
         select
         count(id)
         from story
