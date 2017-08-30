@@ -47,6 +47,8 @@ public class UserStoryController extends BaseController {
     private AnswerService answerService;
     @Autowired
     private StorySetService storySetService;
+    @Autowired
+    private TagUserLogService tagUserLogService;
 
     @ApiOperation(value = "获取ID获取故事", notes = "")
     @RequestMapping(value = "/getStoryById", method = {RequestMethod.GET})
@@ -354,12 +356,8 @@ public class UserStoryController extends BaseController {
     		HttpServletRequest request, HttpServletResponse response){
     	ResponseData<List<Story>> responseData = new ResponseData<>();
     	User user = UserChecker.checkUser(request);
-    	List<Answer> answerList = answerService.getAnswerListByUserId(user.getId(), 0, 50);
-    	//获取content的tagId
-    	List<Integer> contentList = new ArrayList<>();
-    	for(Answer a : answerList){
-    		contentList.add(a.getContent());
-    	}
+        List<Integer> contentList = tagUserLogService.getTagUserLogTagIdListByUserId(user.getId(), 0, 10);
+
     	if(contentList.size()==0){
     		responseData.jsonFill(1, null, null);
     		return responseData;

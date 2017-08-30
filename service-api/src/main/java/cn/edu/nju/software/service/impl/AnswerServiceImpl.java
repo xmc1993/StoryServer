@@ -2,11 +2,17 @@ package cn.edu.nju.software.service.impl;
 
 import cn.edu.nju.software.dao.AnswerDao;
 import cn.edu.nju.software.entity.Answer;
+import cn.edu.nju.software.entity.TagUserLog;
 import cn.edu.nju.software.service.AnswerService;
+import cn.edu.nju.software.service.TagUserLogService;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 
 /**
  * Created by xmc1993 on 2017/5/12.
@@ -16,14 +22,43 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Autowired
     private AnswerDao answerDao;
+    @Autowired
+    private TagUserLogService tagUserLogService;
 
 
     @Override
     public Answer saveAnswer(Answer answer) {
         if (answerDao.saveAnswer(answer)) {
+            extractTagInfo(answer.getContent(), answer.getUserId());
             return answer;
         }
         return null;
+    }
+
+    private void extractTagInfo(String ans, Integer userId){
+        if (ans == null || ans == "") {
+            return;
+        }
+        try {
+            JSONArray optionList = new JSONArray(ans);
+            int iSize = optionList.length();
+            for (int i = 0; i < iSize; i++) {
+                JSONObject jsonObj = optionList.getJSONObject(i);
+                String str = jsonObj.getString("tagId");
+                JSONArray tagList = new JSONArray(str);
+                for (int j = 0; j < tagList.length(); j++) {
+                    Integer tagId = tagList.getInt(j);
+                    TagUserLog tagUserLog = new TagUserLog();
+                    tagUserLog.setUserId(userId);
+                    tagUserLog.setTagId(tagId);
+                    tagUserLogService.saveOrUpdate(tagUserLog);
+                }
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

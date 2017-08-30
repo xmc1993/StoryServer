@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.TagUserLogDao">
+
+    <sql id="fields">
+        id,
+        tagId,
+        userId,
+        totalCount,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveTagUserLog" parameterType="cn.edu.nju.software.entity.TagUserLog">
+        insert into tag_user_log(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{tagId},
+        #{userId},
+        #{totalCount},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <update id="updateTagUserLog" parameterType="cn.edu.nju.software.entity.TagUserLog">
+        UPDATE tag_user_log
+        SET
+        totalCount=#{totalCount}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteTagUserLogById">
+        DELETE FROM tag_user_log
+        WHERE id = #{0}
+    </delete>
+
+    <delete id="deleteTagUserLog">
+        DELETE FROM tag_user_log
+        WHERE tagId = #{0} and userId = #{1}
+    </delete>
+
+
+    <select id="getTagUserLogUserIdListByTagId" resultType="java.lang.Integer">
+        select
+        userId
+        from tag_user_log
+        where tagId = #{0}
+        limit #{1},#{2}
+    </select>
+
+    <select id="getTagUserLogTagListByUserId" resultType="java.lang.Integer">
+        select
+        tagId
+        from tag_user_log
+        where userId = #{0}
+        limit #{1},#{2}
+    </select>
+
+
+    <select id="getTagUserLog" resultType="cn.edu.nju.software.entity.TagUserLog">
+        select
+        <include refid="fields"></include>
+        from tag_user_log
+        where userId = #{0} and tagId = #{1}
+    </select>
+
+    <select id="extractNewRecords" resultType="cn.edu.nju.software.entity.TagUserLog">
+        select
+        <include refid="fields"></include>
+        from tag_user_log
+        where createTime &gt; #{0}
+    </select>
+</mapper>

@@ -37,11 +37,11 @@ public class UserQuestionController extends BaseController {
 
 
     @ApiOperation(value = "提交问题答案", notes = "")
-    @RequestMapping(value = "/submitAnswer", method = {RequestMethod.GET})
+    @RequestMapping(value = "/submitAnswer", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Answer> getAlbumListOfStory(
             @ApiParam("问题ID") @RequestParam("questionId") int questionId,
-            @ApiParam("答案") @RequestParam("content") Integer content,
+            @ApiParam("答案") @RequestParam("content") String content,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Answer> responseData = new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
