@@ -122,18 +122,27 @@ public class UserWorksController extends BaseController {
         return responseData;
     }
 
+    //TODO 抽取service 赶进度先
     private List<WorksVo> worksList2VoList(List<Works> worksList, int userId) {
         List<WorksVo> worksVoList = new ArrayList<>();
         for (Works works : worksList) {
-            WorksVo worksVo = new WorksVo();
-            BeanUtils.copyProperties(works, worksVo);
-            if (agreeService.getAgree(userId, works.getId()) != null) {
-                worksVo.setLike(true);
-            }
-            worksVoList.add(worksVo);
+            worksVoList.add(works2Vo(works, userId));
         }
         return worksVoList;
     }
+
+    private WorksVo works2Vo(Works works, int userId){
+        WorksVo worksVo = new WorksVo();
+        BeanUtils.copyProperties(works, worksVo);
+        if (agreeService.getAgree(userId, works.getId()) != null) {
+            worksVo.setLike(true);
+        }
+        List<Integer> tagIdList = tagRelationService.getTagIdListByStoryId(works.getStoryId());
+        List<StoryTag> tagList = storyTagService.getStoryTagListByIdList(tagIdList);
+        worksVo.setTagList(tagList);
+        return worksVo;
+    }
+
     @ApiOperation(value = "保存Work访问记录", notes = "")
     @RequestMapping(value = "/saveWorkUserLog", method = {RequestMethod.POST})
     @ResponseBody
@@ -217,11 +226,7 @@ public class UserWorksController extends BaseController {
             responseData.jsonFill(2, "作品不存在", null);
             return responseData;
         }
-        WorksVo worksVo = new WorksVo();
-        BeanUtils.copyProperties(works, worksVo);
-        if (agreeService.getAgree(user.getId(), works.getId()) != null) {
-            worksVo.setLike(true);
-        }
+        WorksVo worksVo = works2Vo(works, user.getId());
         responseData.jsonFill(1, null, worksVo);
         return responseData;
     }

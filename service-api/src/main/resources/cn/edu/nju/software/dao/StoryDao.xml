@@ -53,6 +53,7 @@
        story.likeCount,
        story.draft,
        story.suggestedReadingDuration
+       story.readTime
     </sql>
     <sql id="storyVoFields">
         <include refid="story_fields"/>,
@@ -75,6 +76,7 @@
         story.updateTime as story_updateTime,
         story.valid as story_valid
         story.isSet as story_isSet
+        story.readTime as story_readTime
     </sql>
     <sql id="story_tag_fields">
         story_tag.id as  story_tag_id,
@@ -109,6 +111,7 @@
         <id column="draft" property="draft"/>
         <id column="isSet" property="isSet"/>
         <id column="setId" property="setId"/>
+        <id column="readTime" property="readTime"/>
         <id column="suggestedReadingDuration" property="suggestedReadingDuration"/>
     </resultMap>
     <resultMap id="storyVo" type="cn.edu.nju.software.vo.StoryVo">
@@ -132,6 +135,7 @@
         <result column="story_duration" property="story.duration"/>
         <result column="story_likeCount" property="story.likeCount"/>
         <result column="story_draft" property="story.draft"/>
+        <result column="story_readTime" property="story.readTime"/>
         <collection property="tagRelationList" ofType="cn.edu.nju.software.entity.StoryTag">
             <id column="story_tag_id" property="id"/>
             <result column="story_tag_parentId" property="parentId"/>

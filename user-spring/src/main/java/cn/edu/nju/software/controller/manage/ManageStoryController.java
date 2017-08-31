@@ -59,7 +59,7 @@ public class ManageStoryController {
             @ApiParam("出版社") @RequestParam(value = "press", required = false) String press,
             @ApiParam("阅读指导") @RequestParam(value = "guide", required = false) String guide,
             @ApiParam("价格") @RequestParam(value = "price", required = false) String price,
-            @ApiParam("草稿状态") @RequestParam(value="draft") int draft,
+            @ApiParam("草稿状态") @RequestParam(value = "draft") int draft,
             @ApiParam("朗读指导") @RequestParam(value = "readGuide", required = false) String readGuide,
             @ApiParam("默认背景音ID") @RequestParam Integer defaultBackGroundMusicId,
             @ApiParam("封面") @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
@@ -104,7 +104,7 @@ public class ManageStoryController {
         if (guide != null) story.setGuide(guide);
         if (price != null) story.setPrice(price);
         if (readGuide != null) story.setReadGuide(readGuide);
-        if(readTime != null)story.setReadTime(readTime);
+        if (readTime != null) story.setReadTime(readTime);
 
         story.setSetId(setId);
         story.setValid(1);
@@ -132,25 +132,28 @@ public class ManageStoryController {
             }
         }
 
-        StoryRole storyRole = new StoryRole();
-        if (roleIconFile != null && !roleIconFile.isEmpty()) {
-            storyRole.setIcon(uploadFile(roleIconFile));
+        if (roleName != null) {
+            StoryRole storyRole = new StoryRole();
+            if (roleIconFile != null && !roleIconFile.isEmpty()) {
+                storyRole.setIcon(uploadFile(roleIconFile));
+            }
+            if (roleAudioFile != null && !roleAudioFile.isEmpty()) {
+                storyRole.setAudio(uploadFile(roleAudioFile));
+            }
+            storyRole.setCreateTime(new Date());
+            storyRole.setExtra(roleExtra);
+            storyRole.setStoryId(story.getId());
+            storyRole.setName(roleName);
+            storyRoleService.saveStoryRole(storyRole);
         }
-        if (roleAudioFile != null && !roleAudioFile.isEmpty()) {
-            storyRole.setAudio(uploadFile(roleAudioFile));
-        }
-        storyRole.setCreateTime(new Date());
-        storyRole.setExtra(roleExtra);
-        storyRole.setStoryId(story.getId());
-        storyRole.setName(roleName);
-        
+
+
         //保存故事专辑对应关系
         List<Integer> albumIdList = MyStringUtil.strToIntList(albumIdStr, ",");
-        if(albumIdList.size()!=0){
-        	storyAlbumService.saveStoryAlbumRel(res.getId(), albumIdList);
-        }        
+        if (albumIdList.size() != 0) {
+            storyAlbumService.saveStoryAlbumRel(res.getId(), albumIdList);
+        }
         // 保存角色信息
-        storyRoleService.saveStoryRole(storyRole);
         StoryNewVo snv = story2vo(story);
         snv.setAlbumIdList(albumIdList);
         result.jsonFill(1, null, snv);
@@ -185,22 +188,22 @@ public class ManageStoryController {
         if (story == null) {
             throw new RuntimeException("无效的故事id");
         }
-        if (coverFile !=null && !coverFile.isEmpty()) {
+        if (coverFile != null && !coverFile.isEmpty()) {
             //删除旧的封面
             if (story.getCoverUrl() != null) UploadFileUtil.deleteFileByUrl(story.getCoverUrl());
             story.setCoverUrl(uploadFile(coverFile));
         }
-        if (preCoverFile !=null && !preCoverFile.isEmpty()) {
+        if (preCoverFile != null && !preCoverFile.isEmpty()) {
             //删除旧
             if (story.getPreCoverUrl() != null) UploadFileUtil.deleteFileByUrl(story.getPreCoverUrl());
             story.setPreCoverUrl(uploadFile(preCoverFile));
         }
-        if (backgroundFile !=null && !backgroundFile.isEmpty()) {
+        if (backgroundFile != null && !backgroundFile.isEmpty()) {
             //删除旧
             if (story.getBackgroundUrl() != null) UploadFileUtil.deleteFileByUrl(story.getBackgroundUrl());
             story.setBackgroundUrl(uploadFile(backgroundFile));
         }
-        if (originSoundFile !=null && !originSoundFile.isEmpty()) {
+        if (originSoundFile != null && !originSoundFile.isEmpty()) {
             if (story.getOriginSoundUrl() != null) UploadFileUtil.deleteFileByUrl(story.getOriginSoundUrl());
             story.setOriginSoundUrl(uploadFile(originSoundFile));
             String duration = storyService.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(story.getOriginSoundUrl())));
@@ -214,7 +217,7 @@ public class ManageStoryController {
         if (price != null) story.setPrice(price);
         if (readGuide != null) story.setReadGuide(readGuide);
         if (suggestedReadingDuration != null) story.setSuggestedReadingDuration(suggestedReadingDuration);
-        if(readTime != null)story.setReadTime(readTime);
+        if (readTime != null) story.setReadTime(readTime);
 
         story.setSetId(setId);
         story.setDefaultBackGroundMusicId(defaultBackGroundMusicId);
@@ -227,10 +230,10 @@ public class ManageStoryController {
         //跟新专辑和故事对应关系
         List<Integer> albumIdList = MyStringUtil.strToIntList(albumIdStr, ",");
         storyAlbumService.delStoryAlbumRel(id);
-        if(albumIdList.size()!=0){
-        	storyAlbumService.saveStoryAlbumRel(id, albumIdList);
-        }      
-        
+        if (albumIdList.size() != 0) {
+            storyAlbumService.saveStoryAlbumRel(id, albumIdList);
+        }
+
         StoryNewVo snv = story2vo(result);
         snv.setAlbumIdList(albumIdList);
         return snv;
@@ -440,7 +443,6 @@ public class ManageStoryController {
         responseData.setCount(storyService.getRecommendedStoryCount());
         return responseData;
     }
-
 
     /**
      * Story列表转Vo列表

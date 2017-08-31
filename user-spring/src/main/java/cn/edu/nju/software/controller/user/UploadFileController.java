@@ -67,10 +67,10 @@ public class UploadFileController extends BaseController {
         }
         logger.info("开始上传头像!");
         //如果头像超过2M
-        if (uploadFile.getSize() > 2048L) {
-            responseData.jsonFill(2, "头像不允许超过2M", null);
-            return responseData;
-        }
+//        if (uploadFile.getSize() > 2048L) {
+//            responseData.jsonFill(2, "头像不允许超过2M", null);
+//            return responseData;
+//        }
         //如果头像的格式不符合要求
         if (!VALID_SUFFIX.contains(UploadFileUtil.getSuffix(uploadFile.getOriginalFilename()))) {
             responseData.jsonFill(2, "头像类型只支持jpg,jpeg,bmp,gif。", null);

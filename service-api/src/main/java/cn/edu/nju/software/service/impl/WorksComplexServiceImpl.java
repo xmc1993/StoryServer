@@ -3,6 +3,7 @@ package cn.edu.nju.software.service.impl;
 import cn.edu.nju.software.dto.WorksVo;
 import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.service.StoryTagService;
+import cn.edu.nju.software.service.TagRelationService;
 import cn.edu.nju.software.service.WorksComplexService;
 import cn.edu.nju.software.service.WorksService;
 import com.github.pagehelper.PageInfo;
@@ -20,6 +21,9 @@ public class WorksComplexServiceImpl implements WorksComplexService {
     private WorksService worksService;
     @Autowired
     private StoryTagService storyTagService;
+    @Autowired
+    private TagRelationService tagRelationService;
+
 
     @Override
     public List<WorksVo> getWorksListByUserId(int userId, int offset, int limit) {
@@ -30,6 +34,7 @@ public class WorksComplexServiceImpl implements WorksComplexService {
 
     @Override
     public List<WorksVo> getWorksListByStoryId(int storyId, int offset, int limit) {
+        List<Works> worksList = worksService.getWorksListByStoryId(storyId, offset, limit);
         return null;
     }
 
@@ -53,7 +58,7 @@ public class WorksComplexServiceImpl implements WorksComplexService {
         return null;
     }
 
-    private void setTagList() {
+    private void setTagList(WorksVo worksVo) {
 
     }
 }
