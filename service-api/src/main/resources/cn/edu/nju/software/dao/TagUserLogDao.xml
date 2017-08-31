@@ -57,6 +57,7 @@
         tagId
         from tag_user_log
         where userId = #{0}
+        order by totalCount desc
         limit #{1},#{2}
     </select>
 

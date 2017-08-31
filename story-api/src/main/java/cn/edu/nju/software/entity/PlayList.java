@@ -13,6 +13,7 @@ public class PlayList implements Serializable{
     private Integer id;
     private String name;
     private Integer userId;
+    private String cover;//封面
     private Date createTime;
     private Date updateTime;
 }

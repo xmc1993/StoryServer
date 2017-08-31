@@ -1,7 +1,10 @@
 package cn.edu.nju.software.service.impl;
 
+import cn.edu.nju.software.dao.AgreeDao;
 import cn.edu.nju.software.dao.PlayListDao;
+import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.entity.PlayList;
+import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.service.PlayListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +19,10 @@ public class PlayListServiceImpl implements PlayListService {
 
     @Autowired
     private PlayListDao playListDao;
-
+    @Autowired
+    private AgreeDao agreeDao;
+    @Autowired
+    private WorksDao worksDao;
 
     @Override
     public PlayList savePlayList(PlayList playList) {
@@ -38,9 +44,10 @@ public class PlayListServiceImpl implements PlayListService {
 
     @Override
     public PlayList getPlayListById(int id) {
-        return playListDao.getPlayListById(id);
+        PlayList playList = playListDao.getPlayListById(id);
+        setCover(playList);
+        return playList;
     }
-
 
     @Override
     public List<PlayList> getAllPlayListByUserIdByPage(int userId, int page, int pageSize) {
@@ -53,12 +60,29 @@ public class PlayListServiceImpl implements PlayListService {
         playList.setId(0);
         playList.setName("我喜欢");
         list.add(playList);
+        setCoverByPatch(list);
         return list;
     }
 
     @Override
     public List<PlayList> getPlayListListByIdList(List<Integer> idList) {
-        return playListDao.getPlayListListByIdList(idList);
+        List<PlayList> list = playListDao.getPlayListListByIdList(idList);
+        setCoverByPatch(list);
+        return list;
+    }
+
+    private void setCover(PlayList playList) {
+        List<Integer> idList = agreeDao.getAgreeUserIdListByWorksId(playList.getId());
+        List<Works> worksList = worksDao.getWorksListByIdList(idList);
+        if (worksList.size() > 0) {
+            playList.setCover(worksList.get(0).getCoverUrl());
+        }
+    }
+
+    private void setCoverByPatch(List<PlayList> playLists) {
+        for (PlayList playList : playLists) {
+            setCover(playList);
+        }
     }
 
 }

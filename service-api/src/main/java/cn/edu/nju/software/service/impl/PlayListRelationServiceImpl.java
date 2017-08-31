@@ -1,5 +1,6 @@
 package cn.edu.nju.software.service.impl;
 
+import cn.edu.nju.software.dao.AgreeDao;
 import cn.edu.nju.software.dao.PlayListRelationDao;
 import cn.edu.nju.software.entity.PlayListRelation;
 import cn.edu.nju.software.service.PlayListRelationService;
@@ -15,6 +16,8 @@ import java.util.List;
 public class PlayListRelationServiceImpl implements PlayListRelationService {
     @Autowired
     private PlayListRelationDao playListRelationDao;
+    @Autowired
+    private AgreeDao agreeDao;
 
     @Override
     public boolean savePlayListRelation(PlayListRelation playListRelation) {
@@ -35,6 +38,11 @@ public class PlayListRelationServiceImpl implements PlayListRelationService {
     public List<Integer> getWorksIdListByPlayListIdAndUserIdByPage(int playListId, int userId, int page, int pageSize) {
         int offset = page * pageSize;
         int limit = pageSize;
+
+        //如果是“我喜欢”的播放列表则拉取用户喜欢作品列表
+        if (playListId == 0) {
+            return agreeDao.getAgreeWorksListByUserId(userId, offset, limit);
+        }
         return playListRelationDao.getWorksIdListByPlayListIdAndUserIdByPage(playListId, userId, offset, limit);
     }
 }
