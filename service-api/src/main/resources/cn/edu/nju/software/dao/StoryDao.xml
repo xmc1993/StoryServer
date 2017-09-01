@@ -52,7 +52,7 @@
        story.duration,
        story.likeCount,
        story.draft,
-       story.suggestedReadingDuration
+       story.suggestedReadingDuration,
        story.readTime
     </sql>
     <sql id="storyVoFields">
