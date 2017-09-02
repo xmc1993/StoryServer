@@ -54,12 +54,18 @@ public class PlayListServiceImpl implements PlayListService {
         int offset = page*pageSize;
         int limit = pageSize;
         List<PlayList> list = playListDao.getAllPlayListByUserIdByPage(userId, offset, limit);
-        //默认的我喜欢的文件夹每个用户都有
+        //默认的“我喜欢的”文件夹每个用户都有
         PlayList playList = new PlayList();
         playList.setUserId(userId);
         playList.setId(0);
         playList.setName("我喜欢");
         list.add(playList);
+        //默认的“我的作品”文件夹每个用户都有
+        PlayList myWorksList = new PlayList();
+        myWorksList.setUserId(userId);
+        myWorksList.setId(-1);
+        playList.setName("我的作品");
+        list.add(myWorksList);
         setCoverByPatch(list);
         return list;
     }

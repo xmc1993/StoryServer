@@ -43,6 +43,7 @@ public class PlayListRelationServiceImpl implements PlayListRelationService {
         if (playListId == 0) {
             return agreeDao.getAgreeWorksListByUserId(userId, offset, limit);
         }
+
         return playListRelationDao.getWorksIdListByPlayListIdAndUserIdByPage(playListId, userId, offset, limit);
     }
 }

@@ -37,17 +37,8 @@ public class AppUserServiceImpl implements AppUserService {
     }
     @Override
     public User getUserByMobileOrId(String unionId) {
-        //做兼容 mobile既可以传mobile又或者是传id都可以Service层根据实际值进行不同的Dao层调用
-        if (PhoneFormatCheckUtils.isPhoneLegal(unionId) || unionId.length() == 11) {
-            return userDao.getUserByMobile(unionId);
-        } else {
-            try {
-                Integer.valueOf(unionId);
-            } catch (Exception e) {
-                return userDao.getUserByMobile(unionId);
-            }
-            return userDao.getUserById(Integer.valueOf(unionId));
-        }
+        return userDao.getUserById(Integer.valueOf(unionId));
+
     }
 
     @Override

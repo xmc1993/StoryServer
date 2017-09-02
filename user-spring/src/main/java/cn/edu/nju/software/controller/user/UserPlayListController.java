@@ -7,12 +7,9 @@ import cn.edu.nju.software.service.PlayListService;
 import cn.edu.nju.software.service.WorksService;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.vo.PlayListVo;
-import cn.edu.nju.software.vo.StoryNewVo;
-
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -93,6 +89,11 @@ public class UserPlayListController extends BaseController {
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "用户尚未登录。", null);
+            return responseData;
+        }
+        //如果是我的作品这个播放列表 TODO 抽取出来
+        if (playListId == -1) {
+            responseData.jsonFill(1, null, worksService.getWorksListByUserId(user.getId(), page*pageSize, pageSize));
             return responseData;
         }
         List<Integer> idList = playListRelationService.getWorksIdListByPlayListIdAndUserIdByPage(playListId, user.getId(), page, pageSize);
