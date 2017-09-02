@@ -586,7 +586,7 @@
     <select id="getSetStoryListByIdListByPage" resultType="cn.edu.nju.software.entity.Story">
         select
         <include refid="fields"></include>
-        from story where id in and setId = 0
+        from story where setId = 0 and valid=1 and draft=0 and id in
         <foreach collection="storyIdList" item="id" index="index" open="(" separator="," close=")">
             #{id}
         </foreach>

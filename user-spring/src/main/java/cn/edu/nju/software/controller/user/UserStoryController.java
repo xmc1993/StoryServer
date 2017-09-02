@@ -157,7 +157,7 @@ public class UserStoryController extends BaseController {
     }
 
     @ApiOperation(value = "根据二级标签获得故事列表", notes = "根据二级标签获得故事列表")
-    @RequestMapping(value = "getStoryIdListBySecondLevelTagId", method = {RequestMethod.GET})
+    @RequestMapping(value = "/getStoryIdListBySecondLevelTagId", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<StoryNewVo>> getStoryIdListBySecondLevelTagId(
             @ApiParam("二级标签ID") @RequestParam("tagId") int tagId,
