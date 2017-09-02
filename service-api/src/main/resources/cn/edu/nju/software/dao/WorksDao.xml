@@ -150,6 +150,7 @@
         <include refid="fields"></include>
         from works
         where userId = #{0} and valid = 1
+        ORDER BY createTime DESC
         limit #{1},#{2}
     </select>
 
@@ -267,7 +268,13 @@
         </foreach>
         order by updateTime
 	</select>
+
     <select id="getUserIdByWorkId">
         select userId from works where id =#{worksId}
     </select>
+
+    <select id="getWorksAfterSomeDate">
+        select count(id) from works where user_id=#{0} and createTime &gt; #{1}
+    </select>
+
 </mapper>

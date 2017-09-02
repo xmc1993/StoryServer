@@ -4,6 +4,7 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Api(value="返回数据类")
 public class ResponseData<T> implements Serializable {
@@ -22,6 +23,16 @@ public class ResponseData<T> implements Serializable {
 	private String errorMes;
 	@ApiModelProperty(value="分页查询条目总数")
 	private Integer count;//分页查询的条目总数
+	@ApiModelProperty(value="徽章列表")
+	private List<Badge> badgeList;
+
+	public List<Badge> getBadgeList() {
+		return badgeList;
+	}
+
+	public void setBadgeList(List<Badge> badgeList) {
+		this.badgeList = badgeList;
+	}
 
 	public ResponseData() {
 		type = "json";

@@ -22,4 +22,8 @@ public interface WorkUserLogDao {
     List<Integer> getWorkIdListByUserId(@Param("userId") int userId, @Param("offset") int offset, @Param("limit") int limit);
 
     List<WorkUserLog> extractNewRecords(Date lastExtractTime);
+
+    Integer getLogAfterSomeDate(Integer userId, String date);
+
+
 }

@@ -13,4 +13,7 @@ public interface WorkUserLogService {
     boolean saveWorkUserLog(WorkUserLog workUserLog);
 
     List<WorkUserLog> extractNewRecords(Date lastExtractTime);
+
+    Integer getLogAfterSomeDate(Integer userId, String date);
+
 }

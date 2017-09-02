@@ -48,4 +48,11 @@
     WHERE accessTime &gt; #{0}
   </select>
 
+  <select id="getLogAfterSomeDate" resultType="java.lang.Integer">
+    select count(id)
+    from work_user_log
+    WHERE user_id = #{0} and accessTime &gt; #{1}
+  </select>
+
+
 </mapper>

@@ -13,7 +13,7 @@ public class WorkUserLog {
     private Integer userId;
     private Integer workId;
     private Integer storyId;
-    private String channel;
+    private String channel = "default";
     private Date accessTime;
 
     public WorkUserLog() {

@@ -1,8 +1,11 @@
 package cn.edu.nju.software.entity;
 
+import lombok.Data;
+
 /**
  * Created by xmc1993 on 2017/5/14.
  */
+@Data
 public class UserBase {
     private Integer id;
     private String nickname;//用户名
@@ -14,76 +17,7 @@ public class UserBase {
     private Integer workCount = 0;//作品数
     private Integer likeCount = 0;//喜欢的作品数
     private Integer listenCount = 0;//作品被收听数
+    private Integer likeStoryCount = 0;//作品被收听数
+    private Integer listenedCount = 0;//作品被收听数
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public String getHeadImgUrl() {
-        return headImgUrl;
-    }
-
-    public void setHeadImgUrl(String headImgUrl) {
-        this.headImgUrl = headImgUrl;
-    }
-
-    public Integer getFollowerCount() {
-        return followerCount;
-    }
-
-    public void setFollowerCount(Integer followerCount) {
-        this.followerCount = followerCount;
-    }
-
-    public Integer getFolloweeCount() {
-        return followeeCount;
-    }
-
-    public void setFolloweeCount(Integer followeeCount) {
-        this.followeeCount = followeeCount;
-    }
-
-    public Integer getWorkCount() {
-        return workCount;
-    }
-
-    public void setWorkCount(Integer workCount) {
-        this.workCount = workCount;
-    }
-
-    public Integer getLikeCount() {
-        return likeCount;
-    }
-
-    public void setLikeCount(Integer likeCount) {
-        this.likeCount = likeCount;
-    }
-
-    public Integer getListenCount() {
-        return listenCount;
-    }
-
-    public void setListenCount(Integer listenCount) {
-        this.listenCount = listenCount;
-    }
 }

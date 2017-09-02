@@ -41,6 +41,10 @@ public class WorksServiceImpl implements WorksService {
 
     @Override
     public boolean listenWorks(int worksId) {
+        Works works = worksDao.getWorksById(worksId);
+        if (works != null) {
+            appUserDao.newListened(works.getUserId());
+        }
         return worksDao.addListenCount(worksId);
     }
 
@@ -139,7 +143,17 @@ public class WorksServiceImpl implements WorksService {
 
     @Override
     public Integer getUserIdByWorkId(int worksId) {
-        return worksDao.getUserIdByWorkId(worksId);
+        Works works = worksDao.getWorksById(worksId);
+        if (works != null) {
+            return works.getUserId();
+        }
+        return -1;
     }
+
+    @Override
+    public Integer getWorksAfterSomeDate(Integer userId, String date) {
+        return worksDao.getWorksAfterSomeDate(userId, date);
+    }
+
 
 }

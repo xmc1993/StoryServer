@@ -128,6 +128,7 @@
             <mvc:mapping path="/user/getBadgeListByTypeId"/>
             <mvc:mapping path="/user/listenWorks"/>
             <mvc:mapping path="/user/submitAnswer"/>
+            <mvc:mapping path="/user/saveStoryUserLog"/>
 
             <!-- 不需要拦截的uri -->
             <!--

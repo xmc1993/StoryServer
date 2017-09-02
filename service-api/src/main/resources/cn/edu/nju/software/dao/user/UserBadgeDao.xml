@@ -26,4 +26,12 @@
         WHERE
         userId = #{userId}
     </select>
+
+    <select id="getUserBadge" resultType="cn.edu.nju.software.entity.UserBadge">
+        select
+        <include refid="fields"></include>
+        from user_badge_mappings
+        WHERE
+        badgeId = #{0} and userId = #{1}
+    </select>
 </mapper>

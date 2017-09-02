@@ -13,4 +13,7 @@ public interface UserBadgeDao {
     Boolean deleteUserBadgeByUserId(Integer userId);
 
     List<UserBadge> getUserBadgeByUserId(Integer userId);
+
+    UserBadge getUserBadge(int badgeId, int userId);
+
 }

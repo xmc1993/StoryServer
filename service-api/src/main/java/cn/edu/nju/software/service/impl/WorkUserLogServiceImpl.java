@@ -1,6 +1,7 @@
 package cn.edu.nju.software.service.impl;
 
 import cn.edu.nju.software.dao.WorkUserLogDao;
+import cn.edu.nju.software.dao.user.AppUserDao;
 import cn.edu.nju.software.entity.WorkUserLog;
 import cn.edu.nju.software.service.WorkUserLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,22 @@ import java.util.List;
 public class WorkUserLogServiceImpl implements WorkUserLogService {
     @Autowired
     private WorkUserLogDao workUserLogDao;
+    @Autowired
+    private AppUserDao appUserDao;
     @Override
     public boolean saveWorkUserLog(WorkUserLog workUserLog){
+        //增加用户的收听数量
+        appUserDao.newListen(workUserLog.getUserId());
         return workUserLogDao.insertWorkUserLog(workUserLog);
     }
 
     @Override
     public List<WorkUserLog> extractNewRecords(Date lastExtractTime) {
         return workUserLogDao.extractNewRecords(lastExtractTime);
+    }
+
+    @Override
+    public Integer getLogAfterSomeDate(Integer userId, String date) {
+        return workUserLogDao.getLogAfterSomeDate(userId, date);
     }
 }

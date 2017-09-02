@@ -24,7 +24,9 @@
 		followeeCount,
 		workCount,
 		likeCount,
-		deviceId
+		deviceId,
+		listenedCount,
+		likeStoryCount
 	</sql>
 
     <sql id="baseFields">
@@ -36,7 +38,9 @@
 		followeeCount,
 		workCount,
 		likeCount,
-		listenCount
+		listenCount,
+		listenedCount,
+		likeStoryCount
 	</sql>
 
     <resultMap id="userBase" type="cn.edu.nju.software.entity.UserBase">
@@ -49,6 +53,8 @@
         <id column="workCount" property="workCount"/>
         <id column="likeCount" property="likeCount"/>
         <id column="listenCount" property="listenCount"/>
+        <id column="listenedCount" property="listenedCount"/>
+        <id column="likeStoryCount" property="likeStoryCount"/>
     </resultMap>
 
     <resultMap id="user" type="cn.edu.nju.software.entity.User">
@@ -76,6 +82,8 @@
         <id column="workCount" property="workCount"/>
         <id column="likeCount" property="likeCount"/>
         <id column="deviceId" property="deviceId"/>
+        <id column="listenedCount" property="listenedCount"/>
+        <id column="likeStoryCount" property="likeStoryCount"/>
     </resultMap>
 
     <insert id="saveUser" parameterType="cn.edu.nju.software.entity.User" useGeneratedKeys="true">
@@ -104,6 +112,8 @@
         #{followeeCount},
         #{workCount},
         #{likeCount},
+        #{listenedCount},
+        #{likeStoryCount},
         #{deviceId}
         )
     </insert>
@@ -117,7 +127,6 @@
 		sex=#{sex},
 		headImgUrl=#{headImgUrl},
 		wxUnionId=#{wxUnionId},
-		createTime=#{createTime},
 		updateTime=#{updateTime},
 		mobile=#{mobile},
 		verifyCode=#{verifyCode},
@@ -129,12 +138,8 @@
 		weChatOpenId=#{weChatOpenId},
 		weChatAccessToken=#{weChatAccessToken},
 		weChatRefreshToken=#{weChatRefreshToken},
-		followerCount=#{followerCount},
-		followeeCount=#{followeeCount},
-		workCount=#{workCount},
 		likeCount=#{likeCount},
-		deviceId=#{deviceId},
-		listenCount=#{listenCount}
+		deviceId=#{deviceId}
 		where
 		id=#{id}
 	</update>
@@ -255,6 +260,30 @@
         id=#{0}
     </update>
 
+    <update id="removeListen">
+        update user
+        set
+        listenCount = listenCount - 1
+        where
+        id=#{0}
+    </update>
+
+    <update id="newListen">
+        update user
+        set
+        listenCount = listenCount + 1
+        where
+        id=#{0}
+    </update>
+
+    <update id="newListened">
+        update user
+        set
+        listenedCount = listenedCount + 1
+        where
+        id=#{0}
+    </update>
+
     <update id="removeLike">
         update user
         set
@@ -262,12 +291,14 @@
         where
         id=#{0}
     </update>
+
     <update id="updateUserWorkCount">
         update user
         SET
         workCount = #{workCount}
         where id=#{userId}
     </update>
+
     <update id="updateListenCountByUserId">
         update USER
         SET
@@ -275,4 +306,12 @@
         where
         id=#{0}
     </update>
+
+    <select id="getListenCount" resultType="java.lang.Integer">
+        select
+        listenCount
+        from user
+        where id = #{0}
+    </select>
+
 </mapper>

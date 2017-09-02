@@ -3,10 +3,10 @@ package cn.edu.nju.software.controller.user;
 import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.*;
+import cn.edu.nju.software.util.Const;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UserChecker;
 import cn.edu.nju.software.vo.StoryNewVo;
-
 import com.github.pagehelper.PageInfo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -49,6 +49,10 @@ public class UserStoryController extends BaseController {
     private StorySetService storySetService;
     @Autowired
     private TagUserLogService tagUserLogService;
+    @Autowired
+    private UserBadgeService userBadgeService;
+    @Autowired
+    private BadgeService badgeService;
 
     @ApiOperation(value = "获取ID获取故事", notes = "")
     @RequestMapping(value = "/getStoryById", method = {RequestMethod.GET})
@@ -71,20 +75,42 @@ public class UserStoryController extends BaseController {
         }
         return responseData;
     }
+
     @ApiOperation(value = "故事访问记录", notes = "")
     @RequestMapping(value = "/saveStoryUserLog", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<Boolean> getStoryById(
+    public ResponseData<Boolean> saveStoryUserLog(
             @ApiParam("故事ID") @RequestParam("storyId") Integer storyId,
             @ApiParam("用户Id") @RequestParam("userId") Integer userId,
             @ApiParam("访问渠道") @RequestParam(value = "channel") String channel,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Boolean> result = new ResponseData();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            result.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return result;
+        }
         if(storyService.getStoryById(storyId)==null) throw new RuntimeException("无效的故事ID");
         StoryUserLog log = new StoryUserLog(userId,storyId,channel,new Date());
         storyUserLogService.saveLog(log);
+        result.setBadgeList(checkoutViewBadge(user));
         result.jsonFill(1, null, true);
         return result;
+    }
+
+    //TODO 抽取service
+    private List<Badge> checkoutViewBadge(User user){
+        List<Badge> badges = new ArrayList<>();
+        if (userBadgeService.getUserBadge(Const.PABULUN_BADGE_ID, user.getId()) == null) {
+            UserBadge userBadge = new UserBadge();
+            userBadge.setUserId(user.getId());
+            userBadge.setBadgeId(Const.PABULUN_BADGE_ID);
+            userBadgeService.saveUserBadge(userBadge);
+            Badge badge = badgeService.getBadgeById(Const.PABULUN_BADGE_ID);
+            badges.add(badge);
+        }
+        return badges;
     }
 
     @ApiOperation(value = "分页得到故事列表", notes = "分页得到故事列表")

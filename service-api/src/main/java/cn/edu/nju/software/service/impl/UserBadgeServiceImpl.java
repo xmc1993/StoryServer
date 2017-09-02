@@ -31,4 +31,9 @@ public class UserBadgeServiceImpl implements UserBadgeService {
     public List<UserBadge> getUserBadgeByUserId(Integer userId) {
         return userBadgeDao.getUserBadgeByUserId(userId);
     }
+
+    @Override
+    public UserBadge getUserBadge(int badgeId, int userId) {
+        return userBadgeDao.getUserBadge(badgeId, userId);
+    }
 }

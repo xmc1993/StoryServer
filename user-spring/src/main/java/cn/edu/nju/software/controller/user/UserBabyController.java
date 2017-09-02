@@ -36,7 +36,7 @@ public class UserBabyController extends BaseController {
     private BabyService babyService;
 
 
-    @ApiOperation(value = "获得一个用户的所有Bady", notes = "")
+    @ApiOperation(value = "获得一个用户的所有Baby", notes = "")
     @RequestMapping(value = "/getBabyListByParentId", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<Baby>> getBabyListByParentId(

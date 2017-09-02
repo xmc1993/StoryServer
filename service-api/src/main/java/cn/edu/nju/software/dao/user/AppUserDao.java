@@ -54,4 +54,13 @@ public interface AppUserDao {
     boolean updateUserWorkCount(@Param("workCount")Integer workCount,@Param("userId")Integer userId);
 
     boolean updateListenCountByUserId(Integer id);
+
+    boolean newListen(int id);
+
+    boolean newListened(int id);
+
+    boolean deleteListen(int id);
+
+    Integer getListenCount(int userId);
+
 }
