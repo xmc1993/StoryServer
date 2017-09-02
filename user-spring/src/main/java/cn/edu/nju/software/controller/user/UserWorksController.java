@@ -324,7 +324,7 @@ public class UserWorksController extends BaseController {
             response.setStatus(404);
             return responseData;
         }
-        if (works.getUserId() != user.getId()) {
+        if (!works.getUserId().equals(user.getId())) {
             responseData.jsonFill(2, "无效的请求。", null);
             response.setStatus(404);
             return responseData;

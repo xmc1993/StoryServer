@@ -23,10 +23,12 @@ public class UserRelationStoryServiceImpl implements UserRelationStoryService {
     @Autowired
     private StoryDao storyDao;
     @Override
-    public boolean addUserRelationStory(Integer storyId,Integer userId){
+    public boolean  addUserRelationStory(Integer storyId,Integer userId){
         Story story = storyDao.getStoryById(storyId);
+
         if(story ==null) return false;
-        if(userRelationStoryDao.storyIsLikedByUserId(storyId, userId)!=null) return false;
+        Integer res = userRelationStoryDao.storyIsLikedByUserId(storyId, userId);
+        if(res !=null) return false;
         userDao.addLikeStoryCount(userId);
         //增加故事集的喜欢数
         if (story.getSetId() != 0) {

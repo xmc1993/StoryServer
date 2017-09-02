@@ -94,7 +94,7 @@
     <update id="deleteWorksById">
         update works
         set
-        vaild=0
+        valid=0
         where
         id=#{0}
     </update>

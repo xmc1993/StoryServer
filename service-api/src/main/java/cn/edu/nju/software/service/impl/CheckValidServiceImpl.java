@@ -1,6 +1,7 @@
 package cn.edu.nju.software.service.impl;
 
 import cn.edu.nju.software.dao.*;
+import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.service.CheckValidService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,7 +73,8 @@ public class CheckValidServiceImpl implements CheckValidService {
 
     @Override
     public boolean isWorksExist(int worksId) {
-        return worksDao.getWorksById(worksId) != null;
+        Works works = worksDao.getWorksById(worksId);
+        return works != null;
     }
 
     @Override

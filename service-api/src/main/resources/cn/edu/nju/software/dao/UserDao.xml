@@ -24,16 +24,18 @@
         likeCount,
         listenCount
     </sql>
-    <insert id="addLikeStoryCount">
-        update story
+
+    <update id="addLikeStoryCount">
+        update user
         set likeStoryCount=likeStoryCount+1
         where id=#{0}
-    </insert>
-    <delete id="delLikeStoryCount">
-         update story
+    </update>
+
+    <update id="delLikeStoryCount">
+         update user
         set likeStoryCount=likeStoryCount-1
         where id=#{0}
-    </delete>
+    </update>
 
     <resultMap id="user" type="cn.edu.nju.software.entity.User">
         <id column="id" property="id" />
