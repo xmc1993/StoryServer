@@ -5,10 +5,12 @@ import cn.edu.nju.software.dao.PlayListDao;
 import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.entity.PlayList;
 import cn.edu.nju.software.entity.Works;
+import cn.edu.nju.software.service.PlayListRelationService;
 import cn.edu.nju.software.service.PlayListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +25,8 @@ public class PlayListServiceImpl implements PlayListService {
     private AgreeDao agreeDao;
     @Autowired
     private WorksDao worksDao;
+    @Autowired
+    private PlayListRelationService playListRelationService;
 
     @Override
     public PlayList savePlayList(PlayList playList) {
@@ -64,7 +68,7 @@ public class PlayListServiceImpl implements PlayListService {
         PlayList myWorksList = new PlayList();
         myWorksList.setUserId(userId);
         myWorksList.setId(-1);
-        playList.setName("我的作品");
+        myWorksList.setName("我的作品");
         list.add(myWorksList);
         setCoverByPatch(list);
         return list;
@@ -78,8 +82,23 @@ public class PlayListServiceImpl implements PlayListService {
     }
 
     private void setCover(PlayList playList) {
-        List<Integer> idList = agreeDao.getAgreeUserIdListByWorksId(playList.getId());
-        List<Works> worksList = worksDao.getWorksListByIdList(idList);
+//        List<Integer> idList = agreeDao.getAgreeUserIdListByWorksId(playList.getId());
+
+        List<Integer> idList = new ArrayList<>();
+        List<Works> worksList = new ArrayList<>();
+        //我喜欢
+        if (playList.getId() == 0) {
+            idList = agreeDao.getAgreeWorksListByUserId(playList.getUserId(), 0, 10);
+            idList.add(-1);
+            worksList = worksDao.getWorksListByIdList(idList);
+        }else if (playList.getId() == -1) {
+            worksList = worksDao.getWorksListByUserId(playList.getUserId(), 0, 1);
+        }else {
+            idList = playListRelationService.getWorksIdListByPlayListIdAndUserIdByPage(playList.getId(), playList.getUserId(), 0, 10);
+            idList.add(-1);
+            worksList = worksDao.getWorksListByIdList(idList);
+        }
+
         if (worksList.size() > 0) {
             playList.setCover(worksList.get(0).getCoverUrl());
         }

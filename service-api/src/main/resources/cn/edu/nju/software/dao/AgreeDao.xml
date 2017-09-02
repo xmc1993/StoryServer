@@ -48,7 +48,6 @@
         userId
         from agree
         where worksId = #{0}
-        limit #{1},#{2}
     </select>
 
     <select id="getAgreeWorksListByUserId" resultType="java.lang.Integer">
