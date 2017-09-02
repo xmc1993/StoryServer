@@ -26,12 +26,12 @@
     </sql>
     <insert id="addLikeStoryCount">
         update story
-        set likeCount=likeCount+1
+        set likeStoryCount=likeStoryCount+1
         where id=#{0}
     </insert>
     <delete id="delLikeStoryCount">
          update story
-        set likeCount=likeCount-1
+        set likeStoryCount=likeStoryCount-1
         where id=#{0}
     </delete>
 

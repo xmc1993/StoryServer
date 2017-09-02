@@ -30,20 +30,27 @@ public class AgreeServiceImpl implements AgreeService {
             return false;
         }
         boolean res1 = agreeDao.saveAgree(agree);
-        boolean res2 = appUserDao.newLike(agree.getUserId());
+        boolean res2 = false;
+        if (res1) {
+            res2 = appUserDao.newLike(agree.getUserId());
+        }
         return res1 && res2;
     }
 
     @Override
     public boolean deleteAgree(int worksId, int userId) {
         boolean res1 = agreeDao.deleteAgree(worksId, userId);
-        boolean res2 = appUserDao.removeLike(userId);
+        boolean res2 = false;
+        if (res1) {
+            res2 = appUserDao.removeLike(userId);
+        }
         return res1 && res2;
     }
 
     @Override
     public boolean deleteAgreeById(int id) {
-        return agreeDao.deleteAgreeById(id);
+        boolean res = agreeDao.deleteAgreeById(id);
+        return res;
     }
 
     @Override
