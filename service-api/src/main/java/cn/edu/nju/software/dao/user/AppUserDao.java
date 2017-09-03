@@ -13,54 +13,54 @@ import java.util.List;
 @Repository
 public interface AppUserDao {
 
-    boolean saveUser(User user);
+	boolean saveUser(User user);
 
-    boolean updateUser(User user);
+	boolean updateUser(User user);
 
-    boolean deleteUser(int id);
+	boolean deleteUser(int id);
 
-    User getUserById(int userId);
+	User getUserById(int userId);
 
-    User getUserByUnionId(String unionId);
+	User getUserByUnionId(String unionId);
 
-    List<User> getUserByNickname(String nickname);
+	List<User> getUserByNickname(String nickname);
 
-    User getUserByMobile(String mobile);
+	User getUserByMobile(String mobile);
 
-    Integer getNewestId();
+	Integer getNewestId();
 
-    boolean newFollower(int id);
+	boolean newFollower(int id);
 
-    boolean loseFollower(int id);
+	boolean loseFollower(int id);
 
-    boolean newFollowee(int id);
+	boolean newFollowee(int id);
 
-    boolean removeFollowee(int id);
+	boolean removeFollowee(int id);
 
-    boolean newWork(int id);
+	boolean newWork(int id);
 
-    boolean removeWork(int id);
+	boolean removeWork(int id);
 
-    List<UserBase> getUserBaseListByUserIdList(@Param("idList") List<Integer> idList);
+	List<UserBase> getUserBaseListByUserIdList(@Param("idList") List<Integer> idList);
 
-    UserBase getUserBaseById(int id);
+	UserBase getUserBaseById(int id);
 
-    boolean newLike(int id);
+	boolean newLike(int id);
 
-    boolean removeLike(int id);
+	boolean removeLike(int id);
 
-    User getUserByDeviceId(String deviceId);
+	User getUserByDeviceId(String deviceId);
 
-    boolean updateUserWorkCount(@Param("workCount")Integer workCount,@Param("userId")Integer userId);
+	boolean updateUserWorkCount(@Param("workCount") Integer workCount, @Param("userId") Integer userId);
 
-    boolean updateListenCountByUserId(Integer id);
+	boolean updateListenCountByUserId(Integer id);
 
-    boolean newListen(int id);
+	boolean newListen(int id);
 
-    boolean newListened(int id);
+	boolean newListened(int id);
 
-    boolean deleteListen(int id);
+	boolean deleteListen(int id);
 
-    Integer getListenCount(int userId);
+	Integer getListenCount(int userId);
 
 }
