@@ -175,11 +175,11 @@ public class UserStoryController extends BaseController {
         	responseData.jsonFill(1, null, null);
         	return responseData;
         }
-        List<Story> storyList = storyService.getSetStoryListByIdList(idList, offset, limit);
+        List<Story> storyList = storyService.getStoryListByIdList(idList, offset, limit);
         List<StoryNewVo> preList = storyList2VoList(storyList, user.getId());
         transformStorySetList(preList);
         responseData.jsonFill(1, null, preList);
-        responseData.setCount(storyService.getSetStoryCountByIdList(idList));
+        responseData.setCount(storyService.getStoryCountByIdList(idList));
         return responseData;
     }
 
