@@ -3,8 +3,11 @@ package cn.edu.nju.software.service.impl.user;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import cn.edu.nju.software.dao.user.AppUserDao;
+import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.service.user.UserMessageService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -14,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.List;
 
 @Service
 public class UserMessageServiceImpl implements UserMessageService {
@@ -21,6 +25,9 @@ public class UserMessageServiceImpl implements UserMessageService {
 	private final static String tailer = "，请勿转发。";
 	private final static String username = "18658895709";
     private static final String secret = "fe6e14729d1e4a428696aaeddec52e22";
+    
+    @Autowired
+    AppUserDao appUserDao;
 
 	@Override
 	public boolean sendMessage(String phoneNumber, String code) {
@@ -84,5 +91,30 @@ public class UserMessageServiceImpl implements UserMessageService {
         }
         return false;
     }
+
+	@Override
+	public boolean saveUser(User user) {
+		return appUserDao.saveUser(user);
+	}
+
+	@Override
+	public List<User> getUserByNickname(String nickname) {
+		return appUserDao.getUserByNickname(nickname);
+	}
+
+	@Override
+	public User getUserById(int userId) {
+		return appUserDao.getUserById(userId);
+	}
+
+	@Override
+	public boolean deleteUser(int id) {
+		return appUserDao.deleteUser(id);
+	}
+
+	@Override
+	public boolean updateUser(User user) {
+		return appUserDao.updateUser(user);
+	}
 
 }
