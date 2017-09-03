@@ -36,6 +36,37 @@ public class UserQuestionController extends BaseController {
     private AnswerService answerService;
 
 
+    @ApiOperation(value = "提交个性化问题答案", notes = "")
+    @RequestMapping(value = "/submitIndividuationAnswer", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Answer> submitAnswer(
+            @ApiParam("问题ID") @RequestParam("questionId") int questionId,
+            @ApiParam("宝宝ID") @RequestParam("babyId") int babyId,
+            @ApiParam("答案") @RequestParam("content") String content,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Answer> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
+        Answer answer = new Answer();
+        answer.setBabyId(babyId);
+        answer.setUserId(user.getId());
+        answer.setContent(content);
+        answer.setQuestionId(questionId);
+        answer.setCreateTime(new Date());
+        answer.setUpdateTime(new Date());
+        Answer res = answerService.saveAnswer(answer);
+        if (res != null) {
+            responseData.jsonFill(1, null, res);
+        }else {
+            responseData.jsonFill(2, "失败", null);
+        }
+        return responseData;
+    }
+
     @ApiOperation(value = "提交问题答案", notes = "")
     @RequestMapping(value = "/submitAnswer", method = {RequestMethod.POST})
     @ResponseBody

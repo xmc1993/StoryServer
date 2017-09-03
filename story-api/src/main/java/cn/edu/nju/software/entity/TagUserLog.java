@@ -12,6 +12,7 @@ public class TagUserLog {
     private Integer id;
     private Integer tagId;
     private Integer userId;
+    private Integer babyId = 0;
     private Integer totalCount = 0;
     private Date createTime;
     private Date updateTime;

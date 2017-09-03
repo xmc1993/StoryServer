@@ -6,6 +6,7 @@
         id,
         tagId,
         userId,
+        babyId,
         totalCount,
         createTime,
         updateTime
@@ -20,6 +21,7 @@
         #{id},
         #{tagId},
         #{userId},
+        #{babyId},
         #{totalCount},
         #{createTime},
         #{updateTime}
@@ -61,6 +63,14 @@
         limit #{1},#{2}
     </select>
 
+    <select id="getTagUserLogTagIdListByBabyId" resultType="java.lang.Integer">
+        select
+        tagId
+        from tag_user_log
+        where babyId = #{0}
+        order by totalCount desc
+        limit #{1},#{2}
+    </select>
 
     <select id="getTagUserLog" resultType="cn.edu.nju.software.entity.TagUserLog">
         select

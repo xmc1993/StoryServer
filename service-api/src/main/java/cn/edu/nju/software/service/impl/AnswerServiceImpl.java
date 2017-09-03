@@ -29,13 +29,13 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     public Answer saveAnswer(Answer answer) {
         if (answerDao.saveAnswer(answer)) {
-            extractTagInfo(answer.getContent(), answer.getUserId());
+            extractTagInfo(answer.getContent(), answer.getUserId(), answer.getBabyId());
             return answer;
         }
         return null;
     }
 
-    private void extractTagInfo(String ans, Integer userId){
+    private void extractTagInfo(String ans, Integer userId, Integer babyId){
         if (ans == null || ans == "") {
             return;
         }
@@ -51,6 +51,7 @@ public class AnswerServiceImpl implements AnswerService {
                     TagUserLog tagUserLog = new TagUserLog();
                     tagUserLog.setUserId(userId);
                     tagUserLog.setTagId(tagId);
+                    tagUserLog.setBabyId(babyId);
                     tagUserLogService.saveOrUpdate(tagUserLog);
                 }
 

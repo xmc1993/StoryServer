@@ -335,9 +335,9 @@ public class UserStoryController extends BaseController {
     @RequestMapping(value = "/getRecommendedStoryVoByBabyByPage", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<StoryNewVo>> getRecommendedStoryVoByBabyByPage(
-            @ApiParam("offset") @RequestParam("offset") int offset,
+            @ApiParam("pageSize") @RequestParam("pageSize") int pageSize,
             @ApiParam("Baby的ID") @RequestParam("babyId") int babyId,
-            @ApiParam("limit") @RequestParam("limit") int limit,
+            @ApiParam("page") @RequestParam("page") int page,
             HttpServletRequest request, HttpServletResponse response
     ){
         ResponseData<List<StoryNewVo>> responseData = new ResponseData<>();
@@ -346,10 +346,27 @@ public class UserStoryController extends BaseController {
             user = new User();
             user.setId(-1);
         }
-        List<Story> storyList = storyService.getSetRecommendedStoryListByPage(offset, limit);
-        int count = storyService.getRecommendedStoryCount();
-        responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
-        responseData.setCount(count);
+
+        List<Integer> contentList = tagUserLogService.getTagUserLogTagIdListByBabyId(babyId, 0, 10);
+
+        if(contentList.size()==0){
+            responseData.jsonFill(1, null, null);
+            return responseData;
+        }
+        List<Integer> storyIdList = tagRelationService.getStoryIdListByTagIdList(contentList);
+        if(storyIdList.size()==0){
+            List<Story> storyList = storyService.getSetRecommendedStoryListByPage(page*pageSize, pageSize);
+            int count = storyService.getRecommendedStoryCount();
+            responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
+            responseData.setCount(count);
+            return responseData;
+        }
+        PageInfo<Story> pageInfo = storyService.getStoryListByIdListByPage(storyIdList, page, pageSize);
+
+        responseData.setCount((int) pageInfo.getTotal());
+        List<Story> list = pageInfo.getList();
+        responseData.jsonFill(1, null, storyList2VoList(list, user.getId()));
+
         return responseData;
     }
 
@@ -397,6 +414,35 @@ public class UserStoryController extends BaseController {
     	
     	responseData.setCount((int) pageInfo.getTotal());
     	responseData.jsonFill(1, null, pageInfo.getList());
+        return responseData;
+    }
+
+    @ApiOperation(value = "讲故事页面(新)", notes = "需登录")
+    @RequestMapping(value = "/getStoryListByBaby", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<Story>> getStoryListByBaby(
+            @ApiParam("页") @RequestParam int page,
+            @ApiParam("页大小") @RequestParam int pageSize,
+            @ApiParam("宝宝ID") @RequestParam int babyId,
+            HttpServletRequest request, HttpServletResponse response){
+        ResponseData<List<Story>> responseData = new ResponseData<>();
+        User user = UserChecker.checkUser(request);
+        List<Integer> contentList = tagUserLogService.getTagUserLogTagIdListByBabyId(babyId, 0, 10);
+
+        if(contentList.size()==0){
+            responseData.jsonFill(1, null, null);
+            return responseData;
+        }
+        List<Integer> storyIdList = tagRelationService.getStoryIdListByTagIdList(contentList);
+        if(storyIdList.size()==0){
+
+            responseData.jsonFill(1, null, null);
+            return responseData;
+        }
+        PageInfo<Story> pageInfo = storyService.getStoryListByIdListByPage(storyIdList, page, pageSize);
+
+        responseData.setCount((int) pageInfo.getTotal());
+        responseData.jsonFill(1, null, pageInfo.getList());
         return responseData;
     }
 

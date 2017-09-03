@@ -12,6 +12,7 @@ import java.util.Date;
 public class Answer implements Serializable{
     private Integer id;
     private Integer userId;//对应的勋章种类
+    private Integer babyId = 0;//宝宝ID
     private Integer questionId;
     private String content;
     private Date createTime;

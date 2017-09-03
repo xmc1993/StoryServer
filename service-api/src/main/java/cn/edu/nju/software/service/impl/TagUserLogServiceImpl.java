@@ -63,6 +63,13 @@ public class TagUserLogServiceImpl implements TagUserLogService {
     }
 
     @Override
+    public List<Integer> getTagUserLogTagIdListByBabyId(int babyId, int offset, int limit) {
+        offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+        limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+        return tagUserLogDao.getTagUserLogTagIdListByBabyId(babyId, offset, limit);
+    }
+
+    @Override
     public TagUserLog getTagUserLog(int userId, int tagId) {
         return tagUserLogDao.getTagUserLog(userId, tagId);
     }

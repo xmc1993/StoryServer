@@ -20,6 +20,8 @@ public interface TagUserLogService {
 
     List<Integer> getTagUserLogTagIdListByUserId(int userId, int offset, int limit);
 
+    List<Integer> getTagUserLogTagIdListByBabyId(int babyId, int offset, int limit);
+
     TagUserLog getTagUserLog(int userId, int tagId);
 
     List<TagUserLog> extractNewRecords(Date lastExtractTime);

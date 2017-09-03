@@ -28,4 +28,7 @@ public interface TagUserLogDao {
 
     boolean updateTagUserLog(TagUserLog tagUserLog);
 
+    List<Integer> getTagUserLogTagIdListByBabyId(int babyId, int offset, int limit);
+
+
 }
