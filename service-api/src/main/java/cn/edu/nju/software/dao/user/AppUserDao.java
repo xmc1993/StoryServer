@@ -62,5 +62,10 @@ public interface AppUserDao {
 	boolean deleteListen(int id);
 
 	Integer getListenCount(int userId);
+	
+	List<User> getUserListByPage(int limit, int offset);
+	
+	List<User> getAllUserList();
+
 
 }
