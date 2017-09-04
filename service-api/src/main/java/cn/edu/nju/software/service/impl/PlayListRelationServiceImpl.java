@@ -3,7 +3,9 @@ package cn.edu.nju.software.service.impl;
 import cn.edu.nju.software.dao.AgreeDao;
 import cn.edu.nju.software.dao.PlayListRelationDao;
 import cn.edu.nju.software.entity.PlayListRelation;
+import cn.edu.nju.software.service.AgreeService;
 import cn.edu.nju.software.service.PlayListRelationService;
+import cn.edu.nju.software.service.WorksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,10 @@ public class PlayListRelationServiceImpl implements PlayListRelationService {
     private PlayListRelationDao playListRelationDao;
     @Autowired
     private AgreeDao agreeDao;
+    @Autowired
+    private AgreeService agreeService;
+    @Autowired
+    private WorksService worksService;
 
     @Override
     public boolean savePlayListRelation(PlayListRelation playListRelation) {
@@ -26,6 +32,15 @@ public class PlayListRelationServiceImpl implements PlayListRelationService {
 
     @Override
     public boolean deletePlayListRelationByPrimaryKey(int worksId, int playListId, int userId) {
+        //如果是我喜欢
+        if (playListId == 0) {
+            return agreeService.deleteAgree(worksId, userId);
+        }
+        //如果是我的作品
+        if (playListId == -1) {
+            return worksService.deleteWorksById(worksId);
+        }
+
         return playListRelationDao.deletePlayListRelationByPrimaryKey(worksId, playListId, userId);
     }
 
