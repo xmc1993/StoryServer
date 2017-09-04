@@ -19,7 +19,12 @@ public class UserBadgeServiceImpl implements UserBadgeService {
 
     @Override
     public Boolean saveUserBadge(UserBadge userBadge) {
-        return userBadgeDao.saveUserBadge(userBadge);
+        //如果徽章已经存在则不再重复获取 TODO 更高层判断
+        if (getUserBadge(userBadge.getBadgeId(), userBadge.getUserId()) != null) {
+            return false;
+        }
+        Boolean aBoolean = userBadgeDao.saveUserBadge(userBadge);
+        return aBoolean;
     }
 
     @Override
