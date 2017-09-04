@@ -4,15 +4,16 @@ import cn.edu.nju.software.service.user.UserWeChatLoginService;
 import cn.edu.nju.software.vo.WeChatOAuthVo;
 import cn.edu.nju.software.vo.WeChatUserInfoVo;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -30,19 +31,26 @@ public class UserWeChatLoginServiceImpl implements UserWeChatLoginService {
     private final static String WE_CHAT_OAUTH_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";//第三方app OAuth地址
     private final static String USER_INFO_URL = "https://api.weixin.qq.com/sns/userinfo";
     private final static String WX_APPLET_OAUTH_URL = "https://api.weixin.qq.com/sns/jscode2session";//微信小程序 OAuth地址
+    @Autowired
+    private CloseableHttpClient httpClient;
+    @Autowired
+    private RequestConfig requestConfig;
+
+
 
     @Override
     public WeChatOAuthVo getAccessToken(String appId, String secret, String grantType, String code) {
         String url = WE_CHAT_OAUTH_URL + "?appid=" + appId + "&secret=" + secret + "&grant_type=" + grantType + "&code=" + code;
 
         URI uri = URI.create(url);
-        HttpClient client = HttpClients.createDefault();
+//        HttpClient client = new HttpClient(multiThreadedHttpConnectionManager);
         HttpGet get = new HttpGet(uri);
+        get.setConfig(requestConfig);
         WeChatOAuthVo authVo = new WeChatOAuthVo();
 
-        HttpResponse response;
+        CloseableHttpResponse response = null;
         try {
-            response = client.execute(get);
+            response = httpClient.execute(get);
             if (response.getStatusLine().getStatusCode() == 200) {
                 HttpEntity entity = response.getEntity();
 
@@ -81,6 +89,20 @@ public class UserWeChatLoginServiceImpl implements UserWeChatLoginService {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
+        }finally {
+            get.releaseConnection();
+            if (response !=null){
+                try {
+                    response.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return null;
@@ -92,10 +114,10 @@ public class UserWeChatLoginServiceImpl implements UserWeChatLoginService {
     public WeChatUserInfoVo getUserInfo(String accessToken, String openId) {
 
         String uri = USER_INFO_URL + "?access_token=" + accessToken + "&openid=" + openId;
-        HttpClient client = HttpClients.createDefault();
         HttpGet get = new HttpGet(URI.create(uri));
+        CloseableHttpResponse response = null;
         try {
-            HttpResponse response = client.execute(get);
+            response = httpClient.execute(get);
             if (response.getStatusLine().getStatusCode() == 200) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
                 StringBuilder builder = new StringBuilder();
@@ -134,6 +156,21 @@ public class UserWeChatLoginServiceImpl implements UserWeChatLoginService {
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }finally {
+            //关闭链接资源
+            get.releaseConnection();
+            if (response != null) {
+                try {
+                    response.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return null;
