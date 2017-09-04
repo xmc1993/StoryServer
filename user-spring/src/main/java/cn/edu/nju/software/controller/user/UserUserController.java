@@ -77,7 +77,7 @@ public class UserUserController extends BaseController {
             responseData.jsonFill(2, "用户尚未登录。", false);
             return responseData;
         }
-        user = userService.loginByUnionId(user.getWxUnionId());
+        user = userService.getUserById(user.getId());
         Jedis jedis = JedisUtil.getJedis();
         jedis.set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
         jedis.close();

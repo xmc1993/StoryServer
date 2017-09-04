@@ -25,6 +25,8 @@ public interface AppUserService {
 
     User loginByUnionId(String unionId);
 
+    User getUserById(Integer id);
+
     User addOrUpdateUser(User user);
 
     UserBase getUserBaseById(int id);

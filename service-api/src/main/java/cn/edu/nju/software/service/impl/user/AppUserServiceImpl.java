@@ -83,6 +83,11 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
+    public User getUserById(Integer id) {
+        return userDao.getUserById(id);
+    }
+
+    @Override
     public User addOrUpdateUser(User user) {
         user.setUpdateTime(new Date());
         //如果是需要更新
