@@ -2,64 +2,64 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.nju.software.dao.UserDao">
 
-    <sql id="fields">
-        id,
-        nickname,
-        accessToken,
-        sex,
-        headImgUrl,
-        wxUnionId,
-        createTime,
-        updateTime,
-        mobile,
-        verifyCode,
-        expireTime,
-        password,
-        company,
-        city,
-        email,
-        weChatOpenId,
-        weChatAccessToken,
-        weChatRefreshToken,
-        likeCount,
-        listenCount
-    </sql>
+	<sql id="fields">
+		id,
+		nickname,
+		accessToken,
+		sex,
+		headImgUrl,
+		wxUnionId,
+		createTime,
+		updateTime,
+		mobile,
+		verifyCode,
+		expireTime,
+		password,
+		company,
+		city,
+		email,
+		weChatOpenId,
+		weChatAccessToken,
+		weChatRefreshToken,
+		likeCount,
+		listenCount
+	</sql>
 
-    <update id="addLikeStoryCount">
-        update user
-        set likeStoryCount=likeStoryCount+1
-        where id=#{0}
-    </update>
+	<update id="addLikeStoryCount">
+		update user
+		set likeStoryCount=likeStoryCount+1
+		where id=#{0}
+	</update>
 
-    <update id="delLikeStoryCount">
-         update user
-        set likeStoryCount=likeStoryCount-1
-        where id=#{0}
-    </update>
+	<update id="delLikeStoryCount">
+		update user
+		set likeStoryCount=likeStoryCount-1
+		where id=#{0}
+	</update>
 
-    <resultMap id="user" type="cn.edu.nju.software.entity.User">
-        <id column="id" property="id" />
-        <id column="nickname" property="nickname" />
-        <id column="accessToken" property="accessToken" />
-        <id column="headImgUrl" property="headImgUrl" />
-        <id column="wxUnionId" property="wxUnionId" />
-        <id column="createTime" property="createTime" />
-        <id column="updateTime" property="updateTime" />
-        <id column="mobile" property="mobile" />
-        <id column="verifyCode" property="verifyCode" />
-        <id column="expireTime" property="expireTime" />
-        <id column="password" property="password" />
-        <id column="company" property="company" />
-        <id column="city" property="city" />
-        <id column="email" property="email" />
-        <id column="weChatOpenId" property="weChatOpenId" />
-        <id column="weChatAccessToken" property="weChatAccessToken" />
-        <id column="weChatAccessToken" property="weChatAccessToken" />
-        <id column="weChatRefreshToken" property="weChatRefreshToken" />
-        <id column="likeCount"  property="likeCount"/>
-    </resultMap>
+	<resultMap id="user" type="cn.edu.nju.software.entity.User">
+		<id column="id" property="id" />
+		<id column="nickname" property="nickname" />
+		<id column="accessToken" property="accessToken" />
+		<id column="headImgUrl" property="headImgUrl" />
+		<id column="wxUnionId" property="wxUnionId" />
+		<id column="createTime" property="createTime" />
+		<id column="updateTime" property="updateTime" />
+		<id column="mobile" property="mobile" />
+		<id column="verifyCode" property="verifyCode" />
+		<id column="expireTime" property="expireTime" />
+		<id column="password" property="password" />
+		<id column="company" property="company" />
+		<id column="city" property="city" />
+		<id column="email" property="email" />
+		<id column="weChatOpenId" property="weChatOpenId" />
+		<id column="weChatAccessToken" property="weChatAccessToken" />
+		<id column="weChatAccessToken" property="weChatAccessToken" />
+		<id column="weChatRefreshToken" property="weChatRefreshToken" />
+		<id column="likeCount" property="likeCount" />
+	</resultMap>
 
-    <update id="updateUser" parameterType="cn.edu.nju.software.entity.User">
+	<update id="updateUser" parameterType="cn.edu.nju.software.entity.User">
 		update user
 		set
 		nickname=#{nickname},
@@ -84,50 +84,52 @@
 		id=#{id}
 	</update>
 
-    <select id="getUserById" resultType="cn.edu.nju.software.entity.User">
-        select
-        <include refid="fields"></include>
-        from user
-        where id = #{0}
-    </select>
+	<select id="getUserById" resultType="cn.edu.nju.software.entity.User">
+		select
+		<include refid="fields"></include>
+		from user
+		where id = #{0}
+	</select>
 
-    <select id="getUserByDeviceId" resultType="cn.edu.nju.software.entity.User">
-        select
-        <include refid="fields"></include>
-        from user
-        where deviceId = #{0}
-    </select>
+	<select id="getUserByDeviceId" resultType="cn.edu.nju.software.entity.User">
+		select
+		<include refid="fields"></include>
+		from user
+		where deviceId = #{0}
+	</select>
 
-    <select id="getAllUsers" resultType="cn.edu.nju.software.entity.User">
-        select
-        <include refid="fields"></include>
-        from user
-    </select>
+	<select id="getAllUsers" resultType="cn.edu.nju.software.entity.User">
+		select
+		<include refid="fields"></include>
+		from user
+	</select>
 
-    <select id="getUserByMobile" resultType="cn.edu.nju.software.entity.User">
-        select
-        <include refid="fields"></include>
-        from user
-        where mobile = #{0}
-    </select>
-    <select id="getLikeCountByUserId" resultType="java.lang.Integer">
-        select likeCount
-        from user
-        where id = #{userId}
-    </select>
-    <select id="getUserListByIdList" resultType="cn.edu.nju.software.entity.User">
-        select <include refid="fields"/>
-        from USER
-        WHERE id in
-        <foreach collection="idList" item="id" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </select>
-    <select id="getUserByPrimaryKey" resultType="cn.edu.nju.software.entity.User">
-        select <include refid="fields"/>
-        from user
-        where id = #{userId}
-    </select>
-
+	<select id="getUserByMobile" resultType="cn.edu.nju.software.entity.User">
+		select
+		<include refid="fields"></include>
+		from user
+		where mobile = #{0}
+	</select>
+	<select id="getLikeCountByUserId" resultType="java.lang.Integer">
+		select likeCount
+		from user
+		where id = #{userId}
+	</select>
+	<select id="getUserListByIdList" resultType="cn.edu.nju.software.entity.User">
+		select
+		<include refid="fields" />
+		from USER
+		WHERE id in
+		<foreach collection="idList" item="id" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</select>
+	<select id="getUserByPrimaryKey" resultType="cn.edu.nju.software.entity.User">
+		select
+		<include refid="fields" />
+		from user
+		where id = #{userId}
+	</select>
 
 </mapper>

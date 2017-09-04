@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.edu.nju.software.dao.user.AppUserDao;
+import cn.edu.nju.software.entity.Admin;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.service.user.UserMessageService;
 
@@ -115,6 +116,18 @@ public class UserMessageServiceImpl implements UserMessageService {
 	@Override
 	public boolean updateUser(User user) {
 		return appUserDao.updateUser(user);
+	}
+
+	@Override
+	public List<User> getUserListByPage(int page, int pageSize) {
+	        int offset = page * pageSize;
+	        int limit = pageSize;
+	        return appUserDao.getUserListByPage(limit, offset);
+	}
+
+	@Override
+	public List<User> getAllUserList() {
+		return appUserDao.getAllUserList();
 	}
 
 }

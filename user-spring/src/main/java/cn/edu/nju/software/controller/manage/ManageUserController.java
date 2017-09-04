@@ -1,6 +1,8 @@
 package cn.edu.nju.software.controller.manage;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,14 +21,16 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
+import cn.edu.nju.software.entity.Admin;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.service.user.UserMessageService;
+import cn.edu.nju.software.util.Util;
 
 /**
-* @author zs
-* @version 创建时间：2017年9月2日 下午8:06:10
-*/
+ * @author zs
+ * @version 创建时间：2017年9月2日 下午8:06:10
+ */
 
 @Api(value = "User", description = "用户管理接口")
 @Controller
@@ -36,11 +40,11 @@ public class ManageUserController {
 	UserMessageService userMessageService;
 
 	// 删除用户
-	@RequestMapping(value = "/manageUser/{id}", method = { RequestMethod.DELETE })
+	@RequestMapping(value = "/deleteUserById/{id}", method = { RequestMethod.DELETE })
 	@ResponseBody
 	@ApiOperation(value = "根据用户ID删除用户", notes = "")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public ResponseData<Boolean> deleteAdminPower(@ApiParam("id") @PathVariable int id, HttpServletRequest request,
+	public ResponseData<Boolean> deleteUserById(@ApiParam("id") @PathVariable int id, HttpServletRequest request,
 			HttpServletResponse response) {
 		ResponseData<Boolean> responseData = new ResponseData();
 		boolean res = userMessageService.deleteUser(id);
@@ -51,9 +55,9 @@ public class ManageUserController {
 		return responseData;
 	}
 
-	// 根据用户姓名模糊查找
+	// 根据用户姓名查找
 	@RequestMapping(value = "/getUserByNickname", method = { RequestMethod.GET })
-	@ApiOperation(value = "根据用户姓名模糊查找", notes = "")
+	@ApiOperation(value = "根据用户姓名查找", notes = "")
 	@ResponseBody
 	public ResponseData<List<User>> getUserByNickname(@ApiParam("nickName") @RequestParam String nickName,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -78,14 +82,16 @@ public class ManageUserController {
 	// 添加用户
 	@ApiOperation(value = "添加用户", notes = "")
 	@RequestMapping(value = "/saveUser", method = { RequestMethod.POST })
-	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@ResponseStatus(HttpStatus.CREATED)
 	@ResponseBody
-	public void getUserById(@ApiParam("表单提交的添加用户信息") @RequestParam User user, HttpServletRequest request,
+	public User getUserById(@ApiParam("表单提交的添加用户信息") @RequestParam User user, HttpServletRequest request,
 			HttpServletResponse response) {
-		boolean success = userMessageService.saveUser(user);
-		if (!success) {
-			throw new RuntimeException("添加失败");
-		}
+		user.setPassword(Util.getMd5(user.getPassword()));
+		user.setAccessToken(UUID.randomUUID() + "");
+		user.setCreateTime(new Date());
+		user.setUpdateTime(new Date());
+		userMessageService.saveUser(user);
+		return user;
 	}
 
 	// 更新用户信息
@@ -93,11 +99,34 @@ public class ManageUserController {
 	@RequestMapping(value = "/updateUser", method = { RequestMethod.POST })
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ResponseBody
-	public void updateUser(@ApiParam("表单提交的更新后用户信息") @RequestParam User user, HttpServletRequest request,
+	public User updateUser(@ApiParam("表单提交的更新后用户信息") @RequestParam User user, HttpServletRequest request,
 			HttpServletResponse response) {
-		boolean success = userMessageService.updateUser(user);
-		if (!success) {
-			throw new RuntimeException("更新失败");
-		}
+		user.setPassword(Util.getMd5(user.getPassword()));
+		user.setUpdateTime(new Date());
+		userMessageService.updateUser(user);
+		return user;
+	}
+
+	// 根据页数获取所有用户的列表
+	@ApiOperation(value = "分页获得用户", notes = "")
+	@RequestMapping(value = "/getUserListByPage", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<List<User>> getUserListByPage(@ApiParam("PAGE") @RequestParam int page,
+			@ApiParam("SIZE") @RequestParam int pageSize, HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<List<User>> responseData = new ResponseData<>();
+		List<User> userList = userMessageService.getUserListByPage(page, pageSize);
+		responseData.jsonFill(1, null, userList);
+		return responseData;
+	}
+
+	// 获取所有用户列表
+	@ApiOperation(value = "获取所有用户", notes = "")
+	@RequestMapping(value = "/getAllUserList", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<List<User>> getAllUserList(HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<List<User>> responseData = new ResponseData<>();
+		List<User> userList = userMessageService.getAllUserList();
+		responseData.jsonFill(1, null, userList);
+		return responseData;
 	}
 }
