@@ -11,7 +11,7 @@ public interface UserMessageService {
 	
 	//添加用户
 	boolean saveUser(User user);
-	//根据姓名模糊查询用户
+	//根据姓名查询用户
 	List<User> getUserByNickname(String nickname);
 	//根据用户ID查询用户
 	User getUserById(int userId);
