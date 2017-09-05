@@ -113,9 +113,9 @@
 		#{followeeCount},
 		#{workCount},
 		#{likeCount},
+		#{deviceId},
 		#{listenedCount},
-		#{likeStoryCount},
-		#{deviceId}
+		#{likeStoryCount}
 		)
 	</insert>
 
