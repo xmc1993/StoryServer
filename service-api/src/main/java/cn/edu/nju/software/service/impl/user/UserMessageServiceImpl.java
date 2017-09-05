@@ -94,8 +94,13 @@ public class UserMessageServiceImpl implements UserMessageService {
     }
 
 	@Override
-	public boolean saveUser(User user) {
-		return appUserDao.saveUser(user);
+	public User saveUser(User user) {
+		 boolean res = appUserDao.saveUser(user);
+	        if (res) {
+	            return user;
+	        } else {
+	            return null;
+	        }
 	}
 
 	@Override
@@ -109,8 +114,8 @@ public class UserMessageServiceImpl implements UserMessageService {
 	}
 
 	@Override
-	public boolean deleteUser(int id) {
-		return appUserDao.deleteUser(id);
+	public boolean deleteUserById(int id) {
+		return appUserDao.deleteUserById(id);
 	}
 
 	@Override
@@ -129,5 +134,11 @@ public class UserMessageServiceImpl implements UserMessageService {
 	public List<User> getAllUserList() {
 		return appUserDao.getAllUserList();
 	}
+
+	@Override
+	public int getUserCount() {
+		return appUserDao.getUserCount();
+	}
+
 
 }

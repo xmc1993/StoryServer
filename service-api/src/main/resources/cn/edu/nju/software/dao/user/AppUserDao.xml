@@ -213,6 +213,21 @@
 		select * from user
 	</select>
 
+	<select id="getUserCount" resultType="java.lang.Integer">
+		select
+		count(id)
+		from user
+		where valid = 1
+	</select>
+
+	<update id="deleteUserById">
+		update user
+		set
+		valid=0
+		where
+		id=#{0}
+	</update>
+
 	<delete id="deleteUser">
 		DELETE FROM user WHERE id = #{0}
 	</delete>

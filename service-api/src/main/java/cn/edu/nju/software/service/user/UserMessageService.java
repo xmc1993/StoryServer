@@ -11,7 +11,7 @@ public interface UserMessageService {
 	boolean sendMessageByBusiness(String username, String secret, String phoneNumber, String code);
 
 	// 添加用户
-	boolean saveUser(User user);
+	User saveUser(User user);
 
 	// 根据姓名查询用户
 	List<User> getUserByNickname(String nickname);
@@ -20,7 +20,7 @@ public interface UserMessageService {
 	User getUserById(int userId);
 
 	// 删除用户
-	boolean deleteUser(int id);
+	boolean deleteUserById(int id);
 
 	// 更新用户信息
 	boolean updateUser(User user);
@@ -30,5 +30,8 @@ public interface UserMessageService {
 
 	// 根据页数获取所有用户信息
 	List<User> getUserListByPage(int page, int pageSize);
+	
+	//获取用户数
+    int getUserCount();
 
 }
