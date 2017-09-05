@@ -98,11 +98,11 @@ public class UserWeChatLoginServiceImpl implements UserWeChatLoginService {
                     e.printStackTrace();
                 }
             }
-            try {
-                httpClient.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                httpClient.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
 
         return null;
@@ -166,11 +166,11 @@ public class UserWeChatLoginServiceImpl implements UserWeChatLoginService {
                     e.printStackTrace();
                 }
             }
-            try {
-                httpClient.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+//                httpClient.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
 
         return null;
