@@ -63,7 +63,7 @@ public interface AppUserDao {
 
 	Integer getListenCount(int userId);
 	
-	List<User> getUserListByPage(int limit, int offset);
+	List<User> getUserListByPage(int offset, int limit);
 	
 	List<User> getAllUserList();
 

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +35,7 @@ import cn.edu.nju.software.util.Util;
 
 @Api(value = "User", description = "用户管理接口")
 @Controller
-@RequestMapping("/manageUser")
+@RequestMapping("/manage/user")
 public class ManageUserController {
 	@Autowired
 	UserMessageService userMessageService;
@@ -84,7 +85,7 @@ public class ManageUserController {
 	@RequestMapping(value = "/saveUser", method = { RequestMethod.POST })
 	@ResponseStatus(HttpStatus.CREATED)
 	@ResponseBody
-	public User getUserById(@ApiParam("表单提交的添加用户信息") @RequestParam User user, HttpServletRequest request,
+	public User getUserById(@ApiParam("表单提交的添加用户信息") @RequestBody User user, HttpServletRequest request,
 			HttpServletResponse response) {
 		user.setPassword(Util.getMd5(user.getPassword()));
 		user.setAccessToken(UUID.randomUUID() + "");
@@ -99,7 +100,7 @@ public class ManageUserController {
 	@RequestMapping(value = "/updateUser", method = { RequestMethod.POST })
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ResponseBody
-	public User updateUser(@ApiParam("表单提交的更新后用户信息") @RequestParam User user, HttpServletRequest request,
+	public User updateUser(@ApiParam("表单提交的更新后用户信息") @RequestBody User user, HttpServletRequest request,
 			HttpServletResponse response) {
 		user.setPassword(Util.getMd5(user.getPassword()));
 		user.setUpdateTime(new Date());
