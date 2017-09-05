@@ -85,7 +85,7 @@ public class ManageUserController {
 	@RequestMapping(value = "/saveUser", method = { RequestMethod.POST })
 	@ResponseStatus(HttpStatus.CREATED)
 	@ResponseBody
-	public User getUserById(@ApiParam("表单提交的添加用户信息") @RequestParam User user, HttpServletRequest request,
+	public User getUserById(@ApiParam("表单提交的添加用户信息") @RequestBody User user, HttpServletRequest request,
 			HttpServletResponse response) {
 		user.setPassword(Util.getMd5(user.getPassword()));
 		user.setAccessToken(UUID.randomUUID() + "");
