@@ -122,7 +122,7 @@ public class UserMessageServiceImpl implements UserMessageService {
 	public List<User> getUserListByPage(int page, int pageSize) {
 	        int offset = page * pageSize;
 	        int limit = pageSize;
-	        return appUserDao.getUserListByPage(limit, offset);
+	        return appUserDao.getUserListByPage(offset, limit);
 	}
 
 	@Override
