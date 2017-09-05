@@ -41,4 +41,5 @@ public class User implements Serializable {
 	private Integer listenCount = 0;//收听数
 	private Integer listenedCount = 0;//被收听数
 	private Integer likeStoryCount = 0;//喜欢的故事数
+	private Integer valid = 1;//用于软删除
 }

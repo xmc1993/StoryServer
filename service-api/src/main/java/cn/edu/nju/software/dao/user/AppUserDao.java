@@ -66,6 +66,8 @@ public interface AppUserDao {
 	List<User> getUserListByPage(int offset, int limit);
 	
 	List<User> getAllUserList();
+	
+	boolean deleteUserById(int id);
 
-
+	Integer getUserCount();
 }

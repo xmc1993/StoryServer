@@ -48,7 +48,7 @@ public class ManageUserController {
 	public ResponseData<Boolean> deleteUserById(@ApiParam("id") @PathVariable int id, HttpServletRequest request,
 			HttpServletResponse response) {
 		ResponseData<Boolean> responseData = new ResponseData();
-		boolean res = userMessageService.deleteUser(id);
+		boolean res = userMessageService.deleteUserById(id);
 		responseData.jsonFill(res ? 1 : 2, null, res);
 		if (!res) {
 			throw new RuntimeException("删除失败");
@@ -91,7 +91,7 @@ public class ManageUserController {
 		user.setAccessToken(UUID.randomUUID() + "");
 		user.setCreateTime(new Date());
 		user.setUpdateTime(new Date());
-		userMessageService.saveUser(user);
+		user=userMessageService.saveUser(user);
 		return user;
 	}
 
@@ -117,6 +117,7 @@ public class ManageUserController {
 		ResponseData<List<User>> responseData = new ResponseData<>();
 		List<User> userList = userMessageService.getUserListByPage(page, pageSize);
 		responseData.jsonFill(1, null, userList);
+		responseData.setCount(userMessageService.getUserCount());
 		return responseData;
 	}
 
