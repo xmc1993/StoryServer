@@ -1,5 +1,8 @@
 package cn.edu.nju.software.controller.manage;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -11,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +24,6 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
-import cn.edu.nju.software.entity.Admin;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.service.user.UserMessageService;
@@ -85,13 +86,31 @@ public class ManageUserController {
 	@RequestMapping(value = "/saveUser", method = { RequestMethod.POST })
 	@ResponseStatus(HttpStatus.CREATED)
 	@ResponseBody
-	public User getUserById(@ApiParam("表单提交的添加用户信息") @RequestBody User user, HttpServletRequest request,
-			HttpServletResponse response) {
-		user.setPassword(Util.getMd5(user.getPassword()));
-		user.setAccessToken(UUID.randomUUID() + "");
+	public User saveUser(@ApiParam("用户名") @RequestParam(value = "nickname") String nickname,
+			@ApiParam("密码") @RequestParam(value = "password") String password,
+			@ApiParam("性别") @RequestParam(value = "sex", required = false) String sex,
+			@ApiParam("城市") @RequestParam(value = "city", required = false) String city,
+			@ApiParam("公司") @RequestParam(value = "company", required = false) String company,
+			@ApiParam("邮箱") @RequestParam(value = "email", required = false) String email,
+			@ApiParam("手机号码") @RequestParam(value = "mobile", required = false) String mobile,
+			HttpServletRequest request, HttpServletResponse response) throws ParseException {
+		User user = new User();
+		user.setNickname(nickname);
+		user.setPassword(Util.getMd5(password));
 		user.setCreateTime(new Date());
 		user.setUpdateTime(new Date());
-		user=userMessageService.saveUser(user);
+		user.setAccessToken(Util.getToken());
+		if (city != null)
+			user.setCity(city);
+		if (sex != null)
+			user.setSex(sex);
+		if (mobile != null)
+			user.setMobile(mobile);
+		if (company != null)
+			user.setCompany(company);
+		if (email != null)
+			user.setEmail(email);
+		user = userMessageService.saveUser(user);
 		return user;
 	}
 
@@ -100,12 +119,34 @@ public class ManageUserController {
 	@RequestMapping(value = "/updateUser", method = { RequestMethod.POST })
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ResponseBody
-	public User updateUser(@ApiParam("表单提交的更新后用户信息") @RequestBody User user, HttpServletRequest request,
-			HttpServletResponse response) {
-		user.setPassword(Util.getMd5(user.getPassword()));
+	public boolean updateUser(@ApiParam("用户名") @RequestParam(value = "nickname",required = false) String nickname,
+			@ApiParam("密码") @RequestParam(value = "password",required = false) String password,
+			@ApiParam("性别") @RequestParam(value = "sex", required = false) String sex,
+			@ApiParam("城市") @RequestParam(value = "city", required = false) String city,
+			@ApiParam("公司") @RequestParam(value = "company", required = false) String company,
+			@ApiParam("邮箱") @RequestParam(value = "email", required = false) String email,
+			@ApiParam("手机号码") @RequestParam(value = "mobile", required = false) String mobile,
+			HttpServletRequest request, HttpServletResponse response) {
+		User user = new User();
+		if (nickname != null)user.setNickname(nickname);
+		if (password != null)user.setPassword(Util.getMd5(password));
 		user.setUpdateTime(new Date());
-		userMessageService.updateUser(user);
-		return user;
+		user.setAccessToken(Util.getToken());
+		if (city != null)
+			user.setCity(city);
+		if (sex != null)
+			user.setSex(sex);
+		if (mobile != null)
+			user.setMobile(mobile);
+		if (company != null)
+			user.setCompany(company);
+		if (email != null)
+			user.setEmail(email);
+		boolean res = userMessageService.updateUser(user);
+		if (!res) {
+			throw new RuntimeException("删除失败");
+		}
+		return res;
 	}
 
 	// 根据页数获取所有用户的列表
