@@ -114,6 +114,8 @@ public class ControllerAssist {
 	public ResponseEntity<?> handleAllException(HttpServletRequest request, Exception exception, Locale locale) {
 		logger.info("", exception);
 		ResponseData<?> result = new ResponseData<>();
+		//将Exception中的信息打印出来方便查日志
+		exception.printStackTrace();
 		result.jsonFill(2, exception.getMessage(), null);
 		return ResponseEntity.status(400).body(result);
 	}
