@@ -1,11 +1,8 @@
 package cn.edu.nju.software.controller.manage;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,10 +39,9 @@ public class ManageUserController {
 	UserMessageService userMessageService;
 
 	// 删除用户
-	@RequestMapping(value = "/deleteUserById/{id}", method = { RequestMethod.DELETE })
+	@RequestMapping(value = "/deleteUserById/{id}", method = {RequestMethod.DELETE })
 	@ResponseBody
 	@ApiOperation(value = "根据用户ID删除用户", notes = "")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ResponseData<Boolean> deleteUserById(@ApiParam("id") @PathVariable int id, HttpServletRequest request,
 			HttpServletResponse response) {
 		ResponseData<Boolean> responseData = new ResponseData();
@@ -65,6 +61,10 @@ public class ManageUserController {
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<List<User>> responseData = new ResponseData<>();
 		List<User> userList = userMessageService.getUserByNickname(nickName);
+		if(userList==null){
+			responseData.jsonFill(2, "用户不存在", null);
+			return responseData;
+		}
 		responseData.jsonFill(1, null, userList);
 		return responseData;
 	}
@@ -77,6 +77,10 @@ public class ManageUserController {
 			HttpServletResponse response) {
 		ResponseData<User> responseData = new ResponseData<>();
 		User user = userMessageService.getUserById(id);
+		if(user==null){
+			responseData.jsonFill(2, "用户不存在", null);
+			return responseData;
+		}
 		responseData.jsonFill(1, null, user);
 		return responseData;
 	}
@@ -93,6 +97,7 @@ public class ManageUserController {
 			@ApiParam("公司") @RequestParam(value = "company", required = false) String company,
 			@ApiParam("邮箱") @RequestParam(value = "email", required = false) String email,
 			@ApiParam("手机号码") @RequestParam(value = "mobile", required = false) String mobile,
+			@ApiParam("用户头像url") @RequestParam(value = "headImgUrl", required = false) String headImgUrl,
 			HttpServletRequest request, HttpServletResponse response) throws ParseException {
 		User user = new User();
 		user.setNickname(nickname);
@@ -108,6 +113,8 @@ public class ManageUserController {
 			user.setMobile(mobile);
 		if (company != null)
 			user.setCompany(company);
+		if (headImgUrl != null)
+			user.setHeadImgUrl(headImgUrl);
 		if (email != null)
 			user.setEmail(email);
 		user = userMessageService.saveUser(user);
@@ -117,9 +124,10 @@ public class ManageUserController {
 	// 更新用户信息
 	@ApiOperation(value = "更新用户信息", notes = "")
 	@RequestMapping(value = "/updateUser", method = { RequestMethod.POST })
-	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@ResponseBody
-	public boolean updateUser(@ApiParam("用户名") @RequestParam(value = "nickname",required = false) String nickname,
+	public ResponseData<Boolean> updateUser(
+			@ApiParam("用户id") @RequestParam(value = "id") Integer id,
+			@ApiParam("用户名") @RequestParam(value = "nickname",required = false) String nickname,
 			@ApiParam("密码") @RequestParam(value = "password",required = false) String password,
 			@ApiParam("性别") @RequestParam(value = "sex", required = false) String sex,
 			@ApiParam("城市") @RequestParam(value = "city", required = false) String city,
@@ -127,11 +135,15 @@ public class ManageUserController {
 			@ApiParam("邮箱") @RequestParam(value = "email", required = false) String email,
 			@ApiParam("手机号码") @RequestParam(value = "mobile", required = false) String mobile,
 			HttpServletRequest request, HttpServletResponse response) {
-		User user = new User();
+		ResponseData<Boolean> responseData=new ResponseData<>();
+		User user=userMessageService.getUserById(id);
+		if(user==null){
+			 responseData.jsonFill(2, "用户不存在", false);
+	           return responseData;
+		}
 		if (nickname != null)user.setNickname(nickname);
 		if (password != null)user.setPassword(Util.getMd5(password));
 		user.setUpdateTime(new Date());
-		user.setAccessToken(Util.getToken());
 		if (city != null)
 			user.setCity(city);
 		if (sex != null)
@@ -143,10 +155,8 @@ public class ManageUserController {
 		if (email != null)
 			user.setEmail(email);
 		boolean res = userMessageService.updateUser(user);
-		if (!res) {
-			throw new RuntimeException("删除失败");
-		}
-		return res;
+		responseData.jsonFill(res ? 1 : 2, null, res);
+		return responseData;
 	}
 
 	// 根据页数获取所有用户的列表
@@ -162,14 +172,4 @@ public class ManageUserController {
 		return responseData;
 	}
 
-	// 获取所有用户列表
-	@ApiOperation(value = "获取所有用户", notes = "")
-	@RequestMapping(value = "/getAllUserList", method = { RequestMethod.GET })
-	@ResponseBody
-	public ResponseData<List<User>> getAllUserList(HttpServletRequest request, HttpServletResponse response) {
-		ResponseData<List<User>> responseData = new ResponseData<>();
-		List<User> userList = userMessageService.getAllUserList();
-		responseData.jsonFill(1, null, userList);
-		return responseData;
-	}
 }
