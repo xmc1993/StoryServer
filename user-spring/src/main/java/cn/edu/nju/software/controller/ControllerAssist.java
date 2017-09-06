@@ -31,7 +31,7 @@ import java.util.Locale;
  * 
  * @author fenggang
  */
-@ControllerAdvice
+//@ControllerAdvice
 public class ControllerAssist {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());

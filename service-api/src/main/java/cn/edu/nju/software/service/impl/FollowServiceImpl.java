@@ -23,9 +23,13 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     public boolean saveFollowRelation(FollowRelation followRelation) {
+        FollowRelation relation = followRelationDao.getFollowRelation(followRelation.getFollowerId(), followRelation.getFolloweeId());
+        //已经关注了不能再次关注
+        if (relation != null) {
+            return false;
+        }
         boolean res1 = followRelationDao.saveFollowRelation(followRelation);
         if (!res1) return false;
-
         boolean res2 = appUserDao.newFollower(followRelation.getFolloweeId());//被关注的人粉丝+1
         boolean res3 = appUserDao.newFollowee(followRelation.getFollowerId());//关注者关注的人数+1
         return res2 && res3;

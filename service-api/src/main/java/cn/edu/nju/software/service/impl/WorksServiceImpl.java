@@ -133,7 +133,7 @@ public class WorksServiceImpl implements WorksService {
 
 	@Override
 	public PageInfo<Works> getWorksListByStoryIdListByPage(List<Integer> storyIdList, int page, int pageSize) {
-		PageHelper.startPage(page+1, pageSize);
+		PageHelper.startPage(page, pageSize);
         //防止mybatis查询出错
         storyIdList.add(-1);
 		List<Works> workList  = worksDao.getWorksListByStoryIdList(storyIdList);

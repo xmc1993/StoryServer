@@ -140,7 +140,7 @@ public class UserBabyController extends BaseController {
             responseData.jsonFill(2, "宝宝不存在。", false);
             return responseData;
         }
-        if (baby.getParentId() != user.getId()) {
+        if (!baby.getParentId().equals(user.getId())) {
             responseData.jsonFill(2, "无效的请求。", false);
             response.setStatus(401);
             return responseData;
