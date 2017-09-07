@@ -5,6 +5,7 @@ import cn.edu.nju.software.entity.Answer;
 import cn.edu.nju.software.entity.TagUserLog;
 import cn.edu.nju.software.service.AnswerService;
 import cn.edu.nju.software.service.TagUserLogService;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +40,7 @@ public class AnswerServiceImpl implements AnswerService {
         if (ans == null || ans == "") {
             return;
         }
+        ans = StringEscapeUtils.unescapeJava(ans);
         try {
             JSONArray optionList = new JSONArray(ans);
             int iSize = optionList.length();

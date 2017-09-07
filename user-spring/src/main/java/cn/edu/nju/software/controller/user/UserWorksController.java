@@ -242,7 +242,6 @@ public class UserWorksController extends BaseController {
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Works> responseData = new ResponseData();
         Works works = worksService.getWorksById(id);
-        Story story = storyService.getStoryById(works.getStoryId());
         if (works == null) {
             responseData.jsonFill(2, "作品不存在", null);
             return responseData;

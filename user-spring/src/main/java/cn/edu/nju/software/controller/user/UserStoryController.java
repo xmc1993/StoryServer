@@ -349,18 +349,18 @@ public class UserStoryController extends BaseController {
 
         List<Integer> contentList = tagUserLogService.getTagUserLogTagIdListByBabyId(babyId, 0, 10);
 
+//        if(contentList.size()==0){
+//            responseData.jsonFill(1, null, null);
+//            return responseData;
+//        }
         if(contentList.size()==0){
-            responseData.jsonFill(1, null, null);
-            return responseData;
-        }
-        List<Integer> storyIdList = tagRelationService.getStoryIdListByTagIdList(contentList);
-        if(storyIdList.size()==0){
             List<Story> storyList = storyService.getSetRecommendedStoryListByPage(page*pageSize, pageSize);
             int count = storyService.getRecommendedStoryCount();
             responseData.jsonFill(1, null, storyList2VoList(storyList, user.getId()));
             responseData.setCount(count);
             return responseData;
         }
+        List<Integer> storyIdList = tagRelationService.getStoryIdListByTagIdList(contentList);
         PageInfo<Story> pageInfo = storyService.getStoryListByIdListByPage(storyIdList, page, pageSize);
 
         responseData.setCount((int) pageInfo.getTotal());

@@ -49,6 +49,7 @@ public class TagRelationServiceImpl implements TagRelationService {
 
     @Override
     public List<Integer> getStoryIdListByTagIdList(List<Integer> tagIds) {
+        tagIds.add(-1);
         return tagRelationDao.getStoryIdListByTagIdList(tagIds);
     }
 
