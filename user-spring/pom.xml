@@ -37,10 +37,11 @@
 					<warName>${project.artifactId}</warName>
 					<webResources>
 						<resource>
-							<directory>lib/</directory>
+							<directory>${basedir}/lib/</directory>
 							<targetPath>WEB-INF/lib</targetPath>
 							<includes>
 								<include>**/*.jar</include>
+								<filtering>true</filtering>
 							</includes>
 						</resource>
 					</webResources>
