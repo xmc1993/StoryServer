@@ -514,6 +514,14 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.jave</groupId>
+			<artifactId>jave</artifactId>
+			<version>1.02.jar</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/jave-1.02.jar</systemPath>
+		</dependency>
+
+		<dependency>
 			<groupId>com.story</groupId>
 			<artifactId>story.api</artifactId>
 			<version>1.0-SNAPSHOT</version>
