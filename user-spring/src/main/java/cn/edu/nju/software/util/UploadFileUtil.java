@@ -13,9 +13,14 @@ import java.io.IOException;
  */
 public final class UploadFileUtil {
     private static final Logger logger = LoggerFactory.getLogger(UploadFileUtil.class);
+    public static String SOURCE_BASE_URL = "http://120.27.219.173/source";
+
+    static {
+        String url = System.getenv().get("SOURCE_BASE_URL") != null ? System.getenv().get("SOURCE_BASE_URL") : "http://120.27.219.173/source";
+        SOURCE_BASE_URL = url;
+    }
 
     //资源服务器的base url
-    public static final String SOURCE_BASE_URL = "http://120.27.219.173/source";
 
     public static final String URL_BASE = "/source";
 
@@ -145,8 +150,9 @@ public final class UploadFileUtil {
         return url;
     }
     public static void main(String[] args) {
-        String result = getRealPathFromUrl("http://120.27.219.173/source/cover/XKpa5J5vOj9rQVnn.jpg");
-        System.out.println(result);
+//        String result = getRealPathFromUrl("http://120.27.219.173/source/cover/XKpa5J5vOj9rQVnn.jpg");
+//        System.out.println(result);
+        System.out.println(System.getenv().get("STORY_HOME"));
     }
 
 
