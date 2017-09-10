@@ -108,6 +108,11 @@
     <update id="updateWorks">
         update works
         set
+        storyTitle=#{storyTitle}
+        reviewCount=#{reviewCount}
+        listenCount=#{listenCount}
+        headImgUrl=#{headImgUrl}
+        coverUrl=#{coverUrl}
         url=#{url},
         duration=#{duration},
         updateTime=#{updateTime}

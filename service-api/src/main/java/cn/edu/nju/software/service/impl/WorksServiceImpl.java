@@ -7,12 +7,17 @@ import cn.edu.nju.software.entity.TwoTuple;
 import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.service.WorksService;
 import cn.edu.nju.software.util.Const;
+import it.sauronsoftware.jave.Encoder;
+import it.sauronsoftware.jave.EncoderException;
+import it.sauronsoftware.jave.MultimediaInfo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -154,6 +159,29 @@ public class WorksServiceImpl implements WorksService {
     public Integer getWorksAfterSomeDate(Integer userId, String date) {
         return worksDao.getWorksAfterSomeDate(userId, date);
     }
+
+	@Override
+	public String getOriginSoundLength(File file) {
+		 Encoder encoder = new Encoder();
+	        MultimediaInfo m = null;
+	        try {
+	            m = encoder.getInfo(file);
+	            long length = m.getDuration() / 1000;
+	            int hours = (int) (length / 3600);
+	            int minutes = (int) ((length % 3600) / 60);
+	            int seconds = (int) (length % 60);
+	            StringBuilder stringBuilder = new StringBuilder();
+	            stringBuilder.append(hours == 0 ? "0" : String.valueOf(hours));
+	            stringBuilder.append(":");
+	            stringBuilder.append(minutes == 0 ? "0" : String.valueOf(minutes));
+	            stringBuilder.append(":");
+	            stringBuilder.append(seconds == 0 ? "0" : String.valueOf(seconds));
+	            return stringBuilder.toString();
+	        } catch (EncoderException e) {
+	            e.printStackTrace();
+	        }
+	        return null;
+	}
 
 
 }

@@ -4,6 +4,7 @@ import cn.edu.nju.software.entity.TwoTuple;
 import cn.edu.nju.software.entity.Works;
 import com.github.pagehelper.PageInfo;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -48,5 +49,6 @@ public interface WorksService {
     Integer getUserIdByWorkId(int worksId);
 
     Integer getWorksAfterSomeDate(Integer userId, String date);
-
+    
+    String getOriginSoundLength(File file);
 }
