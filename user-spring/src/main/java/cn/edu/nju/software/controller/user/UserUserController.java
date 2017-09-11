@@ -305,6 +305,7 @@ public class UserUserController extends BaseController {
         User user = new User();
         user.setNickname("xmc");
         user.setCity("南京");
+        user.setAccessToken(UploadFileUtil.SOURCE_BASE_URL);
         return user;
     }
 
