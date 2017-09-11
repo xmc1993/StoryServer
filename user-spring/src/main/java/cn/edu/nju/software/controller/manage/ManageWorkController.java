@@ -1,9 +1,15 @@
 package cn.edu.nju.software.controller.manage;
 
 import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.entity.Story;
+import cn.edu.nju.software.entity.StoryRole;
+import cn.edu.nju.software.entity.TagRelation;
 import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.service.WorksService;
+import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
+import cn.edu.nju.software.util.MyStringUtil;
 import cn.edu.nju.software.util.UploadFileUtil;
+import cn.edu.nju.software.vo.StoryNewVo;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -20,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.text.ParseException;
@@ -39,7 +46,6 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/manage")
 public class ManageWorkController {
-	private static final Logger logger = LoggerFactory.getLogger(ManageStoryController.class);
 	@Autowired
 	private WorksService worksService;
 
@@ -66,7 +72,7 @@ public class ManageWorkController {
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<List<Works>> responseData = new ResponseData<>();
 		List<Works> worksList = worksService.getWorksListByUserId(id, page, pageSize);
-		String errorMessage=null;
+		String errorMessage = null;
 		if (worksList == null) {
 			errorMessage = "用户无作品或者用户不存在";
 		}
@@ -94,9 +100,9 @@ public class ManageWorkController {
 	@ResponseBody
 	public ResponseData<Boolean> updateWorksById(@ApiParam("作品id") @RequestParam(value = "id") Integer id,
 			@ApiParam("故事标题") @RequestParam(value = "storyTitle", required = false) String storyTitle,
-			@ApiParam("音频url") @RequestParam(value = "url", required = false) String url,
-			@ApiParam("故事标题图url") @RequestParam(value = "headImgUrl", required = false) String headImgUrl,
-			@ApiParam("封面图url") @RequestParam(value = "coverUrl", required = false) String coverUrl,
+			@ApiParam("音频") @RequestParam(value = "audioFile", required = false) MultipartFile audioFile,
+			@ApiParam("故事标题图") @RequestParam(value = "headImgFile", required = false) MultipartFile headImgFile,
+			@ApiParam("封面图") @RequestParam(value = "coverFile", required = false) MultipartFile coverFile,
 			@ApiParam("浏览次数") @RequestParam(value = "reviewCount", required = false) Integer reviewCount,
 			@ApiParam("收听数") @RequestParam(value = "listenCount", required = false) Integer listenCount,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -107,16 +113,29 @@ public class ManageWorkController {
 			responseData.jsonFill(2, "作品不存在", false);
 			return responseData;
 		}
-		if (storyTitle != null)
+
+		if (coverFile != null && !coverFile.isEmpty()) {
+			// 删除旧的封面
+			if (works.getCoverUrl() != null)
+				UploadFileUtil.deleteFileByUrl(works.getCoverUrl());
+			works.setCoverUrl(uploadFile(coverFile));
+		}
+		if (headImgFile != null && !headImgFile.isEmpty()) {
+			// 删除旧
+			if (works.getHeadImgUrl() != null)
+				UploadFileUtil.deleteFileByUrl(works.getHeadImgUrl());
+			works.setHeadImgUrl(uploadFile(headImgFile));
+		}
+		if (audioFile != null && !audioFile.isEmpty()) {
+			if (works.getUrl() != null)
+				UploadFileUtil.deleteFileByUrl(works.getUrl());
+			works.setUrl(uploadFile(audioFile));
+			String duration = worksService
+					.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(works.getUrl())));
+			works.setDuration(duration);
+		}
+		if(storyTitle !=null)
 			works.setStoryTitle(storyTitle);
-		if (url != null)
-			works.setUrl(url);
-        	String duration = worksService.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(url)));
-        	works.setDuration(duration);
-		if (headImgUrl != null)
-			works.setHeadImgUrl(headImgUrl);
-		if (coverUrl != null)
-			works.setCoverUrl(coverUrl);
 		if (reviewCount != null)
 			works.setReviewCount(reviewCount);
 		if (listenCount != null)
@@ -135,35 +154,62 @@ public class ManageWorkController {
 			@ApiParam("故事id") @RequestParam(value = "storyId") Integer storyId,
 			@ApiParam("故事标题") @RequestParam(value = "storyTitle") String storyTitle,
 			@ApiParam("用户名") @RequestParam(value = "username") String username,
-			@ApiParam("音频url") @RequestParam(value = "url") String url,
-			@ApiParam("故事标题图url") @RequestParam(value = "headImgUrl") String headImgUrl,
-			@ApiParam("封面图url") @RequestParam(value = "coverUrl") String coverUrl,
+			@ApiParam("音频") @RequestParam(value = "audioFile") MultipartFile audioFile,
+			@ApiParam("故事标题图") @RequestParam(value = "headImgFile") MultipartFile headImgFile,
+			@ApiParam("封面图") @RequestParam(value = "coverFile") MultipartFile coverFile,
 			@ApiParam("浏览次数") @RequestParam(value = "reviewCount", required = false) Integer reviewCount,
 			@ApiParam("收听数") @RequestParam(value = "listenCount", required = false) Integer listenCount,
 			HttpServletRequest request, HttpServletResponse response) throws ParseException {
 		Works works = new Works();
-		ResponseData<Works> responseData=new ResponseData<>();
-        String duration = worksService.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(url)));
-        works.setDuration(duration);
+		ResponseData<Works> responseData = new ResponseData<>();
+
+		if (coverFile != null && !coverFile.isEmpty()) {
+			works.setCoverUrl(uploadFile(coverFile));
+		}
+		if (headImgFile != null && !headImgFile.isEmpty()) {
+			works.setHeadImgUrl(uploadFile(headImgFile));
+		}
+		if (audioFile != null && !audioFile.isEmpty()) {
+			works.setUrl(uploadFile(audioFile));
+			String duration = worksService
+					.getOriginSoundLength(new File(UploadFileUtil.getRealPathFromUrl(works.getUrl())));
+			works.setDuration(duration);
+		}
+
 		works.setUserId(userId);
 		works.setStoryId(storyId);
 		works.setStoryTitle(storyTitle);
 		works.setUsername(username);
-		works.setUrl(url);
-		works.setHeadImgUrl(headImgUrl);
-		works.setCoverUrl(coverUrl);
 		works.setCreateTime(new Date());
 		works.setUpdateTime(new Date());
 		if (reviewCount != null)
 			works.setReviewCount(reviewCount);
 		if (listenCount != null)
 			works.setListenCount(listenCount);
-		boolean res=worksService.saveWorks(works);
+		boolean res = worksService.saveWorks(works);
 		if (res == false) {
-            responseData.jsonFill(2, "添加失败", null);
-            return responseData;
-        }
-        responseData.jsonFill(1, null, works);
-        return responseData;
+			responseData.jsonFill(2, "添加失败", null);
+			return responseData;
+		}
+		responseData.jsonFill(1, null, works);
+		return responseData;
+	}
+
+	/**
+	 * 上传文件
+	 *
+	 * @param file
+	 * @return
+	 */
+	private String uploadFile(MultipartFile file) {
+		String realPath = UploadFileUtil.getBaseUrl() + "/cover/";
+		String fileName = RandCharsUtils.getRandomString(16) + "."
+				+ UploadFileUtil.getSuffix(file.getOriginalFilename());
+		boolean success = UploadFileUtil.mvFile(file, realPath, fileName);
+		if (!success) {
+			throw new RuntimeException("文件上传失败");
+		}
+		String url = UploadFileUtil.SOURCE_BASE_URL + "/cover/" + fileName;
+		return url;
 	}
 }
