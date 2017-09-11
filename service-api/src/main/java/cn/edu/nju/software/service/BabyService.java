@@ -20,5 +20,9 @@ public interface BabyService {
     List<Baby> getBabyListByParentId(int parentId);
 
     List<Baby> getAllBabies();
+    
+    Baby getSelectedBady(int parentId);
+    
+    boolean selectBady(int parentId,int id);
 
 }

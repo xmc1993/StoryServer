@@ -24,4 +24,9 @@ public interface BabyDao {
 
     List<Baby> getAllBabies();
 
+    Baby getSelectedBady(int parentId);
+    
+    boolean unSelectAllBady(int parentId);
+    
+    boolean selectBady(int id);
 }

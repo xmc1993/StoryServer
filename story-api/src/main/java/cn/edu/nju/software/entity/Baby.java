@@ -14,6 +14,7 @@ public class Baby {
     private Date birthday;
     private Date createTime;
     private Date updateTime;
+    private Integer selected;
 
     public Integer getId() {
         return id;
@@ -78,4 +79,12 @@ public class Baby {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public Integer getSelected() {
+		return selected;
+	}
+
+	public void setSelected(Integer selected) {
+		this.selected = selected;
+	}
 }

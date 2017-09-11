@@ -50,4 +50,20 @@ public class BabyServiceImpl implements BabyService {
     public List<Baby> getAllBabies() {
         return babyDao.getAllBabies();
     }
+
+	@Override
+	public Baby getSelectedBady(int parentId) {		
+		return babyDao.getSelectedBady(parentId);
+	}
+
+	@Override
+	public boolean selectBady(int parentId,int id) {
+		boolean res=babyDao.unSelectAllBady(parentId);
+		if (res== false) {
+			return false;
+		}else {
+			boolean sucess=babyDao.selectBady(id);
+			return sucess;
+		}
+	}
 }

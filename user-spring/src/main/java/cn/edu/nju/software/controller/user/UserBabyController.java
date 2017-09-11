@@ -165,4 +165,44 @@ public class UserBabyController extends BaseController {
         responseData.jsonFill(1, null, baby);
         return responseData;
     }
+    
+    @ApiOperation(value = "获得用户选中的宝宝信息", notes = "")
+    @RequestMapping(value = "/getSelectedBady", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Baby> getSelectedBady(
+            @ApiParam("用户ID") @RequestParam("parentId") int parentId,
+            HttpServletRequest request, HttpServletResponse response) throws ParseException {
+        ResponseData<Baby> responseData = new ResponseData<>();
+        
+        Baby baby = babyService.getSelectedBady(parentId);
+        if (baby == null) {
+        	List<Baby> babyList = babyService.getBabyListByParentId(parentId);
+        	if(null == babyList){
+        		responseData.jsonFill(2, "用户没有宝宝或者用户不存在", null);
+        		return responseData;
+        	}
+        	responseData.jsonFill(1, "不存在选中的宝宝，返回用户的第一个宝宝", babyList.get(0));
+        	return responseData;
+        }
+        responseData.jsonFill(1, null, baby);
+        return responseData;
+    }
+    
+    @ApiOperation(value = "选中宝宝", notes = "")
+    @RequestMapping(value = "/selectBady", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Boolean> selectBady(
+            @ApiParam("用户ID") @RequestParam("parentId") int parentId,
+            @ApiParam("选中宝宝ID") @RequestParam("id") int id,
+            HttpServletRequest request, HttpServletResponse response) throws ParseException {
+        ResponseData<Boolean> responseData = new ResponseData<>();
+        
+        boolean sucess=babyService.selectBady(parentId, id);
+        if (sucess == false) {
+            responseData.jsonFill(2, "选中失败", sucess);
+            return responseData;
+        }
+        responseData.jsonFill(1, null, sucess);
+        return responseData;
+    }
 }
