@@ -131,6 +131,9 @@
             <mvc:mapping path="/user/submitIndividuationAnswer"/>
             <mvc:mapping path="/user/saveStoryUserLog"/>
             <mvc:mapping path="/user/getStoryListByBaby"/>
+            <mvc:mapping path="/user/newUsage"/>
+            <mvc:mapping path="/user/getUseRunningDays"/>
+            <mvc:mapping path="/user/getUseHistoryMaxRunningDays"/>
 
             <!-- 不需要拦截的uri -->
             <!--

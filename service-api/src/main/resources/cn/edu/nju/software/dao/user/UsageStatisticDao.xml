@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.UsageStatisticDao">
+
+    <sql id="fields">
+        id,
+        userId,
+        lastUsageTime,
+        curCount,
+        historyMaxCount,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveUsageStatistic" parameterType="cn.edu.nju.software.entity.UsageStatistic">
+        insert into usage_statistic(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{userId},
+        #{lastUsageTime},
+        #{curCount},
+        #{historyMaxCount},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <select id="getUsageStatisticByUserId" resultType="cn.edu.nju.software.entity.UsageStatistic">
+        select
+        <include refid="fields"></include>
+        from usage_statistic
+        where userId = #{0}
+    </select>
+
+    <update id="updateUsageStatistic" parameterType="cn.edu.nju.software.entity.UsageStatistic">
+        UPDATE usage_statistic
+        SET
+        lastUsageTime=#{lastUsageTime},
+        curCount=#{curCount},
+        historyMaxCount=#{historyMaxCount},
+        updateTime=#{updateTime}
+        WHERE userId = #{userId}
+    </update>
+    
+</mapper>
