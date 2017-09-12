@@ -6,6 +6,7 @@ import cn.edu.nju.software.service.RecordStatisticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -32,9 +33,9 @@ public class RecordStatisticServiceImpl implements RecordStatisticService {
         } else {
             //否则更新记录
             Date now = new Date();
-            int diff = differentDaysByMillisecond(now, statistic.getLastRecordTime());
+            boolean same = isSameDate(now, statistic.getLastRecordTime());
             //只有不是同一天的记录才需要更新
-            if (diff > 0) {
+            if (!same) {
                 if (statistic.getCurCount() > statistic.getHistoryMaxCount()) {
                     statistic.setHistoryMaxCount(statistic.getCurCount());
                 }
@@ -52,11 +53,11 @@ public class RecordStatisticServiceImpl implements RecordStatisticService {
         if (statistic == null) {
             return 0;
         }
-        //否则更新记录
+
         Date now = new Date();
-        int diff = differentDaysByMillisecond(now, statistic.getLastRecordTime());
-        //只有不是同一天的记录才需要更新
-        if (diff > 0) {
+        boolean same = isSameDate(now, statistic.getLastRecordTime());
+        //如果今天没有录制过故事，就更新一下记录
+        if (!same) {
             if (statistic.getCurCount() > statistic.getHistoryMaxCount()) {
                 statistic.setHistoryMaxCount(statistic.getCurCount());
             }
@@ -79,6 +80,23 @@ public class RecordStatisticServiceImpl implements RecordStatisticService {
         }
     }
 
+    private static boolean isSameDate(Date date1, Date date2) {
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date1);
+
+        Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(date2);
+
+        boolean isSameYear = cal1.get(Calendar.YEAR) == cal2
+                .get(Calendar.YEAR);
+        boolean isSameMonth = isSameYear
+                && cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH);
+        boolean isSameDate = isSameMonth
+                && cal1.get(Calendar.DAY_OF_MONTH) == cal2
+                .get(Calendar.DAY_OF_MONTH);
+
+        return isSameDate;
+    }
 
     private static int differentDaysByMillisecond(Date date1, Date date2) {
         int days = (int) ((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24));
