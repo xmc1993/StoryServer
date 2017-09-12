@@ -24,7 +24,7 @@
         <id column="birthday" property="birthday"/>
         <id column="createTime" property="createTime"/>
         <id column="updateTime" property="updateTime"/>
-        <id column="selected" property="parentId"/>
+        <id column="selected" property="selected"/>
     </resultMap>
 
     <insert id="saveBaby" parameterType="cn.edu.nju.software.entity.Baby" keyProperty="id"
@@ -42,6 +42,7 @@
         #{birthday},
         #{createTime},
         #{updateTime}
+        #{selected}
         )
     </insert>
 
