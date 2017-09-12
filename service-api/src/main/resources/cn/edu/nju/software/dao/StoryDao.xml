@@ -581,6 +581,7 @@
         <foreach collection="storyIdList" item="id" index="index" open="(" separator="," close=")">
             #{id}
         </foreach>
+        order by updateTime desc , likeCount desc
 	</select>
 
     <select id="getSetStoryListByIdListByPage" resultType="cn.edu.nju.software.entity.Story">
