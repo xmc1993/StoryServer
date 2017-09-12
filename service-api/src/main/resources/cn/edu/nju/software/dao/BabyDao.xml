@@ -89,7 +89,7 @@
         birthday,
         createTime,
         updateTime,
-        selected           
+        selected         
         from baby
         WHERE parentId = #{0}
         and selected = 1
