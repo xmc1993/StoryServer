@@ -196,6 +196,8 @@ public class ManageDiscoveryController {
         String zipPath =UploadFileUtil.getRealPathFromUrl(zipUrl.substring(0,zipUrl.lastIndexOf("/")));
         String upZipPath =UploadFileUtil.getRealPathFromUrl(zipUrl.substring(0,zipUrl.lastIndexOf(".")));
         String upZipName = zipUrl.substring(zipUrl.lastIndexOf("/")+1);
+
+        System.out.println("------------" + upZipPath + "------------");
         try {
             AntZipUtil.unZip(zipPath+"/"+upZipName,upZipPath);
         } catch (Exception e) {
@@ -206,13 +208,13 @@ public class ManageDiscoveryController {
         }
         List<File> htmlList = new ArrayList();
         FileUtil.findFiles(upZipPath,"*.html",htmlList);
-        if(htmlList.size()==1){
+        if(htmlList.size()>=1){
             String localPath= htmlList.get(0).getAbsolutePath();
             String webUrl = UploadFileUtil.getURLFromPath(localPath);
             discovery.setWebUrl(webUrl);
         }else {
             result.jsonFill(2,"文件不包含html或含有一个以上html请检查压缩文件",false);
-            FileUtil.deleteFile(upZipPath);
+//            FileUtil.deleteFile(upZipPath);
             return result;
         }
         UploadFileUtil.deleteFileByUrl(zipUrl);
