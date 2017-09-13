@@ -247,7 +247,7 @@
         <include refid="fields"></include>
         from works
         where valid = 1
-        ORDER by likeCount DESC
+        ORDER by listenCount DESC, likeCount DESC
         limit #{0},#{1}
     </select>
 
