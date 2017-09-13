@@ -1,10 +1,9 @@
 package cn.edu.nju.software.controller.user;
 
 import cn.edu.nju.software.controller.BaseController;
+import cn.edu.nju.software.dto.WorksVo;
 import cn.edu.nju.software.entity.*;
-import cn.edu.nju.software.service.PlayListRelationService;
-import cn.edu.nju.software.service.PlayListService;
-import cn.edu.nju.software.service.WorksService;
+import cn.edu.nju.software.service.*;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.vo.PlayListVo;
 import com.wordnik.swagger.annotations.Api;
@@ -38,6 +37,12 @@ public class UserPlayListController extends BaseController {
     private PlayListRelationService playListRelationService;
     @Autowired
     private WorksService worksService;
+    @Autowired
+    StoryTagService storyTagService;
+    @Autowired
+    TagRelationService tagRelationService;
+    @Autowired
+    private AgreeService agreeService;
 
     @ApiOperation(value = "获得一个用户的文件夹列表（播放列表）", notes = "")
     @RequestMapping(value = "/getPlayListsByPage", method = {RequestMethod.GET})
@@ -80,12 +85,12 @@ public class UserPlayListController extends BaseController {
     @ApiOperation(value = "分页获得用户的一个PlayList下的作品", notes = "")
     @RequestMapping(value = "/getWorksListByPlayListIdByPage", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<Works>> getWorksListByPlayListIdByPage(
+    public ResponseData<List<WorksVo>> getWorksListByPlayListIdByPage(
             @ApiParam("PlayList的ID") @RequestParam int playListId,
             @ApiParam("页") @RequestParam int page,
             @ApiParam("页大小") @RequestParam int pageSize,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<Works>> responseData = new ResponseData<>();
+        ResponseData<List<WorksVo>> responseData = new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "用户尚未登录。", null);
@@ -93,12 +98,12 @@ public class UserPlayListController extends BaseController {
         }
         //如果是我的作品这个播放列表 TODO 抽取出来
         if (playListId == -1) {
-            responseData.jsonFill(1, null, worksService.getWorksListByUserId(user.getId(), page*pageSize, pageSize));
+            responseData.jsonFill(1, null, worksList2VoList(worksService.getWorksListByUserId(user.getId(), page*pageSize, pageSize), user.getId()));
             return responseData;
         }
         List<Integer> idList = playListRelationService.getWorksIdListByPlayListIdAndUserIdByPage(playListId, user.getId(), page, pageSize);
         List<Works> worksList = worksService.getWorksListByIdList(idList);
-        responseData.jsonFill(1, null, worksList);
+        responseData.jsonFill(1, null, worksList2VoList(worksList, user.getId()));
         return responseData;
     }
 
@@ -232,6 +237,27 @@ public class UserPlayListController extends BaseController {
         boolean res = playListService.updatePlayList(pl);
         responseData.jsonFill(res ? 1 : 2, null, res);
         return responseData;
+    }
+
+    //TODO 抽取service 赶进度先
+    private List<WorksVo> worksList2VoList(List<Works> worksList, int userId) {
+        List<WorksVo> worksVoList = new ArrayList<>();
+        for (Works works : worksList) {
+            worksVoList.add(works2Vo(works, userId));
+        }
+        return worksVoList;
+    }
+
+    private WorksVo works2Vo(Works works, int userId){
+        WorksVo worksVo = new WorksVo();
+        BeanUtils.copyProperties(works, worksVo);
+        if (agreeService.getAgree(userId, works.getId()) != null) {
+            worksVo.setLike(true);
+        }
+        List<Integer> tagIdList = tagRelationService.getTagIdListByStoryId(works.getStoryId());
+        List<StoryTag> tagList = storyTagService.getStoryTagListByIdList(tagIdList);
+        worksVo.setTagList(tagList);
+        return worksVo;
     }
     	
 }
