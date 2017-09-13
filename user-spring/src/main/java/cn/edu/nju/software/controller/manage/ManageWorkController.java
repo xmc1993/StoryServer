@@ -100,9 +100,10 @@ public class ManageWorkController {
 	@ResponseBody
 	public ResponseData<Boolean> updateWorksById(@ApiParam("作品id") @RequestParam(value = "id") Integer id,
 			@ApiParam("故事标题") @RequestParam(value = "storyTitle", required = false) String storyTitle,
-			@ApiParam("音频") @RequestParam(value = "audioFile", required = false) String url,
-			@ApiParam("故事标题图") @RequestParam(value = "headImgUrl", required = false) String headImgUrl,
-			@ApiParam("封面图") @RequestParam(value = "coverUrl", required = false) String coverUrl,
+			@ApiParam("音频url") @RequestParam(value = "audioFile", required = false) String url,
+			@ApiParam("故事标题图url") @RequestParam(value = "headImgUrl", required = false) String headImgUrl,
+			@ApiParam("封面图url") @RequestParam(value = "coverUrl", required = false) String coverUrl,
+			@ApiParam("音频时长") @RequestParam(value = "duration", required = false) String duration,
 			@ApiParam("浏览次数") @RequestParam(value = "reviewCount", required = false) Integer reviewCount,
 			@ApiParam("收听数") @RequestParam(value = "listenCount", required = false) Integer listenCount,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -122,7 +123,8 @@ public class ManageWorkController {
 		}
 		if (url != null) {
 			works.setUrl(url);
-			String duration = worksService.getOriginSoundLength(new File(url));
+		}
+		if (duration != null) {
 			works.setDuration(duration);
 		}
 		if (storyTitle != null)
@@ -145,6 +147,7 @@ public class ManageWorkController {
 			@ApiParam("故事id") @RequestParam(value = "storyId") Integer storyId,
 			@ApiParam("故事标题") @RequestParam(value = "storyTitle") String storyTitle,
 			@ApiParam("用户名") @RequestParam(value = "username") String username,
+			@ApiParam("音频时长") @RequestParam(value = "duration") String duration,
 			@ApiParam("音频url") @RequestParam(value = "url") String url,
 			@ApiParam("故事标题图url") @RequestParam(value = "headImgUrl") String headImgUrl,
 			@ApiParam("封面图") @RequestParam(value = "coverUrl") String coverUrl,
@@ -157,8 +160,6 @@ public class ManageWorkController {
 		works.setHeadImgUrl(headImgUrl);
 		works.setCoverUrl(coverUrl);
 		works.setUrl(url);
-		//这里获取音频时长有问题，想要获取音频时长必须先根据url获取文件再进行时长判断
-		String duration = worksService.getOriginSoundLength(new File(url));
 		works.setDuration(duration);
 
 		works.setUserId(userId);
