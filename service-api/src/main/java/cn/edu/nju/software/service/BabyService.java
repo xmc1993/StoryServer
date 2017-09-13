@@ -21,8 +21,8 @@ public interface BabyService {
 
     List<Baby> getAllBabies();
     
-    Baby getSelectedBady(int parentId);
+    Baby getSelectedBaby(int parentId);
     
-    boolean selectBady(int parentId,int id);
+    boolean selectBaby(int parentId,int id);
 
 }

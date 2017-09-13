@@ -10,7 +10,8 @@
         sex,
         birthday,
         createTime,
-        updateTime
+        updateTime,
+        selected
     </sql>
 
 
@@ -23,6 +24,7 @@
         <id column="birthday" property="birthday"/>
         <id column="createTime" property="createTime"/>
         <id column="updateTime" property="updateTime"/>
+        <id column="selected" property="selected"/>
     </resultMap>
 
     <insert id="saveBaby" parameterType="cn.edu.nju.software.entity.Baby" keyProperty="id"
@@ -39,7 +41,8 @@
         #{sex},
         #{birthday},
         #{createTime},
-        #{updateTime}
+        #{updateTime},
+        #{selected}
         )
     </insert>
 
@@ -79,7 +82,7 @@
         WHERE id = #{0}
     </select>
     
-    <select id="getSelectedBady" resultType="cn.edu.nju.software.entity.Baby">
+    <select id="getSelectedBaby" resultType="cn.edu.nju.software.entity.Baby">
         select
         id,
         parentId,
@@ -95,14 +98,14 @@
         and selected = 1
     </select>
     
-     <update id="unSelectAllBady" parameterType="cn.edu.nju.software.entity.Baby">
+     <update id="unSelectAllBaby" parameterType="cn.edu.nju.software.entity.Baby">
         UPDATE baby
         SET
 		selected=0
         WHERE parentId = #{0}
     </update>
     
-    <update id="selectBady" parameterType="cn.edu.nju.software.entity.Baby">
+    <update id="selectBaby" parameterType="cn.edu.nju.software.entity.Baby">
         UPDATE baby
         SET
 		selected=1

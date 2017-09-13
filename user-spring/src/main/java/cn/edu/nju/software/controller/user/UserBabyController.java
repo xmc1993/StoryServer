@@ -44,6 +44,10 @@ public class UserBabyController extends BaseController {
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<Baby>> responseData = new ResponseData<>();
         List<Baby> babyList = babyService.getBabyListByParentId(userId);
+        if(babyList==null){
+        	responseData.jsonFill(2, "用户不存在或者无宝宝", null);
+        	return responseData;
+        }
         responseData.jsonFill(1, null, babyList);
         responseData.setCount(babyList.size());
         return responseData;
@@ -72,6 +76,7 @@ public class UserBabyController extends BaseController {
         baby.setAge(age);
         baby.setSex(sex);
         baby.setBabyName(babyName);
+        baby.setSelected(0);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         baby.setBirthday(dateFormat.parse(birthday));
         Baby result = babyService.saveBaby(baby);
@@ -114,6 +119,7 @@ public class UserBabyController extends BaseController {
         baby.setAge(age);
         baby.setSex(sex);
         baby.setBabyName(babyName);
+        baby.setSelected(0);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         baby.setBirthday(dateFormat.parse(birthday));
         boolean result = babyService.updateBaby(baby);
@@ -167,14 +173,14 @@ public class UserBabyController extends BaseController {
     }
     
     @ApiOperation(value = "获得用户选中的宝宝信息", notes = "")
-    @RequestMapping(value = "/getSelectedBady", method = {RequestMethod.GET})
+    @RequestMapping(value = "/getSelectedBaby", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<Baby> getSelectedBady(
+    public ResponseData<Baby> getSelectedBaby(
             @ApiParam("用户ID") @RequestParam("parentId") int parentId,
             HttpServletRequest request, HttpServletResponse response) throws ParseException {
         ResponseData<Baby> responseData = new ResponseData<>();
         
-        Baby baby = babyService.getSelectedBady(parentId);
+        Baby baby = babyService.getSelectedBaby(parentId);
         if (baby == null) {
         	List<Baby> babyList = babyService.getBabyListByParentId(parentId);
         	if(null == babyList){
@@ -189,15 +195,15 @@ public class UserBabyController extends BaseController {
     }
     
     @ApiOperation(value = "选中宝宝", notes = "")
-    @RequestMapping(value = "/selectBady", method = {RequestMethod.GET})
+    @RequestMapping(value = "/selectBaby", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<Boolean> selectBady(
+    public ResponseData<Boolean> selectBaby(
             @ApiParam("用户ID") @RequestParam("parentId") int parentId,
             @ApiParam("选中宝宝ID") @RequestParam("id") int id,
             HttpServletRequest request, HttpServletResponse response) throws ParseException {
         ResponseData<Boolean> responseData = new ResponseData<>();
         
-        boolean sucess=babyService.selectBady(parentId, id);
+        boolean sucess=babyService.selectBaby(parentId, id);
         if (sucess == false) {
             responseData.jsonFill(2, "选中失败", sucess);
             return responseData;
