@@ -27,7 +27,7 @@ import cn.edu.nju.software.util.TokenConfig;
 @Api("usageStatisticService controller")
 @Controller
 @RequestMapping("/user")
-public class UserAppStatisticController extends BaseController {
+public class UserAppStatisticController extends BaseController{
 	@Autowired
     private UsageStatisticService usageStatisticService;
 

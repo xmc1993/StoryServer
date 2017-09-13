@@ -52,17 +52,17 @@ public class BabyServiceImpl implements BabyService {
     }
 
 	@Override
-	public Baby getSelectedBady(int parentId) {		
-		return babyDao.getSelectedBady(parentId);
+	public Baby getSelectedBaby(int parentId) {		
+		return babyDao.getSelectedBaby(parentId);
 	}
 
 	@Override
-	public boolean selectBady(int parentId,int id) {
-		boolean res=babyDao.unSelectAllBady(parentId);
+	public boolean selectBaby(int parentId,int id) {
+		boolean res=babyDao.unSelectAllBaby(parentId);
 		if (res== false) {
 			return false;
 		}else {
-			boolean sucess=babyDao.selectBady(id);
+			boolean sucess=babyDao.selectBaby(id);
 			return sucess;
 		}
 	}

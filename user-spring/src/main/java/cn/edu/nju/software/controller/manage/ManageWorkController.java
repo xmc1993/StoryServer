@@ -102,7 +102,7 @@ public class ManageWorkController {
 			@ApiParam("故事标题") @RequestParam(value = "storyTitle", required = false) String storyTitle,
 			@ApiParam("音频") @RequestParam(value = "audioFile", required = false) String url,
 			@ApiParam("故事标题图") @RequestParam(value = "headImgUrl", required = false) String headImgUrl,
-			@ApiParam("封面图") @RequestParam(value = "coverFile", required = false) String coverUrl,
+			@ApiParam("封面图") @RequestParam(value = "coverUrl", required = false) String coverUrl,
 			@ApiParam("浏览次数") @RequestParam(value = "reviewCount", required = false) Integer reviewCount,
 			@ApiParam("收听数") @RequestParam(value = "listenCount", required = false) Integer listenCount,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -157,6 +157,7 @@ public class ManageWorkController {
 		works.setHeadImgUrl(headImgUrl);
 		works.setCoverUrl(coverUrl);
 		works.setUrl(url);
+		//这里获取音频时长有问题，想要获取音频时长必须先根据url获取文件再进行时长判断
 		String duration = worksService.getOriginSoundLength(new File(url));
 		works.setDuration(duration);
 
