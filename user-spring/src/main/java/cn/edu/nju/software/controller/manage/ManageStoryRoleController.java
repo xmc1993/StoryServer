@@ -2,8 +2,12 @@ package cn.edu.nju.software.controller.manage;
 
 import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.StoryRole;
+import cn.edu.nju.software.entity.StoryRoleAudio;
 import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.service.StoryRoleAudioService;
 import cn.edu.nju.software.service.StoryRoleService;
+import cn.edu.nju.software.util.UploadFileUtil;
+
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -27,8 +31,12 @@ import java.util.List;
 @RequestMapping("/manage")
 public class ManageStoryRoleController {
     private static final Logger logger = LoggerFactory.getLogger(ManageStoryRoleController.class);
+    //该字段标记语音为官方的userId
+    private static final Integer adminSign=2;
     @Autowired
     private StoryRoleService storyRoleService;
+    @Autowired
+    private StoryRoleAudioService storyRoleAudioService;
 
     @RequiredPermissions({1, 5})
     @ApiOperation(value = "新增故事角色项", notes = "")
@@ -55,7 +63,6 @@ public class ManageStoryRoleController {
         //storyRole.setId(id);
         storyRole.setUpdateTime(new Date());
         return storyRoleService.updateStoryRole(storyRole) ? storyRole : null;
-
     }
 
     @RequiredPermissions({2, 5})
@@ -100,6 +107,113 @@ public class ManageStoryRoleController {
         responseData.jsonFill(1, null, storyRoleList);
         return responseData;
     }
+    
+    
+	@ApiOperation(value = "添加故事角色音频")
+	@RequestMapping(value = "/saveStoryRoleAudio", method = { RequestMethod.POST })
+	@ResponseBody
+	public ResponseData<StoryRoleAudio> saveStoryRoleAudio(
+			@ApiParam("角色ID") @RequestParam Integer roleId,
+			@ApiParam("故事id") @RequestParam Integer storyId, @ApiParam("content") @RequestParam String content,
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<StoryRoleAudio> responseData = new ResponseData<>();
 
+		StoryRoleAudio storyRoleAudio = new StoryRoleAudio();
+		storyRoleAudio.setContent(content);
+		storyRoleAudio.setRoleid(roleId);
+		storyRoleAudio.setCreatetime(new Date());
+		storyRoleAudio.setUpdatetime(new Date());
+		storyRoleAudio.setUserid(adminSign);
+		int res = storyRoleAudioService.saveRoleAudio(storyRoleAudio);
+		if (res == 1) {
+			responseData.jsonFill(res, null, storyRoleAudio);
+			return responseData;
+		}
+		responseData.jsonFill(2, "更新失败", null);
+		return responseData;
+	}
+
+	@ApiOperation(value = "删除故事角色的音频(仅删除音频记录，不删除音频文件)",notes="如需要在服务器删除音频文件，使用deleteByUrl接口")
+	@RequestMapping(value = "/deleteStoryRoleAudioById/{id}", method = { RequestMethod.DELETE })
+	@ResponseBody
+	public ResponseData<Boolean> deleteStoryRoleAudioById(@ApiParam("ID") @RequestParam Integer id,
+			HttpServletRequest request, HttpServletResponse response) {
+		StoryRoleAudio storyRoleAudio = storyRoleAudioService.selectById(id);
+		ResponseData<Boolean> responseData = new ResponseData<>();
+		if (storyRoleAudio == null) {
+			responseData.jsonFill(2, "你需要删除的音频不存在", null);
+		}
+		//功能尚未完成，拿conten字段内容删除
+		//UploadFileUtil.deleteFileByUrl(storyRoleAudio.getUrl());
+
+		int res = storyRoleAudioService.deleteById(id);
+		if (res == 1) {
+			responseData.jsonFill(res, null, true);
+			return responseData;
+		}
+		responseData.jsonFill(2, "删除失败", null);
+		return responseData;
+	}
+
+	@ApiOperation(value = "查询故事角色的音频")
+	@RequestMapping(value = "/getStoryRoleAudioById", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<StoryRoleAudio> getStoryRoleAudioById(@ApiParam("ID") @RequestParam Integer id,
+			HttpServletRequest request, HttpServletResponse response) {
+		StoryRoleAudio storyRoleAudio = storyRoleAudioService.selectById(id);
+		ResponseData<StoryRoleAudio> responseData = new ResponseData<>();
+		if (storyRoleAudio == null) {
+			responseData.jsonFill(2, "该音频不存在", null);
+		}
+		responseData.jsonFill(1, null, storyRoleAudio);
+		return responseData;
+	}
+
+	@ApiOperation(value = "根据用户id查询角色音频")
+	@RequestMapping(value = "/getStoryRoleAudioByUserId", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<List<StoryRoleAudio>> getStoryRoleAudioByUserId(
+			@ApiParam(value="用户ID")@RequestParam Integer userId,
+			HttpServletRequest request,
+			HttpServletResponse response) {
+		ResponseData<List<StoryRoleAudio>> responseData = new ResponseData<>(); 
+		List<StoryRoleAudio> storyRoleAudioList = storyRoleAudioService.getStoryRoleAudioByUserId(userId);
+		if (storyRoleAudioList == null) {
+			responseData.jsonFill(2, "不存在音频", null);
+		}
+		responseData.jsonFill(1, null, storyRoleAudioList);
+		responseData.setCount(storyRoleAudioList.size());
+		return responseData;
+	}
+
+	@ApiOperation(value = "根据用户id,角色id下载音频")
+	@RequestMapping(value = "/getStoryRoleAudioByUserIdAndRoleId", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<List<StoryRoleAudio>> getStoryRoleAudioByUserIdAndRoleId(
+			@ApiParam(value = "用戶id") @RequestParam Integer userId,
+			@ApiParam(value = "角色id") @RequestParam Integer roleId,
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<List<StoryRoleAudio>> responseData = new ResponseData<>();
+		List<StoryRoleAudio> storyRoleAudioList = storyRoleAudioService.getStoryRoleAudioByUserIdAndRoleId(userId, roleId);
+		if (storyRoleAudioList == null) {
+			responseData.jsonFill(2, "不存在音频", null);
+		}
+		responseData.jsonFill(1, null, storyRoleAudioList);
+		responseData.setCount(storyRoleAudioList.size());
+		return responseData;
+	}
+	
+	@ApiOperation(value="删除文件服务器的文件(用于测试时产生的脏数据删除)")
+	@RequestMapping(value="deleteByUrl")
+	@ResponseBody
+	public ResponseData<Boolean> deleteByUrl(
+			@ApiParam(value = "URL") @RequestParam String url,
+			HttpServletRequest request, HttpServletResponse response
+			){
+		ResponseData<Boolean> responseData=new ResponseData<>();
+		boolean res=UploadFileUtil.deleteFileByUrl(url);
+		responseData.jsonFill(1,null,res);
+		return responseData;
+	}
 
 }

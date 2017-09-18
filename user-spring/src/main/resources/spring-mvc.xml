@@ -134,6 +134,12 @@
             <mvc:mapping path="/user/newUsage"/>
             <mvc:mapping path="/user/getUseRunningDays"/>
             <mvc:mapping path="/user/getUseHistoryMaxRunningDays"/>
+            <mvc:mapping path="/user/uploadRoleAudioFile"/>
+            <mvc:mapping path="/user/uploadRoleAudioFileList"/>
+            <mvc:mapping path="/user/saveStoryRoleAudio"/>
+            <mvc:mapping path="/user/getStoryRoleAudioById"/>
+            <mvc:mapping path="/user/getStoryRoleAudioByUserId"/>
+            <mvc:mapping path="getStoryRoleAudioByUserIdAndRoleId"/>
 
             <!-- 不需要拦截的uri -->
             <!--
