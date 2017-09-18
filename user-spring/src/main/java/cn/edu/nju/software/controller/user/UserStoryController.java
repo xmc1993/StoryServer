@@ -468,7 +468,7 @@ public class UserStoryController extends BaseController {
         }
         return storyVoList;
     }
-
+ //根据故事和用户id获得一个故事vo类(故事的标签，用户是否喜爱这个故事)
     private StoryNewVo story2Vo(Story story, int userId){
         if (story == null) {
             return null;

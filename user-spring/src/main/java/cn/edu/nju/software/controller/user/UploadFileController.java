@@ -31,25 +31,24 @@ import java.util.List;
 @Controller
 @RequestMapping("/user")
 public class UploadFileController extends BaseController {
-    private static final Logger logger = LoggerFactory.getLogger(UploadFileController.class);
-    private final String default_avatar = "default_avatar.jpg";
-    private static final String SUFFIX = ".jpg";
-    private static final String HEAD_ROOT = "/head/"; //头像的基础路径
-    private static final List<String> VALID_SUFFIX = new ArrayList<>();
+	private static final Logger logger = LoggerFactory.getLogger(UploadFileController.class);
+	private final String default_avatar = "default_avatar.jpg";
+	private static final String SUFFIX = ".jpg";
+	private static final String HEAD_ROOT = "/head/"; // 头像的基础路径
+	private static final List<String> VALID_SUFFIX = new ArrayList<>();
 
-    //初始化支持的头像类型
-    static {
-        VALID_SUFFIX.add("jpg");
-        VALID_SUFFIX.add("jpeg");
-        VALID_SUFFIX.add("bmp");
-        VALID_SUFFIX.add("gif");
-    }
+	// 初始化支持的头像类型
+	static {
+		VALID_SUFFIX.add("jpg");
+		VALID_SUFFIX.add("jpeg");
+		VALID_SUFFIX.add("bmp");
+		VALID_SUFFIX.add("gif");
+	}
 
-    @Autowired
-    private AppUserService userService;
+	@Autowired
+	private AppUserService userService;
 
-
-    @ApiOperation(value = "上传头像", notes = "上传头像")
+	@ApiOperation(value = "上传头像", notes = "上传头像")
     @RequestMapping(value = "/updateHeadImg", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData uploadFile(MultipartFile uploadFile,
@@ -66,11 +65,11 @@ public class UploadFileController extends BaseController {
             return responseData;
         }
         logger.info("开始上传头像!");
-        //如果头像超过2M
-//        if (uploadFile.getSize() > 2048L) {
-//            responseData.jsonFill(2, "头像不允许超过2M", null);
-//            return responseData;
-//        }
+        //如果头像超过2M,getSize获取得是字节数,2M=2*1024*1024byte=2097152byte
+        if (uploadFile.getSize() > 2097152L) {
+            responseData.jsonFill(2, "头像不允许超过2M", null);
+            return responseData;
+       }
         //如果头像的格式不符合要求
         if (!VALID_SUFFIX.contains(UploadFileUtil.getSuffix(uploadFile.getOriginalFilename()))) {
             responseData.jsonFill(2, "头像类型只支持jpg,jpeg,bmp,gif。", null);
@@ -112,6 +111,5 @@ public class UploadFileController extends BaseController {
         responseData.jsonFill(1, null, "success");
         return responseData;
     }
-
 
 }

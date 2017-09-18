@@ -105,8 +105,8 @@ public class ManageStoryController {
         if (price != null) story.setPrice(price);
         if (readGuide != null) story.setReadGuide(readGuide);
         if (readTime != null) story.setReadTime(readTime);
-
-        story.setSetId(setId);
+        if(setId !=null)story.setSetId(setId);
+        
         story.setValid(1);
         story.setDefaultBackGroundMusicId(defaultBackGroundMusicId);
         story.setCreateTime(new Date());

@@ -51,7 +51,7 @@ public class Story {
     private Integer defaultBackGroundMusicId;//
     @ApiModelProperty(value="喜欢次数")
     private Integer likeCount;
-    private Integer draft;
+    private Integer draft = 0;
     @ApiModelProperty(value="建议阅读时长 单位是秒")
     private Integer suggestedReadingDuration;//建议阅读时长 单位是秒
     @ApiModelProperty(value="专辑id列表")
