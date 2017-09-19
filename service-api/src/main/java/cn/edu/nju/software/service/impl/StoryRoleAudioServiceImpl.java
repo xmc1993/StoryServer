@@ -48,6 +48,7 @@ public class StoryRoleAudioServiceImpl implements StoryRoleAudioService{
 		return list;
 	}
 
+	//这里可使用多条件查询，不需要增强for遍历，但我又暂时不想改，留着 。write by zs
 	@Override
 	public List<StoryRoleAudio> getStoryRoleAudioByUserIdAndRoleId(Integer userId, Integer RoleId) {
 		List<StoryRoleAudio> list=getStoryRoleAudioByUserId(userId);
