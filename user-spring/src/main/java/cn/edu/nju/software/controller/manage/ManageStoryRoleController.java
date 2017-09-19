@@ -119,6 +119,8 @@ public class ManageStoryRoleController {
 		ResponseData<StoryRoleAudio> responseData = new ResponseData<>();
 
 		StoryRoleAudio storyRoleAudio = new StoryRoleAudio();
+		storyRoleAudio.setStoryid(storyId);
+		storyRoleAudio.setValid(1);
 		storyRoleAudio.setContent(content);
 		storyRoleAudio.setRoleid(roleId);
 		storyRoleAudio.setCreatetime(new Date());
@@ -136,7 +138,7 @@ public class ManageStoryRoleController {
 	@ApiOperation(value = "删除故事角色的音频(仅删除音频记录，不删除音频文件)",notes="如需要在服务器删除音频文件，使用deleteByUrl接口")
 	@RequestMapping(value = "/deleteStoryRoleAudioById/{id}", method = { RequestMethod.DELETE })
 	@ResponseBody
-	public ResponseData<Boolean> deleteStoryRoleAudioById(@ApiParam("ID") @RequestParam Integer id,
+	public ResponseData<Boolean> deleteStoryRoleAudioById(@ApiParam("ID") @PathVariable Integer id,
 			HttpServletRequest request, HttpServletResponse response) {
 		StoryRoleAudio storyRoleAudio = storyRoleAudioService.selectById(id);
 		ResponseData<Boolean> responseData = new ResponseData<>();
@@ -186,7 +188,7 @@ public class ManageStoryRoleController {
 		return responseData;
 	}
 
-	@ApiOperation(value = "根据用户id,角色id下载音频")
+	@ApiOperation(value = "根据用户id,角色id查询音频")
 	@RequestMapping(value = "/getStoryRoleAudioByUserIdAndRoleId", method = { RequestMethod.GET })
 	@ResponseBody
 	public ResponseData<List<StoryRoleAudio>> getStoryRoleAudioByUserIdAndRoleId(

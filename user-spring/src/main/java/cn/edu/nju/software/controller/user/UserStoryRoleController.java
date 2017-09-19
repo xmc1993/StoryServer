@@ -1,6 +1,7 @@
 package cn.edu.nju.software.controller.user;
 
 import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,11 @@ import cn.edu.nju.software.service.StoryRoleService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UploadFileUtil;
+
+/**
+ * @author zs1996 E-mail:806949096@qq.com
+ * @version 创建时间：2017年9月19日
+ */
 
 @Api("用户故事角色控制器")
 @Controller
