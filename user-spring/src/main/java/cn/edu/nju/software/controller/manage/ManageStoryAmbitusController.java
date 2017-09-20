@@ -45,7 +45,7 @@ public class ManageStoryAmbitusController {
 		return responseData;
 	}
 
-	@ApiOperation(value = "保存故事的周边", notes = "")
+	@ApiOperation(value = "新建故事的周边", notes = "")
 	@RequestMapping(value = "/saveStoryAmbitus", method = { RequestMethod.POST })
 	@ResponseBody
 	public ResponseData<StoryAmbitus> saveStoryAmbitus(@ApiParam("故事ID") @RequestParam Integer storyId,
