@@ -30,90 +30,82 @@ import java.util.List;
 @Controller()
 @RequestMapping("/manage")
 public class ManageStoryRoleController {
-    private static final Logger logger = LoggerFactory.getLogger(ManageStoryRoleController.class);
-    //该字段标记语音为官方的userId
-    private static final Integer adminSign=2;
-    @Autowired
-    private StoryRoleService storyRoleService;
-    @Autowired
-    private StoryRoleAudioService storyRoleAudioService;
+	private static final Logger logger = LoggerFactory.getLogger(ManageStoryRoleController.class);
+	// 该字段标记语音为官方的userId
+	private static final Integer adminSign = 2;
+	@Autowired
+	private StoryRoleService storyRoleService;
+	@Autowired
+	private StoryRoleAudioService storyRoleAudioService;
 
-    @RequiredPermissions({1, 5})
-    @ApiOperation(value = "新增故事角色项", notes = "")
-    @RequestMapping(value = "/storyRoles", method = {RequestMethod.POST})
-    @ResponseBody
-    @ResponseStatus(HttpStatus.CREATED)
-    public StoryRole publishStoryRole(
-            @ApiParam("故事角色项") @RequestBody StoryRole storyRole,
-            HttpServletRequest request, HttpServletResponse response) {
-        storyRole.setCreateTime(new Date());
-        storyRole.setUpdateTime(new Date());
-        storyRoleService.saveStoryRole(storyRole);
-        return storyRole;
-    }
+	@RequiredPermissions({ 1, 5 })
+	@ApiOperation(value = "新增故事角色项", notes = "")
+	@RequestMapping(value = "/storyRoles", method = { RequestMethod.POST })
+	@ResponseBody
+	@ResponseStatus(HttpStatus.CREATED)
+	public StoryRole publishStoryRole(@ApiParam("故事角色项") @RequestBody StoryRole storyRole, HttpServletRequest request,
+			HttpServletResponse response) {
+		storyRole.setCreateTime(new Date());
+		storyRole.setUpdateTime(new Date());
+		storyRoleService.saveStoryRole(storyRole);
+		return storyRole;
+	}
 
-    @RequiredPermissions({3, 5})
-    @ApiOperation(value = "更新故事角色项", notes = "")
-    @RequestMapping(value = "/storyRoles/{id}", method = {RequestMethod.POST})
-    @ResponseBody
-    public StoryRole updateStoryRole(
-            @ApiParam("ID") @PathVariable int id,
-            @ApiParam("") @RequestBody StoryRole storyRole,
-            HttpServletRequest request, HttpServletResponse response) {
-        //storyRole.setId(id);
-        storyRole.setUpdateTime(new Date());
-        return storyRoleService.updateStoryRole(storyRole) ? storyRole : null;
-    }
+	@RequiredPermissions({ 3, 5 })
+	@ApiOperation(value = "更新故事角色项", notes = "")
+	@RequestMapping(value = "/storyRoles/{id}", method = { RequestMethod.POST })
+	@ResponseBody
+	public StoryRole updateStoryRole(@ApiParam("ID") @PathVariable int id,
+			@ApiParam("") @RequestBody StoryRole storyRole, HttpServletRequest request, HttpServletResponse response) {
+		// storyRole.setId(id);
+		storyRole.setUpdateTime(new Date());
+		return storyRoleService.updateStoryRole(storyRole) ? storyRole : null;
+	}
 
-    @RequiredPermissions({2, 5})
-    @ApiOperation(value = "删除故事角色项", notes = "")
-    @RequestMapping(value = "/storyRoles/{id}", method = {RequestMethod.DELETE})
-    @ResponseBody
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteStoryRole(
-            @ApiParam("ID") @PathVariable int id,
-            HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<Boolean> responseData = new ResponseData<>();
-        boolean success = storyRoleService.deleteStoryRole(id);
-        if (!success) {
-            throw new RuntimeException("删除失败");
-        }
-    }
+	@RequiredPermissions({ 2, 5 })
+	@ApiOperation(value = "删除故事角色项", notes = "")
+	@RequestMapping(value = "/storyRoles/{id}", method = { RequestMethod.DELETE })
+	@ResponseBody
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteStoryRole(@ApiParam("ID") @PathVariable int id, HttpServletRequest request,
+			HttpServletResponse response) {
+		ResponseData<Boolean> responseData = new ResponseData<>();
+		boolean success = storyRoleService.deleteStoryRole(id);
+		if (!success) {
+			throw new RuntimeException("删除失败");
+		}
+	}
 
-    @RequiredPermissions({4, 5})
-    @ApiOperation(value = "根据ID获得故事角色项", notes = "")
-    @RequestMapping(value = "/storyRoles/{id}", method = {RequestMethod.GET})
-    @ResponseBody
-    public StoryRole getStoryById(
-            @ApiParam("ID") @PathVariable int id,
-            HttpServletRequest request, HttpServletResponse response) {
-        StoryRole storyRole = storyRoleService.getStoryRoleById(id);
-        if (storyRole == null) {
-            throw new RuntimeException("无效的ID");
-        } else {
-            return storyRole;
-        }
-    }
+	@RequiredPermissions({ 4, 5 })
+	@ApiOperation(value = "根据ID获得故事角色项", notes = "")
+	@RequestMapping(value = "/storyRoles/{id}", method = { RequestMethod.GET })
+	@ResponseBody
+	public StoryRole getStoryById(@ApiParam("ID") @PathVariable int id, HttpServletRequest request,
+			HttpServletResponse response) {
+		StoryRole storyRole = storyRoleService.getStoryRoleById(id);
+		if (storyRole == null) {
+			throw new RuntimeException("无效的ID");
+		} else {
+			return storyRole;
+		}
+	}
 
-    @RequiredPermissions({4, 5})
-    @ApiOperation(value = "根据故事角色类型故事角色项列表", notes = "")
-    @RequestMapping(value = "/getStoryRoleListByStoryId", method = {RequestMethod.GET})
-    @ResponseBody
-    public ResponseData<List<StoryRole>> getStoryRoleListByTypeId(
-            @ApiParam("故事ID") @RequestParam int storyId,
-            HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<StoryRole>> responseData = new ResponseData<>();
-        List<StoryRole> storyRoleList = storyRoleService.getStoryRoleListByStoryId(storyId);
-        responseData.jsonFill(1, null, storyRoleList);
-        return responseData;
-    }
-    
-    
+	@RequiredPermissions({ 4, 5 })
+	@ApiOperation(value = "根据故事角色类型故事角色项列表", notes = "")
+	@RequestMapping(value = "/getStoryRoleListByStoryId", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<List<StoryRole>> getStoryRoleListByTypeId(@ApiParam("故事ID") @RequestParam int storyId,
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<List<StoryRole>> responseData = new ResponseData<>();
+		List<StoryRole> storyRoleList = storyRoleService.getStoryRoleListByStoryId(storyId);
+		responseData.jsonFill(1, null, storyRoleList);
+		return responseData;
+	}
+
 	@ApiOperation(value = "添加故事角色音频")
 	@RequestMapping(value = "/saveStoryRoleAudio", method = { RequestMethod.POST })
 	@ResponseBody
-	public ResponseData<StoryRoleAudio> saveStoryRoleAudio(
-			@ApiParam("角色ID") @RequestParam Integer roleId,
+	public ResponseData<StoryRoleAudio> saveStoryRoleAudio(@ApiParam("角色ID") @RequestParam Integer roleId,
 			@ApiParam("故事id") @RequestParam Integer storyId, @ApiParam("content") @RequestParam String content,
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<StoryRoleAudio> responseData = new ResponseData<>();
@@ -135,7 +127,7 @@ public class ManageStoryRoleController {
 		return responseData;
 	}
 
-	@ApiOperation(value = "删除故事角色的音频(仅删除音频记录，不删除音频文件)",notes="如需要在服务器删除音频文件，使用deleteByUrl接口")
+	@ApiOperation(value = "删除故事角色的音频(仅删除音频记录，不删除音频文件)", notes = "如需要在服务器删除音频文件，使用deleteByUrl接口")
 	@RequestMapping(value = "/deleteStoryRoleAudioById/{id}", method = { RequestMethod.DELETE })
 	@ResponseBody
 	public ResponseData<Boolean> deleteStoryRoleAudioById(@ApiParam("ID") @PathVariable Integer id,
@@ -145,8 +137,8 @@ public class ManageStoryRoleController {
 		if (storyRoleAudio == null) {
 			responseData.jsonFill(2, "你需要删除的音频不存在", null);
 		}
-		//功能尚未完成，拿conten字段内容删除
-		//UploadFileUtil.deleteFileByUrl(storyRoleAudio.getUrl());
+		// 功能尚未完成，拿conten字段内容删除
+		// UploadFileUtil.deleteFileByUrl(storyRoleAudio.getUrl());
 
 		int res = storyRoleAudioService.deleteById(id);
 		if (res == 1) {
@@ -175,10 +167,9 @@ public class ManageStoryRoleController {
 	@RequestMapping(value = "/getStoryRoleAudioByUserId", method = { RequestMethod.GET })
 	@ResponseBody
 	public ResponseData<List<StoryRoleAudio>> getStoryRoleAudioByUserId(
-			@ApiParam(value="用户ID")@RequestParam Integer userId,
-			HttpServletRequest request,
+			@ApiParam(value = "用户ID") @RequestParam Integer userId, HttpServletRequest request,
 			HttpServletResponse response) {
-		ResponseData<List<StoryRoleAudio>> responseData = new ResponseData<>(); 
+		ResponseData<List<StoryRoleAudio>> responseData = new ResponseData<>();
 		List<StoryRoleAudio> storyRoleAudioList = storyRoleAudioService.getStoryRoleAudioByUserId(userId);
 		if (storyRoleAudioList == null) {
 			responseData.jsonFill(2, "不存在音频", null);
@@ -193,10 +184,11 @@ public class ManageStoryRoleController {
 	@ResponseBody
 	public ResponseData<List<StoryRoleAudio>> getStoryRoleAudioByUserIdAndRoleId(
 			@ApiParam(value = "用戶id") @RequestParam Integer userId,
-			@ApiParam(value = "角色id") @RequestParam Integer roleId,
-			HttpServletRequest request, HttpServletResponse response) {
+			@ApiParam(value = "角色id") @RequestParam Integer roleId, HttpServletRequest request,
+			HttpServletResponse response) {
 		ResponseData<List<StoryRoleAudio>> responseData = new ResponseData<>();
-		List<StoryRoleAudio> storyRoleAudioList = storyRoleAudioService.getStoryRoleAudioByUserIdAndRoleId(userId, roleId);
+		List<StoryRoleAudio> storyRoleAudioList = storyRoleAudioService.getStoryRoleAudioByUserIdAndRoleId(userId,
+				roleId);
 		if (storyRoleAudioList == null) {
 			responseData.jsonFill(2, "不存在音频", null);
 		}
@@ -204,17 +196,46 @@ public class ManageStoryRoleController {
 		responseData.setCount(storyRoleAudioList.size());
 		return responseData;
 	}
-	
-	@ApiOperation(value="删除文件服务器的文件(用于测试时产生的脏数据删除)")
-	@RequestMapping(value="deleteByUrl")
+
+	@ApiOperation(value = "根据故事id分页获取所有音频")
+	@RequestMapping(value = "/getStoryRoleAuioByStoryId", method = { RequestMethod.GET })
 	@ResponseBody
-	public ResponseData<Boolean> deleteByUrl(
-			@ApiParam(value = "URL") @RequestParam String url,
-			HttpServletRequest request, HttpServletResponse response
-			){
-		ResponseData<Boolean> responseData=new ResponseData<>();
-		boolean res=UploadFileUtil.deleteFileByUrl(url);
-		responseData.jsonFill(1,null,res);
+	public ResponseData<List<StoryRoleAudio>> getStoryRoleAudioByUserIdAndRoleId(
+			@ApiParam(value = "故事id") @RequestParam Integer storyId,
+			@ApiParam(value = "page") @RequestParam Integer page,
+			@ApiParam(value = "pageSize") @RequestParam Integer pageSize, HttpServletRequest request,
+			HttpServletResponse response) {
+		ResponseData<List<StoryRoleAudio>> responseData = new ResponseData<>();
+		responseData = storyRoleAudioService.getStoryRoleAuioByStoryId(storyId, page, pageSize);
+		return responseData;
+	}
+
+	@ApiOperation(value = "根据用户Id故事Id取所有音频")
+	@RequestMapping(value = "/getStoryRoleAuioByUserAndStory", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<List<StoryRoleAudio>> getStoryRoleAuioByUserAndStory(
+			@ApiParam(value = "用户Id") @RequestParam Integer userId,
+			@ApiParam(value = "故事Id") @RequestParam Integer storyId, HttpServletRequest request,
+			HttpServletResponse response) {
+		ResponseData<List<StoryRoleAudio>> responseData = new ResponseData<>();
+		List<StoryRoleAudio> list = storyRoleAudioService.getStoryRoleAuioByUserAndStory(userId, storyId);
+		if(null==list){
+			responseData.jsonFill(2, "无该音频", null);
+			return responseData;
+		}
+		responseData.jsonFill(1, null, list);
+		responseData.setCount(list.size());
+		return responseData;
+	}
+
+	@ApiOperation(value = "删除文件服务器的文件(用于测试时产生的脏数据删除)")
+	@RequestMapping(value = "/deleteByUrl")
+	@ResponseBody
+	public ResponseData<Boolean> deleteByUrl(@ApiParam(value = "URL") @RequestParam String url,
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<Boolean> responseData = new ResponseData<>();
+		boolean res = UploadFileUtil.deleteFileByUrl(url);
+		responseData.jsonFill(1, null, res);
 		return responseData;
 	}
 
