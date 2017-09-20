@@ -266,6 +266,7 @@
         <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
             #{id}
         </foreach>
+        order by createTime desc
         limit #{offset},#{limit}
     </select>
 
@@ -323,6 +324,7 @@
         <include refid="fields"></include>
         from story
         where valid = 1 and recommend = 1 and draft = 0 and setId=0
+        order by createTime DESC
         limit #{0},#{1}
     </select>
 
@@ -581,7 +583,7 @@
         <foreach collection="storyIdList" item="id" index="index" open="(" separator="," close=")">
             #{id}
         </foreach>
-        order by updateTime desc , likeCount desc
+        order by createTime desc , likeCount desc
 	</select>
 
     <select id="getSetStoryListByIdListByPage" resultType="cn.edu.nju.software.entity.Story">
