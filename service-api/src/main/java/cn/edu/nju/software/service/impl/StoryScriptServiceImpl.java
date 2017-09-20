@@ -32,7 +32,7 @@ public class StoryScriptServiceImpl implements StoryScriptService {
 		StoryScriptExample.Criteria criteria = storyScriptExample.createCriteria();
         criteria.andValidEqualTo(1);
         //数据库中有大文本文件 查询使用这个方法，selectByExampleWithBLOBs
-        List<StoryScript> list = storyScriptMapper.selectByExample(storyScriptExample);
+        List<StoryScript> list = storyScriptMapper.selectByExampleWithBLOBs(storyScriptExample);
         PageInfo<StoryScript> pageInfo=new PageInfo<>(list);
         int count=(int)pageInfo.getTotal();
         ResponseData<List<StoryScript>> responseData=new ResponseData<>();
@@ -61,7 +61,7 @@ public class StoryScriptServiceImpl implements StoryScriptService {
 		StoryScriptExample storyScriptExample=new StoryScriptExample();
 		StoryScriptExample.Criteria criteria = storyScriptExample.createCriteria();
         criteria.andStoryidEqualTo(storyId);
-        List<StoryScript> list = storyScriptMapper.selectByExample(storyScriptExample);
+        List<StoryScript> list = storyScriptMapper.selectByExampleWithBLOBs(storyScriptExample);
 		return list.get(0);
 	}
 

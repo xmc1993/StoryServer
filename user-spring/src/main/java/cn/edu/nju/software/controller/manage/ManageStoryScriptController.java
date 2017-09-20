@@ -50,6 +50,7 @@ public class ManageStoryScriptController {
 	@RequestMapping(value = "/saveStoryScript", method = { RequestMethod.POST })
 	@ResponseBody
 	public ResponseData<StoryScript> saveStoryScript(@ApiParam("故事ID") @RequestParam Integer storyId,
+			@ApiParam("内容") @RequestParam String content,
 			@ApiParam("角色Id") @RequestParam(value="roleId",required=false) Integer roleId,
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<StoryScript> responseData = new ResponseData<>();
@@ -57,6 +58,7 @@ public class ManageStoryScriptController {
 		StoryScript storyScript=storyScriptService.getStoryScriptByStoryId(storyId);
 		if(null==storyScript){
 			StoryScript storyScript2 = new StoryScript();
+			storyScript2.setContent(content);
 			storyScript2.setStoryid(storyId);
 			storyScript2.setCreatetime(new Date());
 			storyScript2.setUpdatetime(new Date());
@@ -92,6 +94,7 @@ public class ManageStoryScriptController {
 	@RequestMapping(value = "/updataStoryScriptById", method = { RequestMethod.POST })
 	@ResponseBody
 	public ResponseData<StoryScript> updataStoryScriptById(@ApiParam("故事剧本id") @RequestParam Integer id,
+			@ApiParam("内容") @RequestParam(value = "content", required = false) String content,
 			@ApiParam("故事ID") @RequestParam(value = "storyId", required = false) Integer storyId,
 			@ApiParam("角色ID") @RequestParam(value = "roleId", required = false) Integer roleId,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -101,6 +104,8 @@ public class ManageStoryScriptController {
 			responseData.jsonFill(2, "故事剧本不存在", null);
 			return responseData;
 		}
+		if(content!=null)
+			storyScript.setContent(content);
 		if (storyId != null)
 			storyScript.setStoryid(storyId);
 		if (roleId != null)

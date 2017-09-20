@@ -15,7 +15,7 @@ public class StoryScript {
 
     private Integer roleid;
 
-    private String obligate;
+    private String content;
 
     public Integer getId() {
         return id;
@@ -65,11 +65,11 @@ public class StoryScript {
         this.roleid = roleid;
     }
 
-    public String getObligate() {
-        return obligate;
+    public String getContent() {
+        return content;
     }
 
-    public void setObligate(String obligate) {
-        this.obligate = obligate == null ? null : obligate.trim();
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
     }
 }
