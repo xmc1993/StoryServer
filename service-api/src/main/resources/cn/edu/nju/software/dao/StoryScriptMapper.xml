@@ -8,7 +8,9 @@
     <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
     <result column="valid" property="valid" jdbcType="INTEGER" />
     <result column="roleId" property="roleid" jdbcType="INTEGER" />
-    <result column="obligate" property="obligate" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="cn.edu.nju.software.entity.StoryScript" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -69,8 +71,27 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, storyId, createTime, updateTime, valid, roleId, obligate
+    id, storyId, createTime, updateTime, valid, roleId
   </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="cn.edu.nju.software.entity.StoryScriptExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from story_script
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.edu.nju.software.entity.StoryScriptExample" >
     select
     <if test="distinct" >
@@ -85,9 +106,11 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from story_script
     where id = #{id,jdbcType=INTEGER}
   </select>
@@ -104,10 +127,10 @@
   <insert id="insert" parameterType="cn.edu.nju.software.entity.StoryScript" >
     insert into story_script (id, storyId, createTime, 
       updateTime, valid, roleId, 
-      obligate)
+      content)
     values (#{id,jdbcType=INTEGER}, #{storyid,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
       #{updatetime,jdbcType=TIMESTAMP}, #{valid,jdbcType=INTEGER}, #{roleid,jdbcType=INTEGER}, 
-      #{obligate,jdbcType=VARCHAR})
+      #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.nju.software.entity.StoryScript" >
     insert into story_script
@@ -130,8 +153,8 @@
       <if test="roleid != null" >
         roleId,
       </if>
-      <if test="obligate != null" >
-        obligate,
+      <if test="content != null" >
+        content,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -153,8 +176,8 @@
       <if test="roleid != null" >
         #{roleid,jdbcType=INTEGER},
       </if>
-      <if test="obligate != null" >
-        #{obligate,jdbcType=VARCHAR},
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -185,10 +208,23 @@
       <if test="record.roleid != null" >
         roleId = #{record.roleid,jdbcType=INTEGER},
       </if>
-      <if test="record.obligate != null" >
-        obligate = #{record.obligate,jdbcType=VARCHAR},
+      <if test="record.content != null" >
+        content = #{record.content,jdbcType=LONGVARCHAR},
       </if>
     </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update story_script
+    set id = #{record.id,jdbcType=INTEGER},
+      storyId = #{record.storyid,jdbcType=INTEGER},
+      createTime = #{record.createtime,jdbcType=TIMESTAMP},
+      updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
+      valid = #{record.valid,jdbcType=INTEGER},
+      roleId = #{record.roleid,jdbcType=INTEGER},
+      content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -200,8 +236,7 @@
       createTime = #{record.createtime,jdbcType=TIMESTAMP},
       updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
       valid = #{record.valid,jdbcType=INTEGER},
-      roleId = #{record.roleid,jdbcType=INTEGER},
-      obligate = #{record.obligate,jdbcType=VARCHAR}
+      roleId = #{record.roleid,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -224,10 +259,20 @@
       <if test="roleid != null" >
         roleId = #{roleid,jdbcType=INTEGER},
       </if>
-      <if test="obligate != null" >
-        obligate = #{obligate,jdbcType=VARCHAR},
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
       </if>
     </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.edu.nju.software.entity.StoryScript" >
+    update story_script
+    set storyId = #{storyid,jdbcType=INTEGER},
+      createTime = #{createtime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      valid = #{valid,jdbcType=INTEGER},
+      roleId = #{roleid,jdbcType=INTEGER},
+      content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.edu.nju.software.entity.StoryScript" >
@@ -236,8 +281,7 @@
       createTime = #{createtime,jdbcType=TIMESTAMP},
       updateTime = #{updatetime,jdbcType=TIMESTAMP},
       valid = #{valid,jdbcType=INTEGER},
-      roleId = #{roleid,jdbcType=INTEGER},
-      obligate = #{obligate,jdbcType=VARCHAR}
+      roleId = #{roleid,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
