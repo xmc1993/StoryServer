@@ -57,12 +57,12 @@ public class StoryScriptServiceImpl implements StoryScriptService {
 	}
 
 	@Override
-	public StoryScript getStoryScriptByStoryId(Integer storyId) {
+	public List<StoryScript> getStoryScriptByStoryId(Integer storyId) {
 		StoryScriptExample storyScriptExample=new StoryScriptExample();
 		StoryScriptExample.Criteria criteria = storyScriptExample.createCriteria();
         criteria.andStoryidEqualTo(storyId);
         List<StoryScript> list = storyScriptMapper.selectByExampleWithBLOBs(storyScriptExample);
-		return list.get(0);
+		return list;
 	}
 
 	@Override

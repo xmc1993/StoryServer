@@ -55,21 +55,18 @@ public class ManageStoryScriptController {
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<StoryScript> responseData = new ResponseData<>();
 		//查看该故事是否有剧本
-		StoryScript storyScript=storyScriptService.getStoryScriptByStoryId(storyId);
-		if(null==storyScript){
+		List<StoryScript> storyScript=storyScriptService.getStoryScriptByStoryId(storyId);
+		if(storyScript==null||storyScript.isEmpty()){
 			StoryScript storyScript2 = new StoryScript();
 			storyScript2.setContent(content);
 			storyScript2.setStoryid(storyId);
 			storyScript2.setCreatetime(new Date());
 			storyScript2.setUpdatetime(new Date());
-			if(null!=roleId)storyScript2.setRoleid(roleId);
+			if(roleId!=null)storyScript2.setRoleid(roleId);
 			storyScript2.setValid(1);
 			int res=storyScriptService.saveStoryScript(storyScript2);
-			if(res==1){
-				responseData.jsonFill(1, null, storyScript2);
-				return responseData;
-			}
-			responseData.jsonFill(2, "添加失败", null);
+			responseData.jsonFill(res, null, storyScript2);
+			return responseData;
 		}
 		responseData.jsonFill(2, "该故事存在剧本,如需修改请使用修改按钮", null);
 		return responseData;
@@ -123,10 +120,10 @@ public class ManageStoryScriptController {
 	@ApiOperation(value = "根据故事Id获取故事剧本", notes = "")
 	@RequestMapping(value = "/getStoryScriptByStoryId", method = { RequestMethod.GET })
 	@ResponseBody
-	public ResponseData<StoryScript> getStoryScriptByStoryId(@ApiParam("故事id") @RequestParam Integer storyId,
+	public ResponseData<List<StoryScript>> getStoryScriptByStoryId(@ApiParam("故事id") @RequestParam Integer storyId,
 			HttpServletRequest request, HttpServletResponse response) {
-		ResponseData<StoryScript> responseData = new ResponseData<>();
-		StoryScript storyScript = storyScriptService.getStoryScriptByStoryId(storyId);
+		ResponseData<List<StoryScript>> responseData = new ResponseData<>();
+		List<StoryScript> storyScript = storyScriptService.getStoryScriptByStoryId(storyId);
 		if(null==storyScript){
 			responseData.jsonFill(2, "该故事没有剧本", null);
 			return responseData;

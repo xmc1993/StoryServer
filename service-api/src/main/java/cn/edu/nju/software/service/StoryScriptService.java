@@ -14,6 +14,6 @@ public interface StoryScriptService {
 	int saveStoryScript(StoryScript storyScript);
 	int deleteById(Integer id);
 	int updataById(StoryScript storyScript);
-	StoryScript getStoryScriptByStoryId(Integer storyId);
+	List<StoryScript> getStoryScriptByStoryId(Integer storyId);
 	StoryScript getStoryScriptById(Integer id);
 }
