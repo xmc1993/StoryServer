@@ -2,6 +2,7 @@ package cn.edu.nju.software.service;
 
 import java.util.List;
 
+import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.StoryRoleAudio;
 
 public interface StoryRoleAudioService {
@@ -16,4 +17,8 @@ public interface StoryRoleAudioService {
 	List<StoryRoleAudio> getStoryRoleAudioByUserId(Integer userId);
 	
 	List<StoryRoleAudio> getStoryRoleAudioByUserIdAndRoleId(Integer userId,Integer RoleId);
+	
+	ResponseData<List<StoryRoleAudio>> getStoryRoleAuioByStoryId(Integer storyId,Integer page,Integer pageSize);
+	
+	List<StoryRoleAudio> getStoryRoleAuioByUserAndStory(Integer userId,Integer storyId);
 }

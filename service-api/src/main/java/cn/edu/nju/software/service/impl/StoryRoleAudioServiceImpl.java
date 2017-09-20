@@ -6,7 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
 import cn.edu.nju.software.dao.StoryRoleAudioMapper;
+import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.StoryRoleAudio;
 import cn.edu.nju.software.entity.StoryRoleAudioExample;
 import cn.edu.nju.software.service.StoryRoleAudioService;
@@ -59,6 +63,35 @@ public class StoryRoleAudioServiceImpl implements StoryRoleAudioService{
 			}
 		}
 		return list2;
+	}
+
+	@Override
+	public ResponseData<List<StoryRoleAudio>> getStoryRoleAuioByStoryId(Integer storyId, Integer page, Integer pageSize) {
+		PageHelper.startPage(page, pageSize);
+		StoryRoleAudioExample storyRoleAudioExample=new StoryRoleAudioExample();
+		StoryRoleAudioExample.Criteria criteria = storyRoleAudioExample.createCriteria();
+        criteria.andStoryidEqualTo(storyId);
+        List<StoryRoleAudio> list = storyRoleAudioMapper.selectByExample(storyRoleAudioExample);
+        ResponseData<List<StoryRoleAudio>> responseData=new ResponseData<>();
+        if(list==null){
+        	responseData.jsonFill(2, "没有此音频", null);
+        	return responseData;
+        }
+        PageInfo<StoryRoleAudio> pageInfo=new PageInfo<>(list);
+        int count=(int)pageInfo.getTotal();
+        responseData.setCount(count);
+        responseData.jsonFill(1,null, list);
+		return responseData;
+	}
+
+	@Override
+	public List<StoryRoleAudio> getStoryRoleAuioByUserAndStory(Integer userId, Integer storyId) {
+		StoryRoleAudioExample storyRoleAudioExample=new StoryRoleAudioExample();
+		StoryRoleAudioExample.Criteria criteria = storyRoleAudioExample.createCriteria();
+        criteria.andUseridEqualTo(userId);
+        criteria.andStoryidEqualTo(storyId);
+        List<StoryRoleAudio> list = storyRoleAudioMapper.selectByExample(storyRoleAudioExample);
+		return list;
 	}
 
 }

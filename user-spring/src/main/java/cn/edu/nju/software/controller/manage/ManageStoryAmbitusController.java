@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -67,6 +68,7 @@ public class ManageStoryAmbitusController {
 		int res = storyAmbitusService.saveStoryAmbitus(storyAmbitus);
 		if (res == 1) {
 			responseData.jsonFill(1, null, storyAmbitus);
+			return responseData;
 		}
 		responseData.jsonFill(2, "添加失败", null);
 		return responseData;
@@ -75,7 +77,7 @@ public class ManageStoryAmbitusController {
 	@ApiOperation(value = "删除故事周边根据id", notes = "")
 	@RequestMapping(value = "/deleteById/{id}", method = { RequestMethod.DELETE })
 	@ResponseBody
-	public ResponseData<Boolean> deleteById(@ApiParam("故事周边id") @RequestParam Integer id, HttpServletRequest request,
+	public ResponseData<Boolean> deleteById(@ApiParam("故事周边id") @PathVariable Integer id, HttpServletRequest request,
 			HttpServletResponse response) {
 		ResponseData<Boolean> responseData = new ResponseData<>();
 		int res = storyAmbitusService.deleteById(id);
@@ -98,16 +100,21 @@ public class ManageStoryAmbitusController {
 			@ApiParam("内容") @RequestParam(value = "content", required = false) String content,
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<StoryAmbitus> responseData = new ResponseData<>();
-		StoryAmbitus storyAmbitus=storyAmbitusService.getStoryAmbitusById(id);
-		if(storyAmbitus==null){
+		StoryAmbitus storyAmbitus = storyAmbitusService.getStoryAmbitusById(id);
+		if (storyAmbitus == null) {
 			responseData.jsonFill(2, "故事周边不存在", null);
 			return responseData;
 		}
-		if(storyId!=null)storyAmbitus.setStoryid(storyId);
-		if(title!=null)storyAmbitus.setTitle(title);
-		if(icon!=null)storyAmbitus.setIcon(icon);
-		if(videoUrl!=null)storyAmbitus.setVideourl(videoUrl);
-		if(content!=null)storyAmbitus.setContent(content);
+		if (storyId != null)
+			storyAmbitus.setStoryid(storyId);
+		if (title != null)
+			storyAmbitus.setTitle(title);
+		if (icon != null)
+			storyAmbitus.setIcon(icon);
+		if (videoUrl != null)
+			storyAmbitus.setVideourl(videoUrl);
+		if (content != null)
+			storyAmbitus.setContent(content);
 		storyAmbitus.setUpdatetime(new Date());
 		int res = storyAmbitusService.updataById(storyAmbitus);
 		if (res == 1) {
@@ -117,4 +124,36 @@ public class ManageStoryAmbitusController {
 		responseData.jsonFill(2, "更新失败", null);
 		return responseData;
 	}
+
+	@ApiOperation(value = "根据故事Id获取故事周边", notes = "")
+	@RequestMapping(value = "/getStoryAmbitusByStoryId", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<List<StoryAmbitus>> getStoryAmbitusByStoryId(@ApiParam("故事id") @RequestParam Integer storyId,
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<List<StoryAmbitus>> responseData = new ResponseData<>();
+		List<StoryAmbitus> list = storyAmbitusService.getStoryAmbitusByStoryId(storyId);
+		if(null==list){
+			responseData.jsonFill(2, "该故事没有周边", null);
+			return responseData;
+		}
+		responseData.jsonFill(1, null, list);
+		responseData.setCount(list.size());
+		return responseData;
+	}
+	
+	@ApiOperation(value = "根据故事周边Id获取故事周边", notes = "")
+	@RequestMapping(value = "/getStoryAmbitusById", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<StoryAmbitus> getStoryAmbitusById(@ApiParam("id") @RequestParam Integer id,
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<StoryAmbitus> responseData = new ResponseData<>();
+		StoryAmbitus storyAmbitus = storyAmbitusService.getStoryAmbitusById(id);
+		if(null==storyAmbitus){
+			responseData.jsonFill(2, "没有该周边", null);
+			return responseData;
+		}
+		responseData.jsonFill(1, null, storyAmbitus);
+		return responseData;
+	}
+	
 }

@@ -25,13 +25,11 @@ public interface ReviewService {
 
     boolean deleteSubReviewByWorkAuthor(int reviewId, int userId);
 
-
     boolean deleteReviewByUser(int reviewId, int userId);
 
     boolean deleteSubReviewByParentUser(int reviewId, int userId);
 
     boolean deleteSubReviewByUser(int reviewId, int userId);
-
 
     Review getReviewById(Integer id);
 
