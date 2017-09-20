@@ -74,9 +74,9 @@ public class ManageStoryScriptController {
 	}
 
 	@ApiOperation(value = "删除故事剧本根据id", notes = "")
-	@RequestMapping(value = "/deleteById/{id}", method = { RequestMethod.DELETE })
+	@RequestMapping(value = "/deleteStoryScriptById/{id}", method = { RequestMethod.DELETE })
 	@ResponseBody
-	public ResponseData<Boolean> deleteById(@ApiParam("故事周边id") @PathVariable Integer id, HttpServletRequest request,
+	public ResponseData<Boolean> deleteById(@ApiParam("故事剧本id") @PathVariable Integer id, HttpServletRequest request,
 			HttpServletResponse response) {
 		ResponseData<Boolean> responseData = new ResponseData<>();
 		int res = storyScriptService.deleteById(id);

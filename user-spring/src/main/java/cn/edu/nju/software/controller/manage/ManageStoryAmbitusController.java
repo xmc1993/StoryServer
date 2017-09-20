@@ -75,7 +75,7 @@ public class ManageStoryAmbitusController {
 	}
 
 	@ApiOperation(value = "删除故事周边根据id", notes = "")
-	@RequestMapping(value = "/deleteById/{id}", method = { RequestMethod.DELETE })
+	@RequestMapping(value = "/deleteStoryAmbitusById/{id}", method = { RequestMethod.DELETE })
 	@ResponseBody
 	public ResponseData<Boolean> deleteById(@ApiParam("故事周边id") @PathVariable Integer id, HttpServletRequest request,
 			HttpServletResponse response) {
