@@ -198,7 +198,7 @@ public class ManageStoryRoleController {
 	}
 
 	@ApiOperation(value = "根据故事id分页获取所有音频")
-	@RequestMapping(value = "/getStoryRoleAuioByStoryId", method = { RequestMethod.GET })
+	@RequestMapping(value = "/getStoryRoleAudioByStoryId", method = { RequestMethod.GET })
 	@ResponseBody
 	public ResponseData<List<StoryRoleAudio>> getStoryRoleAudioByUserIdAndRoleId(
 			@ApiParam(value = "故事id") @RequestParam Integer storyId,
@@ -211,9 +211,9 @@ public class ManageStoryRoleController {
 	}
 
 	@ApiOperation(value = "根据用户Id故事Id取所有音频")
-	@RequestMapping(value = "/getStoryRoleAuioByUserAndStory", method = { RequestMethod.GET })
+	@RequestMapping(value = "/getStoryRoleAudioByUserAndStory", method = { RequestMethod.GET })
 	@ResponseBody
-	public ResponseData<List<StoryRoleAudio>> getStoryRoleAuioByUserAndStory(
+	public ResponseData<List<StoryRoleAudio>> getStoryRoleAudioByUserAndStory(
 			@ApiParam(value = "用户Id") @RequestParam Integer userId,
 			@ApiParam(value = "故事Id") @RequestParam Integer storyId, HttpServletRequest request,
 			HttpServletResponse response) {

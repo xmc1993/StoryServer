@@ -54,7 +54,7 @@ public class StoryAmbitusServiceImpl implements StoryAmbitusService {
 
 	@Override
 	public int updataById(StoryAmbitus storyAmbitus) {
-		return storyAmbitusMapper.updateByPrimaryKey(storyAmbitus);
+		return storyAmbitusMapper.updateByPrimaryKeyWithBLOBs(storyAmbitus);
 	}
 
 	@Override

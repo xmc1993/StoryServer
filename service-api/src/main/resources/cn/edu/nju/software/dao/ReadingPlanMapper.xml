@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.nju.software.dao.ReadingPlanMapper">
+	<resultMap id="BaseResultMap" type="cn.edu.nju.software.entity.ReadingPlan">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="ageGroup" property="agegroup" jdbcType="VARCHAR" />
+		<result column="valid" property="valid" jdbcType="INTEGER" />
+		<result column="timePoint" property="timepoint" jdbcType="VARCHAR" />
+		<result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+		<result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="coverUrl" property="coverurl" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="cn.edu.nju.software.entity.ReadingPlan"
+		extends="BaseResultMap">
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, ageGroup, valid, timePoint, createTime, updateTime,
+		title, coverUrl
+	</sql>
+	<sql id="Blob_Column_List">
+		content
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="cn.edu.nju.software.entity.ReadingPlanExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from reading_plan
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="cn.edu.nju.software.entity.ReadingPlanExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from reading_plan
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from reading_plan
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		reading_plan
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="cn.edu.nju.software.entity.ReadingPlanExample">
+		delete from reading_plan
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="cn.edu.nju.software.entity.ReadingPlan">
+	
+		insert into reading_plan (id, ageGroup, valid,
+		timePoint, createTime,
+		updateTime,
+		title, coverUrl, content
+		)
+		values (#{id,jdbcType=INTEGER},
+		#{agegroup,jdbcType=VARCHAR},
+		#{valid,jdbcType=INTEGER},
+		#{timepoint,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP},
+		#{updatetime,jdbcType=TIMESTAMP},
+		#{title,jdbcType=VARCHAR},
+		#{coverurl,jdbcType=VARCHAR},
+		#{content,jdbcType=LONGVARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="cn.edu.nju.software.entity.ReadingPlan">
+		insert into reading_plan
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="agegroup != null">
+				ageGroup,
+			</if>
+			<if test="valid != null">
+				valid,
+			</if>
+			<if test="timepoint != null">
+				timePoint,
+			</if>
+			<if test="createtime != null">
+				createTime,
+			</if>
+			<if test="updatetime != null">
+				updateTime,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="coverurl != null">
+				coverUrl,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="agegroup != null">
+				#{agegroup,jdbcType=VARCHAR},
+			</if>
+			<if test="valid != null">
+				#{valid,jdbcType=INTEGER},
+			</if>
+			<if test="timepoint != null">
+				#{timepoint,jdbcType=VARCHAR},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatetime != null">
+				#{updatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="coverurl != null">
+				#{coverurl,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="cn.edu.nju.software.entity.ReadingPlanExample"
+		resultType="java.lang.Integer">
+		select count(*) from reading_plan
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update reading_plan
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.agegroup != null">
+				ageGroup = #{record.agegroup,jdbcType=VARCHAR},
+			</if>
+			<if test="record.valid != null">
+				valid = #{record.valid,jdbcType=INTEGER},
+			</if>
+			<if test="record.timepoint != null">
+				timePoint = #{record.timepoint,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createtime != null">
+				createTime = #{record.createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.updatetime != null">
+				updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.title != null">
+				title = #{record.title,jdbcType=VARCHAR},
+			</if>
+			<if test="record.coverurl != null">
+				coverUrl = #{record.coverurl,jdbcType=VARCHAR},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update reading_plan
+		set id = #{record.id,jdbcType=INTEGER},
+		ageGroup =
+		#{record.agegroup,jdbcType=VARCHAR},
+		valid =
+		#{record.valid,jdbcType=INTEGER},
+		timePoint =
+		#{record.timepoint,jdbcType=VARCHAR},
+		createTime =
+		#{record.createtime,jdbcType=TIMESTAMP},
+		updateTime =
+		#{record.updatetime,jdbcType=TIMESTAMP},
+		title =
+		#{record.title,jdbcType=VARCHAR},
+		coverUrl =
+		#{record.coverurl,jdbcType=VARCHAR},
+		content =
+		#{record.content,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update reading_plan
+		set id = #{record.id,jdbcType=INTEGER},
+		ageGroup =
+		#{record.agegroup,jdbcType=VARCHAR},
+		valid =
+		#{record.valid,jdbcType=INTEGER},
+		timePoint =
+		#{record.timepoint,jdbcType=VARCHAR},
+		createTime =
+		#{record.createtime,jdbcType=TIMESTAMP},
+		updateTime =
+		#{record.updatetime,jdbcType=TIMESTAMP},
+		title =
+		#{record.title,jdbcType=VARCHAR},
+		coverUrl =
+		#{record.coverurl,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="cn.edu.nju.software.entity.ReadingPlan">
+		update reading_plan
+		<set>
+			<if test="agegroup != null">
+				ageGroup = #{agegroup,jdbcType=VARCHAR},
+			</if>
+			<if test="valid != null">
+				valid = #{valid,jdbcType=INTEGER},
+			</if>
+			<if test="timepoint != null">
+				timePoint = #{timepoint,jdbcType=VARCHAR},
+			</if>
+			<if test="createtime != null">
+				createTime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatetime != null">
+				updateTime = #{updatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="coverurl != null">
+				coverUrl = #{coverurl,jdbcType=VARCHAR},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.edu.nju.software.entity.ReadingPlan">
+		update
+		reading_plan
+		set ageGroup = #{agegroup,jdbcType=VARCHAR},
+		valid =
+		#{valid,jdbcType=INTEGER},
+		timePoint = #{timepoint,jdbcType=VARCHAR},
+		createTime = #{createtime,jdbcType=TIMESTAMP},
+		updateTime =
+		#{updatetime,jdbcType=TIMESTAMP},
+		title = #{title,jdbcType=VARCHAR},
+		coverUrl = #{coverurl,jdbcType=VARCHAR},
+		content =
+		#{content,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="cn.edu.nju.software.entity.ReadingPlan">
+		update
+		reading_plan
+		set ageGroup = #{agegroup,jdbcType=VARCHAR},
+		valid =
+		#{valid,jdbcType=INTEGER},
+		timePoint = #{timepoint,jdbcType=VARCHAR},
+		createTime = #{createtime,jdbcType=TIMESTAMP},
+		updateTime =
+		#{updatetime,jdbcType=TIMESTAMP},
+		title = #{title,jdbcType=VARCHAR},
+		coverUrl = #{coverurl,jdbcType=VARCHAR}
+		where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+</mapper>
