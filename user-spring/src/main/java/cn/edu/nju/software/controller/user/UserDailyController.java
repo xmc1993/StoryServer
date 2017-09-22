@@ -1,12 +1,20 @@
 package cn.edu.nju.software.controller.user;
 
 import cn.edu.nju.software.controller.BaseController;
+import cn.edu.nju.software.dto.MsgVo;
 import cn.edu.nju.software.entity.Daily;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.User;
-import cn.edu.nju.software.service.*;
+import cn.edu.nju.software.entity.feed.Feed;
+import cn.edu.nju.software.entity.feed.MessageType;
+import cn.edu.nju.software.enums.Visibility;
+import cn.edu.nju.software.feed.service.MessageFeedService;
+import cn.edu.nju.software.service.DailyService;
+import cn.edu.nju.software.service.FollowService;
+import cn.edu.nju.software.service.StoryTagService;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.util.TokenConfig;
+import com.google.gson.Gson;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -38,6 +46,8 @@ public class UserDailyController extends BaseController {
     AppUserService appUserService;
     @Autowired
     FollowService followService;
+    @Autowired
+    MessageFeedService messageFeedService;
 
     @ApiOperation(value = "获取某个用户的日志列表", notes = "需要登录")
     @RequestMapping(value = "/getDailyListByUserIdByPage", method = {RequestMethod.GET})
@@ -113,6 +123,11 @@ public class UserDailyController extends BaseController {
             return responseData;
         }
         boolean res = dailyService.deleteDaily(dailyId);
+        if(res){
+            if ((daily.getVisibility() & Visibility.FOLLOWER) > 0){
+                messageFeedService.unfeedFollowers(dailyId, user.getId());
+            }
+        }
         responseData.jsonFill(res ? 1 : 2, null, res);
         return responseData;
     }
@@ -144,8 +159,23 @@ public class UserDailyController extends BaseController {
         daily = dailyService.saveDaily(daily);
         if (daily == null) {
             responseData.jsonFill(2, "发布失败", null);
-        }else {
+        } else {
             responseData.jsonFill(1, null, daily);
+            //如果对关注自己的人开房则feed TODO 抽取到service
+            if ((daily.getVisibility() & Visibility.FOLLOWER) > 0) {
+                MsgVo msgVo = new MsgVo();
+                msgVo.setUserId(user.getId());
+                msgVo.setHeadImgUrl(user.getHeadImgUrl());
+                msgVo.setUserName(user.getNickname());
+                Feed feed = new Feed();
+                feed.setCreateTime(new Date());
+                feed.setUpdateTime(new Date());
+                feed.setFid(user.getId());
+                feed.setContent(new Gson().toJson(msgVo));
+                feed.setMid(daily.getId());
+                feed.setType(MessageType.NEW_DAILY);
+                messageFeedService.feedFollowers(feed, user.getId());
+            }
         }
         return responseData;
     }
@@ -180,7 +210,7 @@ public class UserDailyController extends BaseController {
         daily = dailyService.saveDraftDaily(daily);
         if (daily == null) {
             responseData.jsonFill(2, "添加草稿日志失败", null);
-        }else {
+        } else {
             responseData.jsonFill(1, null, daily);
         }
         return responseData;

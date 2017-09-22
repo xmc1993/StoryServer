@@ -50,6 +50,8 @@ public interface MessageFeedService {
      */
     boolean deleteFeed(int id);
 
+    boolean feedFollowers(Feed feed, Integer sender);
 
+    boolean unfeedFollowers(Integer mid, Integer sender);
 
 }

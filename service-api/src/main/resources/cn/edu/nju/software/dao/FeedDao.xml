@@ -67,4 +67,14 @@
         limit #{offset},#{limit}
     </select>
 
+    <update id="deleteFeedByPatch" parameterType="cn.edu.nju.software.entity.Feed">
+        UPDATE feed
+        SET
+        valid=0
+        WHERE mid = #{0} and id in
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
 </mapper>

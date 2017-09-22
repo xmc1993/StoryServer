@@ -21,6 +21,8 @@ public interface FeedDao {
 
     Feed getFeedById(int id);
 
+    boolean deleteFeedByPatch(int mid, @Param("idList")List<Integer> idList);
+
     List<Feed> getFeedsByPageByTimestamp(@Param("lastPullTime")Date lastPullTime, @Param("userId")int userId, @Param("limit")int limit, @Param("type")MessageType type);
 
     List<Feed> getFeedsByPage(@Param("userId")int userId, @Param("offset")int offset, @Param("limit")int limit, @Param("type")MessageType type);
