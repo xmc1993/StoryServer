@@ -17,7 +17,7 @@ public class Feed {
     private String content;
     private MessageType type;
     private int valid = 1;
-    private int read = 0;//是否已读
+    private int isRead = 0;//是否已读
     private Date createTime;
     private Date updateTime;
 }

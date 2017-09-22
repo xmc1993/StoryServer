@@ -10,7 +10,7 @@
         content,
         type,
         valid,
-        read,
+        isRead,
         createTime,
         updateTime
     </sql>
@@ -29,7 +29,7 @@
         #{content},
         #{type},
         #{valid},
-        #{read},
+        #{isRead},
         #{createTime},
         #{updateTime}
         )
@@ -71,7 +71,7 @@
         UPDATE feed
         SET
         valid=0
-        WHERE mid = #{0} and id in
+        WHERE mid = #{0} and tid in
         <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
             #{id}
         </foreach>

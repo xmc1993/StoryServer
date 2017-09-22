@@ -95,6 +95,7 @@ public class MessageFeedServiceImpl implements MessageFeedService{
     public boolean feedFollowers(Feed feed, Integer sender) {
         List<Integer> userFollowerList = followService.getUserFollowerList(sender, 0, 9999999);
         for (Integer tid : userFollowerList) {
+            feed.setId(null);
             feed.setTid(tid);
             feed.setTid(tid);
             feedDao.saveFeed(feed);
