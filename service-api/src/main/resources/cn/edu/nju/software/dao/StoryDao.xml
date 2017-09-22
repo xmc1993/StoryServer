@@ -262,7 +262,7 @@
         select
         <include refid="fields"></include>
         from story
-        where valid = 1 and draft = 0 and isSet = 0 and id in
+        where valid = 1 and draft = 0 and id in
         <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
             #{id}
         </foreach>
@@ -579,7 +579,7 @@
 	<select id="getStoryListByIdListByPage" resultType="cn.edu.nju.software.entity.Story">
 		select 
 		<include refid="fields"></include>
-        from story where isSet = 0 and valid=1 and draft=0 and id in
+        from story where valid=1 and draft=0 and id in
         <foreach collection="storyIdList" item="id" index="index" open="(" separator="," close=")">
             #{id}
         </foreach>

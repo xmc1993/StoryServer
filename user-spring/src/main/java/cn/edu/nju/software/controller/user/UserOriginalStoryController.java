@@ -2,8 +2,10 @@ package cn.edu.nju.software.controller.user;
 
 import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.entity.TagRelation;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.entity.UserStory;
+import cn.edu.nju.software.service.TagRelationService;
 import cn.edu.nju.software.service.UserStoryService;
 import cn.edu.nju.software.util.TokenConfig;
 import com.wordnik.swagger.annotations.Api;
@@ -32,9 +34,10 @@ import java.util.List;
 public class UserOriginalStoryController extends BaseController {
     @Autowired
     private UserStoryService userStoryService;
+    @Autowired
+    private TagRelationService tagRelationService;
 
-
-    @ApiOperation(value = "获得一个用户的所有UserStory", notes = "")
+    @ApiOperation(value = "获得一个用户的所有原创故事", notes = "")
     @RequestMapping(value = "/getAllUserStoryByUserIdByPage", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<UserStory>> getUserStoryListByParentId(
@@ -54,7 +57,7 @@ public class UserOriginalStoryController extends BaseController {
         return responseData;
     }
 
-    @ApiOperation(value = "添加UserStory", notes = "Auth")
+    @ApiOperation(value = "添加原创故事", notes = "Auth")
     @RequestMapping(value = "/addUserStory", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<UserStory> addUserStory(
@@ -81,11 +84,19 @@ public class UserOriginalStoryController extends BaseController {
             responseData.jsonFill(2, "发布失败", null);
             return responseData;
         }
+        TagRelation tagRelation = new TagRelation();
+        tagRelation.setStoryId(result.getId());
+        //添加原创故事的标签
+        tagRelation.setTagId(100124);
+        tagRelation.setCreateTime(new Date());
+        tagRelation.setUpdateTime(new Date());
+        tagRelationService.saveTagRelation(tagRelation);
+
         responseData.jsonFill(1, null, userStory);
         return responseData;
     }
 
-    @ApiOperation(value = "更新UserStory信息", notes = "Auth")
+    @ApiOperation(value = "更新原创故事信息", notes = "Auth")
     @RequestMapping(value = "/updateUserStory", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> updateUserStory(
@@ -123,7 +134,7 @@ public class UserOriginalStoryController extends BaseController {
     }
 
 
-    @ApiOperation(value = "删除UserStory", notes = "Auth")
+    @ApiOperation(value = "删除原创故事", notes = "Auth")
     @RequestMapping(value = "/deleteUserStory", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> deleteUserStory(
@@ -151,7 +162,7 @@ public class UserOriginalStoryController extends BaseController {
         return responseData;
     }
 
-    @ApiOperation(value = "获得一个故事的信息", notes = "")
+    @ApiOperation(value = "获得一个原创故事的信息", notes = "")
     @RequestMapping(value = "/getUserStoryById", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<UserStory> getUserStoryById(

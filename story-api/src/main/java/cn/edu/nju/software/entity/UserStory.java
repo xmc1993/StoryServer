@@ -24,8 +24,8 @@ public class UserStory {
     private Integer userId;
 	@ApiModelProperty(value="封面地址")
     private String coverUrl;
-    @ApiModelProperty(value="是否原创")
-    private Integer original = 1;
+    @ApiModelProperty(value="故事类型 0:普通故事 1:故事集 2:用户故事")
+    private Integer isSet = 2;
     @ApiModelProperty(value="用于软删除")
     private Integer valid = 1;//用于软删除
     @ApiModelProperty(value="被讲次数")

@@ -9,7 +9,7 @@
         author,
         userId,
         coverUrl,
-        original,
+        isSet,
         tellCount,
         likeCount,
         valid,
@@ -30,7 +30,7 @@
         #{author},
         #{userId},
         #{coverUrl},
-        #{original},
+        #{isSet},
         #{tellCount},
         #{likeCount},
         #{valid},
@@ -46,20 +46,20 @@
         content=#{content},
         coverUrl=#{coverUrl},
         updateTime=#{updateTime}
-        WHERE id = #{id} and valid = 1 and isSet = 1
+        WHERE id = #{id} and valid = 1 and isSet = 2
     </update>
 
     <update id="deleteUserStory">
         UPDATE story
         SET valid=0
-        WHERE id=#{id} and isSet = 1
+        WHERE id=#{id} and isSet = 2
     </update>
 
     <select id="getAllUserStoryByUserIdByPage" resultType="cn.edu.nju.software.entity.UserStory">
         select
         <include refid="fields"></include>
         from story
-        WHERE userId = {0} and valid = 1
+        WHERE userId = #{0} and valid = 1
         limit #{1},#{2}
     </select>
 
