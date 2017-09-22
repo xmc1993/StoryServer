@@ -60,6 +60,16 @@ public class ReadPlanStoryGroupServiceImpl implements ReadPlanStoryGroupService 
 		return responseData;
 	}
 
+	@Override
+	public List<ReadingPlanStoryGroup> getReadPlanStoryGroupByPlanId(Integer readPlanId) {
+		ReadingPlanStoryGroupExample readingPlanStoryGroupExample=new ReadingPlanStoryGroupExample();
+        //通过criteria构造查询条件
+		ReadingPlanStoryGroupExample.Criteria criteria = readingPlanStoryGroupExample.createCriteria();
+        criteria.andReadingplanidEqualTo(readPlanId);
+        List<ReadingPlanStoryGroup> list=readingPlanStoryGroupMapper.selectByExample(readingPlanStoryGroupExample);
+		return list;
+	}
+
 
 	
 	
