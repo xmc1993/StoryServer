@@ -12,6 +12,9 @@ import java.util.List;
  */
 public interface MessageFeedService {
 
+
+    List<Feed> getDisplayFeedsByPage(int userId, int page, int pageSize);
+
     /**
      * 从最新的feed开始分页查询
      * @param page

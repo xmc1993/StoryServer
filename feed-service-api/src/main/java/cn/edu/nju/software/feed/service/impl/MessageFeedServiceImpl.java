@@ -1,10 +1,14 @@
 package cn.edu.nju.software.feed.service.impl;
 
 import cn.edu.nju.software.dao.FeedDao;
+import cn.edu.nju.software.dto.MsgVo;
+import cn.edu.nju.software.entity.Daily;
 import cn.edu.nju.software.entity.feed.Feed;
 import cn.edu.nju.software.entity.feed.MessageType;
 import cn.edu.nju.software.feed.service.MessageFeedService;
+import cn.edu.nju.software.service.DailyService;
 import cn.edu.nju.software.service.FollowService;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +24,36 @@ public class MessageFeedServiceImpl implements MessageFeedService{
     private FeedDao feedDao;
     @Autowired
     private FollowService followService;
+    @Autowired
+    private DailyService dailyService;
+
+    @Override
+    public List<Feed> getDisplayFeedsByPage(int userId, int page, int pageSize) {
+        List<Feed> feeds = getFeedsByPage(userId, page, pageSize, null);
+        transformFeedList(feeds);
+        return feeds;
+    }
+
+    private void transformFeedList(List<Feed> feedList){
+        for (Feed feed : feedList) {
+            transformFeed(feed);
+        }
+    }
+
+    private Feed transformFeed(Feed feed){
+        Gson gson = new Gson();
+        MsgVo msgVo = gson.fromJson(feed.getContent(), MsgVo.class);
+        switch (feed.getType()){
+            case NEW_DAILY:
+                Daily daily = dailyService.getDailyById(feed.getMid());
+                msgVo.setData(daily);
+                break;
+            default:
+                return feed;
+        }
+        feed.setContent(gson.toJson(msgVo));
+        return feed;
+    }
 
     @Override
     public List<Feed> getFeedsByPage(int userId, int page, int pageSize, MessageType type) {

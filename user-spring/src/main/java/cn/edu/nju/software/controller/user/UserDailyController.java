@@ -34,7 +34,7 @@ import java.util.List;
  * Created by xmc1993 on 2017/5/12.
  */
 
-@Api(value = "/work", description = "和日志有关的接口")
+@Api(value = "/daily", description = "和日志有关的接口")
 @Controller
 @RequestMapping("/user/daily")
 public class UserDailyController extends BaseController {
