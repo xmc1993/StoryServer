@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.UserStoryDao">
+
+    <sql id="fields">
+        id,
+        title,
+        content,
+        author,
+        userId,
+        coverUrl,
+        original,
+        tellCount,
+        likeCount,
+        valid,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveUserStory" parameterType="cn.edu.nju.software.entity.UserStory" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into story(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{title},
+        #{content},
+        #{author},
+        #{userId},
+        #{coverUrl},
+        #{original},
+        #{tellCount},
+        #{likeCount},
+        #{valid},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <update id="updateUserStory" parameterType="cn.edu.nju.software.entity.UserStory">
+        UPDATE story
+        SET
+        title=#{title},
+        content=#{content},
+        coverUrl=#{coverUrl},
+        updateTime=#{updateTime}
+        WHERE id = #{id} and valid = 1 and isSet = 1
+    </update>
+
+    <update id="deleteUserStory">
+        UPDATE story
+        SET valid=0
+        WHERE id=#{id} and isSet = 1
+    </update>
+
+    <select id="getAllUserStoryByUserIdByPage" resultType="cn.edu.nju.software.entity.UserStory">
+        select
+        <include refid="fields"></include>
+        from story
+        WHERE userId = {0} and valid = 1
+        limit #{1},#{2}
+    </select>
+
+    <select id="getUserStoryCountByUserId" resultType="java.lang.Integer">
+        select
+        count(id)
+        from story
+        WHERE userId = #{0} and valid = 1
+    </select>
+
+    <select id="getUserStoryById" resultType="cn.edu.nju.software.entity.UserStory">
+        select
+        <include refid="fields"></include>
+        from story
+        WHERE id = #{0} and valid = 1
+    </select>
+
+</mapper>
