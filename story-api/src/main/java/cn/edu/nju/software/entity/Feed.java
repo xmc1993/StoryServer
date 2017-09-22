@@ -1,5 +1,6 @@
-package cn.edu.nju.software.entity.feed;
+package cn.edu.nju.software.entity;
 
+import cn.edu.nju.software.entity.feed.MessageType;
 import lombok.Data;
 
 import java.util.Date;

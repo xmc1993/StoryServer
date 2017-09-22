@@ -1,6 +1,6 @@
 package cn.edu.nju.software.feed.service;
 
-import cn.edu.nju.software.entity.feed.Feed;
+import cn.edu.nju.software.entity.Feed;
 import cn.edu.nju.software.entity.feed.MessageType;
 
 import java.util.Date;

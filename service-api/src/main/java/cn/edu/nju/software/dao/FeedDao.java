@@ -1,6 +1,6 @@
 package cn.edu.nju.software.dao;
 
-import cn.edu.nju.software.entity.feed.Feed;
+import cn.edu.nju.software.entity.Feed;
 import cn.edu.nju.software.entity.feed.MessageType;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

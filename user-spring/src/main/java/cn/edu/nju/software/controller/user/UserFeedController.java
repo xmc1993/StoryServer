@@ -3,7 +3,7 @@ package cn.edu.nju.software.controller.user;
 import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.User;
-import cn.edu.nju.software.entity.feed.Feed;
+import cn.edu.nju.software.entity.Feed;
 import cn.edu.nju.software.feed.service.MessageFeedService;
 import cn.edu.nju.software.util.TokenConfig;
 import com.wordnik.swagger.annotations.Api;

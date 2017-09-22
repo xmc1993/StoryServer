@@ -5,7 +5,7 @@ import cn.edu.nju.software.dto.MsgVo;
 import cn.edu.nju.software.entity.Daily;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.User;
-import cn.edu.nju.software.entity.feed.Feed;
+import cn.edu.nju.software.entity.Feed;
 import cn.edu.nju.software.entity.feed.MessageType;
 import cn.edu.nju.software.enums.Visibility;
 import cn.edu.nju.software.feed.service.MessageFeedService;
