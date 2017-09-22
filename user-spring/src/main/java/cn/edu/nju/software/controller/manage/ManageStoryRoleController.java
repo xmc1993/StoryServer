@@ -7,6 +7,8 @@ import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.StoryRoleAudioService;
 import cn.edu.nju.software.service.StoryRoleService;
 import cn.edu.nju.software.util.UploadFileUtil;
+import cn.edu.nju.software.vo.StoryRoleAudioList;
+import cn.edu.nju.software.vo.StoryRoleAudioVo;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -105,25 +109,24 @@ public class ManageStoryRoleController {
 	@ApiOperation(value = "添加故事角色音频")
 	@RequestMapping(value = "/saveStoryRoleAudio", method = { RequestMethod.POST })
 	@ResponseBody
-	public ResponseData<StoryRoleAudio> saveStoryRoleAudio(@ApiParam("角色ID") @RequestParam Integer roleId,
-			@ApiParam("故事id") @RequestParam Integer storyId, @ApiParam("content") @RequestParam String content,
+	public ResponseData<StoryRoleAudioList> saveStoryRoleAudio(@ApiParam("故事音频列表")@RequestBody StoryRoleAudioList storyRoleAudioList,
 			HttpServletRequest request, HttpServletResponse response) {
-		ResponseData<StoryRoleAudio> responseData = new ResponseData<>();
-
-		StoryRoleAudio storyRoleAudio = new StoryRoleAudio();
-		storyRoleAudio.setStoryid(storyId);
-		storyRoleAudio.setValid(1);
-		storyRoleAudio.setContent(content);
-		storyRoleAudio.setRoleid(roleId);
-		storyRoleAudio.setCreatetime(new Date());
-		storyRoleAudio.setUpdatetime(new Date());
-		storyRoleAudio.setUserid(adminSign);
-		int res = storyRoleAudioService.saveRoleAudio(storyRoleAudio);
-		if (res == 1) {
-			responseData.jsonFill(res, null, storyRoleAudio);
-			return responseData;
+		ResponseData<StoryRoleAudioList> responseData = new ResponseData<>();
+		List<StoryRoleAudioVo> list=storyRoleAudioList.getRoleMsg();
+		Integer storyId=storyRoleAudioList.getStoryId();
+		for (StoryRoleAudioVo storyRoleAudioVo : list) {
+			StoryRoleAudio storyRoleAudio = new StoryRoleAudio();
+			storyRoleAudio.setStoryid(storyId);
+			storyRoleAudio.setValid(1);
+			storyRoleAudio.setRoleid(storyRoleAudioVo.getRoleId());
+			storyRoleAudio.setContent(storyRoleAudioVo.getContent());
+			storyRoleAudio.setCreatetime(new Date());
+			storyRoleAudio.setUpdatetime(new Date());
+			storyRoleAudio.setUserid(adminSign);
+			storyRoleAudioService.saveRoleAudio(storyRoleAudio);
 		}
-		responseData.jsonFill(2, "更新失败", null);
+		responseData.jsonFill(1, null,storyRoleAudioList);
+		responseData.setCount(list.size());
 		return responseData;
 	}
 
@@ -197,7 +200,7 @@ public class ManageStoryRoleController {
 		return responseData;
 	}
 
-	@ApiOperation(value = "根据故事id分页获取所有音频")
+	@ApiOperation(value = "根据故事id分页获取所有音频(这个是包括用户上传的音频)")
 	@RequestMapping(value = "/getStoryRoleAudioByStoryId", method = { RequestMethod.GET })
 	@ResponseBody
 	public ResponseData<List<StoryRoleAudio>> getStoryRoleAudioByUserIdAndRoleId(
@@ -210,21 +213,27 @@ public class ManageStoryRoleController {
 		return responseData;
 	}
 
-	@ApiOperation(value = "根据用户Id故事Id取所有音频")
-	@RequestMapping(value = "/getStoryRoleAudioByUserAndStory", method = { RequestMethod.GET })
+	@ApiOperation(value = "根据故事Id获取官方所有音频(这个是获取官方的)")
+	@RequestMapping(value = "/getAdminStoryRoleAudioByStory", method = { RequestMethod.GET })
 	@ResponseBody
-	public ResponseData<List<StoryRoleAudio>> getStoryRoleAudioByUserAndStory(
-			@ApiParam(value = "用户Id") @RequestParam Integer userId,
+	public ResponseData<StoryRoleAudioList> getStoryRoleAudioByUserAndStory(
 			@ApiParam(value = "故事Id") @RequestParam Integer storyId, HttpServletRequest request,
 			HttpServletResponse response) {
-		ResponseData<List<StoryRoleAudio>> responseData = new ResponseData<>();
-		List<StoryRoleAudio> list = storyRoleAudioService.getStoryRoleAuioByUserAndStory(userId, storyId);
-		if(null==list){
-			responseData.jsonFill(2, "无该音频", null);
-			return responseData;
-		}
-		responseData.jsonFill(1, null, list);
-		responseData.setCount(list.size());
+		ResponseData<StoryRoleAudioList> responseData =new ResponseData<>();
+		
+		List<StoryRoleAudio> list = storyRoleAudioService.getStoryRoleAuioByUserAndStory(2, storyId);
+		List<StoryRoleAudioVo> list2=new ArrayList<StoryRoleAudioVo>();
+	for (StoryRoleAudio storyRoleAudio : list) {
+		StoryRoleAudioVo storyRoleAudioVo=new StoryRoleAudioVo();
+		storyRoleAudioVo.setContent(storyRoleAudio.getContent());
+		storyRoleAudioVo.setRoleId(storyRoleAudio.getRoleid());
+		list2.add(storyRoleAudioVo);
+	}	
+		StoryRoleAudioList storyRoleAudioList=new StoryRoleAudioList();
+		storyRoleAudioList.setRoleMsg(list2);
+		storyRoleAudioList.setStoryId(storyId);
+		responseData.jsonFill(1, null, storyRoleAudioList);
+		responseData.setCount(list2.size());
 		return responseData;
 	}
 

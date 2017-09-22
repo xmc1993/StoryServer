@@ -14,4 +14,5 @@ public interface ReadPlanStoryGroupService {
 	int deleteReadPlanStoryByReadPlanId(Integer readPlanId);
 	ReadingPlanStoryGroup getReadPlanStoryGroupById(Integer id);
 	ResponseData<List<ReadingPlanStoryGroup>> getReadPlanStoryGroupByPlanId(Integer readPlanId,Integer page,Integer pageSize);
+	List<ReadingPlanStoryGroup> getReadPlanStoryGroupByPlanId(Integer readPlanId);
 }

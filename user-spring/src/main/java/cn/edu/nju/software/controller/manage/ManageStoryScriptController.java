@@ -87,24 +87,23 @@ public class ManageStoryScriptController {
 		return responseData;
 	}
 
-	@ApiOperation(value = "更新故事剧本根据剧本id")
-	@RequestMapping(value = "/updataStoryScriptById", method = { RequestMethod.POST })
+	@ApiOperation(value = "更新故事剧本根据故事id")
+	@RequestMapping(value = "/updataStoryScriptByStoryId", method = { RequestMethod.POST })
 	@ResponseBody
-	public ResponseData<StoryScript> updataStoryScriptById(@ApiParam("故事剧本id") @RequestParam Integer id,
+	public ResponseData<StoryScript> updataStoryScriptById(
+			@ApiParam("故事ID") @RequestParam Integer storyId,
 			@ApiParam("内容") @RequestParam(value = "content", required = false) String content,
-			@ApiParam("故事ID") @RequestParam(value = "storyId", required = false) Integer storyId,
 			@ApiParam("角色ID") @RequestParam(value = "roleId", required = false) Integer roleId,
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<StoryScript> responseData = new ResponseData<>();
-		StoryScript storyScript = storyScriptService.getStoryScriptById(id);
-		if (storyScript == null) {
+		List<StoryScript> list = storyScriptService.getStoryScriptByStoryId(storyId);
+		if (list == null||list.isEmpty()) {
 			responseData.jsonFill(2, "故事剧本不存在", null);
 			return responseData;
 		}
+		StoryScript storyScript=list.get(0);
 		if(content!=null)
 			storyScript.setContent(content);
-		if (storyId != null)
-			storyScript.setStoryid(storyId);
 		if (roleId != null)
 			storyScript.setRoleid(roleId);
 		storyScript.setUpdatetime(new Date());
