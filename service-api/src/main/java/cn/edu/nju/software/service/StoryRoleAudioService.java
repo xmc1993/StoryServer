@@ -12,6 +12,8 @@ public interface StoryRoleAudioService {
 	
 	int deleteById(Integer id);
 	
+	int deleteByStoryId(Integer storyId);
+	
 	StoryRoleAudio selectById(Integer id);
 	
 	List<StoryRoleAudio> getStoryRoleAudioByUserId(Integer userId);

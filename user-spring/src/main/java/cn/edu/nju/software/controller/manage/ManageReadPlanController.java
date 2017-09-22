@@ -51,7 +51,7 @@ public class ManageReadPlanController {
 	@ApiOperation(value = "新建阅读计划")
 	@RequestMapping(value = "/saveReadPlan", method = { RequestMethod.POST })
 	@ResponseBody
-	public ResponseData<ReadingPlan> saveReadPlan(@ApiParam("年龄段") @RequestParam String ageGroup,
+	public ResponseData<ReadingPlan> saveReadPlan(@ApiParam("年龄段(请传该年龄段最大的天数的)") @RequestParam String ageGroup,
 			@ApiParam("时间点(格式:yyyy/mm/dd) 备注:这个是字符串类型") @RequestParam String timepoint,
 			@ApiParam("题目") @RequestParam String title, @ApiParam("封面url") @RequestParam String coverurl,
 			@ApiParam("内容") @RequestParam String content, HttpServletRequest request, HttpServletResponse response) {
@@ -117,7 +117,7 @@ public class ManageReadPlanController {
 	@ResponseBody
 	public ResponseData<Boolean> updataReadPlan(@ApiParam("阅读计划id") @RequestParam Integer id,
 			@ApiParam("年龄段") @RequestParam(value = "ageGroup", required = false) String ageGroup,
-			@ApiParam("时间点(格式:yyyy/mm/dd) 备注:这个是字符串类型") @RequestParam(value = "timepoint", required = false) String timepoint,
+			@ApiParam("时间点(格式:yyyy/MM) 备注:这个是字符串类型") @RequestParam(value = "timepoint", required = false) String timepoint,
 			@ApiParam("题目") @RequestParam(value = "title", required = false) String title,
 			@ApiParam("封面url") @RequestParam(value = "coverurl", required = false) String coverurl,
 			@ApiParam("内容") @RequestParam(value = "content", required = false) String content,

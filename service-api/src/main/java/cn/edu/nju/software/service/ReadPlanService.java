@@ -15,4 +15,5 @@ public interface ReadPlanService {
 	int deleteReadPlan(Integer id);
 	int updateReadPlan(ReadingPlan readPlan);
 	ReadingPlan selectReadPlanById(Integer id);
+	List<ReadingPlan> getReadingPlanByTime(String days,String timePoint);
 }
