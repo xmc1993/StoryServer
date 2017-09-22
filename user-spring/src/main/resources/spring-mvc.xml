@@ -140,6 +140,7 @@
             <mvc:mapping path="/user/getStoryRoleAudioById"/>
             <mvc:mapping path="/user/getStoryRoleAudioByUserId"/>
             <mvc:mapping path="/user/daily/**"/>
+            <mvc:mapping path="/user/originalStory/**"/>
             <mvc:mapping path="getStoryRoleAudioByUserIdAndRoleId"/>
 
             <!-- 不需要拦截的uri -->

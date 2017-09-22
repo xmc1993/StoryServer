@@ -21,7 +21,7 @@ public class UserStory {
     @ApiModelProperty(value="作者")
     private String author;
     @ApiModelProperty(value="用户ID")
-    private String userId;
+    private Integer userId;
 	@ApiModelProperty(value="封面地址")
     private String coverUrl;
     @ApiModelProperty(value="是否原创")

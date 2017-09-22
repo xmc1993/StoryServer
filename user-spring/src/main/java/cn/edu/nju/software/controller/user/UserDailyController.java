@@ -40,12 +40,12 @@ public class UserDailyController extends BaseController {
     FollowService followService;
 
     @ApiOperation(value = "获取某个用户的日志列表", notes = "需要登录")
-    @RequestMapping(value = "/getDailyListByUserId", method = {RequestMethod.GET})
+    @RequestMapping(value = "/getDailyListByUserIdByPage", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<Daily>> getDailyListByUserId(
             @ApiParam("用户ID") @RequestParam("userId") int userId,
-            @ApiParam("OFFSET") @RequestParam int page,
-            @ApiParam("LIMIT") @RequestParam int pageSize,
+            @ApiParam("page") @RequestParam int page,
+            @ApiParam("pageSize") @RequestParam int pageSize,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<Daily>> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);

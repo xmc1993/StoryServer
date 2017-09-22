@@ -203,12 +203,12 @@ public class UserBabyController extends BaseController {
             HttpServletRequest request, HttpServletResponse response) throws ParseException {
         ResponseData<Boolean> responseData = new ResponseData<>();
         
-        boolean sucess=babyService.selectBaby(parentId, id);
-        if (sucess == false) {
-            responseData.jsonFill(2, "选中失败", sucess);
+        boolean success=babyService.selectBaby(parentId, id);
+        if (success == false) {
+            responseData.jsonFill(2, "选中失败", success);
             return responseData;
         }
-        responseData.jsonFill(1, null, sucess);
+        responseData.jsonFill(1, null, success);
         return responseData;
     }
 }
