@@ -114,6 +114,7 @@ public class ManageStoryRoleController {
 		ResponseData<StoryRoleAudioList> responseData = new ResponseData<>();
 		List<StoryRoleAudioVo> list=storyRoleAudioList.getRoleMsg();
 		Integer storyId=storyRoleAudioList.getStoryId();
+		storyRoleAudioService.deleteByStoryId(storyId);
 		for (StoryRoleAudioVo storyRoleAudioVo : list) {
 			StoryRoleAudio storyRoleAudio = new StoryRoleAudio();
 			storyRoleAudio.setStoryid(storyId);
