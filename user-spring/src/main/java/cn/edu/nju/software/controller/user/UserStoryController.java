@@ -44,8 +44,6 @@ public class UserStoryController extends BaseController {
     @Autowired
     private StoryTagService storyTagService;
     @Autowired
-    private AnswerService answerService;
-    @Autowired
     private StorySetService storySetService;
     @Autowired
     private TagUserLogService tagUserLogService;
@@ -349,10 +347,6 @@ public class UserStoryController extends BaseController {
 
         List<Integer> contentList = tagUserLogService.getTagUserLogTagIdListByBabyId(babyId, 0, 10);
 
-//        if(contentList.size()==0){
-//            responseData.jsonFill(1, null, null);
-//            return responseData;
-//        }
         if(contentList.size()==0){
             List<Story> storyList = storyService.getSetRecommendedStoryListByPage(page*pageSize, pageSize);
             int count = storyService.getRecommendedStoryCount();

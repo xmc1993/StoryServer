@@ -30,8 +30,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/user/daily")
 public class UserDailyController extends BaseController {
-
-    private static final String WORKS_ROOT = "/daily/"; //头像的基础路径
     @Autowired
     private DailyService dailyService;
     @Autowired
