@@ -94,4 +94,12 @@ public class StoryRoleAudioServiceImpl implements StoryRoleAudioService{
 		return list;
 	}
 
+	@Override
+	public int deleteByStoryId(Integer storyId) {
+		StoryRoleAudioExample storyRoleAudioExample=new StoryRoleAudioExample();
+		StoryRoleAudioExample.Criteria criteria = storyRoleAudioExample.createCriteria();
+        criteria.andStoryidEqualTo(storyId);
+        return storyRoleAudioMapper.deleteByExample(storyRoleAudioExample);
+	}
+
 }
