@@ -54,9 +54,8 @@ public class ManageStoryScriptController {
 			@ApiParam("角色Id") @RequestParam(value="roleId",required=false) Integer roleId,
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<StoryScript> responseData = new ResponseData<>();
-		//查看该故事是否有剧本
-		List<StoryScript> storyScript=storyScriptService.getStoryScriptByStoryId(storyId);
-		if(storyScript==null||storyScript.isEmpty()){
+		
+			storyScriptService.deleteByStoryId(storyId);
 			StoryScript storyScript2 = new StoryScript();
 			storyScript2.setContent(content);
 			storyScript2.setStoryid(storyId);
@@ -67,9 +66,6 @@ public class ManageStoryScriptController {
 			int res=storyScriptService.saveStoryScript(storyScript2);
 			responseData.jsonFill(res, null, storyScript2);
 			return responseData;
-		}
-		responseData.jsonFill(2, "该故事存在剧本,如需修改请使用修改按钮", null);
-		return responseData;
 	}
 
 	@ApiOperation(value = "删除故事剧本根据id", notes = "")
