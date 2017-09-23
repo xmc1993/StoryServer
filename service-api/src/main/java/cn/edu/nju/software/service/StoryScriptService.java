@@ -13,6 +13,7 @@ public interface StoryScriptService {
 	ResponseData<List<StoryScript>> selectAllStoryScript(int page,int pageSize);
 	int saveStoryScript(StoryScript storyScript);
 	int deleteById(Integer id);
+	int deleteByStoryId(Integer stroyId);
 	int updataById(StoryScript storyScript);
 	List<StoryScript> getStoryScriptByStoryId(Integer storyId);
 	StoryScript getStoryScriptById(Integer id);

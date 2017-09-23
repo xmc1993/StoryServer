@@ -70,6 +70,15 @@ public class StoryScriptServiceImpl implements StoryScriptService {
 		return storyScriptMapper.selectByPrimaryKey(id);
 	}
 
+	@Override
+	public int deleteByStoryId(Integer storyId) {
+		StoryScriptExample storyScriptExample=new StoryScriptExample();
+		StoryScriptExample.Criteria criteria = storyScriptExample.createCriteria();
+        criteria.andStoryidEqualTo(storyId);
+       return storyScriptMapper.deleteByExample(storyScriptExample);
+		
+	}
+
 
 
 }
