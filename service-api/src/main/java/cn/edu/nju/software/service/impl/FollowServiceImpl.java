@@ -3,6 +3,7 @@ package cn.edu.nju.software.service.impl;
 import cn.edu.nju.software.dao.FollowRelationDao;
 import cn.edu.nju.software.dao.user.AppUserDao;
 import cn.edu.nju.software.entity.FollowRelation;
+import cn.edu.nju.software.enums.Visibility;
 import cn.edu.nju.software.service.FollowService;
 import cn.edu.nju.software.util.Const;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,5 +91,27 @@ public class FollowServiceImpl implements FollowService {
             return 1;//单方面关注
         }
         return 0;//无关联
+    }
+
+    @Override
+    public int getRelation(Integer visitedUserId, Integer visitorId) {
+        //权限以visitedUserId为主体，即以被访问者为主体
+        if (visitedUserId.equals(visitorId)) {
+            //本人
+            return Visibility.SELF;
+        }
+        int relation = getStatusBetween(visitedUserId, visitorId);
+        switch (relation) {
+            case 0://陌生人
+                return Visibility.STRANGER;
+            case 2://当方面被关注
+                return Visibility.FOLLOWER;
+            case 1://单方面关注了访客
+                return Visibility.FOLLOWEE;
+            case 3://相互关注
+                return Visibility.MUTUAL;
+            default:
+                return 0;
+        }
     }
 }

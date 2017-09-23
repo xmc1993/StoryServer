@@ -7,6 +7,8 @@
     <result column="babyId" property="babyid" jdbcType="INTEGER" />
     <result column="url" property="url" jdbcType="VARCHAR" />
     <result column="valid" property="valid" jdbcType="INTEGER" />
+    <result column="creatTime" property="creattime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -67,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, babyReadInfoId, babyId, url, valid
+    id, babyReadInfoId, babyId, url, valid, creatTime, updateTime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.edu.nju.software.entity.BabyReadExample" >
     select
@@ -101,9 +103,11 @@
   </delete>
   <insert id="insert" parameterType="cn.edu.nju.software.entity.BabyRead" >
     insert into baby_read (id, babyReadInfoId, babyId, 
-      url, valid)
+      url, valid, creatTime, 
+      updateTime)
     values (#{id,jdbcType=INTEGER}, #{babyreadinfoid,jdbcType=INTEGER}, #{babyid,jdbcType=INTEGER}, 
-      #{url,jdbcType=VARCHAR}, #{valid,jdbcType=INTEGER})
+      #{url,jdbcType=VARCHAR}, #{valid,jdbcType=INTEGER}, #{creattime,jdbcType=TIMESTAMP}, 
+      #{updatetime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.nju.software.entity.BabyRead" >
     insert into baby_read
@@ -123,6 +127,12 @@
       <if test="valid != null" >
         valid,
       </if>
+      <if test="creattime != null" >
+        creatTime,
+      </if>
+      <if test="updatetime != null" >
+        updateTime,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -139,6 +149,12 @@
       </if>
       <if test="valid != null" >
         #{valid,jdbcType=INTEGER},
+      </if>
+      <if test="creattime != null" >
+        #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -166,6 +182,12 @@
       <if test="record.valid != null" >
         valid = #{record.valid,jdbcType=INTEGER},
       </if>
+      <if test="record.creattime != null" >
+        creatTime = #{record.creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatetime != null" >
+        updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -177,7 +199,9 @@
       babyReadInfoId = #{record.babyreadinfoid,jdbcType=INTEGER},
       babyId = #{record.babyid,jdbcType=INTEGER},
       url = #{record.url,jdbcType=VARCHAR},
-      valid = #{record.valid,jdbcType=INTEGER}
+      valid = #{record.valid,jdbcType=INTEGER},
+      creatTime = #{record.creattime,jdbcType=TIMESTAMP},
+      updateTime = #{record.updatetime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -197,6 +221,12 @@
       <if test="valid != null" >
         valid = #{valid,jdbcType=INTEGER},
       </if>
+      <if test="creattime != null" >
+        creatTime = #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -205,7 +235,9 @@
     set babyReadInfoId = #{babyreadinfoid,jdbcType=INTEGER},
       babyId = #{babyid,jdbcType=INTEGER},
       url = #{url,jdbcType=VARCHAR},
-      valid = #{valid,jdbcType=INTEGER}
+      valid = #{valid,jdbcType=INTEGER},
+      creatTime = #{creattime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

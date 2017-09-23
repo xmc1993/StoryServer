@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.DailyDao">
+
+    <sql id="fields">
+        id,
+        userId,
+        title,
+        content,
+        picUrl,
+        visibility,
+        deleted,
+        draft,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveDaily" parameterType="cn.edu.nju.software.entity.Daily" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into daily(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{userId},
+        #{title},
+        #{content},
+        #{picUrl},
+        #{visibility},
+        #{deleted},
+        #{draft},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <update id="updateDaily" parameterType="cn.edu.nju.software.entity.Daily">
+        UPDATE daily
+        SET
+        title=#{title},
+        content=#{content},
+        picUrl=#{picUrl},
+        visibility=#{visibility},
+        updateTime=#{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <update id="deleteDaily">
+        UPDATE daily
+        SET
+        deleted=1
+        WHERE id = #{0}
+    </update>
+
+    <select id="getDailyById" resultType="cn.edu.nju.software.entity.Daily">
+        select
+        <include refid="fields"></include>
+        from daily
+        WHERE id = #{0} and deleted = 0
+    </select>
+
+    <select id="getDailyListByUserId" resultType="cn.edu.nju.software.entity.Daily">
+        select
+        <include refid="fields"></include>
+        from daily
+        where userId = #{0} and deleted = 0 and draft = 0 and ((visibility &amp; #{1}) &gt; 0)
+        ORDER by createTime DESC
+        limit #{2},#{3}
+    </select>
+
+    <select id="getDailyCountByUserId" resultType="java.lang.Integer">
+        select
+        count(*)
+        from daily
+        where userId = #{0} and deleted = 0 and draft = 0 and ((visibility &amp; #{1}) &gt; 0)
+    </select>
+
+    <select id="getDraftDaily" resultType="cn.edu.nju.software.entity.Daily">
+        select
+        <include refid="fields"></include>
+        from daily
+        WHERE userId = #{0} and deleted = 0 and draft = 1
+        order by createTime DESC
+        limit 1
+    </select>
+
+    <update id="deleteDraftDaily">
+        UPDATE daily
+        SET
+        deleted=1
+        WHERE userId=#{0} and draft = 1
+    </update>
+
+</mapper>

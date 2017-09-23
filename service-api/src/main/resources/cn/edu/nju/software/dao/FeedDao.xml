@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.FeedDao">
+
+    <sql id="fields">
+        id,
+        mid,
+        fid,
+        tid,
+        content,
+        type,
+        valid,
+        isRead,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveFeed" parameterType="cn.edu.nju.software.entity.Feed" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into feed(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{mid},
+        #{fid},
+        #{tid},
+        #{content},
+        #{type},
+        #{valid},
+        #{isRead},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <update id="deleteFeed" parameterType="cn.edu.nju.software.entity.Feed">
+        UPDATE feed
+        SET
+        valid=0
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="getFeedsByPageByTimestamp" resultType="cn.edu.nju.software.entity.Feed">
+        select
+        <include refid="fields"></include>
+        from feed
+        where tid = #{userId} and createTime &lt; #{lastPullTime} and valid = 1
+        <if test="type != null">
+          and type = #{type}
+        </if>
+        ORDER by createTime DESC
+        limit #{limit}
+    </select>
+
+    <select id="getFeedsByPage" resultType="cn.edu.nju.software.entity.Feed">
+        select
+        <include refid="fields"></include>
+        from feed
+        where tid = #{userId} and valid = 1
+        <if test="type != null">
+            and type = #{type}
+        </if>
+        ORDER by createTime DESC
+        limit #{offset},#{limit}
+    </select>
+
+    <update id="deleteFeedByPatch" parameterType="cn.edu.nju.software.entity.Feed">
+        UPDATE feed
+        SET
+        valid=0
+        WHERE mid = #{0} and tid in
+        <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

@@ -24,5 +24,7 @@ public interface FollowService {
     Integer getUserFolloweeCountByUserId(int userId);
 
     int getStatusBetween(int curUserId, int userId);
+
+    int getRelation(Integer visitedUserId, Integer visitorId);
 }
 

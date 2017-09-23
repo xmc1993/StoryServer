@@ -1,6 +1,7 @@
 package cn.edu.nju.software.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class BabyReadInfoExample {
@@ -224,73 +225,73 @@ public class BabyReadInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andIocnurlIsNull() {
-            addCriterion("iocnUrl is null");
+        public Criteria andIconurlIsNull() {
+            addCriterion("iconUrl is null");
             return (Criteria) this;
         }
 
-        public Criteria andIocnurlIsNotNull() {
-            addCriterion("iocnUrl is not null");
+        public Criteria andIconurlIsNotNull() {
+            addCriterion("iconUrl is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIocnurlEqualTo(String value) {
-            addCriterion("iocnUrl =", value, "iocnurl");
+        public Criteria andIconurlEqualTo(String value) {
+            addCriterion("iconUrl =", value, "iconurl");
             return (Criteria) this;
         }
 
-        public Criteria andIocnurlNotEqualTo(String value) {
-            addCriterion("iocnUrl <>", value, "iocnurl");
+        public Criteria andIconurlNotEqualTo(String value) {
+            addCriterion("iconUrl <>", value, "iconurl");
             return (Criteria) this;
         }
 
-        public Criteria andIocnurlGreaterThan(String value) {
-            addCriterion("iocnUrl >", value, "iocnurl");
+        public Criteria andIconurlGreaterThan(String value) {
+            addCriterion("iconUrl >", value, "iconurl");
             return (Criteria) this;
         }
 
-        public Criteria andIocnurlGreaterThanOrEqualTo(String value) {
-            addCriterion("iocnUrl >=", value, "iocnurl");
+        public Criteria andIconurlGreaterThanOrEqualTo(String value) {
+            addCriterion("iconUrl >=", value, "iconurl");
             return (Criteria) this;
         }
 
-        public Criteria andIocnurlLessThan(String value) {
-            addCriterion("iocnUrl <", value, "iocnurl");
+        public Criteria andIconurlLessThan(String value) {
+            addCriterion("iconUrl <", value, "iconurl");
             return (Criteria) this;
         }
 
-        public Criteria andIocnurlLessThanOrEqualTo(String value) {
-            addCriterion("iocnUrl <=", value, "iocnurl");
+        public Criteria andIconurlLessThanOrEqualTo(String value) {
+            addCriterion("iconUrl <=", value, "iconurl");
             return (Criteria) this;
         }
 
-        public Criteria andIocnurlLike(String value) {
-            addCriterion("iocnUrl like", value, "iocnurl");
+        public Criteria andIconurlLike(String value) {
+            addCriterion("iconUrl like", value, "iconurl");
             return (Criteria) this;
         }
 
-        public Criteria andIocnurlNotLike(String value) {
-            addCriterion("iocnUrl not like", value, "iocnurl");
+        public Criteria andIconurlNotLike(String value) {
+            addCriterion("iconUrl not like", value, "iconurl");
             return (Criteria) this;
         }
 
-        public Criteria andIocnurlIn(List<String> values) {
-            addCriterion("iocnUrl in", values, "iocnurl");
+        public Criteria andIconurlIn(List<String> values) {
+            addCriterion("iconUrl in", values, "iconurl");
             return (Criteria) this;
         }
 
-        public Criteria andIocnurlNotIn(List<String> values) {
-            addCriterion("iocnUrl not in", values, "iocnurl");
+        public Criteria andIconurlNotIn(List<String> values) {
+            addCriterion("iconUrl not in", values, "iconurl");
             return (Criteria) this;
         }
 
-        public Criteria andIocnurlBetween(String value1, String value2) {
-            addCriterion("iocnUrl between", value1, value2, "iocnurl");
+        public Criteria andIconurlBetween(String value1, String value2) {
+            addCriterion("iconUrl between", value1, value2, "iconurl");
             return (Criteria) this;
         }
 
-        public Criteria andIocnurlNotBetween(String value1, String value2) {
-            addCriterion("iocnUrl not between", value1, value2, "iocnurl");
+        public Criteria andIconurlNotBetween(String value1, String value2) {
+            addCriterion("iconUrl not between", value1, value2, "iconurl");
             return (Criteria) this;
         }
 
@@ -351,6 +352,126 @@ public class BabyReadInfoExample {
 
         public Criteria andValidNotBetween(Integer value1, Integer value2) {
             addCriterion("valid not between", value1, value2, "valid");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreattimeIsNull() {
+            addCriterion("creatTime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreattimeIsNotNull() {
+            addCriterion("creatTime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreattimeEqualTo(Date value) {
+            addCriterion("creatTime =", value, "creattime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreattimeNotEqualTo(Date value) {
+            addCriterion("creatTime <>", value, "creattime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreattimeGreaterThan(Date value) {
+            addCriterion("creatTime >", value, "creattime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreattimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("creatTime >=", value, "creattime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreattimeLessThan(Date value) {
+            addCriterion("creatTime <", value, "creattime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreattimeLessThanOrEqualTo(Date value) {
+            addCriterion("creatTime <=", value, "creattime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreattimeIn(List<Date> values) {
+            addCriterion("creatTime in", values, "creattime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreattimeNotIn(List<Date> values) {
+            addCriterion("creatTime not in", values, "creattime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreattimeBetween(Date value1, Date value2) {
+            addCriterion("creatTime between", value1, value2, "creattime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreattimeNotBetween(Date value1, Date value2) {
+            addCriterion("creatTime not between", value1, value2, "creattime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeIsNull() {
+            addCriterion("updateTime is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeIsNotNull() {
+            addCriterion("updateTime is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeEqualTo(Date value) {
+            addCriterion("updateTime =", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeNotEqualTo(Date value) {
+            addCriterion("updateTime <>", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeGreaterThan(Date value) {
+            addCriterion("updateTime >", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("updateTime >=", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeLessThan(Date value) {
+            addCriterion("updateTime <", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeLessThanOrEqualTo(Date value) {
+            addCriterion("updateTime <=", value, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeIn(List<Date> values) {
+            addCriterion("updateTime in", values, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeNotIn(List<Date> values) {
+            addCriterion("updateTime not in", values, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeBetween(Date value1, Date value2) {
+            addCriterion("updateTime between", value1, value2, "updatetime");
+            return (Criteria) this;
+        }
+
+        public Criteria andUpdatetimeNotBetween(Date value1, Date value2) {
+            addCriterion("updateTime not between", value1, value2, "updatetime");
             return (Criteria) this;
         }
     }
