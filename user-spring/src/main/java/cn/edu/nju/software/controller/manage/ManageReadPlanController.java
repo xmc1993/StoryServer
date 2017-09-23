@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -99,7 +100,7 @@ public class ManageReadPlanController {
 	@ApiOperation(value = "删除阅读计划(包括添加的故事)", notes = "")
 	@RequestMapping(value = "/deleteReadPlan/{id}", method = { RequestMethod.DELETE })
 	@ResponseBody
-	public ResponseData<Boolean> deleteReadPlan(@ApiParam("阅读计划id") @RequestParam Integer id,
+	public ResponseData<Boolean> deleteReadPlan(@ApiParam("阅读计划id") @PathVariable Integer id,
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<Boolean> responseData = new ResponseData<>();
 		readPlanStoryGroupService.deleteReadPlanStoryByReadPlanId(id);
@@ -147,8 +148,8 @@ public class ManageReadPlanController {
 		responseData.jsonFill(2, null, false);
 		return responseData;
 	}
-	
-	//这些接口都写得好烂啊啊啊，不是我写的，以后回来优化
+
+	// 这些接口都写得好烂啊啊啊，不是我写的，以后回来优化
 	@ApiOperation(value = "为阅读计划修改故事", notes = "这个反应可能也会有点慢")
 	@RequestMapping(value = "/updateStoryForReadPlan", method = { RequestMethod.POST })
 	@ResponseBody
@@ -171,18 +172,27 @@ public class ManageReadPlanController {
 		responseData.jsonFill(1, null, true);
 		return responseData;
 	}
-	
-	@ApiOperation(value="根据阅读计划id分页查询故事组")
+
+	@ApiOperation(value = "根据阅读计划id分页查询故事组")
 	@RequestMapping(value = "/getStoryGroupByPlanId", method = { RequestMethod.GET })
 	@ResponseBody
 	public ResponseData<List<ReadingPlanStoryGroup>> getStoryGroupByPlanId(
-			@ApiParam("阅读计划id") @RequestParam Integer ReadingPlanId,
-			@ApiParam("page") @RequestParam Integer page,
-			@ApiParam("pageSize") @RequestParam Integer pageSize,
-			HttpServletRequest request, HttpServletResponse response
-			){
-		ResponseData<List<ReadingPlanStoryGroup>> responseData=new ResponseData<>();
-		responseData=readPlanStoryGroupService.getReadPlanStoryGroupByPlanId(ReadingPlanId, page, pageSize);
-		return responseData;	
+			@ApiParam("阅读计划id") @RequestParam Integer ReadingPlanId, @ApiParam("page") @RequestParam Integer page,
+			@ApiParam("pageSize") @RequestParam Integer pageSize, HttpServletRequest request,
+			HttpServletResponse response) {
+		ResponseData<List<ReadingPlanStoryGroup>> responseData = new ResponseData<>();
+		responseData = readPlanStoryGroupService.getReadPlanStoryGroupByPlanId(ReadingPlanId, page, pageSize);
+		return responseData;
+	}
+
+	@ApiOperation(value = "根据阅读计划id查询阅读计划详情")
+	@RequestMapping(value = "/getReadPlanById", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<ReadingPlan> getStoryGroupByPlanId(@ApiParam("阅读计划id") @RequestParam Integer id,
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<ReadingPlan> responseData = new ResponseData<>();
+		ReadingPlan readingPlan = readPlanService.selectReadPlanById(id);
+		responseData.jsonFill(1, null, readingPlan);
+		return responseData;
 	}
 }

@@ -1,5 +1,7 @@
 package cn.edu.nju.software.entity;
 
+import java.util.Date;
+
 public class BabyRead {
     private Integer id;
 
@@ -10,6 +12,10 @@ public class BabyRead {
     private String url;
 
     private Integer valid;
+
+    private Date creattime;
+
+    private Date updatetime;
 
     public Integer getId() {
         return id;
@@ -49,5 +55,21 @@ public class BabyRead {
 
     public void setValid(Integer valid) {
         this.valid = valid;
+    }
+
+    public Date getCreattime() {
+        return creattime;
+    }
+
+    public void setCreattime(Date creattime) {
+        this.creattime = creattime;
+    }
+
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
     }
 }

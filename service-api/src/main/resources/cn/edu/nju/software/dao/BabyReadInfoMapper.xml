@@ -4,8 +4,10 @@
   <resultMap id="BaseResultMap" type="cn.edu.nju.software.entity.BabyReadInfo" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="storyId" property="storyid" jdbcType="INTEGER" />
-    <result column="iocnUrl" property="iocnurl" jdbcType="VARCHAR" />
+    <result column="iconUrl" property="iconurl" jdbcType="VARCHAR" />
     <result column="valid" property="valid" jdbcType="INTEGER" />
+    <result column="creatTime" property="creattime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="cn.edu.nju.software.entity.BabyReadInfo" extends="BaseResultMap" >
     <result column="content" property="content" jdbcType="LONGVARCHAR" />
@@ -69,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, storyId, iocnUrl, valid
+    id, storyId, iconUrl, valid, creatTime, updateTime
   </sql>
   <sql id="Blob_Column_List" >
     content
@@ -123,10 +125,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.edu.nju.software.entity.BabyReadInfo" >
-    insert into baby_read_info (id, storyId, iocnUrl, 
-      valid, content)
-    values (#{id,jdbcType=INTEGER}, #{storyid,jdbcType=INTEGER}, #{iocnurl,jdbcType=VARCHAR}, 
-      #{valid,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
+    insert into baby_read_info (id, storyId, iconUrl, 
+      valid, creatTime, updateTime, 
+      content)
+    values (#{id,jdbcType=INTEGER}, #{storyid,jdbcType=INTEGER}, #{iconurl,jdbcType=VARCHAR}, 
+      #{valid,jdbcType=INTEGER}, #{creattime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, 
+      #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.nju.software.entity.BabyReadInfo" >
     insert into baby_read_info
@@ -137,11 +141,17 @@
       <if test="storyid != null" >
         storyId,
       </if>
-      <if test="iocnurl != null" >
-        iocnUrl,
+      <if test="iconurl != null" >
+        iconUrl,
       </if>
       <if test="valid != null" >
         valid,
+      </if>
+      <if test="creattime != null" >
+        creatTime,
+      </if>
+      <if test="updatetime != null" >
+        updateTime,
       </if>
       <if test="content != null" >
         content,
@@ -154,11 +164,17 @@
       <if test="storyid != null" >
         #{storyid,jdbcType=INTEGER},
       </if>
-      <if test="iocnurl != null" >
-        #{iocnurl,jdbcType=VARCHAR},
+      <if test="iconurl != null" >
+        #{iconurl,jdbcType=VARCHAR},
       </if>
       <if test="valid != null" >
         #{valid,jdbcType=INTEGER},
+      </if>
+      <if test="creattime != null" >
+        #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
       </if>
       <if test="content != null" >
         #{content,jdbcType=LONGVARCHAR},
@@ -180,11 +196,17 @@
       <if test="record.storyid != null" >
         storyId = #{record.storyid,jdbcType=INTEGER},
       </if>
-      <if test="record.iocnurl != null" >
-        iocnUrl = #{record.iocnurl,jdbcType=VARCHAR},
+      <if test="record.iconurl != null" >
+        iconUrl = #{record.iconurl,jdbcType=VARCHAR},
       </if>
       <if test="record.valid != null" >
         valid = #{record.valid,jdbcType=INTEGER},
+      </if>
+      <if test="record.creattime != null" >
+        creatTime = #{record.creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatetime != null" >
+        updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.content != null" >
         content = #{record.content,jdbcType=LONGVARCHAR},
@@ -198,8 +220,10 @@
     update baby_read_info
     set id = #{record.id,jdbcType=INTEGER},
       storyId = #{record.storyid,jdbcType=INTEGER},
-      iocnUrl = #{record.iocnurl,jdbcType=VARCHAR},
+      iconUrl = #{record.iconurl,jdbcType=VARCHAR},
       valid = #{record.valid,jdbcType=INTEGER},
+      creatTime = #{record.creattime,jdbcType=TIMESTAMP},
+      updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
       content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -209,8 +233,10 @@
     update baby_read_info
     set id = #{record.id,jdbcType=INTEGER},
       storyId = #{record.storyid,jdbcType=INTEGER},
-      iocnUrl = #{record.iocnurl,jdbcType=VARCHAR},
-      valid = #{record.valid,jdbcType=INTEGER}
+      iconUrl = #{record.iconurl,jdbcType=VARCHAR},
+      valid = #{record.valid,jdbcType=INTEGER},
+      creatTime = #{record.creattime,jdbcType=TIMESTAMP},
+      updateTime = #{record.updatetime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -221,11 +247,17 @@
       <if test="storyid != null" >
         storyId = #{storyid,jdbcType=INTEGER},
       </if>
-      <if test="iocnurl != null" >
-        iocnUrl = #{iocnurl,jdbcType=VARCHAR},
+      <if test="iconurl != null" >
+        iconUrl = #{iconurl,jdbcType=VARCHAR},
       </if>
       <if test="valid != null" >
         valid = #{valid,jdbcType=INTEGER},
+      </if>
+      <if test="creattime != null" >
+        creatTime = #{creattime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatetime != null" >
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
       </if>
       <if test="content != null" >
         content = #{content,jdbcType=LONGVARCHAR},
@@ -236,16 +268,20 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.edu.nju.software.entity.BabyReadInfo" >
     update baby_read_info
     set storyId = #{storyid,jdbcType=INTEGER},
-      iocnUrl = #{iocnurl,jdbcType=VARCHAR},
+      iconUrl = #{iconurl,jdbcType=VARCHAR},
       valid = #{valid,jdbcType=INTEGER},
+      creatTime = #{creattime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP},
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.edu.nju.software.entity.BabyReadInfo" >
     update baby_read_info
     set storyId = #{storyid,jdbcType=INTEGER},
-      iocnUrl = #{iocnurl,jdbcType=VARCHAR},
-      valid = #{valid,jdbcType=INTEGER}
+      iconUrl = #{iconurl,jdbcType=VARCHAR},
+      valid = #{valid,jdbcType=INTEGER},
+      creatTime = #{creattime,jdbcType=TIMESTAMP},
+      updateTime = #{updatetime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

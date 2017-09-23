@@ -212,6 +212,17 @@ public class UserStoryRoleController {
 		return responseData;
 	}
 
+	@ApiOperation(value = "根据故事id获取官方音频")
+	@RequestMapping(value = "/getAdminStoryRoleAudioByStoryId", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<List<StoryRoleAudio>> getStoryRoleAudioByUserIdAndRoleId(
+			@ApiParam(value = "故事id") @RequestParam Integer storyId,
+			HttpServletResponse response) {
+		ResponseData<List<StoryRoleAudio>> responseData = new ResponseData<>();
+		List<StoryRoleAudio> list = storyRoleAudioService.getStoryRoleAuioByUserAndStory(2,storyId);
+		responseData.jsonFill(1,null, list);
+		return responseData;
+	}
 	/**
 	 * 上传作品的音频文件
 	 *

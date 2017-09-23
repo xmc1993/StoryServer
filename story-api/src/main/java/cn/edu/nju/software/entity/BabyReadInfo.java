@@ -1,13 +1,19 @@
 package cn.edu.nju.software.entity;
 
+import java.util.Date;
+
 public class BabyReadInfo {
     private Integer id;
 
     private Integer storyid;
 
-    private String iocnurl;
+    private String iconurl;
 
     private Integer valid;
+
+    private Date creattime;
+
+    private Date updatetime;
 
     private String content;
 
@@ -27,12 +33,12 @@ public class BabyReadInfo {
         this.storyid = storyid;
     }
 
-    public String getIocnurl() {
-        return iocnurl;
+    public String getIconurl() {
+        return iconurl;
     }
 
-    public void setIocnurl(String iocnurl) {
-        this.iocnurl = iocnurl == null ? null : iocnurl.trim();
+    public void setIconurl(String iconurl) {
+        this.iconurl = iconurl == null ? null : iconurl.trim();
     }
 
     public Integer getValid() {
@@ -41,6 +47,22 @@ public class BabyReadInfo {
 
     public void setValid(Integer valid) {
         this.valid = valid;
+    }
+
+    public Date getCreattime() {
+        return creattime;
+    }
+
+    public void setCreattime(Date creattime) {
+        this.creattime = creattime;
+    }
+
+    public Date getUpdatetime() {
+        return updatetime;
+    }
+
+    public void setUpdatetime(Date updatetime) {
+        this.updatetime = updatetime;
     }
 
     public String getContent() {

@@ -148,6 +148,7 @@
             <mvc:mapping path="/user/getStoryRoleAudioByUserIdAndRoleId"/>
             <mvc:mapping path="/user/getReadPlanByUser"/>
 			<mvc:mapping path="/user/getStoryGroupByPlanId"/>
+			<mvc:mapping path="/user/uploadBabyReadAudioFile"/>
 
             <!-- 不需要拦截的uri -->
             <!--
