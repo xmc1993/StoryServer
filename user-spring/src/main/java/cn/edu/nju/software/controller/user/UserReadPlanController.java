@@ -137,32 +137,20 @@ public class UserReadPlanController extends BaseController {
 		// 计算天数
 		long days = 0;
 		days = getDays(babyBirthday, dateString);
-		if (days <= 91) {
-			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("91", timePoint);
-			return list;
-		} else if (days <= 182 && days > 91) {
-			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("182", timePoint);
-			return list;
-		} else if (days <= 365 && days > 182) {
-			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("365", timePoint);
-			return list;
-		} else if (days <= 547 && days > 365) {
-			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("547", timePoint);
-			return list;
-		} else if (days <= 730 && days > 547) {
-			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("730", timePoint);
+		if (days <= 730) {			
+			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("0-2岁", timePoint);
 			return list;
 		} else if (days <= 1095 && days > 730) {
-			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("1095", timePoint);
+			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("2-3岁", timePoint);
 			return list;
 		} else if (days <= 1460 && days > 1095) {
-			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("1460", timePoint);
+			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("3-4岁", timePoint);
 			return list;
 		} else if (days <= 1825 && days > 1460) {
-			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("1825", timePoint);
+			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("4-5岁", timePoint);
 			return list;
 		} else if (days <= 2190 && days > 1825) {
-			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("2190", timePoint);
+			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("5-6岁", timePoint);
 			return list;
 		}
 		return null;
