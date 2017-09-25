@@ -94,6 +94,8 @@ public class MessageFeedServiceImpl implements MessageFeedService{
     @Override
     public boolean feedFollowers(Feed feed, Integer sender) {
         List<Integer> userFollowerList = followService.getUserFollowerList(sender, 0, 9999999);
+        //把自己添加进去
+        userFollowerList.add(sender);
         for (Integer tid : userFollowerList) {
             feed.setId(null);
             feed.setTid(tid);
@@ -106,6 +108,8 @@ public class MessageFeedServiceImpl implements MessageFeedService{
     @Override
     public boolean unfeedFollowers(Integer mid, Integer sender) {
         List<Integer> userFollowerList = followService.getUserFollowerList(sender, 0, 9999999);
+        //把自己添加进去
+        userFollowerList.add(sender);
         return feedDao.deleteFeedByPatch(mid, userFollowerList);
     }
 }
