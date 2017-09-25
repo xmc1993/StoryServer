@@ -4,10 +4,12 @@ import cn.edu.nju.software.dao.FeedDao;
 import cn.edu.nju.software.dto.MsgVo;
 import cn.edu.nju.software.entity.Daily;
 import cn.edu.nju.software.entity.Feed;
+import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.entity.feed.MessageType;
 import cn.edu.nju.software.feed.service.MessageFeedService;
 import cn.edu.nju.software.service.DailyService;
 import cn.edu.nju.software.service.FollowService;
+import cn.edu.nju.software.service.WorksService;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,8 @@ public class MessageFeedServiceImpl implements MessageFeedService{
     private FollowService followService;
     @Autowired
     private DailyService dailyService;
+    @Autowired
+    private WorksService worksService;
 
     @Override
     public List<Feed> getDisplayFeedsByPage(int userId, int page, int pageSize) {
@@ -48,6 +52,9 @@ public class MessageFeedServiceImpl implements MessageFeedService{
                 Daily daily = dailyService.getDailyById(feed.getMid());
                 msgVo.setData(daily);
                 break;
+            case NEW_WORKS:
+                Works works = worksService.getWorksById(feed.getMid());
+                msgVo.setData(works);
             default:
                 return feed;
         }
@@ -92,10 +99,12 @@ public class MessageFeedServiceImpl implements MessageFeedService{
     }
 
     @Override
-    public boolean feedFollowers(Feed feed, Integer sender) {
+    public boolean feedFollowers(Feed feed, Integer sender, boolean includeSelf) {
         List<Integer> userFollowerList = followService.getUserFollowerList(sender, 0, 9999999);
         //把自己添加进去
-        userFollowerList.add(sender);
+        if (includeSelf) {
+            userFollowerList.add(sender);
+        }
         for (Integer tid : userFollowerList) {
             feed.setId(null);
             feed.setTid(tid);
@@ -106,10 +115,13 @@ public class MessageFeedServiceImpl implements MessageFeedService{
     }
 
     @Override
-    public boolean unfeedFollowers(Integer mid, Integer sender) {
+    public boolean unfeedFollowers(Integer mid, Integer sender, boolean includeSelf) {
         List<Integer> userFollowerList = followService.getUserFollowerList(sender, 0, 9999999);
         //把自己添加进去
-        userFollowerList.add(sender);
+        if (includeSelf) {
+            userFollowerList.add(sender);
+        }
         return feedDao.deleteFeedByPatch(mid, userFollowerList);
     }
+
 }

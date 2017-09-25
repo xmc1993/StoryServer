@@ -35,13 +35,13 @@ public class WorksServiceImpl implements WorksService {
     private AppUserDao appUserDao;
 
     @Override
-    public boolean saveWorks(Works works) {
+    public Works saveWorks(Works works) {
         boolean res = worksDao.saveWorks(works);
         if (res) {
             storyDao.newTell(works.getStoryId());
             appUserDao.newWork(works.getUserId());
         }
-        return res;
+        return works;
     }
 
     @Override
