@@ -87,10 +87,14 @@ public class MessageFeedServiceImpl implements MessageFeedService{
         //TODO 转NoSql异步处理
         for (Integer tid : idList) {
             feed.setTid(tid);
-            feed.setTid(tid);
             feedDao.saveFeed(feed);
         }
         return true;
+    }
+
+    @Override
+    public boolean unfeed(int mid, List<Integer> idList) {
+        return feedDao.deleteFeedByPatch(mid, idList);
     }
 
     @Override

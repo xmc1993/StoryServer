@@ -1,40 +1,21 @@
 package cn.edu.nju.software.controller.manage;
 
 import cn.edu.nju.software.entity.ResponseData;
-import cn.edu.nju.software.entity.Story;
-import cn.edu.nju.software.entity.StoryRole;
-import cn.edu.nju.software.entity.TagRelation;
 import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.service.WorksService;
-import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
-import cn.edu.nju.software.util.MyStringUtil;
-import cn.edu.nju.software.util.UploadFileUtil;
-import cn.edu.nju.software.vo.StoryNewVo;
-
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 管理作品接口
@@ -172,12 +153,12 @@ public class ManageWorkController {
 			works.setReviewCount(reviewCount);
 		if (listenCount != null)
 			works.setListenCount(listenCount);
-		boolean res = worksService.saveWorks(works);
-		if (res == false) {
+		Works res = worksService.saveWorks(works);
+		if (res == null) {
 			responseData.jsonFill(2, "添加失败", null);
 			return responseData;
 		}
-		responseData.jsonFill(1, null, works);
+		responseData.jsonFill(1, null, res);
 		return responseData;
 	}
 }

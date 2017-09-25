@@ -214,6 +214,10 @@
 		select * from user
 	</select>
 
+	<select id="getAllUserIdList">
+		select id from user
+	</select>
+
 	<select id="getUserCount" resultType="java.lang.Integer">
 		select
 		count(id)

@@ -47,6 +47,14 @@ public interface MessageFeedService {
     boolean feed(Feed feed, List<Integer> idList);
 
     /**
+     * 批量unfeed
+     * @param mid
+     * @param idList
+     * @return
+     */
+    boolean unfeed(int mid, List<Integer> idList);
+
+    /**
      * 删除feed
      * @param id
      * @return
