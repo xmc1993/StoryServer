@@ -380,7 +380,7 @@ public class UserWorksController extends BaseController {
         WorksVo worksVo = new WorksVo();
         if (res) {
             List<Badge> badges = judgeUserAddBadgeByPublish(user, works);
-            BeanUtils.copyProperties(works,worksVo );
+            BeanUtils.copyProperties(works,worksVo);
             responseData.jsonFill(1, null, worksVo);
             responseData.setBadgeList(badges);
         } else {

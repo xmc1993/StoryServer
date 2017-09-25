@@ -4,10 +4,13 @@ import cn.edu.nju.software.dao.FeedDao;
 import cn.edu.nju.software.dto.MsgVo;
 import cn.edu.nju.software.entity.Daily;
 import cn.edu.nju.software.entity.Feed;
+import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.entity.feed.MessageType;
 import cn.edu.nju.software.feed.service.MessageFeedService;
 import cn.edu.nju.software.service.DailyService;
 import cn.edu.nju.software.service.FollowService;
+import cn.edu.nju.software.service.WorksService;
+
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,8 @@ public class MessageFeedServiceImpl implements MessageFeedService{
     private FollowService followService;
     @Autowired
     private DailyService dailyService;
+    @Autowired
+    private WorksService worksService;
 
     @Override
     public List<Feed> getDisplayFeedsByPage(int userId, int page, int pageSize) {
@@ -47,6 +52,10 @@ public class MessageFeedServiceImpl implements MessageFeedService{
             case NEW_DAILY:
                 Daily daily = dailyService.getDailyById(feed.getMid());
                 msgVo.setData(daily);
+                break;
+            case NEW_WORKS:
+                Works works= worksService.getWorksById(feed.getMid());
+                msgVo.setData(works);
                 break;
             default:
                 return feed;
