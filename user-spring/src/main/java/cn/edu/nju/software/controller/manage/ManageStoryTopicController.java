@@ -168,7 +168,7 @@ public class ManageStoryTopicController {
 	public ResponseData<Boolean> addStoryForStoryTopic(@ApiParam("专题id") @RequestParam Integer storyTopicId,
 			@ApiParam("添加故事id列表") @RequestParam Integer[] storyIds) {
 		ResponseData<Boolean> responseData = new ResponseData<>();
-
+		storyTopicServcie.deleteStoryTopicStorys(storyTopicId);
 		for (Integer storyId : storyIds) {
 			StoryTopicRelation storyTopicRelation = new StoryTopicRelation();
 			storyTopicRelation.setCreatetime(new Date());

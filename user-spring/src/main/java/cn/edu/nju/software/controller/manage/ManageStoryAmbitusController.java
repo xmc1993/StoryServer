@@ -62,7 +62,6 @@ public class ManageStoryAmbitusController {
 		if (videoUrl != null) {
 			storyAmbitus.setVideourl(videoUrl);
 		}
-		storyAmbitus.setVideourl(videoUrl);
 		storyAmbitus.setValid(1);
 		storyAmbitus.setIcon(icon);
 		int res = storyAmbitusService.saveStoryAmbitus(storyAmbitus);

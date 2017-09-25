@@ -77,8 +77,9 @@ public class BabyReadServiceImpl implements BabyReadService {
 	}
 
 	@Override
-	public int saveBabyRead(BabyRead babyRead) {
-		return babyReadMapper.insert(babyRead);
+	public BabyRead saveBabyRead(BabyRead babyRead) {
+		boolean res=babyReadMapper.insert(babyRead);
+		return babyRead;
 	}
 
 }
