@@ -66,7 +66,7 @@ public class ManageSystemNoticeController {
             feed.setFid(user.getId());
             feed.setContent(new Gson().toJson(msgVo));
             feed.setMid(systemNotice.getId());
-            feed.setType(MessageType.NEW_WORKS);
+            feed.setType(MessageType.SYSTEM_NOTICE);
             messageFeedService.feed(feed, allUserIdList);
         }
 
