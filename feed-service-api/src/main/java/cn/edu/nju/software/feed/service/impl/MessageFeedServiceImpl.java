@@ -4,10 +4,14 @@ import cn.edu.nju.software.dao.FeedDao;
 import cn.edu.nju.software.dto.MsgVo;
 import cn.edu.nju.software.entity.Daily;
 import cn.edu.nju.software.entity.Feed;
+import cn.edu.nju.software.entity.SystemNotice;
+import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.entity.feed.MessageType;
 import cn.edu.nju.software.feed.service.MessageFeedService;
 import cn.edu.nju.software.service.DailyService;
 import cn.edu.nju.software.service.FollowService;
+import cn.edu.nju.software.service.SystemNoticeService;
+import cn.edu.nju.software.service.WorksService;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +30,10 @@ public class MessageFeedServiceImpl implements MessageFeedService{
     private FollowService followService;
     @Autowired
     private DailyService dailyService;
+    @Autowired
+    private WorksService worksService;
+    @Autowired
+    private SystemNoticeService systemNoticeService;
 
     @Override
     public List<Feed> getDisplayFeedsByPage(int userId, int page, int pageSize) {
@@ -47,6 +55,14 @@ public class MessageFeedServiceImpl implements MessageFeedService{
             case NEW_DAILY:
                 Daily daily = dailyService.getDailyById(feed.getMid());
                 msgVo.setData(daily);
+                break;
+            case NEW_WORKS:
+                Works works = worksService.getWorksById(feed.getMid());
+                msgVo.setData(works);
+                break;
+            case SYSTEM_NOTICE:
+                SystemNotice systemNotice = systemNoticeService.getSystemNoticeById(feed.getMid());
+                msgVo.setData(systemNotice);
                 break;
             default:
                 return feed;
@@ -80,10 +96,14 @@ public class MessageFeedServiceImpl implements MessageFeedService{
         //TODO 转NoSql异步处理
         for (Integer tid : idList) {
             feed.setTid(tid);
-            feed.setTid(tid);
             feedDao.saveFeed(feed);
         }
         return true;
+    }
+
+    @Override
+    public boolean unfeed(int mid, List<Integer> idList) {
+        return feedDao.deleteFeedByPatch(mid, idList);
     }
 
     @Override
@@ -92,8 +112,12 @@ public class MessageFeedServiceImpl implements MessageFeedService{
     }
 
     @Override
-    public boolean feedFollowers(Feed feed, Integer sender) {
+    public boolean feedFollowers(Feed feed, Integer sender, boolean includeSelf) {
         List<Integer> userFollowerList = followService.getUserFollowerList(sender, 0, 9999999);
+        //把自己添加进去
+        if (includeSelf) {
+            userFollowerList.add(sender);
+        }
         for (Integer tid : userFollowerList) {
             feed.setId(null);
             feed.setTid(tid);
@@ -104,8 +128,13 @@ public class MessageFeedServiceImpl implements MessageFeedService{
     }
 
     @Override
-    public boolean unfeedFollowers(Integer mid, Integer sender) {
+    public boolean unfeedFollowers(Integer mid, Integer sender, boolean includeSelf) {
         List<Integer> userFollowerList = followService.getUserFollowerList(sender, 0, 9999999);
+        //把自己添加进去
+        if (includeSelf) {
+            userFollowerList.add(sender);
+        }
         return feedDao.deleteFeedByPatch(mid, userFollowerList);
     }
+
 }
