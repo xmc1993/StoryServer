@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface WorksService {
 
-    boolean saveWorks(Works works);
+    Works saveWorks(Works works);
 
     boolean listenWorks(int worksId);
 

@@ -1,7 +1,10 @@
 package cn.edu.nju.software.controller.user;
 
 import cn.edu.nju.software.controller.BaseController;
+import cn.edu.nju.software.dto.MsgVo;
 import cn.edu.nju.software.entity.*;
+import cn.edu.nju.software.entity.feed.MessageType;
+import cn.edu.nju.software.feed.service.MessageFeedService;
 import cn.edu.nju.software.service.*;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
@@ -9,6 +12,7 @@ import cn.edu.nju.software.util.Const;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UploadFileUtil;
 import cn.edu.nju.software.dto.WorksVo;
+import com.google.gson.Gson;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -59,7 +63,8 @@ public class UserWorksController extends BaseController {
     BadgeService badgeService;
     @Autowired
     UserBadgeService userBadgeService;
-
+    @Autowired
+    MessageFeedService messageFeedService;
 
     @ApiOperation(value = "获得最新的作品列表", notes = "需要登录")
     @RequestMapping(value = "/getLatestWorksByPage", method = {RequestMethod.GET})
@@ -329,6 +334,9 @@ public class UserWorksController extends BaseController {
             return responseData;
         }
         boolean res = worksService.deleteWorksById(worksId);
+        if (res) {
+            messageFeedService.unfeedFollowers(worksId, user.getId(), false);
+        }
         responseData.jsonFill(res ? 1 : 2, null, res);
         return responseData;
     }
@@ -375,10 +383,25 @@ public class UserWorksController extends BaseController {
         works.setUsername(user.getNickname());
         works.setUrl(url);
         works.setHeadImgUrl(user.getHeadImgUrl());
-        boolean res = worksService.saveWorks(works);
+        Works res = worksService.saveWorks(works);
+        if (res != null){
+            MsgVo msgVo = new MsgVo();
+            msgVo.setUserId(user.getId());
+            msgVo.setHeadImgUrl(user.getHeadImgUrl());
+            msgVo.setUserName(user.getNickname());
+            Feed feed = new Feed();
+            feed.setCreateTime(new Date());
+            feed.setUpdateTime(new Date());
+            feed.setFid(user.getId());
+            feed.setContent(new Gson().toJson(msgVo));
+            feed.setMid(res.getId());
+            feed.setType(MessageType.NEW_WORKS);
+            messageFeedService.feedFollowers(feed, user.getId(), false);
+        }
+
 
         WorksVo worksVo = new WorksVo();
-        if (res) {
+        if (res != null) {
             List<Badge> badges = judgeUserAddBadgeByPublish(user, works);
             BeanUtils.copyProperties(works,worksVo);
             responseData.jsonFill(1, null, worksVo);

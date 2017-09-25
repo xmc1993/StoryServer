@@ -1,8 +1,8 @@
 package cn.edu.nju.software.service.user;
 
-import java.util.List;
-
 import cn.edu.nju.software.entity.User;
+
+import java.util.List;
 
 public interface UserMessageService {
 
@@ -27,6 +27,8 @@ public interface UserMessageService {
 
 	// 获取所有用户
 	List<User> getAllUserList();
+
+	List<Integer> getAllUserIdList();
 
 	// 根据页数获取所有用户信息
 	List<User> getUserListByPage(int page, int pageSize);
