@@ -1,13 +1,10 @@
 package cn.edu.nju.software.service.impl.user;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-
 import cn.edu.nju.software.dao.user.AppUserDao;
-import cn.edu.nju.software.entity.Admin;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.service.user.UserMessageService;
-
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -135,7 +132,12 @@ public class UserMessageServiceImpl implements UserMessageService {
 		return appUserDao.getAllUserList();
 	}
 
-	@Override
+    @Override
+    public List<Integer> getAllUserIdList() {
+        return appUserDao.getAllUserIdList();
+    }
+
+    @Override
 	public int getUserCount() {
 		return appUserDao.getUserCount();
 	}

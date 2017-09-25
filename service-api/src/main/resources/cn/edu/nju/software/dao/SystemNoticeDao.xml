@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.SystemNoticeDao">
+
+    <sql id="fields">
+        id,
+        content,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveSystemNotice" parameterType="cn.edu.nju.software.entity.SystemNotice" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into system_notice(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{content},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <update id="updateSystemNotice" parameterType="cn.edu.nju.software.entity.SystemNotice">
+        UPDATE system_notice
+        SET
+        content=#{content},
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteSystemNotice">
+        DELETE FROM system_notice
+        WHERE id = #{0}
+    </delete>
+
+    <select id="getAllSystemNoticeByPage" resultType="cn.edu.nju.software.entity.SystemNotice">
+        select
+        <include refid="fields"></include>
+        from system_notice
+        limit #{0},#{1}
+    </select>
+
+    <select id="getSystemNoticeById" resultType="cn.edu.nju.software.entity.SystemNotice">
+        select
+        <include refid="fields"></include>
+        from system_notice
+        WHERE id = #{0}
+    </select>
+
+
+	
+	<select id="getSystemNoticeList" resultType="cn.edu.nju.software.entity.SystemNotice">
+		select * from system_notice
+	</select>
+</mapper>

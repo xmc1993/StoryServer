@@ -176,7 +176,11 @@ public class ManageStoryTopicController {
 			storyTopicRelation.setstoryId(storyId);
 			storyTopicRelation.setValid(1);
 			storyTopicRelation.setstorytopicId(storyTopicId);
-			storyTopicServcie.saveStoryTopicRelation(storyTopicRelation);
+			int res =storyTopicServcie.saveStoryTopicRelation(storyTopicRelation);
+			if(res!=1){
+				responseData.jsonFill(2, null, false);
+				return responseData;
+			}
 		}
 		responseData.jsonFill(1, null, true);
 		return responseData;
