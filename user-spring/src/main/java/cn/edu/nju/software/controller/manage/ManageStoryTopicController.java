@@ -87,6 +87,7 @@ public class ManageStoryTopicController {
 		responseData.jsonFill(2, "添加失败", null);
 		return responseData;
 	}
+	
 
 	@ApiOperation(value = "修改故事专题", notes = "")
 	@RequestMapping(value = "/updateStoryTopicById", method = { RequestMethod.POST })
@@ -133,6 +134,18 @@ public class ManageStoryTopicController {
 		responseData.jsonFill(2, "删除失败", null);
 		return responseData;
 	}
+	
+	@ApiOperation(value = "根据id故事专题详情", notes = "")
+	@RequestMapping(value = "/getStoryTopicById", method = { RequestMethod.GET})
+	@ResponseBody
+	public ResponseData<StoryTopic> getStoryTopicById(@ApiParam("专题id") @RequestParam Integer id,
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<StoryTopic> responseData = new ResponseData<>();
+		StoryTopic storyTopic=storyTopicServcie.getStoryTopicById(id);
+		responseData.jsonFill(2, "删除失败", storyTopic);
+		return responseData;
+	}
+
 
 	@ApiOperation(value = "根据故事专题获得故事列表", notes = "")
 	@RequestMapping(value = "/getStorysByStoryTopic", method = { RequestMethod.GET })

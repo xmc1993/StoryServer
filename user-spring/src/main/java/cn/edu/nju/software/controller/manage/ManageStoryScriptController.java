@@ -50,11 +50,11 @@ public class ManageStoryScriptController {
 	@RequestMapping(value = "/saveStoryScript", method = { RequestMethod.POST })
 	@ResponseBody
 	public ResponseData<StoryScript> saveStoryScript(@ApiParam("故事ID") @RequestParam Integer storyId,
-			@ApiParam("内容") @RequestParam String content,
+			@ApiParam("内容") @RequestParam(value="content",required=false) String content,
 			@ApiParam("角色Id") @RequestParam(value="roleId",required=false) Integer roleId,
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<StoryScript> responseData = new ResponseData<>();
-		
+			
 			storyScriptService.deleteByStoryId(storyId);
 			StoryScript storyScript2 = new StoryScript();
 			storyScript2.setContent(content);

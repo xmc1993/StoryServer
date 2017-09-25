@@ -54,7 +54,8 @@ public class ManageReadPlanController {
 	@ResponseBody
 	public ResponseData<ReadingPlan> saveReadPlan(@ApiParam("年龄段(请传该年龄段最大的天数的)") @RequestParam String ageGroup,
 			@ApiParam("时间点(格式:yyyy/mm/dd) 备注:这个是字符串类型") @RequestParam String timepoint,
-			@ApiParam("题目") @RequestParam String title, @ApiParam("封面url") @RequestParam String coverurl,
+			@ApiParam("题目") @RequestParam String title,
+			@ApiParam("封面url") @RequestParam(value = "coverurl", required = false) String coverurl,
 			@ApiParam("内容") @RequestParam String content, HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<ReadingPlan> responseData = new ResponseData<>();
 		ReadingPlan readingPlan = new ReadingPlan();
