@@ -82,4 +82,9 @@ public class BabyReadServiceImpl implements BabyReadService {
 		return babyRead;
 	}
 
+	@Override
+	public BabyRead selectBabyReadById(Integer id) {
+		return babyReadMapper.selectByPrimaryKey(id);
+	}
+
 }

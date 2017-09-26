@@ -19,4 +19,5 @@ public interface BabyReadService {
 	BabyReadInfo selectReadInfoById(Integer id);
 	List<BabyReadInfo> selectReadInfoByStoryId(Integer storyId);
 	BabyRead saveBabyRead(BabyRead babyRead);
+	BabyRead selectBabyReadById(Integer id);
 }
