@@ -97,5 +97,9 @@ public interface StoryService {
 
     List<Story> getSetStoryListByIdList(List<Integer> idList, Integer offset, Integer limit);
 
+    List<Story> getStoryListBySecondLevelTagId(
+            Integer tagId, Integer visibility, Integer offset, Integer limit);
 
+    Integer getStoryCountBySecondLevelTagId(
+            Integer tagId, Integer visibility);
 }

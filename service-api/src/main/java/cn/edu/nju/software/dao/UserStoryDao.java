@@ -20,7 +20,7 @@ public interface UserStoryDao {
 
     UserStory getUserStoryById(int id);
 
-    List<UserStory> getAllUserStoryByUserIdByPage(int userId, int offset, int limit);
+    List<UserStory> getAllUserStoryByUserIdByPage(int userId, int visibility, int offset, int limit);
 
-    int getUserStoryCountByUserId(int userId);
+    int getUserStoryCountByUserId(int userId, int visibility);
 }

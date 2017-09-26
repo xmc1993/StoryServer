@@ -373,4 +373,14 @@ public class StoryServiceImpl implements StoryService {
     public List<Story> getSetStoryListByIdList(List<Integer> idList, Integer offset, Integer limit) {
         return storyDao.getSetStoryListByIdList(idList, offset, limit);
     }
+
+    @Override
+    public List<Story> getStoryListBySecondLevelTagId(Integer tagId, Integer visibility, Integer offset, Integer limit) {
+        return storyDao.getStoryListBySecondLevelTagId(tagId, visibility, offset, limit);
+    }
+
+    @Override
+    public Integer getStoryCountBySecondLevelTagId(Integer tagId, Integer visibility) {
+        return storyDao.getStoryCountBySecondLevelTagId(tagId, visibility);
+    }
 }

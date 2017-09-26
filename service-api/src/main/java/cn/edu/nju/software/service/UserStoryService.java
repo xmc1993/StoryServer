@@ -17,8 +17,8 @@ public interface UserStoryService {
 
     UserStory getUserStoryById(int id);
 
-    List<UserStory> getAllUserStoryByUserIdByPage(int userId, int page, int pageSize);
+    List<UserStory> getAllUserStoryByUserIdByPage(int userId, int visibility, int page, int pageSize);
 
-    int getUserStoryCountByUserId(int userId);
+    int getUserStoryCountByUserId(int userId, int visibility);
 
 }

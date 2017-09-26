@@ -621,4 +621,19 @@
         limit #{offset},#{limit}
     </select>
 
+    <select id="getStoryListBySecondLevelTagId" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="multiTableFields"></include>
+        from tag_relation tr left join story st on tr.storyId = st.id
+        where tr.id = #{tagId} and story.valid = 1 and story.draft = 0 and ((story.visibility &amp; #{visibility}) &gt; 0)
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="getStoryCountBySecondLevelTagId" resultType="cn.edu.nju.software.entity.Story">
+        select
+        count(st.id)
+        from tag_relation tr left join story st on tr.storyId = st.id
+        where tr.id = #{tagId} and story.valid = 1 and story.draft = 0 and ((story.visibility &amp; #{visibility}) &gt; 0)
+    </select>
+
 </mapper>

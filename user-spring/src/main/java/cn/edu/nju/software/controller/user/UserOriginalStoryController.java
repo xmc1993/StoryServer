@@ -5,6 +5,7 @@ import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.TagRelation;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.entity.UserStory;
+import cn.edu.nju.software.service.FollowService;
 import cn.edu.nju.software.service.TagRelationService;
 import cn.edu.nju.software.service.UserStoryService;
 import cn.edu.nju.software.util.TokenConfig;
@@ -36,6 +37,8 @@ public class UserOriginalStoryController extends BaseController {
     private UserStoryService userStoryService;
     @Autowired
     private TagRelationService tagRelationService;
+    @Autowired
+    private FollowService followService;
 
     @ApiOperation(value = "获得一个用户的所有原创故事", notes = "")
     @RequestMapping(value = "/getAllUserStoryByUserIdByPage", method = {RequestMethod.GET})
@@ -51,9 +54,10 @@ public class UserOriginalStoryController extends BaseController {
             responseData.jsonFill(2, "用户尚未登录。", null);
             return responseData;
         }
-        List<UserStory> userStoryList = userStoryService.getAllUserStoryByUserIdByPage(userId, page, pageSize);
+        int relation = followService.getRelation(userId, user.getId());
+        List<UserStory> userStoryList = userStoryService.getAllUserStoryByUserIdByPage(userId, relation, page, pageSize);
         responseData.jsonFill(1, null, userStoryList);
-        responseData.setCount(userStoryList.size());
+        responseData.setCount(userStoryService.getUserStoryCountByUserId(userId, relation));
         return responseData;
     }
 
@@ -64,6 +68,7 @@ public class UserOriginalStoryController extends BaseController {
             @ApiParam("故事标题") @RequestParam(value = "title", required = false) String title,
             @ApiParam("内容") @RequestParam(value = "content", required = false) String content,
             @ApiParam("封面内容") @RequestParam(value = "coverUrl", required = false) String coverUrl,
+            @ApiParam("可见性") @RequestParam(value = "visibility") Integer visibility,
             HttpServletRequest request, HttpServletResponse response) throws ParseException {
         ResponseData<UserStory> responseData = new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
@@ -79,6 +84,7 @@ public class UserOriginalStoryController extends BaseController {
         userStory.setTitle(title);
         userStory.setContent(content);
         userStory.setCoverUrl(coverUrl);
+        userStory.setVisibility(visibility);
         UserStory result = userStoryService.saveUserStory(userStory);
         if (result == null) {
             responseData.jsonFill(2, "发布失败", null);
