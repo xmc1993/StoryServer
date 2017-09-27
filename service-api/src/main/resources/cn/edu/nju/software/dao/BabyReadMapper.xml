@@ -101,11 +101,11 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="cn.edu.nju.software.entity.BabyRead" >
+  <insert id="insert" parameterType="cn.edu.nju.software.entity.BabyRead" keyProperty="id" useGeneratedKeys="true" >
     insert into baby_read (id, babyReadInfoId, babyId, 
       url, valid, creatTime, 
       updateTime)
-    values (#{id,jdbcType=INTEGER}, #{babyreadinfoid,jdbcType=INTEGER}, #{babyid,jdbcType=INTEGER}, 
+    values (#{id}, #{babyreadinfoid,jdbcType=INTEGER}, #{babyid,jdbcType=INTEGER}, 
       #{url,jdbcType=VARCHAR}, #{valid,jdbcType=INTEGER}, #{creattime,jdbcType=TIMESTAMP}, 
       #{updatetime,jdbcType=TIMESTAMP})
   </insert>

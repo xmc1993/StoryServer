@@ -161,20 +161,22 @@ public class UserDailyController extends BaseController {
             responseData.jsonFill(2, "发布失败", null);
         } else {
             responseData.jsonFill(1, null, daily);
-            //如果对关注自己的人开房则feed TODO 抽取到service
+            //如果对关注自己的人则feed TODO 抽取到service
+            MsgVo msgVo = new MsgVo();
+            msgVo.setUserId(user.getId());
+            msgVo.setHeadImgUrl(user.getHeadImgUrl());
+            msgVo.setUserName(user.getNickname());
+            Feed feed = new Feed();
+            feed.setCreateTime(new Date());
+            feed.setUpdateTime(new Date());
+            feed.setFid(user.getId());
+            feed.setContent(new Gson().toJson(msgVo));
+            feed.setMid(daily.getId());
+            feed.setType(MessageType.NEW_DAILY);
+            feed.setTid(user.getId());
+            messageFeedService.feed(feed);
             if ((daily.getVisibility() & Visibility.FOLLOWER) > 0) {
-                MsgVo msgVo = new MsgVo();
-                msgVo.setUserId(user.getId());
-                msgVo.setHeadImgUrl(user.getHeadImgUrl());
-                msgVo.setUserName(user.getNickname());
-                Feed feed = new Feed();
-                feed.setCreateTime(new Date());
-                feed.setUpdateTime(new Date());
-                feed.setFid(user.getId());
-                feed.setContent(new Gson().toJson(msgVo));
-                feed.setMid(daily.getId());
-                feed.setType(MessageType.NEW_DAILY);
-                messageFeedService.feedFollowers(feed, user.getId(), true);
+                messageFeedService.feedFollowers(feed, user.getId(), false);
             }
         }
         return responseData;

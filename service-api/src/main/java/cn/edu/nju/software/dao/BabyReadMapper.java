@@ -14,7 +14,7 @@ public interface BabyReadMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(BabyRead record);
+    boolean insert(BabyRead record);
 
     int insertSelective(BabyRead record);
 

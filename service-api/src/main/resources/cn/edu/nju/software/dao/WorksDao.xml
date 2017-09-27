@@ -119,6 +119,13 @@
         where
         id = #{id} and valid = 1
     </update>
+    
+    <select id="getWorksByUserAndStory" resultType="cn.edu.nju.software.entity.Works">
+        select
+        <include refid="fields"></include>
+        from works
+        where valid = 1 and userId=#{userId} and storyId=#{storyId}
+    </select>
 
     <select id="getStoryTagById" resultType="cn.edu.nju.software.entity.Works">
         select

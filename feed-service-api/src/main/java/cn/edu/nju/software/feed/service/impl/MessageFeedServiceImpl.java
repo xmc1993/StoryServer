@@ -2,12 +2,14 @@ package cn.edu.nju.software.feed.service.impl;
 
 import cn.edu.nju.software.dao.FeedDao;
 import cn.edu.nju.software.dto.MsgVo;
+import cn.edu.nju.software.entity.BabyRead;
 import cn.edu.nju.software.entity.Daily;
 import cn.edu.nju.software.entity.Feed;
 import cn.edu.nju.software.entity.SystemNotice;
 import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.entity.feed.MessageType;
 import cn.edu.nju.software.feed.service.MessageFeedService;
+import cn.edu.nju.software.service.BabyReadService;
 import cn.edu.nju.software.service.DailyService;
 import cn.edu.nju.software.service.FollowService;
 import cn.edu.nju.software.service.SystemNoticeService;
@@ -34,6 +36,8 @@ public class MessageFeedServiceImpl implements MessageFeedService{
     private WorksService worksService;
     @Autowired
     private SystemNoticeService systemNoticeService;
+    @Autowired
+    private BabyReadService babyReadService;
 
     @Override
     public List<Feed> getDisplayFeedsByPage(int userId, int page, int pageSize) {
@@ -64,6 +68,9 @@ public class MessageFeedServiceImpl implements MessageFeedService{
                 SystemNotice systemNotice = systemNoticeService.getSystemNoticeById(feed.getMid());
                 msgVo.setData(systemNotice);
                 break;
+             case NEW_BABYREAD:
+            	 BabyRead babyRead=babyReadService.selectBabyReadById(feed.getMid());
+            	 msgVo.setData(babyRead);
             default:
                 return feed;
         }
@@ -120,7 +127,7 @@ public class MessageFeedServiceImpl implements MessageFeedService{
         }
         for (Integer tid : userFollowerList) {
             feed.setId(null);
-            feed.setTid(tid);
+            feed.setFid(sender);
             feed.setTid(tid);
             feedDao.saveFeed(feed);
         }

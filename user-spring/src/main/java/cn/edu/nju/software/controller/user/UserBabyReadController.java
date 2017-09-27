@@ -14,15 +14,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
 import cn.edu.nju.software.controller.BaseController;
+import cn.edu.nju.software.dto.MsgVo;
 import cn.edu.nju.software.entity.BabyRead;
 import cn.edu.nju.software.entity.BabyReadInfo;
+import cn.edu.nju.software.entity.Feed;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.User;
+import cn.edu.nju.software.entity.feed.MessageType;
+import cn.edu.nju.software.feed.service.MessageFeedService;
 import cn.edu.nju.software.service.BabyReadService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.TokenConfig;
@@ -43,6 +48,8 @@ public class UserBabyReadController extends BaseController {
 	
 	@Autowired
 	BabyReadService babyReadService;
+	@Autowired
+	MessageFeedService messageFeedService; 
 	
 	@ApiOperation(value = "根据宝宝读的Id获取宝宝读内容", notes = "")
 	@RequestMapping(value = "/getBabyReadInfotById", method = { RequestMethod.GET })
@@ -66,7 +73,7 @@ public class UserBabyReadController extends BaseController {
 		return responseData;
 	}
 	
-	@ApiOperation(value = "添加宝宝读的音频", notes = "")
+	@ApiOperation(value = "添加宝宝读的音频", notes = "需登录")
 	@RequestMapping(value = "/saveBabyRead", method = { RequestMethod.POST })
 	@ResponseBody
 	public ResponseData<BabyRead> saveBabyRead(@ApiParam("babyReadInfoId") @RequestParam Integer babyReadInfoId,
@@ -74,6 +81,12 @@ public class UserBabyReadController extends BaseController {
 			@ApiParam("音频Url") @RequestParam String url,
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<BabyRead> responseData = new ResponseData<>();
+		User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
 		BabyRead babyRead=new BabyRead();
 		babyRead.setValid(1);
 		babyRead.setBabyreadinfoid(babyReadInfoId);
@@ -81,7 +94,21 @@ public class UserBabyReadController extends BaseController {
 		babyRead.setUpdatetime(new Date());
 		babyRead.setUrl(url);
 		babyRead.setBabyid(babyId);
-		babyReadService.saveBabyRead(babyRead);
+		BabyRead res =babyReadService.saveBabyRead(babyRead);
+		if(res!=null){
+			  	MsgVo msgVo = new MsgVo();
+	            msgVo.setUserId(user.getId());
+	            msgVo.setHeadImgUrl(user.getHeadImgUrl());
+	            msgVo.setUserName(user.getNickname());
+	            Feed feed = new Feed();
+	            feed.setCreateTime(new Date());
+	            feed.setUpdateTime(new Date());
+	            feed.setFid(user.getId());
+	            feed.setContent(new Gson().toJson(msgVo));
+	            feed.setMid(res.getId());
+	            feed.setType(MessageType.NEW_BABYREAD);
+	            messageFeedService.feedFollowers(feed, user.getId(), false);
+		}
 		responseData.jsonFill(1, null, babyRead);
 		return responseData;
 	}
