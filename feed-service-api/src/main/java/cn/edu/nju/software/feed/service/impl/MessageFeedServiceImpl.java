@@ -127,7 +127,7 @@ public class MessageFeedServiceImpl implements MessageFeedService{
         }
         for (Integer tid : userFollowerList) {
             feed.setId(null);
-            feed.setTid(tid);
+            feed.setFid(sender);
             feed.setTid(tid);
             feedDao.saveFeed(feed);
         }

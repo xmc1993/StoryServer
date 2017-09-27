@@ -183,5 +183,9 @@ public class WorksServiceImpl implements WorksService {
 	        return null;
 	}
 
-
+	@Override
+	public boolean getWorksByUserAndStory(Integer userId, Integer storyId) {
+		 if(worksDao.getWorksByUserAndStory(userId, storyId)==null) return false;
+	        return true;
+	}
 }

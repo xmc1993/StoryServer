@@ -34,9 +34,9 @@ import cn.edu.nju.software.service.ReadPlanStoryGroupService;
 import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.service.StoryTagService;
 import cn.edu.nju.software.service.TagRelationService;
-import cn.edu.nju.software.service.UserRelationStoryService;
+import cn.edu.nju.software.service.WorksService;
 import cn.edu.nju.software.util.TokenConfig;
-import cn.edu.nju.software.vo.StoryNewVo;
+import cn.edu.nju.software.vo.StoryNewWorksVo;
 
 /**
  * @author zs
@@ -58,7 +58,7 @@ public class UserReadPlanController extends BaseController {
 	@Autowired
 	StoryTagService storyTagService;
 	@Autowired
-	UserRelationStoryService userRelationStoryService;
+	WorksService worksService ;
 	@Autowired
 	StoryService storyService;
 
@@ -93,9 +93,9 @@ public class UserReadPlanController extends BaseController {
 	@ApiOperation(value = "根据阅读计划id查询故事组")
 	@RequestMapping(value = "/getStoryGroupByPlanId", method = { RequestMethod.GET })
 	@ResponseBody
-	public ResponseData<List<StoryNewVo>> getStoryGroupByPlanId(@ApiParam("阅读计划id") @RequestParam Integer ReadingPlanId,
+	public ResponseData<List<StoryNewWorksVo>> getStoryGroupByPlanId(@ApiParam("阅读计划id") @RequestParam Integer ReadingPlanId,
 			HttpServletRequest request, HttpServletResponse response) {
-		ResponseData<List<StoryNewVo>> responseData = new ResponseData<>();
+		ResponseData<List<StoryNewWorksVo>> responseData = new ResponseData<>();
 		User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
 		if (user == null) {
 			responseData.jsonFill(2, "请先登录", null);
@@ -103,14 +103,14 @@ public class UserReadPlanController extends BaseController {
 			return responseData;
 		}
 		List<ReadingPlanStoryGroup> list = readPlanStoryGroupService.getReadPlanStoryGroupByPlanId(ReadingPlanId);
-		List<StoryNewVo> storyNewVoList = new ArrayList<StoryNewVo>();
+		List<StoryNewWorksVo> storyNewWorksVoList = new ArrayList<StoryNewWorksVo>();
 		for (ReadingPlanStoryGroup readingPlanStoryGroup : list) {
 			Story story = storyService.getStoryById(readingPlanStoryGroup.getStoryid());
-			StoryNewVo storyNewVo = new StoryNewVo();
-			storyNewVo = story2Vo(story, user.getId());
-			storyNewVoList.add(storyNewVo);
+			StoryNewWorksVo storyNewWorksVo=new StoryNewWorksVo();
+			storyNewWorksVo = story2Vo(story, user.getId());
+			storyNewWorksVoList.add(storyNewWorksVo);
 		}
-		responseData.jsonFill(1, null, storyNewVoList);
+		responseData.jsonFill(1, null, storyNewWorksVoList);
 		return responseData;
 	}
 
@@ -175,20 +175,20 @@ public class UserReadPlanController extends BaseController {
 		return Math.abs(day);
 	}
 
-	// 根据故事和用户id获得一个故事vo类(故事的标签，用户是否喜爱这个故事)
-	private StoryNewVo story2Vo(Story story, int userId) {
+	// 根据故事和用户id获得一个故事vo类(故事的标签，用户是否完成过这个故事)
+	private StoryNewWorksVo story2Vo(Story story, int userId) {
 		if (story == null) {
 			return null;
 		}
-		StoryNewVo storyVo = new StoryNewVo();
+		StoryNewWorksVo storyWorkVo = new StoryNewWorksVo();
 		List<Integer> idList = tagRelationService.getTagIdListByStoryId(story.getId());
 		List<StoryTag> storyTagList = storyTagService.getStoryTagListByIdList(idList);
-		storyVo.setTagList(storyTagList);
-		BeanUtils.copyProperties(story, storyVo);
+		storyWorkVo.setTagList(storyTagList);
+		BeanUtils.copyProperties(story, storyWorkVo);
 		if (userId > 0) {
-			boolean isLiked = userRelationStoryService.isLikedByUser(userId, story.getId());
-			storyVo.setLike(isLiked);
+			boolean isWorks = worksService.getWorksByUserAndStory(userId, story.getId());
+			storyWorkVo.setisWorks(isWorks);
 		}
-		return storyVo;
+		return storyWorkVo;
 	}
 }
