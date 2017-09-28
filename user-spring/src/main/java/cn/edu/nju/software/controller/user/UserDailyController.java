@@ -249,4 +249,22 @@ public class UserDailyController extends BaseController {
         return responseData;
     }
 
+    @ApiOperation(value = "读日志", notes = "")
+    @RequestMapping(value = "/readDaily", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> readDaily(
+            @ApiParam("日志id") @RequestParam("id") Integer id,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Boolean> responseData = new ResponseData();
+//        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+//        if (user == null) {
+//            responseData.jsonFill(2, "请先登录", null);
+//            response.setStatus(401);
+//            return responseData;
+//        }
+
+        responseData.jsonFill(1, null, dailyService.newRead(id));
+        return responseData;
+    }
+
 }

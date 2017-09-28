@@ -150,6 +150,7 @@
 			<mvc:mapping path="/user/getStoryGroupByPlanId"/>
 			<mvc:mapping path="/user/uploadBabyReadAudioFile"/>
 			<mvc:mapping path="/user/refreshToken"/>
+			<mvc:mapping path="/user/getPopularOriginalStoryListByPage"/>
 
             <!-- 不需要拦截的uri -->
             <!--

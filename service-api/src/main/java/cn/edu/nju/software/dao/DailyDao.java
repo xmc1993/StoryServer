@@ -28,4 +28,6 @@ public interface DailyDao {
 
     boolean deleteDraftDaily(Integer userId);
 
+    boolean newRead(int id);
+
 }
