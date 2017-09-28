@@ -124,9 +124,7 @@ public class UserDailyController extends BaseController {
         }
         boolean res = dailyService.deleteDaily(dailyId);
         if(res){
-            if ((daily.getVisibility() & Visibility.FOLLOWER) > 0){
                 messageFeedService.unfeedFollowers(dailyId, user.getId(), true);
-            }
         }
         responseData.jsonFill(res ? 1 : 2, null, res);
         return responseData;

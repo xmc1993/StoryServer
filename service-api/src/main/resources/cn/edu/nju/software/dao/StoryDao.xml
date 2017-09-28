@@ -253,7 +253,7 @@
         select
         <include refid="fields"></include>
         from story
-        where valid = 1 and draft = 0 and setId =0
+        where valid = 1 and draft = 0 and setId =0 and isSet in (0,1)
         order by createTime ${sortByCreateTime}
         limit #{0},#{1}
     </select>
