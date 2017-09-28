@@ -383,4 +383,11 @@ public class StoryServiceImpl implements StoryService {
     public Integer getStoryCountBySecondLevelTagId(Integer tagId) {
         return storyDao.getStoryCountBySecondLevelTagId(tagId);
     }
+
+    @Override
+    public List<Story> getPopularOriginalStoryListByPage(Integer page, int pageSize) {
+        int offset = page*pageSize;
+        int limit = pageSize;
+        return storyDao.getPopularOriginalStoryListByPage(offset, limit);
+    }
 }

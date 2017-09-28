@@ -626,6 +626,7 @@
         <include refid="multiTableFields"></include>
         from tag_relation tr left join story on tr.storyId = story.id
         where tr.tagId = #{tagId} and story.valid = 1 and story.draft = 0 and visibility = 255
+        order by story.createTime DESC
         limit #{offset},#{limit}
     </select>
 
@@ -634,6 +635,15 @@
         count(story.id)
         from tag_relation tr left join story on tr.storyId = story.id
         where tr.tagId = #{tagId} and story.valid = 1 and story.draft = 0 and visibility = 255
+    </select>
+
+    <select id="getPopularOriginalStoryListByPage" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="multiTableFields"></include>
+        from tag_relation tr left join story on tr.storyId = story.id
+        where tr.tagId = 100124 and story.valid = 1 and story.draft = 0 and visibility = 255
+        order by story.tellCount DESC, story.likeCount DESC
+        limit #{offset},#{limit}
     </select>
 
 </mapper>

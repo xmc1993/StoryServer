@@ -25,9 +25,9 @@ public interface StoryService {
 
     Story updateStory(Story story);
 
-    List<Story> getStoryListByPage(int offset, int limit,String sortByCreateTime);
+    List<Story> getStoryListByPage(int offset, int limit, String sortByCreateTime);
 
-    List<Story> getSetStoryListByPage(int offset, int limit,String sortByCreateTime);
+    List<Story> getSetStoryListByPage(int offset, int limit, String sortByCreateTime);
 
     List<Story> getStoryListByPageIncludeDrafts(int offset, int limit);
 
@@ -67,7 +67,7 @@ public interface StoryService {
 
     Integer getSetStoryCountByIdList(List<Integer> idList);
 
-    List <Story>  getStoryByFuzzyQuery(String query, Integer offset, Integer limit);
+    List<Story> getStoryByFuzzyQuery(String query, Integer offset, Integer limit);
 
     List<Story> getStoryByClassifyFuzzyQueryIncludeDrafts(String title, String author, String content, String press, Integer tag, Integer offset, Integer limit);
 
@@ -87,9 +87,9 @@ public interface StoryService {
 
     List<Story> getRecommendStoryListByPage(int offset, int limit);
 
-	PageInfo<Story> getStoryListByIdListByPage(List<Integer> storyIdList,Integer page,Integer pageSize);
+    PageInfo<Story> getStoryListByIdListByPage(List<Integer> storyIdList, Integer page, Integer pageSize);
 
-	PageInfo<Story> getSetStoryListByIdListByPage(List<Integer> storyIdList,Integer page,Integer pageSize);
+    PageInfo<Story> getSetStoryListByIdListByPage(List<Integer> storyIdList, Integer page, Integer pageSize);
 
     List<Story> getStoryListBySetId(int setId, int page, int pageSize);
 
@@ -102,4 +102,7 @@ public interface StoryService {
 
     Integer getStoryCountBySecondLevelTagId(
             Integer tagId);
+
+    List<Story> getPopularOriginalStoryListByPage(Integer page,  int pageSize);
+
 }

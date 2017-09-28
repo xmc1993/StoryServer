@@ -133,6 +133,27 @@ public class UserStoryController extends BaseController {
         return responseData;
     }
 
+    @ApiOperation(value = "分页获得热门原创故事", notes = "")
+    @RequestMapping(value = "/getPopularOriginalStoryListByPage", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<StoryNewVo>> getPopularOriginalStoryListByPage(
+            @ApiParam("PAGE") @RequestParam int page,
+            @ApiParam("PAGESIZE") @RequestParam int pageSize,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<StoryNewVo>> responseData = new ResponseData();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            user = new User();
+            user.setId(-1);
+        }
+        List<Story> storyList = storyService.getPopularOriginalStoryListByPage(page, pageSize);
+        List<StoryNewVo> preList = storyList2VoList(storyList, user.getId());
+        transformStorySetList(preList);
+        responseData.jsonFill(1, null, preList);
+        responseData.setCount(storyService.getStoryCountBySecondLevelTagId(100124));
+        return responseData;
+    }
+
     @ApiOperation(value = "根据一级标签获得故事列表", notes = "根据一级标签获得故事列表")
     @RequestMapping(value = "/getStoryIdListByFirstLevelTagId", method = {RequestMethod.GET})
     @ResponseBody
