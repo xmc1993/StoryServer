@@ -32,6 +32,8 @@ public class UserStory {
     private Integer tellCount = 0;//
     @ApiModelProperty(value="喜欢次数")
     private Integer likeCount = 0;
+    @ApiModelProperty(value="可见性")
+    private Integer visibility;
     @ApiModelProperty(value="创建时间")
     private Date createTime;
     @ApiModelProperty(value="更新时间")
