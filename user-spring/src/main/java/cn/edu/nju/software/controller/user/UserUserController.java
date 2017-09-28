@@ -66,6 +66,33 @@ public class UserUserController extends BaseController {
         return responseData;
     }
 
+    @ApiOperation(value = "更新token信息", notes = "")
+    @RequestMapping(value = "/refreshToken", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> refreshToken(
+            @ApiParam("Token") @RequestParam("accessToken") String accessToken,
+            HttpServletRequest request, HttpServletResponse response){
+        ResponseData responseData = new ResponseData();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "用户尚未登录。", false);
+            return responseData;
+        }
+        Jedis jedis = null;
+        try {
+            jedis = JedisUtil.getJedis();
+            jedis.expire(accessToken.getBytes(), 60 * 60 * 24 * 30);
+            responseData.jsonFill(1, null, true);
+        }catch (Exception e){
+            responseData.jsonFill(2, "失败", null);
+        }finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+        return responseData;
+    }
+
     @ApiOperation(value = "得到当前用户信息", notes = "获取用户信息")
     @RequestMapping(value = "/getUserSelfInfo", method = {RequestMethod.POST})
     @ResponseBody
