@@ -168,16 +168,25 @@ public class UserStoryController extends BaseController {
             user = new User();
             user.setId(-1);
         }
-        List<Integer> idList = tagRelationService.getStoryIdListBySecondLevelTagId(tagId);
-        if(idList.size()==0){
-        	responseData.jsonFill(1, null, null);
-        	return responseData;
+
+        //TODO 除去原创故事的特殊处理
+        List<Story> storyList;
+        if (tagId == 100124){
+            storyList = storyService.getStoryListBySecondLevelTagId(tagId, offset, limit);
+            responseData.setCount(storyService.getStoryCountBySecondLevelTagId(tagId));
+        }else {
+            List<Integer> idList = tagRelationService.getStoryIdListBySecondLevelTagId(tagId);
+            if (idList.size() == 0) {
+                responseData.jsonFill(1, null, null);
+                return responseData;
+            }
+            storyList = storyService.getStoryListByIdList(idList, offset, limit);
+            responseData.setCount(storyService.getStoryCountByIdList(idList));
         }
-        List<Story> storyList = storyService.getStoryListByIdList(idList, offset, limit);
         List<StoryNewVo> preList = storyList2VoList(storyList, user.getId());
         transformStorySetList(preList);
         responseData.jsonFill(1, null, preList);
-        responseData.setCount(storyService.getStoryCountByIdList(idList));
+
         return responseData;
     }
 

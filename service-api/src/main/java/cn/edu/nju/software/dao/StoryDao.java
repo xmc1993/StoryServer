@@ -120,9 +120,9 @@ public interface StoryDao {
     List<Story> getSetStoryListByIdList(@Param("idList") List<Integer> idList,@Param("offset") Integer offset, @Param("limit") Integer limit);
 
     List<Story> getStoryListBySecondLevelTagId(
-            @Param("tagId")Integer tagId, @Param("visibility")Integer visibility, @Param("offset")Integer offset, @Param("limit")int limit);
+            @Param("tagId")Integer tagId, @Param("offset")Integer offset, @Param("limit")int limit);
 
     Integer getStoryCountBySecondLevelTagId(
-            @Param("tagId")Integer tagId, @Param("visibility")Integer visibility);
+            @Param("tagId")Integer tagId);
 
 }

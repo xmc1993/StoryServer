@@ -624,16 +624,16 @@
     <select id="getStoryListBySecondLevelTagId" resultType="cn.edu.nju.software.entity.Story">
         select
         <include refid="multiTableFields"></include>
-        from tag_relation tr left join story st on tr.storyId = st.id
-        where tr.id = #{tagId} and story.valid = 1 and story.draft = 0 and ((story.visibility &amp; #{visibility}) &gt; 0)
+        from tag_relation tr left join story on tr.storyId = story.id
+        where tr.tagId = #{tagId} and story.valid = 1 and story.draft = 0 and visibility = 255
         limit #{offset},#{limit}
     </select>
 
-    <select id="getStoryCountBySecondLevelTagId" resultType="cn.edu.nju.software.entity.Story">
+    <select id="getStoryCountBySecondLevelTagId" resultType="java.lang.Integer">
         select
-        count(st.id)
-        from tag_relation tr left join story st on tr.storyId = st.id
-        where tr.id = #{tagId} and story.valid = 1 and story.draft = 0 and ((story.visibility &amp; #{visibility}) &gt; 0)
+        count(story.id)
+        from tag_relation tr left join story on tr.storyId = story.id
+        where tr.tagId = #{tagId} and story.valid = 1 and story.draft = 0 and visibility = 255
     </select>
 
 </mapper>

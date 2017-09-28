@@ -375,12 +375,12 @@ public class StoryServiceImpl implements StoryService {
     }
 
     @Override
-    public List<Story> getStoryListBySecondLevelTagId(Integer tagId, Integer visibility, Integer offset, Integer limit) {
-        return storyDao.getStoryListBySecondLevelTagId(tagId, visibility, offset, limit);
+    public List<Story> getStoryListBySecondLevelTagId(Integer tagId, Integer offset, Integer limit) {
+        return storyDao.getStoryListBySecondLevelTagId(tagId, offset, limit);
     }
 
     @Override
-    public Integer getStoryCountBySecondLevelTagId(Integer tagId, Integer visibility) {
-        return storyDao.getStoryCountBySecondLevelTagId(tagId, visibility);
+    public Integer getStoryCountBySecondLevelTagId(Integer tagId) {
+        return storyDao.getStoryCountBySecondLevelTagId(tagId);
     }
 }

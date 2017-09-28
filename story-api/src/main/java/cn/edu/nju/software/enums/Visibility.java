@@ -20,9 +20,9 @@ public class Visibility {
     //仅自己可见
     public final static int SELF_VISUAL = 8;//0000 0000 0000 1000
     //仅关注者可见
-    public final static int FOLLOWER_VISUAL = 12;//0000 0000 0000 1100
+    public final static int FOLLOWER_VISUAL = 13;//0000 0000 0000 1101
     //仅我关注的人可见
-    public final static int FOLLOWEE_VISUAL = 10;//0000 0000 0000 1010
+    public final static int FOLLOWEE_VISUAL = 11;//0000 0000 0000 1011
     //仅相互关注的人可见
     public final static int MUTUAL_VISUAL = 9;//0000 0000 0000 1001
 
