@@ -423,7 +423,7 @@ public class UserStoryController extends BaseController {
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<List<Story>> responseData = new ResponseData<>();
 		List<Story> storyList = storyService.getStoryListByReadLog(storyId);
-		List<Story> list=storyList.subList(0, 5);
+		List<Story> list = storyList.subList(0, 5);
 		responseData.jsonFill(1, null, list);
 		return responseData;
 	}
@@ -455,6 +455,21 @@ public class UserStoryController extends BaseController {
 		return responseData;
 	}
 
+	@ApiOperation(value = "分页获取热门故事", notes = "需登录")
+	@RequestMapping(value = "/getMostPopularStoryByPage", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<List<Story>> getMostPopularStoryByPage(@ApiParam("页") @RequestParam int page,
+			@ApiParam("页大小") @RequestParam int pageSize, HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<List<Story>> responseData = new ResponseData<>();
+		User user = UserChecker.checkUser(request);
+	
+		List<Story> list=storyService.getMostPopularStoryByPage(page, pageSize);
+		responseData.jsonFill(1, null, list);
+		responseData.setCount(storyService.getSetStoryCount());
+		return responseData;
+	}
+
+	
 	@ApiOperation(value = "分页获得集合列表", notes = "")
 	@RequestMapping(value = "/getAllStorySetByPage", method = { RequestMethod.GET })
 	@ResponseBody

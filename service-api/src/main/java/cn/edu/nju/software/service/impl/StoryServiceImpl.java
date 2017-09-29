@@ -397,4 +397,11 @@ public class StoryServiceImpl implements StoryService {
 		List<Story> list=storyDao.getStoryListByReadLog();
 		return list;
 	}
+
+	@Override
+	public List<Story> getMostPopularStoryByPage(int page, int pageSize) {
+		return storyDao.getMostPopularStoryByPage(page*pageSize, pageSize);
+	}
+
+
 }

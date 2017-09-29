@@ -253,7 +253,7 @@
         select
         <include refid="fields"></include>
         from story
-        where valid = 1 and draft = 0 and setId =0 and isSet in (0,1)
+        where valid = 1 and draft = 0 and setId =0 and isSet = 0
         order by createTime ${sortByCreateTime}
         limit #{0},#{1}
     </select>
@@ -651,6 +651,15 @@
         <include refid="fields"></include>
         from story
         where valid = 1 and recommend = 1 and isSet = 0
+    </select>
+    
+    <select id="getMostPopularStoryByPage" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="fields"></include>
+        from story
+        where valid = 1 and draft = 0 and setId =0 and isSet = 0
+        ORDER by tellCount DESC, likeCount DESC
+        limit #{0},#{1}
     </select>
 
 </mapper>

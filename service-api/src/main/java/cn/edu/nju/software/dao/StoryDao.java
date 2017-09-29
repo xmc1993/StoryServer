@@ -128,4 +128,5 @@ public interface StoryDao {
     
     List<Story> getStoryListByReadLog();
 
+    List<Story> getMostPopularStoryByPage(int offset, int limit);
 }
