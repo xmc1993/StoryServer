@@ -29,4 +29,6 @@ public interface DailyService {
 
     Daily saveDraftDaily(Daily daily);
 
+    boolean newRead(int id);
+
 }

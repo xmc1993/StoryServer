@@ -13,6 +13,7 @@
         tellCount,
         likeCount,
         valid,
+        visibility,
         createTime,
         updateTime
     </sql>
@@ -34,6 +35,7 @@
         #{tellCount},
         #{likeCount},
         #{valid},
+        #{visibility},
         #{createTime},
         #{updateTime}
         )
@@ -59,7 +61,7 @@
         select
         <include refid="fields"></include>
         from story
-        WHERE userId = #{0} and valid = 1
+        WHERE userId = #{0} and valid = 1 and ((visibility &amp; #{1}) &gt; 0)
         limit #{1},#{2}
     </select>
 
@@ -67,7 +69,7 @@
         select
         count(id)
         from story
-        WHERE userId = #{0} and valid = 1
+        WHERE userId = #{0} and valid = 1 and ((visibility &amp; #{1}) &gt; 0)
     </select>
 
     <select id="getUserStoryById" resultType="cn.edu.nju.software.entity.UserStory">

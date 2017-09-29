@@ -51,6 +51,23 @@ public class ManageStoryTopicController {
 		return responseData;
 	}
 
+	@ApiOperation(value = "置顶某个专题")
+	@RequestMapping(value = "/stickieStoryTopic", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<Boolean> stickieStoryTopic(@ApiParam("专题id") @RequestParam Integer id,
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<Boolean> responseData = new ResponseData<>();
+		StoryTopic storyTopic = storyTopicServcie.getStoryTopicById(id);
+		storyTopic.setUpdatetime(new Date());
+		int res = storyTopicServcie.updateStoryTopicWithoutContent(storyTopic);
+		if (res == 1) {
+			responseData.jsonFill(1, null, true);
+			return responseData;
+		}
+		responseData.jsonFill(2, "置顶失败", false);
+		return responseData;
+	}
+
 	@ApiOperation(value = "获取所有有效的故事专题", notes = "")
 	@RequestMapping(value = "/selectAllShowStoryTopic", method = { RequestMethod.GET })
 	@ResponseBody
@@ -87,7 +104,6 @@ public class ManageStoryTopicController {
 		responseData.jsonFill(2, "添加失败", null);
 		return responseData;
 	}
-	
 
 	@ApiOperation(value = "修改故事专题", notes = "")
 	@RequestMapping(value = "/updateStoryTopicById", method = { RequestMethod.POST })
@@ -134,18 +150,17 @@ public class ManageStoryTopicController {
 		responseData.jsonFill(2, "删除失败", null);
 		return responseData;
 	}
-	
+
 	@ApiOperation(value = "根据id故事专题详情", notes = "")
-	@RequestMapping(value = "/getStoryTopicById", method = { RequestMethod.GET})
+	@RequestMapping(value = "/getStoryTopicById", method = { RequestMethod.GET })
 	@ResponseBody
 	public ResponseData<StoryTopic> getStoryTopicById(@ApiParam("专题id") @RequestParam Integer id,
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<StoryTopic> responseData = new ResponseData<>();
-		StoryTopic storyTopic=storyTopicServcie.getStoryTopicById(id);
+		StoryTopic storyTopic = storyTopicServcie.getStoryTopicById(id);
 		responseData.jsonFill(2, "删除失败", storyTopic);
 		return responseData;
 	}
-
 
 	@ApiOperation(value = "根据故事专题获得故事列表", notes = "")
 	@RequestMapping(value = "/getStorysByStoryTopic", method = { RequestMethod.GET })
@@ -169,18 +184,21 @@ public class ManageStoryTopicController {
 			@ApiParam("添加故事id列表") @RequestParam Integer[] storyIds) {
 		ResponseData<Boolean> responseData = new ResponseData<>();
 		storyTopicServcie.deleteStoryTopicStorys(storyTopicId);
+		int order=1;
 		for (Integer storyId : storyIds) {
 			StoryTopicRelation storyTopicRelation = new StoryTopicRelation();
+			storyTopicRelation.setMyorder(order);
 			storyTopicRelation.setCreatetime(new Date());
 			storyTopicRelation.setUpdatetime(new Date());
 			storyTopicRelation.setstoryId(storyId);
 			storyTopicRelation.setValid(1);
 			storyTopicRelation.setstorytopicId(storyTopicId);
-			int res =storyTopicServcie.saveStoryTopicRelation(storyTopicRelation);
-			if(res!=1){
+			int res = storyTopicServcie.saveStoryTopicRelation(storyTopicRelation);
+			if (res != 1) {
 				responseData.jsonFill(2, null, false);
 				return responseData;
 			}
+			order++;
 		}
 		responseData.jsonFill(1, null, true);
 		return responseData;

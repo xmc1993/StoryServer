@@ -18,6 +18,7 @@ public class Daily implements Serializable{
     private Integer visibility;
     private Integer deleted = 0;
     private Integer draft = 0;//是否为草稿
+    private Integer readCount = 0;//阅读数
     private Date createTime;
     private Date updateTime;
 }

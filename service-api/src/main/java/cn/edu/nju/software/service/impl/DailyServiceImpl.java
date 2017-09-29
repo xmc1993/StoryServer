@@ -78,5 +78,10 @@ public class DailyServiceImpl implements DailyService {
         return saveDaily(daily);
     }
 
+    @Override
+    public boolean newRead(int id) {
+        return dailyDao.newRead(id);
+    }
+
 
 }

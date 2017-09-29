@@ -11,6 +11,7 @@
         visibility,
         deleted,
         draft,
+        readCount,
         createTime,
         updateTime
     </sql>
@@ -30,6 +31,7 @@
         #{visibility},
         #{deleted},
         #{draft},
+        #{readCount},
         #{createTime},
         #{updateTime}
         )
@@ -44,6 +46,13 @@
         visibility=#{visibility},
         updateTime=#{updateTime}
         WHERE id = #{id}
+    </update>
+
+    <update id="newRead">
+        UPDATE daily
+        SET
+        readCount = readCount+1
+        WHERE id = #{0} and deleted = 0
     </update>
 
     <update id="deleteDaily">

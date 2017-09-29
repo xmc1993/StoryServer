@@ -41,15 +41,15 @@ public class UserStoryServiceImpl implements UserStoryService {
     }
 
     @Override
-    public List<UserStory> getAllUserStoryByUserIdByPage(int userId, int page, int pageSize) {
+    public List<UserStory> getAllUserStoryByUserIdByPage(int userId, int visibility, int page, int pageSize) {
         int offset = page * pageSize;
         int limit = pageSize;
-        return userStoryDao.getAllUserStoryByUserIdByPage(userId, offset, limit);
+        return userStoryDao.getAllUserStoryByUserIdByPage(userId, visibility, offset, limit);
     }
 
     @Override
-    public int getUserStoryCountByUserId(int userId) {
-        return userStoryDao.getUserStoryCountByUserId(userId);
+    public int getUserStoryCountByUserId(int userId, int visibility) {
+        return userStoryDao.getUserStoryCountByUserId(userId, visibility);
     }
 
 }

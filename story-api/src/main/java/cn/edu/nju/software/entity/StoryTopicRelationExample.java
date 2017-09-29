@@ -464,6 +464,66 @@ public class StoryTopicRelationExample {
             addCriterion("updateTime not between", value1, value2, "updatetime");
             return (Criteria) this;
         }
+
+        public Criteria andMyorderIsNull() {
+            addCriterion("myOrder is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMyorderIsNotNull() {
+            addCriterion("myOrder is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMyorderEqualTo(Integer value) {
+            addCriterion("myOrder =", value, "myorder");
+            return (Criteria) this;
+        }
+
+        public Criteria andMyorderNotEqualTo(Integer value) {
+            addCriterion("myOrder <>", value, "myorder");
+            return (Criteria) this;
+        }
+
+        public Criteria andMyorderGreaterThan(Integer value) {
+            addCriterion("myOrder >", value, "myorder");
+            return (Criteria) this;
+        }
+
+        public Criteria andMyorderGreaterThanOrEqualTo(Integer value) {
+            addCriterion("myOrder >=", value, "myorder");
+            return (Criteria) this;
+        }
+
+        public Criteria andMyorderLessThan(Integer value) {
+            addCriterion("myOrder <", value, "myorder");
+            return (Criteria) this;
+        }
+
+        public Criteria andMyorderLessThanOrEqualTo(Integer value) {
+            addCriterion("myOrder <=", value, "myorder");
+            return (Criteria) this;
+        }
+
+        public Criteria andMyorderIn(List<Integer> values) {
+            addCriterion("myOrder in", values, "myorder");
+            return (Criteria) this;
+        }
+
+        public Criteria andMyorderNotIn(List<Integer> values) {
+            addCriterion("myOrder not in", values, "myorder");
+            return (Criteria) this;
+        }
+
+        public Criteria andMyorderBetween(Integer value1, Integer value2) {
+            addCriterion("myOrder between", value1, value2, "myorder");
+            return (Criteria) this;
+        }
+
+        public Criteria andMyorderNotBetween(Integer value1, Integer value2) {
+            addCriterion("myOrder not between", value1, value2, "myorder");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

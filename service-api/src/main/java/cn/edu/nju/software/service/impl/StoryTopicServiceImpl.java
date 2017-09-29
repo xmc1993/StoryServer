@@ -40,6 +40,8 @@ public class StoryTopicServiceImpl implements StoryTopicServcie {
         //通过criteria构造查询条件
 		StoryTopicExample.Criteria criteria = storyTopicExample.createCriteria();
         criteria.andValidEqualTo(1);
+        //根据更新时间逆序排
+		storyTopicExample.setOrderByClause("updatetime desc");
         //数据库中有大文本文件 查询使用这个方法，selectByExampleWithBLOBs
         List<StoryTopic> list = storyTopicMapper.selectByExampleWithBLOBs(storyTopicExample);
         PageInfo<StoryTopic> pageInfo=new PageInfo<>(list);
@@ -57,6 +59,7 @@ public class StoryTopicServiceImpl implements StoryTopicServcie {
 		StoryTopicExample.Criteria criteria = storyTopicExample.createCriteria();
         criteria.andIsshowEqualTo(1);
         //数据库中有大文本文件 查询使用这个方法，selectByExampleWithBLOBs
+        storyTopicExample.setOrderByClause("updatetime desc");
         List<StoryTopic> list = storyTopicMapper.selectByExampleWithBLOBs(storyTopicExample);
 		return list;
 	}
@@ -71,6 +74,7 @@ public class StoryTopicServiceImpl implements StoryTopicServcie {
 		StoryTopicRelationExample storyTopicRelationExample=new StoryTopicRelationExample();
 		StoryTopicRelationExample.Criteria criteria = storyTopicRelationExample.createCriteria();
 		criteria.andStorytopicidEqualTo(storyTopicId);
+		storyTopicRelationExample.setOrderByClause("myOrder asc");
 		List<StoryTopicRelation> list=storyTopicRelationMapper.selectByExample(storyTopicRelationExample);
 		return list;
 	}
@@ -105,6 +109,11 @@ public class StoryTopicServiceImpl implements StoryTopicServcie {
 		criteria.andStorytopicidEqualTo(storyTopicId);
 		criteria.andStoryidEqualTo(storyId);
 		return storyTopicRelationMapper.deleteByExample(storyTopicRelationExample);
+	}
+
+	@Override
+	public int updateStoryTopicWithoutContent(StoryTopic storyTopic) {
+		return storyTopicMapper.updateByPrimaryKey(storyTopic);
 	}
 
 
