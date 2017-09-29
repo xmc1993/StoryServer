@@ -15,6 +15,8 @@ public class StoryTopicRelation {
 
     private Date updatetime;
 
+    private Integer myorder;
+
     public Integer getId() {
         return id;
     }
@@ -23,21 +25,6 @@ public class StoryTopicRelation {
         this.id = id;
     }
 
-    public Integer getstorytopicId() {
-        return storytopicId;
-    }
-
-    public void setstorytopicId(Integer storytopicId) {
-        this.storytopicId = storytopicId;
-    }
-
-    public Integer getstoryId() {
-        return storyId;
-    }
-
-    public void setstoryId(Integer storyId) {
-        this.storyId = storyId;
-    }
 
     public Integer getValid() {
         return valid;
@@ -62,4 +49,28 @@ public class StoryTopicRelation {
     public void setUpdatetime(Date updatetime) {
         this.updatetime = updatetime;
     }
+
+    public Integer getMyorder() {
+        return myorder;
+    }
+
+    public void setMyorder(Integer myorder) {
+        this.myorder = myorder;
+    }
+
+	public Integer getstorytopicId() {
+		return storytopicId;
+	}
+
+	public void setstorytopicId(Integer storyTopicId) {
+		this.storytopicId = storyTopicId;
+	}
+
+	public Integer getstoryId() {
+		return storyId;
+	}
+
+	public void setstoryId(Integer storyId) {
+		this.storyId = storyId;
+	}
 }

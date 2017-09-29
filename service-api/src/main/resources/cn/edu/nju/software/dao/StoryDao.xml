@@ -645,5 +645,12 @@
         order by story.tellCount DESC, story.likeCount DESC
         limit #{offset},#{limit}
     </select>
+    
+    <select id="getStoryListByReadLog" resultType="cn.edu.nju.software.entity.Story">
+        select
+        <include refid="fields"></include>
+        from story
+        where valid = 1 and recommend = 1 and isSet = 0
+    </select>
 
 </mapper>

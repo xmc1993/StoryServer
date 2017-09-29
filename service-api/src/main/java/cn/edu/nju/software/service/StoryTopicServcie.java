@@ -31,4 +31,6 @@ public interface StoryTopicServcie {
 	int saveStoryTopicRelation(StoryTopicRelation storyTopicRelation);
 	
 	int deleteStoryForStoryTopic(Integer storyTopicId,Integer storyId);
+	
+	int updateStoryTopicWithoutContent(StoryTopic storyTopic);
 }

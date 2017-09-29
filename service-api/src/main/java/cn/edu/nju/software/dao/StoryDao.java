@@ -125,5 +125,7 @@ public interface StoryDao {
 
     Integer getStoryCountBySecondLevelTagId(
             @Param("tagId")Integer tagId);
+    
+    List<Story> getStoryListByReadLog();
 
 }

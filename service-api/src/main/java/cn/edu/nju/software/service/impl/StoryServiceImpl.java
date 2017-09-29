@@ -390,4 +390,11 @@ public class StoryServiceImpl implements StoryService {
         int limit = pageSize;
         return storyDao.getPopularOriginalStoryListByPage(offset, limit);
     }
+
+	@Override
+	public List<Story> getStoryListByReadLog(Integer storyId) {
+		//这里先传假数据
+		List<Story> list=storyDao.getStoryListByReadLog();
+		return list;
+	}
 }

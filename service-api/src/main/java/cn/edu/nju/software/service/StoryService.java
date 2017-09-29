@@ -104,5 +104,7 @@ public interface StoryService {
             Integer tagId);
 
     List<Story> getPopularOriginalStoryListByPage(Integer page,  int pageSize);
+    
+    List<Story> getStoryListByReadLog(Integer storyId);
 
 }
