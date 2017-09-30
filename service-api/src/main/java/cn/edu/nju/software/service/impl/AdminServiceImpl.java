@@ -49,4 +49,9 @@ public class AdminServiceImpl implements AdminService {
         int limit = pageSize;
         return adminDao.getAdminListByPage(offset, limit);
     }
+
+	@Override
+	public int getAdminCount() {
+		return adminDao.getAdminCount();
+	}
 }

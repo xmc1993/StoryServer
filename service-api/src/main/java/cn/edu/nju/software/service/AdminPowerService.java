@@ -20,5 +20,7 @@ public interface AdminPowerService {
     List<AdminPower> getAdminPowerListByAdminId(int id);
 
     List<Integer> getAdminPowerCodeListByAdminId(int id);
+    
+    List<AdminPower> getAdminPowerListByAdminId(int id,int page,int pageSize);
 
 }

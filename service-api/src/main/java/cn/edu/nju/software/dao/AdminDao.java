@@ -23,4 +23,6 @@ public interface AdminDao {
     boolean deleteAdmin(int id);
 
     List<Admin> getAdminListByPage(int limit, int offset);
+    
+    int getAdminCount();
 }

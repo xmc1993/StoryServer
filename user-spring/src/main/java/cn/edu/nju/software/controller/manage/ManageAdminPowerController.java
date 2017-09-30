@@ -89,17 +89,19 @@ public class ManageAdminPowerController {
         }
     }
 
+
     @RequiredPermissions({4,15})
     @ApiOperation(value = "分页获得后台用户权限", notes = "")
     @RequestMapping(value = "/getAdminPowerListByPage", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<AdminPower>> getAdminPowerListByPage(
             @ApiParam("后台用户id") @RequestParam int id,
+            @ApiParam("PAGE") @RequestParam int page,
+            @ApiParam("SIZE") @RequestParam int pageSize,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<AdminPower>> responseData = new ResponseData<>();
-        List<AdminPower> adminPowerList = adminPowerService.getAdminPowerListByAdminId(id);
+        List<AdminPower> adminPowerList = adminPowerService.getAdminPowerListByAdminId(id,page,pageSize);
         responseData.jsonFill(1, null, adminPowerList);
         return responseData;
     }
-
 }

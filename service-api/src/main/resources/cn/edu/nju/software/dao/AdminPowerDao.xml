@@ -49,4 +49,11 @@
         WHERE id = #{0}
     </select>
 
+	 <select id="getAdminPowerListByAdminId" resultType="cn.edu.nju.software.entity.AdminPower">
+        select
+        <include refid="fields"></include>
+        from admin_power
+        where adminId = #{0}
+        limit #{1},#{2}
+    </select>
 </mapper>

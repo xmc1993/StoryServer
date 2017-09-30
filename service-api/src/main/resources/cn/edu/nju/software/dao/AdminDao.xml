@@ -75,6 +75,12 @@
         expireTime=#{expireTime}
         WHERE username = #{username}
     </update>
+    
+    <select id="getAdminCount" resultType="java.lang.Integer">
+        select
+        count(*)
+        from admin
+    </select>
 
 
 </mapper>

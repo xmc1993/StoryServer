@@ -81,4 +81,11 @@ public class AdminPowerServiceImpl implements AdminPowerService {
         }
 
     }
+
+    @Override
+    public List<AdminPower> getAdminPowerListByAdminId(int id,int page,int pageSize) {
+        int offset = (page-1)*pageSize;
+        int limit = pageSize;
+        return adminPowerDao.getAdminPowerListByAdminId(id,offset, limit);
+    }
 }

@@ -396,7 +396,7 @@ public class UserWorksController extends BaseController {
             feed.setContent(new Gson().toJson(msgVo));
             feed.setMid(res.getId());
             feed.setType(MessageType.NEW_WORKS);
-            messageFeedService.feedFollowers(feed, user.getId(), false);
+            messageFeedService.feedFollowers(feed, user.getId(), true);
         }
 
 

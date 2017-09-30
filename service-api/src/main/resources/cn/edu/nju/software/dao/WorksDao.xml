@@ -196,7 +196,7 @@
         set
         headImgUrl=#{1}
         where
-        userId = #{0}
+        userId = #{0} and valid =1
     </update>
     <update id="setDelReviewCount">
         update works
