@@ -62,7 +62,7 @@
         <include refid="fields"></include>
         from story
         WHERE userId = #{0} and valid = 1 and ((visibility &amp; #{1}) &gt; 0)
-        limit #{1},#{2}
+        limit #{2},#{3}
     </select>
 
     <select id="getUserStoryCountByUserId" resultType="java.lang.Integer">
