@@ -153,6 +153,7 @@ public class AdminController {
 		ResponseData<List<Admin>> responseData = new ResponseData<>();
 		List<Admin> adminList = adminService.getAdminListByPage(page, pageSize);
 		responseData.jsonFill(1, null, adminList);
+		responseData.setCount(adminService.getAdminCount());
 		return responseData;
 	}
 }

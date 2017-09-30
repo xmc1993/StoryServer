@@ -1,5 +1,6 @@
 package cn.edu.nju.software.controller.user;
 
+import cn.edu.nju.software.entity.Baby;
 import cn.edu.nju.software.entity.FollowRelation;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.User;
@@ -125,8 +126,13 @@ public class UserFollowController {
 			// 需求改动：需要返回粉丝的第一个宝宝(write by zs)
 			UserBaseFollowBabyVo userBaseFollowBabyVo = new UserBaseFollowBabyVo();
 			BeanUtils.copyProperties(userBaseFollowVo, userBaseFollowBabyVo);
-			userBaseFollowBabyVo.setBaby(babyService.getBabyListByParentId(user.getId()).get(0));
-			result.add(userBaseFollowBabyVo);
+			List<Baby> babyList = babyService.getBabyListByParentId(user.getId());
+			if (babyList == null || babyList.isEmpty()) {
+				result.add(userBaseFollowBabyVo);
+			} else {
+				userBaseFollowBabyVo.setBaby(babyList.get(0));
+				result.add(userBaseFollowBabyVo);
+			}
 		}
 		responseData.jsonFill(1, null, result);
 		responseData.setCount(followService.getUserFollowerCountByUserId(userId));
@@ -160,8 +166,13 @@ public class UserFollowController {
 			// 需求改动：需要返回关注的人的第一个宝宝(write by zs)
 			UserBaseFollowBabyVo userBaseFollowBabyVo = new UserBaseFollowBabyVo();
 			BeanUtils.copyProperties(userBaseFollowVo, userBaseFollowBabyVo);
-			userBaseFollowBabyVo.setBaby(babyService.getBabyListByParentId(user.getId()).get(0));
-			result.add(userBaseFollowBabyVo);
+			List<Baby> babyList = babyService.getBabyListByParentId(user.getId());
+			if (babyList == null || babyList.isEmpty()) {
+				result.add(userBaseFollowBabyVo);
+			} else {
+				userBaseFollowBabyVo.setBaby(babyList.get(0));
+				result.add(userBaseFollowBabyVo);
+			}
 		}
 		responseData.jsonFill(1, null, result);
 		responseData.setCount(followService.getUserFolloweeCountByUserId(userId));

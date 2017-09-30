@@ -58,7 +58,7 @@ public class UserReadPlanController extends BaseController {
 	@Autowired
 	StoryTagService storyTagService;
 	@Autowired
-	WorksService worksService ;
+	WorksService worksService;
 	@Autowired
 	StoryService storyService;
 
@@ -93,8 +93,9 @@ public class UserReadPlanController extends BaseController {
 	@ApiOperation(value = "根据阅读计划id查询故事组")
 	@RequestMapping(value = "/getStoryGroupByPlanId", method = { RequestMethod.GET })
 	@ResponseBody
-	public ResponseData<List<StoryNewWorksVo>> getStoryGroupByPlanId(@ApiParam("阅读计划id") @RequestParam Integer ReadingPlanId,
-			HttpServletRequest request, HttpServletResponse response) {
+	public ResponseData<List<StoryNewWorksVo>> getStoryGroupByPlanId(
+			@ApiParam("阅读计划id") @RequestParam Integer ReadingPlanId, HttpServletRequest request,
+			HttpServletResponse response) {
 		ResponseData<List<StoryNewWorksVo>> responseData = new ResponseData<>();
 		User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
 		if (user == null) {
@@ -106,7 +107,7 @@ public class UserReadPlanController extends BaseController {
 		List<StoryNewWorksVo> storyNewWorksVoList = new ArrayList<StoryNewWorksVo>();
 		for (ReadingPlanStoryGroup readingPlanStoryGroup : list) {
 			Story story = storyService.getStoryById(readingPlanStoryGroup.getStoryid());
-			StoryNewWorksVo storyNewWorksVo=new StoryNewWorksVo();
+			StoryNewWorksVo storyNewWorksVo = new StoryNewWorksVo();
 			storyNewWorksVo = story2Vo(story, user.getId());
 			storyNewWorksVoList.add(storyNewWorksVo);
 		}
@@ -124,6 +125,8 @@ public class UserReadPlanController extends BaseController {
 	// 3-4岁：1460天
 	// 4-5岁：1825天
 	// 5-6岁：2190天
+	// 当宝宝年龄大于6岁时，小于7岁时，阅读计划给他返回 5-6岁的阅读计划
+	// 还未出生的宝宝给他返回0-2岁的阅读计划
 	private List<ReadingPlan> getBabyReadPlan(Baby baby) {
 		// 获取当前时间
 		Date currentTime = new Date();
@@ -137,7 +140,7 @@ public class UserReadPlanController extends BaseController {
 		// 计算天数
 		long days = 0;
 		days = getDays(babyBirthday, dateString);
-		if (days <= 730) {			
+		if (days <= 730) {
 			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("0-2岁", timePoint);
 			return list;
 		} else if (days <= 1095 && days > 730) {
@@ -150,6 +153,9 @@ public class UserReadPlanController extends BaseController {
 			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("4-5岁", timePoint);
 			return list;
 		} else if (days <= 2190 && days > 1825) {
+			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("5-6岁", timePoint);
+			return list;
+		} else if (days <= 2555 && days > 2190) {
 			List<ReadingPlan> list = readPlanService.getReadingPlanByTime("5-6岁", timePoint);
 			return list;
 		}

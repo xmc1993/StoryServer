@@ -3,6 +3,7 @@ package cn.edu.nju.software.controller.user;
 import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.User;
+import cn.edu.nju.software.service.WorksService;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.JedisUtil;
@@ -47,6 +48,8 @@ public class UploadFileController extends BaseController {
 
 	@Autowired
 	private AppUserService userService;
+	@Autowired
+	private WorksService worksService;
 
 	@ApiOperation(value = "上传头像", notes = "上传头像")
     @RequestMapping(value = "/updateHeadImg", method = {RequestMethod.POST})
@@ -100,6 +103,9 @@ public class UploadFileController extends BaseController {
             responseData.jsonFill(2, "更新失败", null);
             return responseData;
         }
+        
+        //更新work数据库表中的HeadImgUrl字段
+        worksService.updateHeadImg(user.getId(),url);
 
         //删除旧的头像
         UploadFileUtil.deleteFileByUrl(oldHeadImgUrl);

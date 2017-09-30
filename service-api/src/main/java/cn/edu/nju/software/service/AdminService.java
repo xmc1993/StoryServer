@@ -20,5 +20,7 @@ public interface AdminService {
     boolean deleteAdmin(int id);
 
     List<Admin> getAdminListByPage(int page, int pageSize);
+    
+    int getAdminCount();
 
 }
