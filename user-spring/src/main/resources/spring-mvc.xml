@@ -74,7 +74,7 @@
         <property name="validationMessageSource" ref="messageSource"/>
     </bean>
 
-    <!--<mvc:resources mapping="/**" location="/WEB-INF/"/>-->
+    <mvc:resources mapping="/**" location="/WEB-INF/home/"/>
     <mvc:resources mapping="/swagger/**" location="/WEB-INF/swagger/**"/>
 
     <mvc:interceptors>
