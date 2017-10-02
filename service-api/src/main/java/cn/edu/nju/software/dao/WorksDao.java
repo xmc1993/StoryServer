@@ -70,4 +70,8 @@ public interface WorksDao {
     List<Integer> getUserIdListByStoryId(Integer storyId);
     
     List<Integer> getStoryIdListByUserId(Integer userId);
+
+    boolean newLike(int id);
+
+    boolean cancelLike(int id);
 }

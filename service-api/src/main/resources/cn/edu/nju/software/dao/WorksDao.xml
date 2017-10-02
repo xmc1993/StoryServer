@@ -304,4 +304,16 @@
         select count(id) from works where user_id=#{0} and createTime &gt; #{1}
     </select>
 
+    <update id="newLike">
+      update works
+      set likeCount = likeCount+1
+      where id=#{0} and valid=1
+    </update>
+
+    <update id="cancelLike">
+      update works
+      set likeCount = likeCount-1
+      where id=#{0} and valid=1
+    </update>
+
 </mapper>

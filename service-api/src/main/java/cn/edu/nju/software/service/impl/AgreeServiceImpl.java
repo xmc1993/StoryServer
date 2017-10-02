@@ -33,6 +33,7 @@ public class AgreeServiceImpl implements AgreeService {
         boolean res2 = false;
         if (res1) {
             res2 = appUserDao.newLike(agree.getUserId());
+            worksDao.newLike(agree.getWorksId());
         }
         return res1 && res2;
     }
@@ -43,6 +44,7 @@ public class AgreeServiceImpl implements AgreeService {
         boolean res2 = false;
         if (res1) {
             res2 = appUserDao.removeLike(userId);
+            worksDao.cancelLike(worksId);
         }
         return res1 && res2;
     }
