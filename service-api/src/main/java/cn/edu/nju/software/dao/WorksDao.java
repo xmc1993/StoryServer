@@ -66,4 +66,8 @@ public interface WorksDao {
     Integer getUserIdByWorkId(int worksId);
 
     Integer getWorksAfterSomeDate(Integer userId, String date);
+
+    boolean newLike(int id);
+
+    boolean cancelLike(int id);
 }
