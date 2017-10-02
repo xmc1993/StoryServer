@@ -542,6 +542,20 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 			<version>1.0-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
+		
+		<!-- 阿里短信服务的jar -->
+		<dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>3.2.3</version>
+            <scope>compile</scope>
+        </dependency>
+        
+		<dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
 	</dependencies>
 </project>

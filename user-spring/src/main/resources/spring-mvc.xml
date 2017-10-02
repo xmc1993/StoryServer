@@ -131,6 +131,7 @@
             <mvc:mapping path="/user/submitIndividuationAnswer"/>
             <mvc:mapping path="/user/saveStoryUserLog"/>
             <mvc:mapping path="/user/getStoryListByBaby"/>
+            <mvc:mapping path="/user/getMostPopularStoryByPage"/>
             <mvc:mapping path="/user/newUsage"/>
             <mvc:mapping path="/user/getUseRunningDays"/>
             <mvc:mapping path="/user/getUseHistoryMaxRunningDays"/>
@@ -147,6 +148,7 @@
 
             <mvc:mapping path="/user/getStoryRoleAudioByUserIdAndRoleId"/>
             <mvc:mapping path="/user/getReadPlanByUser"/>
+            <mvc:mapping path="/user/saveBabyRead"/>
 			<mvc:mapping path="/user/getStoryGroupByPlanId"/>
 			<mvc:mapping path="/user/uploadBabyReadAudioFile"/>
 			<mvc:mapping path="/user/refreshToken"/>
