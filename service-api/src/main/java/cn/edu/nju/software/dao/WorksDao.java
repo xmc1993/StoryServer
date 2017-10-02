@@ -66,4 +66,8 @@ public interface WorksDao {
     Integer getUserIdByWorkId(int worksId);
 
     Integer getWorksAfterSomeDate(Integer userId, String date);
+    
+    List<Integer> getUserIdListByStoryId(Integer storyId);
+    
+    List<Integer> getStoryIdListByUserId(Integer userId);
 }

@@ -423,8 +423,12 @@ public class UserStoryController extends BaseController {
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<List<Story>> responseData = new ResponseData<>();
 		List<Story> storyList = storyService.getStoryListByReadLog(storyId);
-		List<Story> list = storyList.subList(0, 5);
-		responseData.jsonFill(1, null, list);
+		if (storyList.size()>=5) {
+			List<Story> list = storyList.subList(0, 5);
+			responseData.jsonFill(1, null, list);
+			return responseData;
+		}
+		responseData.jsonFill(1, null, storyList);
 		return responseData;
 	}
 

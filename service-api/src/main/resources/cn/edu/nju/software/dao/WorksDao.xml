@@ -156,6 +156,21 @@
         order by likeCount desc
         limit #{1},#{2}
     </select>
+    
+    <select id="getUserIdListByStoryId" resultType="java.lang.Integer">
+        select
+        userId
+        from works
+        where storyId = #{0} and valid = 1
+        order by likeCount desc
+    </select>
+    
+    <select id="getStoryIdListByUserId" resultType="java.lang.Integer">
+        select
+        DISTINCT storyId
+        from works
+        where userId = #{0} and valid = 1
+    </select>
 
     <select id="getWorksListByUserId" resultType="cn.edu.nju.software.entity.Works">
         select

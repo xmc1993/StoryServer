@@ -42,4 +42,8 @@ public interface AppUserService {
     boolean updateUserWorkCount(Integer workCount,Integer userId);
 
     boolean updateListenCountByUserId(Integer id);
+    
+    boolean deleteUserById(int id);
+    
+    boolean recoverUserById(int id);
 }

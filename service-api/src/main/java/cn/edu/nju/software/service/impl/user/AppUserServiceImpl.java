@@ -172,5 +172,14 @@ public class AppUserServiceImpl implements AppUserService {
     public boolean updateListenCountByUserId(Integer id) {
         return userDao.updateListenCountByUserId(id);
     }
+	@Override
+	public boolean deleteUserById(int id) {
+		return userDao.deleteUserById(id);
+	}
+	
+	@Override
+	public boolean recoverUserById(int id) {
+		return userDao.recoverUserById(id);
+	}
 
 }
