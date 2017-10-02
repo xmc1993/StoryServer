@@ -279,7 +279,6 @@ public class UserUserController extends BaseController {
 	public ResponseData<LoginResponseVo> loginByShortMessage(@ApiParam("用户手机号") @RequestParam("mobile") String mobile,
 			@ApiParam("短信验证码") @RequestParam("verifyCode") String verifyCode, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
-		Boolean isNewUser = false;
 		ResponseData responseData = new ResponseData();
 		User user = userService.getUserByMobile(mobile);
 		if (user == null) {
@@ -294,7 +293,7 @@ public class UserUserController extends BaseController {
 			if (verifyCode.equals(code)) {
 				// 0的话就是新用户
 				if (user.getValid()==0||user.getValid().equals(0)) {
-					isNewUser = true;
+					loginResponseVo.setIsNewUser(true);
 					user.setValid(1);
 				}
 				//验证成功恢复身份
@@ -303,7 +302,7 @@ public class UserUserController extends BaseController {
 				// 获取到用户信息
 				loginResponseVo.setAccessToken(user.getAccessToken());
 				loginResponseVo.setId(user.getId());
-				loginResponseVo.setIsNewUser(isNewUser);
+
 
 				// 登录信息写入缓存
 				JedisUtil.getJedis().set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
