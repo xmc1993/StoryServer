@@ -1,0 +1,8 @@
+.official-container {
+	width: 100vw;
+}
+
+.official-container > img {
+	width: 100vw;
+	object-fit: scale-down;
+}

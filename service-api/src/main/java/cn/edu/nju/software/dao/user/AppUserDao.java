@@ -71,6 +71,8 @@ public interface AppUserDao {
 
 	
 	boolean deleteUserById(int id);
+	
+	boolean recoverUserById(int id);
 
 	Integer getUserCount();
 }

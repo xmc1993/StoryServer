@@ -171,6 +171,8 @@ public class UserUserController extends BaseController {
 			user2.setUpdateTime(new Date());
 			user2.setValid(0);
 			user2 = userService.addOrUpdateUser(user2);
+			//先软删除，如果验证码正确，再恢复。
+			userService.deleteUserById(user2.getId());
 			responseData.jsonFill(1, null, user2);
 		} else {
 			Util.setNewAccessToken(user);
@@ -291,13 +293,13 @@ public class UserUserController extends BaseController {
 		if (dValue <= 900000L) {
 			if (verifyCode.equals(code)) {
 				// 0的话就是新用户
-				if (user.getValid()==0) {
+				if (user.getValid()==0||user.getValid().equals(0)) {
 					isNewUser = true;
 					user.setValid(1);
 				}
-				//0000表示验证码已经使用过了，对他进行失效处理
-				user.setVerifyCode("0000");
-				userService.addOrUpdateUser(user);
+				//验证成功恢复身份
+				userService.recoverUserById(user.getId());
+				
 				// 获取到用户信息
 				loginResponseVo.setAccessToken(user.getAccessToken());
 				loginResponseVo.setId(user.getId());

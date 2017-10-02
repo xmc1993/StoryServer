@@ -26,8 +26,7 @@
 		likeCount,
 		deviceId,
 		listenedCount,
-		likeStoryCount,
-		valid
+		likeStoryCount
 	</sql>
 
 	<sql id="baseFields">
@@ -117,7 +116,6 @@
 		#{deviceId},
 		#{listenedCount},
 		#{likeStoryCount}
-		#{valid}
 		)
 	</insert>
 
@@ -235,6 +233,14 @@
 		id=#{0}
 	</update>
 
+	<update id="recoverUserById">
+		update user
+		set
+		valid=1
+		where
+		id=#{0}
+	</update>
+	
 	<delete id="deleteUser">
 		DELETE FROM user WHERE id = #{0}
 	</delete>
