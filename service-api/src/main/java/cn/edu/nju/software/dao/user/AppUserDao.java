@@ -75,4 +75,8 @@ public interface AppUserDao {
 	boolean recoverUserById(int id);
 
 	Integer getUserCount();
+
+	String getTotalRecordTime(int id);
+
+	boolean updateTotalRecordTime(int id, String time);
 }

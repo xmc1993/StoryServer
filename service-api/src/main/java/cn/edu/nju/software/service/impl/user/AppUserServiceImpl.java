@@ -1,6 +1,7 @@
 package cn.edu.nju.software.service.impl.user;
 
 import cn.edu.nju.software.dao.user.AppUserDao;
+import cn.edu.nju.software.dto.TimeVo;
 import cn.edu.nju.software.entity.TwoTuple;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.entity.UserBase;
@@ -181,5 +182,26 @@ public class AppUserServiceImpl implements AppUserService {
 	public boolean recoverUserById(int id) {
 		return userDao.recoverUserById(id);
 	}
+
+    @Override
+    public String getTotalRecordTime(int id) {
+        return userDao.getTotalRecordTime(id);
+    }
+
+    @Override
+    public boolean updateTotalRecordTime(int id, String time) {
+        return userDao.updateTotalRecordTime(id, time);
+    }
+
+    @Override
+    public boolean updateTotalRecordTime(int id, String gap, boolean increase) {
+        TimeVo timeVo = new TimeVo(getTotalRecordTime(id));
+        if (increase){
+            timeVo.increase(gap);
+        }else {
+            timeVo.reduce(gap);
+        }
+        return updateTotalRecordTime(id, timeVo.toString());
+    }
 
 }
