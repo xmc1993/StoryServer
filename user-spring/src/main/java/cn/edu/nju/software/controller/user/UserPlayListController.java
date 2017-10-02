@@ -120,6 +120,16 @@ public class UserPlayListController extends BaseController {
             responseData.jsonFill(2, "用户尚未登录。", null);
             return responseData;
         }
+        if (playListId == 0) {
+            Agree agree = new Agree();
+            agree.setCreateTime(new Date());
+            agree.setUpdateTime(new Date());
+            agree.setWorksId(worksId);
+            agree.setUserId(user.getId());
+            boolean res = agreeService.addAgree(agree);
+            responseData.jsonFill(res ? 1 : 2, null, res);
+            return responseData;
+        }
         //TODO 做一些校验
         PlayListRelation playListRelation = new PlayListRelation();
         playListRelation.setCreateTime(new Date());

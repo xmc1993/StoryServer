@@ -154,6 +154,9 @@
 			<mvc:mapping path="/user/refreshToken"/>
 			<mvc:mapping path="/user/getPopularOriginalStoryListByPage"/>
 
+			<mvc:mapping path="/user/getListenCount"/>
+			<mvc:mapping path="/user/getTotalRecordTime"/>
+
             <!-- 不需要拦截的uri -->
             <!--
             <mvc:exclude-mapping path="/user/getLandingPage"/>

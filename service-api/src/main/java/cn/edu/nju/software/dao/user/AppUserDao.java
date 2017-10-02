@@ -79,4 +79,5 @@ public interface AppUserDao {
 	String getTotalRecordTime(int id);
 
 	boolean updateTotalRecordTime(int id, String time);
+
 }

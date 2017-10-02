@@ -53,4 +53,7 @@ public interface AppUserService {
 
     boolean updateTotalRecordTime(int id, String gap, boolean increase);
 
+    Integer getListenCount(int userId);
+
+
 }

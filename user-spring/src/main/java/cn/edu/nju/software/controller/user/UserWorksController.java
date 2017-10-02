@@ -613,10 +613,10 @@ public class UserWorksController extends BaseController {
 
 
 	@ApiOperation(value = "获得总的录制时长", notes = "需登录")
-	@RequestMapping(value = "/getTotalRecordTime", method = { RequestMethod.POST })
-	@ResponseBody
-	public ResponseData<String> getTotalRecordTime(
-										   HttpServletRequest request, HttpServletResponse response) {
+		 @RequestMapping(value = "/getTotalRecordTime", method = { RequestMethod.GET })
+		 @ResponseBody
+		 public ResponseData<String> getTotalRecordTime(
+			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<String> responseData = new ResponseData();
 		User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
 		if (user == null) {
@@ -627,6 +627,24 @@ public class UserWorksController extends BaseController {
 
 		String totalRecordTime = appUserService.getTotalRecordTime(user.getId());
 		responseData.jsonFill(1, null, totalRecordTime);
+		return responseData;
+	}
+
+	@ApiOperation(value = "获得收听数", notes = "需登录")
+	@RequestMapping(value = "/getListenCount", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<Integer> getListenCount(
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<Integer> responseData = new ResponseData();
+		User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+		if (user == null) {
+			responseData.jsonFill(2, "请先登录", null);
+			response.setStatus(401);
+			return responseData;
+		}
+
+		Integer listenCount = appUserService.getListenCount(user.getId());
+		responseData.jsonFill(1, null, listenCount);
 		return responseData;
 	}
 

@@ -204,4 +204,9 @@ public class AppUserServiceImpl implements AppUserService {
         return updateTotalRecordTime(id, timeVo.toString());
     }
 
+    @Override
+    public Integer getListenCount(int userId) {
+        return userDao.getListenCount(userId);
+    }
+
 }
