@@ -2,18 +2,10 @@ package cn.edu.nju.software.feed.service.impl;
 
 import cn.edu.nju.software.dao.FeedDao;
 import cn.edu.nju.software.dto.MsgVo;
-import cn.edu.nju.software.entity.BabyRead;
-import cn.edu.nju.software.entity.Daily;
-import cn.edu.nju.software.entity.Feed;
-import cn.edu.nju.software.entity.SystemNotice;
-import cn.edu.nju.software.entity.Works;
+import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.entity.feed.MessageType;
 import cn.edu.nju.software.feed.service.MessageFeedService;
-import cn.edu.nju.software.service.BabyReadService;
-import cn.edu.nju.software.service.DailyService;
-import cn.edu.nju.software.service.FollowService;
-import cn.edu.nju.software.service.SystemNoticeService;
-import cn.edu.nju.software.service.WorksService;
+import cn.edu.nju.software.service.*;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +30,8 @@ public class MessageFeedServiceImpl implements MessageFeedService{
     private SystemNoticeService systemNoticeService;
     @Autowired
     private BabyReadService babyReadService;
+    @Autowired
+    private StoryService storyService;
 
     @Override
     public List<Feed> getDisplayFeedsByPage(int userId, int page, int pageSize) {
@@ -72,6 +66,10 @@ public class MessageFeedServiceImpl implements MessageFeedService{
             	 BabyRead babyRead=babyReadService.selectBabyReadById(feed.getMid());
             	 msgVo.setData(babyRead);
             	 break;
+            case NEW_FRIEND_STORY:
+                Story story = storyService.getStoryById(feed.getId());
+                msgVo.setData(story);
+                break;
             default:
                 return feed;
         }

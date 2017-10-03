@@ -1,14 +1,16 @@
 package cn.edu.nju.software.controller.user;
 
 import cn.edu.nju.software.controller.BaseController;
-import cn.edu.nju.software.entity.ResponseData;
-import cn.edu.nju.software.entity.TagRelation;
-import cn.edu.nju.software.entity.User;
-import cn.edu.nju.software.entity.UserStory;
+import cn.edu.nju.software.dto.MsgVo;
+import cn.edu.nju.software.entity.*;
+import cn.edu.nju.software.entity.feed.MessageType;
+import cn.edu.nju.software.enums.Visibility;
+import cn.edu.nju.software.feed.service.MessageFeedService;
 import cn.edu.nju.software.service.FollowService;
 import cn.edu.nju.software.service.TagRelationService;
 import cn.edu.nju.software.service.UserStoryService;
 import cn.edu.nju.software.util.TokenConfig;
+import com.google.gson.Gson;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -39,6 +41,8 @@ public class UserOriginalStoryController extends BaseController {
     private TagRelationService tagRelationService;
     @Autowired
     private FollowService followService;
+    @Autowired
+    private MessageFeedService messageFeedService;
 
     @ApiOperation(value = "获得一个用户的所有原创故事", notes = "")
     @RequestMapping(value = "/getAllUserStoryByUserIdByPage", method = {RequestMethod.GET})
@@ -90,8 +94,24 @@ public class UserOriginalStoryController extends BaseController {
             responseData.jsonFill(2, "发布失败", null);
             return responseData;
         }
+        MsgVo msgVo = new MsgVo();
+        msgVo.setUserId(user.getId());
+        msgVo.setHeadImgUrl(user.getHeadImgUrl());
+        msgVo.setUserName(user.getNickname());
+        Feed feed = new Feed();
+        feed.setCreateTime(new Date());
+        feed.setUpdateTime(new Date());
+        feed.setFid(user.getId());
+        feed.setContent(new Gson().toJson(msgVo));
+        feed.setMid(result.getId());
+        feed.setType(MessageType.NEW_FRIEND_STORY);
         TagRelation tagRelation = new TagRelation();
         tagRelation.setStoryId(result.getId());
+        feed.setTid(user.getId());
+        messageFeedService.feed(feed);
+        if ((userStory.getVisibility() & Visibility.FOLLOWER) > 0){
+            messageFeedService.feedFollowers(feed, user.getId(), false);
+        }
         //添加原创故事的标签
         tagRelation.setTagId(100124);
         tagRelation.setCreateTime(new Date());
@@ -164,6 +184,9 @@ public class UserOriginalStoryController extends BaseController {
             return responseData;
         }
         boolean result = userStoryService.deleteUserStory(userStoryId);
+        if(result){
+            messageFeedService.unfeedFollowers(userStoryId, user.getId(), true);
+        }
         responseData.jsonFill(result ? 1 : 2, null, result);
         return responseData;
     }

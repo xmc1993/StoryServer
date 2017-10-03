@@ -223,7 +223,7 @@
         select
         <include refid="fields"></include>
         from story
-        where id = #{0} and valid = 1 and isSet = 0
+        where id = #{0} and valid = 1
     </select>
 
     <select id="getStoryByIdHard" resultType="cn.edu.nju.software.entity.Story">
