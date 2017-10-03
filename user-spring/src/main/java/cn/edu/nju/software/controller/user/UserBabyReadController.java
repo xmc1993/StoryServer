@@ -25,10 +25,12 @@ import cn.edu.nju.software.entity.BabyRead;
 import cn.edu.nju.software.entity.BabyReadInfo;
 import cn.edu.nju.software.entity.Feed;
 import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.entity.feed.MessageType;
 import cn.edu.nju.software.feed.service.MessageFeedService;
 import cn.edu.nju.software.service.BabyReadService;
+import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UploadFileUtil;
@@ -50,6 +52,8 @@ public class UserBabyReadController extends BaseController {
 	BabyReadService babyReadService;
 	@Autowired
 	MessageFeedService messageFeedService; 
+	@Autowired
+	StoryService storyService;
 	
 	@ApiOperation(value = "根据宝宝读的Id获取宝宝读内容", notes = "")
 	@RequestMapping(value = "/getBabyReadInfotById", method = { RequestMethod.GET })
@@ -72,6 +76,20 @@ public class UserBabyReadController extends BaseController {
 		responseData.jsonFill(1, null, babyReadInfo);
 		return responseData;
 	}
+	
+	@ApiOperation(value = "根据宝宝读Id获取故事内容", notes = "")
+	@RequestMapping(value = "/getStorytByBabyReadId", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<Story> getStorytByBabyReadId(@ApiParam("babyReadId") @RequestParam Integer babyReadId,
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<Story> responseData=new ResponseData<>(); 
+		BabyRead babyRead = babyReadService.selectBabyReadById(babyReadId);
+		BabyReadInfo babyReadInfo=babyReadService.selectReadInfoById(babyRead.getBabyreadinfoid());
+		Story story=storyService.getStoryById(babyReadInfo.getStoryid());
+		responseData.jsonFill(1, null, story);
+		return responseData;
+	}
+	
 	
 	@ApiOperation(value = "添加宝宝读的音频", notes = "需登录")
 	@RequestMapping(value = "/saveBabyRead", method = { RequestMethod.POST })
@@ -107,7 +125,7 @@ public class UserBabyReadController extends BaseController {
 	            feed.setContent(new Gson().toJson(msgVo));
 	            feed.setMid(res.getId());
 	            feed.setType(MessageType.NEW_BABYREAD);
-	            messageFeedService.feedFollowers(feed, user.getId(), false);
+	            messageFeedService.feedFollowers(feed, user.getId(), true);
 		}
 		responseData.jsonFill(1, null, babyRead);
 		return responseData;

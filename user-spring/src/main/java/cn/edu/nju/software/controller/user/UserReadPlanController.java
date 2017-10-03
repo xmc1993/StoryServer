@@ -77,7 +77,7 @@ public class UserReadPlanController extends BaseController {
 		Baby baby = babyService.getSelectedBaby(user.getId());
 		if (baby == null) {
 			List<Baby> babyList = babyService.getBabyListByParentId(user.getId());
-			if (babyList == null) {
+			if (babyList == null||babyList.isEmpty()) {
 				responseData.jsonFill(2, "用户没有宝宝或者用户不存在", null);
 				return responseData;
 			}
