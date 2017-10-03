@@ -1,7 +1,10 @@
 package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.dao.SoundEffectDao;
+import cn.edu.nju.software.dto.TimeVo;
 import cn.edu.nju.software.entity.SoundEffect;
+import cn.edu.nju.software.entity.Works;
+import cn.edu.nju.software.service.user.AppUserService;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -11,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by xmc1993 on 2017/5/14.
@@ -21,6 +24,49 @@ import java.util.Date;
 @ContextConfiguration(locations = {"classpath*:/test/context/config/spring-test.xml"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SoundEffectServiceTest {
+
+    @Autowired
+    private WorksService worksService;
+    @Autowired
+    private AppUserService appUserService;
+
+
+//    @Test
+    public void updateTime(){
+
+        appUserService.updateTotalRecordTime(25, "1'12\"", true);
+    }
+
+//    @Test
+    public void getTime() {
+        List<Works> works = worksService.getLatestWorksByPage(0, 999999);
+        Map<Integer, ArrayList<String>> map = new HashMap();
+        for (Works work : works) {
+            ArrayList<String> arr = map.get(work.getUserId());
+            if (arr == null) {
+                arr = new ArrayList<>();
+                map.put(work.getUserId(), arr);
+            }
+            arr.add(work.getDuration());
+        }
+
+        Iterator<Map.Entry<Integer, ArrayList<String>>> iterator = map.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Integer, ArrayList<String>> next = iterator.next();
+            ArrayList<String> values = next.getValue();
+            String s = "";
+            s += next.getKey() + " ";
+            TimeVo timeVo = new TimeVo("0");
+            for (String value : values) {
+//                s += value + "-";
+                timeVo.increase(value);
+            }
+//            s += "\n";
+            appUserService.updateTotalRecordTime(next.getKey(), timeVo.toString());
+            s += timeVo.toString() + "\n";
+            System.out.println(s);
+        }
+    }
 
     @Autowired
     private SoundEffectService soundEffectService;

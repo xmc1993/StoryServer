@@ -316,6 +316,7 @@ public class UserWorksController extends BaseController {
 		}
 		boolean res = worksService.deleteWorksById(worksId);
 		if (res) {
+			appUserService.updateTotalRecordTime(user.getId(), works.getDuration(), false);
 			messageFeedService.unfeedFollowers(worksId, user.getId(), false);
 		}
 		responseData.jsonFill(res ? 1 : 2, null, res);
@@ -365,6 +366,7 @@ public class UserWorksController extends BaseController {
 		works.setHeadImgUrl(user.getHeadImgUrl());
 		Works res = worksService.saveWorks(works);
 		if (res != null) {
+			appUserService.updateTotalRecordTime(user.getId(), works.getDuration(), true);
 			MsgVo msgVo = new MsgVo();
 			msgVo.setUserId(user.getId());
 			msgVo.setHeadImgUrl(user.getHeadImgUrl());
@@ -606,6 +608,43 @@ public class UserWorksController extends BaseController {
 		}
 		responseData.setBadgeList(checkoutListenBadge(user, works));
 		responseData.jsonFill(1, null, res);
+		return responseData;
+	}
+
+
+	@ApiOperation(value = "获得总的录制时长", notes = "需登录")
+		 @RequestMapping(value = "/getTotalRecordTime", method = { RequestMethod.GET })
+		 @ResponseBody
+		 public ResponseData<String> getTotalRecordTime(
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<String> responseData = new ResponseData();
+		User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+		if (user == null) {
+			responseData.jsonFill(2, "请先登录", null);
+			response.setStatus(401);
+			return responseData;
+		}
+
+		String totalRecordTime = appUserService.getTotalRecordTime(user.getId());
+		responseData.jsonFill(1, null, totalRecordTime);
+		return responseData;
+	}
+
+	@ApiOperation(value = "获得收听数", notes = "需登录")
+	@RequestMapping(value = "/getListenCount", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<Integer> getListenCount(
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<Integer> responseData = new ResponseData();
+		User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+		if (user == null) {
+			responseData.jsonFill(2, "请先登录", null);
+			response.setStatus(401);
+			return responseData;
+		}
+
+		Integer listenCount = appUserService.getListenCount(user.getId());
+		responseData.jsonFill(1, null, listenCount);
 		return responseData;
 	}
 

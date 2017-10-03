@@ -42,4 +42,6 @@ public class User implements Serializable {
 	private Integer listenedCount = 0;//被收听数
 	private Integer likeStoryCount = 0;//喜欢的故事数
 	private Integer valid = 1;//用于软删除
+	//总的录用时间
+	private String totalRecordTime = "0'0\"";
 }

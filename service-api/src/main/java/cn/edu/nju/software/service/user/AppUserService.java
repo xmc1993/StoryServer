@@ -46,4 +46,14 @@ public interface AppUserService {
     boolean deleteUserById(int id);
     
     boolean recoverUserById(int id);
+
+    String getTotalRecordTime(int id);
+
+    boolean updateTotalRecordTime(int id, String time);
+
+    boolean updateTotalRecordTime(int id, String gap, boolean increase);
+
+    Integer getListenCount(int userId);
+
+
 }

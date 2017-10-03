@@ -357,4 +357,20 @@
 		where id = #{0}
 	</select>
 
+	<select id="getTotalRecordTime" resultType="java.lang.String">
+		select
+		totalRecordTime
+		from
+		user
+		where id = #{0}
+	</select>
+
+	<update id="updateTotalRecordTime">
+		update user
+		SET
+		totalRecordTime = #{1}
+		where
+		id=#{0}
+	</update>
+
 </mapper>

@@ -71,6 +71,7 @@ public class MessageFeedServiceImpl implements MessageFeedService{
              case NEW_BABYREAD:
             	 BabyRead babyRead=babyReadService.selectBabyReadById(feed.getMid());
             	 msgVo.setData(babyRead);
+            	 break;
             default:
                 return feed;
         }
