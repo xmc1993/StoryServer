@@ -78,7 +78,7 @@ public class UserBabyReadController extends BaseController {
 	}
 	
 	@ApiOperation(value = "根据宝宝读Id获取故事内容", notes = "")
-	@RequestMapping(value = "/getStorytByBabyReadId", method = { RequestMethod.GET })
+	@RequestMapping(value = "/getStoryByBabyReadId", method = { RequestMethod.GET })
 	@ResponseBody
 	public ResponseData<Story> getStorytByBabyReadId(@ApiParam("babyReadId") @RequestParam Integer babyReadId,
 			HttpServletRequest request, HttpServletResponse response) {
