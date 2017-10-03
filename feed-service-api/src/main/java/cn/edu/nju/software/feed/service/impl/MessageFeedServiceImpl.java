@@ -67,7 +67,7 @@ public class MessageFeedServiceImpl implements MessageFeedService{
             	 msgVo.setData(babyRead);
             	 break;
             case NEW_FRIEND_STORY:
-                Story story = storyService.getStoryById(feed.getId());
+                Story story = storyService.getStoryById(feed.getMid());
                 msgVo.setData(story);
                 break;
             default:
