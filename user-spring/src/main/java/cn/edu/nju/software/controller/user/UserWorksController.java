@@ -12,6 +12,7 @@ import cn.edu.nju.software.util.Const;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UploadFileUtil;
 import cn.edu.nju.software.dto.WorksVo;
+import cn.edu.nju.software.util.UserChecker;
 import com.google.gson.Gson;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -92,12 +93,14 @@ public class UserWorksController extends BaseController {
 	public ResponseData<List<WorksVo>> getMostPopularByPage(@ApiParam("页") @RequestParam int page,
 			@ApiParam("页大小") @RequestParam int pageSize, HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<List<WorksVo>> responseData = new ResponseData<>();
-		User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
-		if (user == null) {
-			responseData.jsonFill(2, "请先登录", null);
-			response.setStatus(401);
-			return responseData;
-		}
+//		User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+//		if (user == null) {
+//			responseData.jsonFill(2, "请先登录", null);
+//			response.setStatus(401);
+//			return responseData;
+//		}
+		User user = UserChecker.checkUser(request);
+
 		List<Works> worksList = worksService.getMostPopularByPage(page, pageSize);
 
 		responseData.jsonFill(1, null, worksList2VoList(worksList, user.getId()));
