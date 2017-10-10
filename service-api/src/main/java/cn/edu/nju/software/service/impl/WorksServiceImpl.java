@@ -86,6 +86,12 @@ public class WorksServiceImpl implements WorksService {
 		limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
 		return worksDao.getWorksListByUserId(userId, offset, limit);
 	}
+	@Override
+	public List<Works> getWorksListByUserIdByPage(int userId, int page, int pageSize) {
+		int offset = page * pageSize;
+		int limit = pageSize;
+		return worksDao.getWorksListByUserId(userId, offset, limit);
+	}
 
 	@Override
 	public List<Works> getWorksListByStoryId(int storyId, int offset, int limit) {

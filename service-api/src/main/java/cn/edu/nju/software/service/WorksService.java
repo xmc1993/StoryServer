@@ -26,6 +26,8 @@ public interface WorksService {
 
     List<Works> getWorksListByUserId(int userId, int offset, int limit);
 
+    List<Works> getWorksListByUserIdByPage(int userId, int page, int pageSize);
+
     List<Works> getWorksListByStoryId(int storyId, int offset, int limit);
 
     List<Works> getWorksListByIdList(List<Integer> idList);
