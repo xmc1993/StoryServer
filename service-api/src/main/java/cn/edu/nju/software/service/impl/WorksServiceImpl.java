@@ -101,6 +101,13 @@ public class WorksServiceImpl implements WorksService {
 	}
 
 	@Override
+	public List<Works> getWorksListByStoryIdByPage(int storyId, int page, int pageSize) {
+		int offset = page * pageSize;
+		int limit = pageSize;
+		return worksDao.getWorksListByStoryId(storyId, offset, limit);
+	}
+
+	@Override
 	public List<Works> getWorksListByIdList(List<Integer> idList) {
 		idList.add(-1);// 防止mybatis查询出错
 		return worksDao.getWorksListByIdList(idList);

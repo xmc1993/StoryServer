@@ -52,6 +52,23 @@ public class ManageWorkController {
 			@ApiParam("PAGE") @RequestParam int page, @ApiParam("SIZE") @RequestParam int pageSize,
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<List<Works>> responseData = new ResponseData<>();
+		List<Works> worksList = worksService.getWorksListByUserIdByPage(id, page, pageSize);
+		String errorMessage = null;
+		if (worksList == null) {
+			errorMessage = "用户无作品或者用户不存在";
+		}
+		responseData.jsonFill(1, errorMessage, worksList);
+		responseData.setCount(worksService.getWorksCountByUserId(id));
+		return responseData;
+	}
+
+	@ApiOperation(value = "根据用户id分页获取用户的所有作品", notes = "")
+	@RequestMapping(value = "/getWorksListByStoryId", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<List<Works>> getWorksListByStoryId(@ApiParam("故事id") @RequestParam(value = "id") Integer id,
+														  @ApiParam("PAGE") @RequestParam int page, @ApiParam("SIZE") @RequestParam int pageSize,
+														  HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<List<Works>> responseData = new ResponseData<>();
 		List<Works> worksList = worksService.getWorksListByUserId(id, page, pageSize);
 		String errorMessage = null;
 		if (worksList == null) {

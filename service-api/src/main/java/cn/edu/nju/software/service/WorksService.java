@@ -30,6 +30,8 @@ public interface WorksService {
 
     List<Works> getWorksListByStoryId(int storyId, int offset, int limit);
 
+    List<Works> getWorksListByStoryIdByPage(int storyId, int page, int pageSize);
+
     List<Works> getWorksListByIdList(List<Integer> idList);
 
     Integer getWorksCount();
