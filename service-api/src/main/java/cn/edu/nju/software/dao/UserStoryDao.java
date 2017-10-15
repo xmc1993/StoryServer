@@ -17,6 +17,8 @@ public interface UserStoryDao {
     boolean updateUserStory(UserStory userStory);
 
     boolean deleteUserStory(int id);
+    
+    boolean roseUserStoryTellCount(int id);
 
     UserStory getUserStoryById(int id);
 

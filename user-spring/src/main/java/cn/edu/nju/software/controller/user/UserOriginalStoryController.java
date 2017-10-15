@@ -206,4 +206,21 @@ public class UserOriginalStoryController extends BaseController {
         responseData.jsonFill(1, null, userStory);
         return responseData;
     }
+    
+    @ApiOperation(value = "原创故事的阅读次数加一", notes = "")
+    @RequestMapping(value = "/roseUserStoryTellCount", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Boolean> roseUserStoryTellCount(
+            @ApiParam("故事ID") @RequestParam("id") int id,
+            HttpServletRequest request, HttpServletResponse response) throws ParseException {
+        ResponseData<Boolean> responseData = new ResponseData<>();
+        boolean res=userStoryService.roseUserStoryTellCount(id);
+        if (res==false) {
+            responseData.jsonFill(2, "修改失败", false);
+            return responseData;
+        }
+        responseData.jsonFill(1, null, true);
+        return responseData;
+    }
+    
 }

@@ -22,4 +22,5 @@ public interface PowerCodeDao {
 
     List<PowerCode> getPowerCodeListByPage(int offset, int limit);
 
+    int getPowerCodeCount();
 }

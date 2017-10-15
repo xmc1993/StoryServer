@@ -18,5 +18,7 @@ public interface PowerCodeService {
     PowerCode getPowerCodeById(int id);
 
     List<PowerCode> getPowerCodeListByPage(int page, int pageSize);
+    
+    Integer getPowerCodeCount();
 
 }

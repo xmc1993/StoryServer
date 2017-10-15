@@ -100,6 +100,7 @@ public class ManagePowerCodeController {
         ResponseData<List<PowerCode>> responseData = new ResponseData<>();
         List<PowerCode> powerCodeList = powerCodeService.getPowerCodeListByPage(page, pageSize);
         responseData.jsonFill(1, null, powerCodeList);
+        responseData.setCount(powerCodeService.getPowerCodeCount());
         return responseData;
     }
 

@@ -64,8 +64,8 @@ public class ManageAdminPowerController {
     @RequestMapping(value = "/deleteAdminPower", method = {RequestMethod.POST})
     @ResponseBody
     public void deleteAdminPowerWithPrimaryKey(
-            @ApiParam("后台用户id") @PathVariable int adminId,
-            @ApiParam("权限code") @PathVariable int code,
+            @ApiParam("后台用户id") @RequestParam int adminId,
+            @ApiParam("权限code") @RequestParam int code,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Boolean> responseData = new ResponseData<>();
         boolean success = adminPowerService.deleteAdminPowerWithPrimaryKey(adminId, code);

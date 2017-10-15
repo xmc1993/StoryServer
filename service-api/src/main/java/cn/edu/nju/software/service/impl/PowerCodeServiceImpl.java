@@ -48,4 +48,9 @@ public class PowerCodeServiceImpl implements PowerCodeService {
         int limit = pageSize;
         return powerCodeDao.getPowerCodeListByPage(offset, limit);
     }
+
+	@Override
+	public Integer getPowerCodeCount() {
+		return powerCodeDao.getPowerCodeCount();
+	}
 }
