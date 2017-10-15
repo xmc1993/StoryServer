@@ -62,4 +62,6 @@ public class Story {
     private Integer setId = 0;
     @ApiModelProperty(value="阅读时长")
     private String readTime;
+    @ApiModelProperty(value="推荐时间")
+    private Date recommendTime;
 }

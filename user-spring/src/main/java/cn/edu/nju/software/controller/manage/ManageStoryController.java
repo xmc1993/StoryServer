@@ -121,6 +121,7 @@ public class ManageStoryController {
 		story.setDefaultBackGroundMusicId(defaultBackGroundMusicId);
 		story.setCreateTime(new Date());
 		story.setUpdateTime(new Date());
+		story.setRecommendTime(new Date());
 		story.setDraft(draft);
 		story.setLikeCount(0);
 		if (suggestedReadingDuration != null) {
