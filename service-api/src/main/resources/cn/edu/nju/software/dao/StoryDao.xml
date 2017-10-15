@@ -302,7 +302,7 @@
         update story
         set
         recommend = 1,
-        recommendTime = now
+        recommendTime = NOW()
         where valid = 1 and id=#{0} and recommend = 0 and draft = 0
     </update>
 
