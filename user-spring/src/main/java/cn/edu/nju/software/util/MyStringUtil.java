@@ -39,7 +39,10 @@ public class MyStringUtil {
 	}
 	
 	public static void main(String[] args){
-		List list = strToIntList("",",");
+		List list = new ArrayList<String>();
+		list.add("大伟哥");
+		list.add(null);
+		list.add("哈哈哈");
 		System.out.println(list);
 	}
 }

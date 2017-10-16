@@ -1,11 +1,13 @@
 package cn.edu.nju.software.controller.manage;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +21,11 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
 import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.entity.StoryAmbitus;
 import cn.edu.nju.software.service.StoryAmbitusService;
+import cn.edu.nju.software.service.StoryService;
+import cn.edu.nju.software.vo.StoryAmbitusVo;
 
 /**
  * @author zs1996 E-mail:806949096@qq.com
@@ -33,15 +38,59 @@ import cn.edu.nju.software.service.StoryAmbitusService;
 public class ManageStoryAmbitusController {
 	@Autowired
 	StoryAmbitusService storyAmbitusService;
-
-	@ApiOperation(value = "分页获取所有故事周边", notes = "")
+	@Autowired
+	StoryService storyService;
+	
+	
+	@ApiOperation(value = "分页获取所有故事周边(包括故事名)", notes = "")
 	@RequestMapping(value = "/selectAllStoryAmbitus", method = { RequestMethod.GET })
 	@ResponseBody
-	public ResponseData<List<StoryAmbitus>> selectAllStoryAmbitus(@ApiParam("page") @RequestParam Integer page,
+	public ResponseData<List<StoryAmbitusVo>> selectAllStoryAmbitus(@ApiParam("page") @RequestParam Integer page,
 			@ApiParam("pageSize") @RequestParam Integer pageSize, HttpServletRequest request,
 			HttpServletResponse response) {
 		ResponseData<List<StoryAmbitus>> responseData = new ResponseData<>();
 		responseData = storyAmbitusService.selectAllStoryAmbitus(page, pageSize);
+		
+		//需求修改 需要发返回故事名(这里纠结是把压力放在服务器还是数据库上，暂时先把压力放在数据库上，已做优化)
+		List<StoryAmbitus> list=responseData.getObj();
+		List<StoryAmbitusVo> storyAmbitusVoList=new ArrayList<>();
+		for (StoryAmbitus storyAmbitus : list) {
+			StoryAmbitusVo storyAmbitusVo=new StoryAmbitusVo();
+			String storyName=storyService.getStoryNameById(storyAmbitus.getStoryid());
+			BeanUtils.copyProperties(storyAmbitus, storyAmbitusVo);
+
+			storyAmbitusVo.setStoryName(storyName);
+			storyAmbitusVoList.add(storyAmbitusVo);
+		}
+		ResponseData<List<StoryAmbitusVo>> responseData2= new ResponseData<>();
+		responseData2.jsonFill(1, null, storyAmbitusVoList);
+		responseData2.setCount(responseData.getCount());
+		return responseData2;
+	}
+	
+	@ApiOperation(value = "根据故事名字获取故事周边", notes = "分页，模糊查询")
+	@RequestMapping(value = "/selectStoryAmbitusByStoryTitle", method = { RequestMethod.GET})
+	@ResponseBody
+	public ResponseData<List<StoryAmbitus>> selectStoryAmbitusByStoryTitle(
+			@ApiParam("OFFSET") @RequestParam int offset, @ApiParam("LIMIT") @RequestParam int limit,
+			@ApiParam("storyTitle") @RequestParam String storyTitle, HttpServletRequest request,
+			HttpServletResponse response) {
+		ResponseData<List<StoryAmbitus>> responseData= new ResponseData<>();
+		List<Story> stories = storyService.getStoryByFuzzyQuery(storyTitle, offset, limit);
+		if (stories==null||stories.isEmpty()) {
+			responseData.jsonFill(2, "该故事没有故事周边", null);
+			return responseData;
+		}
+		List<StoryAmbitus> storyAmbitusList=new ArrayList<>();
+		for (Story story : stories) {
+			List<StoryAmbitus> storyAmbitusList2=storyAmbitusService.getStoryAmbitusByStoryId(story.getId());
+			if(storyAmbitusList==null||storyAmbitusList.isEmpty()){
+				continue;
+			}
+			storyAmbitusList.add(storyAmbitusList2.get(0));
+		}
+		responseData.jsonFill(1, null, storyAmbitusList);
+		responseData.setCount(responseData.getCount());
 		return responseData;
 	}
 

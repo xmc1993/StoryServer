@@ -32,6 +32,8 @@ public interface StoryService {
     List<Story> getStoryListByPageIncludeDrafts(int offset, int limit);
 
     List<Story> getStoryListByIdList(List<Integer> idList, Integer offset, Integer limit);
+    
+    String getStoryNameById(Integer id);
 
     List<Story> getStoryListByTitle(String title, int offset, int limit);
 

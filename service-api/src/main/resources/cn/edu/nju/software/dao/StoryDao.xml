@@ -259,6 +259,13 @@
         order by createTime ${sortByCreateTime}
         limit #{0},#{1}
     </select>
+    
+    <select id="getStoryNameById" resultType="string">
+        select
+        title
+        from story
+        where valid = 1 and draft = 0 and id=#{id}
+    </select>
 
     <select id="getStoryListByIdList" resultType="cn.edu.nju.software.entity.Story">
         select

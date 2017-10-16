@@ -24,6 +24,7 @@ public class StoryAmbitusServiceImpl implements StoryAmbitusService {
 	
 	@Autowired
 	StoryAmbitusMapper storyAmbitusMapper;
+	
 
 	@Override
 	public ResponseData <List<StoryAmbitus>> selectAllStoryAmbitus(int page, int pageSize) {
@@ -33,7 +34,7 @@ public class StoryAmbitusServiceImpl implements StoryAmbitusService {
 		StoryAmbitusExample.Criteria criteria = storyAmbitusExample.createCriteria();
         criteria.andValidEqualTo(1);
         //数据库中有大文本文件 查询使用这个方法，selectByExampleWithBLOBs
-        List<StoryAmbitus> list = storyAmbitusMapper.selectByExampleWithBLOBs(storyAmbitusExample);
+        List<StoryAmbitus> list = storyAmbitusMapper.selectByExampleWithBLOBs(storyAmbitusExample);     
         PageInfo<StoryAmbitus> pageInfo=new PageInfo<>(list);
         int count=(int)pageInfo.getTotal();
         ResponseData<List<StoryAmbitus>> responseData=new ResponseData<>();

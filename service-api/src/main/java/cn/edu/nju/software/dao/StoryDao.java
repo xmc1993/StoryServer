@@ -109,6 +109,8 @@ public interface StoryDao {
     List<Integer> getRecommendedStoryIdListByPage(@Param("offset") int offset, @Param("limit") int limit);
 
 	List<Story> getStoryListByIdListByPage(@Param("storyIdList")List<Integer> storyIdList);
+	
+	String getStoryNameById(int id);
 
 	List<Story> getSetStoryListByIdListByPage(@Param("storyIdList")List<Integer> storyIdList);
 
