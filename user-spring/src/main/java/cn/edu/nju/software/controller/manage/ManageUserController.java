@@ -1,30 +1,23 @@
 package cn.edu.nju.software.controller.manage;
 
-import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.service.user.UserMessageService;
 import cn.edu.nju.software.util.Util;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zs
@@ -39,6 +32,7 @@ public class ManageUserController {
 	UserMessageService userMessageService;
 
 	// 删除用户
+	@RequiredPermissions({2, 19})
 	@RequestMapping(value = "/deleteUserById/{id}", method = {RequestMethod.DELETE })
 	@ResponseBody
 	@ApiOperation(value = "根据用户ID删除用户", notes = "")
@@ -54,6 +48,7 @@ public class ManageUserController {
 	}
 
 	// 根据用户姓名查找
+	@RequiredPermissions({4, 19})
 	@RequestMapping(value = "/getUserByNickname", method = { RequestMethod.GET })
 	@ApiOperation(value = "根据用户姓名查找", notes = "")
 	@ResponseBody
@@ -70,6 +65,7 @@ public class ManageUserController {
 	}
 
 	// 根据用户ID查找用户
+	@RequiredPermissions({4, 19})
 	@ApiOperation(value = "根据用户ID查找用户", notes = "")
 	@RequestMapping(value = "/getUserById", method = { RequestMethod.GET })
 	@ResponseBody
@@ -86,6 +82,7 @@ public class ManageUserController {
 	}
 
 	// 添加用户
+	@RequiredPermissions({1, 19})
 	@ApiOperation(value = "添加用户", notes = "")
 	@RequestMapping(value = "/saveUser", method = { RequestMethod.POST })
 	@ResponseStatus(HttpStatus.CREATED)
@@ -122,6 +119,7 @@ public class ManageUserController {
 	}
 
 	// 更新用户信息
+	@RequiredPermissions({3, 19})
 	@ApiOperation(value = "更新用户信息", notes = "")
 	@RequestMapping(value = "/updateUser", method = { RequestMethod.POST })
 	@ResponseBody
@@ -160,6 +158,7 @@ public class ManageUserController {
 	}
 
 	// 根据页数获取所有用户的列表
+	@RequiredPermissions({4, 19})
 	@ApiOperation(value = "分页获得用户", notes = "")
 	@RequestMapping(value = "/getUserListByPage", method = { RequestMethod.GET })
 	@ResponseBody
