@@ -1,26 +1,20 @@
 package cn.edu.nju.software.controller.manage;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.StoryScript;
 import cn.edu.nju.software.service.StoryScriptService;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.List;
 
 /**
 * @author zs1996 E-mail:806949096@qq.com
@@ -35,6 +29,7 @@ public class ManageStoryScriptController {
 	@Autowired
 	StoryScriptService storyScriptService;
 
+	@RequiredPermissions({4, 22})
 	@ApiOperation(value = "分页获取所有故事剧本", notes = "")
 	@RequestMapping(value = "/selectAllStoryScript", method = { RequestMethod.GET })
 	@ResponseBody
@@ -46,6 +41,7 @@ public class ManageStoryScriptController {
 		return responseData;
 	}
 
+	@RequiredPermissions({1, 22})
 	@ApiOperation(value = "新建故事的剧本", notes = "")
 	@RequestMapping(value = "/saveStoryScript", method = { RequestMethod.POST })
 	@ResponseBody
@@ -68,6 +64,7 @@ public class ManageStoryScriptController {
 			return responseData;
 	}
 
+	@RequiredPermissions({2, 22})
 	@ApiOperation(value = "删除故事剧本根据id", notes = "")
 	@RequestMapping(value = "/deleteStoryScriptById/{id}", method = { RequestMethod.DELETE })
 	@ResponseBody
@@ -83,6 +80,7 @@ public class ManageStoryScriptController {
 		return responseData;
 	}
 
+	@RequiredPermissions({3, 22})
 	@ApiOperation(value = "更新故事剧本根据故事id")
 	@RequestMapping(value = "/updataStoryScriptByStoryId", method = { RequestMethod.POST })
 	@ResponseBody
@@ -112,6 +110,7 @@ public class ManageStoryScriptController {
 		return responseData;
 	}
 
+	@RequiredPermissions({4, 22})
 	@ApiOperation(value = "根据故事Id获取故事剧本", notes = "")
 	@RequestMapping(value = "/getStoryScriptByStoryId", method = { RequestMethod.GET })
 	@ResponseBody
@@ -126,7 +125,8 @@ public class ManageStoryScriptController {
 		responseData.jsonFill(1, null, storyScript);
 		return responseData;
 	}
-	
+
+	@RequiredPermissions({4, 22})
 	@ApiOperation(value = "根据故事剧本Id获取故事剧本", notes = "")
 	@RequestMapping(value = "/getStoryScriptById", method = { RequestMethod.GET })
 	@ResponseBody

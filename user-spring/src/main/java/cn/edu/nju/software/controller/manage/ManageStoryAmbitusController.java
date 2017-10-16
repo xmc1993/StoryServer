@@ -16,16 +16,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
+import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.entity.StoryAmbitus;
+import cn.edu.nju.software.service.StoryAmbitusService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
-import cn.edu.nju.software.entity.ResponseData;
+
 import cn.edu.nju.software.entity.Story;
-import cn.edu.nju.software.entity.StoryAmbitus;
-import cn.edu.nju.software.service.StoryAmbitusService;
 import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.vo.StoryAmbitusVo;
+
+
 
 /**
  * @author zs1996 E-mail:806949096@qq.com
@@ -38,10 +42,12 @@ import cn.edu.nju.software.vo.StoryAmbitusVo;
 public class ManageStoryAmbitusController {
 	@Autowired
 	StoryAmbitusService storyAmbitusService;
+
 	@Autowired
 	StoryService storyService;
-	
-	
+
+
+	@RequiredPermissions({4, 17})
 	@ApiOperation(value = "分页获取所有故事周边(包括故事名)", notes = "")
 	@RequestMapping(value = "/selectAllStoryAmbitus", method = { RequestMethod.GET })
 	@ResponseBody
@@ -68,6 +74,7 @@ public class ManageStoryAmbitusController {
 		return responseData2;
 	}
 	
+	@RequiredPermissions({4, 17})
 	@ApiOperation(value = "根据故事名字获取故事周边", notes = "分页，模糊查询")
 	@RequestMapping(value = "/selectStoryAmbitusByStoryTitle", method = { RequestMethod.GET})
 	@ResponseBody
@@ -94,6 +101,7 @@ public class ManageStoryAmbitusController {
 		return responseData;
 	}
 
+	@RequiredPermissions({1, 17})
 	@ApiOperation(value = "新建故事的周边", notes = "")
 	@RequestMapping(value = "/saveStoryAmbitus", method = { RequestMethod.POST })
 	@ResponseBody
@@ -122,6 +130,7 @@ public class ManageStoryAmbitusController {
 		return responseData;
 	}
 
+	@RequiredPermissions({2, 17})
 	@ApiOperation(value = "删除故事周边根据id", notes = "")
 	@RequestMapping(value = "/deleteStoryAmbitusById/{id}", method = { RequestMethod.DELETE })
 	@ResponseBody
@@ -137,6 +146,7 @@ public class ManageStoryAmbitusController {
 		return responseData;
 	}
 
+	@RequiredPermissions({3, 17})
 	@ApiOperation(value = "更新故事周边根据周边id")
 	@RequestMapping(value = "/updataStoryAmbitusById", method = { RequestMethod.POST })
 	@ResponseBody
@@ -173,6 +183,7 @@ public class ManageStoryAmbitusController {
 		return responseData;
 	}
 
+	@RequiredPermissions({4, 17})
 	@ApiOperation(value = "根据故事Id获取故事周边", notes = "")
 	@RequestMapping(value = "/getStoryAmbitusByStoryId", method = { RequestMethod.GET })
 	@ResponseBody
@@ -188,7 +199,8 @@ public class ManageStoryAmbitusController {
 		responseData.setCount(list.size());
 		return responseData;
 	}
-	
+
+	@RequiredPermissions({4, 17})
 	@ApiOperation(value = "根据故事周边Id获取故事周边", notes = "")
 	@RequestMapping(value = "/getStoryAmbitusById", method = { RequestMethod.GET })
 	@ResponseBody

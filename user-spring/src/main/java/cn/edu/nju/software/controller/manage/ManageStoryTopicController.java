@@ -1,30 +1,24 @@
 package cn.edu.nju.software.controller.manage;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.entity.StoryTopic;
 import cn.edu.nju.software.entity.StoryTopicRelation;
 import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.service.StoryTopicServcie;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zs1996 E-mail:806949096@qq.com
@@ -40,6 +34,7 @@ public class ManageStoryTopicController {
 	@Autowired
 	private StoryService storyService;
 
+	@RequiredPermissions({4, 21})
 	@ApiOperation(value = "分页获取所有故事专题", notes = "")
 	@RequestMapping(value = "/selectAllStoryTopic", method = { RequestMethod.GET })
 	@ResponseBody
@@ -51,6 +46,7 @@ public class ManageStoryTopicController {
 		return responseData;
 	}
 
+	@RequiredPermissions({3, 21})
 	@ApiOperation(value = "置顶某个专题")
 	@RequestMapping(value = "/stickieStoryTopic", method = { RequestMethod.GET })
 	@ResponseBody
@@ -68,6 +64,7 @@ public class ManageStoryTopicController {
 		return responseData;
 	}
 
+	@RequiredPermissions({4, 21})
 	@ApiOperation(value = "获取所有有效的故事专题", notes = "")
 	@RequestMapping(value = "/selectAllShowStoryTopic", method = { RequestMethod.GET })
 	@ResponseBody
@@ -79,6 +76,7 @@ public class ManageStoryTopicController {
 		return responseData;
 	}
 
+	@RequiredPermissions({1, 21})
 	@ApiOperation(value = "保存故事专题", notes = "")
 	@RequestMapping(value = "/saveStoryTopic", method = { RequestMethod.POST })
 	@ResponseBody
@@ -105,6 +103,7 @@ public class ManageStoryTopicController {
 		return responseData;
 	}
 
+	@RequiredPermissions({3, 21})
 	@ApiOperation(value = "修改故事专题", notes = "")
 	@RequestMapping(value = "/updateStoryTopicById", method = { RequestMethod.POST })
 	@ResponseBody
@@ -135,6 +134,7 @@ public class ManageStoryTopicController {
 		return responseData;
 	}
 
+	@RequiredPermissions({2, 21})
 	@ApiOperation(value = "删除故事专题", notes = "")
 	@RequestMapping(value = "/deleteStoryTopic/{id}", method = { RequestMethod.DELETE })
 	@ResponseBody
@@ -151,6 +151,7 @@ public class ManageStoryTopicController {
 		return responseData;
 	}
 
+	@RequiredPermissions({4, 21})
 	@ApiOperation(value = "根据id故事专题详情", notes = "")
 	@RequestMapping(value = "/getStoryTopicById", method = { RequestMethod.GET })
 	@ResponseBody
@@ -162,6 +163,7 @@ public class ManageStoryTopicController {
 		return responseData;
 	}
 
+	@RequiredPermissions({4, 21})
 	@ApiOperation(value = "根据故事专题获得故事列表", notes = "")
 	@RequestMapping(value = "/getStorysByStoryTopic", method = { RequestMethod.GET })
 	@ResponseBody
@@ -177,6 +179,7 @@ public class ManageStoryTopicController {
 		return responseData;
 	}
 
+	@RequiredPermissions({1, 21})
 	@ApiOperation(value = "为某个专题添加故事")
 	@RequestMapping(value = "/addStoryForStoryTopic", method = { RequestMethod.POST })
 	@ResponseBody
@@ -204,6 +207,7 @@ public class ManageStoryTopicController {
 		return responseData;
 	}
 
+	@RequiredPermissions({2, 21})
 	@ApiOperation(value = "删除某个专题的某个故事")
 	@RequestMapping(value = "/deleteStoryForStoryTopic", method = { RequestMethod.POST })
 	@ResponseBody

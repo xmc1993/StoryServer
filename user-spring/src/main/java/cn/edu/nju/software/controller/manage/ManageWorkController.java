@@ -1,5 +1,6 @@
 package cn.edu.nju.software.controller.manage;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.service.WorksService;
@@ -30,6 +31,7 @@ public class ManageWorkController {
 	@Autowired
 	private WorksService worksService;
 
+	@RequiredPermissions({4, 18})
 	@ApiOperation(value = "根据id获取故事", notes = "")
 	@RequestMapping(value = "/getWorkById", method = { RequestMethod.GET })
 	@ResponseBody
@@ -45,6 +47,7 @@ public class ManageWorkController {
 		return responseData;
 	}
 
+	@RequiredPermissions({4, 18})
 	@ApiOperation(value = "根据用户id分页获取用户的所有作品", notes = "")
 	@RequestMapping(value = "/getWorksListByUserId", method = { RequestMethod.GET })
 	@ResponseBody
@@ -62,6 +65,7 @@ public class ManageWorkController {
 		return responseData;
 	}
 
+	@RequiredPermissions({4, 18})
 	@ApiOperation(value = "根据故事id分页获取用户的所有作品", notes = "")
 	@RequestMapping(value = "/getWorksListByStoryId", method = { RequestMethod.GET })
 	@ResponseBody
@@ -79,6 +83,7 @@ public class ManageWorkController {
 		return responseData;
 	}
 
+	@RequiredPermissions({2, 18})
 	@ApiOperation(value = "根据作品id删除作品", notes = "")
 	@RequestMapping(value = "/deleteWorksById/{id}", method = { RequestMethod.DELETE })
 	@ResponseBody
@@ -93,6 +98,7 @@ public class ManageWorkController {
 		return responseData;
 	}
 
+	@RequiredPermissions({3, 18})
 	@ApiOperation(value = "根据作品id修改作品信息", notes = "")
 	@RequestMapping(value = "/updateWorksById", method = { RequestMethod.POST })
 	@ResponseBody
@@ -137,6 +143,7 @@ public class ManageWorkController {
 	}
 
 	// 根据用户id添加作品
+	@RequiredPermissions({1, 18})
 	@ApiOperation(value = "根据用户id为用户添加作品", notes = "")
 	@RequestMapping(value = "/saveWorksByUserId", method = { RequestMethod.POST })
 	@ResponseStatus(HttpStatus.CREATED)

@@ -1,30 +1,24 @@
 package cn.edu.nju.software.controller.manage;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.BabyReadInfo;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.BabyReadService;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zs
- * @version 创建时间：2017年9月12日 上午11:23:37
+ * @version 创建时间：2017年9月12日 上午11:24:37
  */
 @Api(value = "Admin", description = "管理接口")
 @Controller
@@ -34,6 +28,7 @@ public class ManageBabyReadController {
 	@Autowired
 	BabyReadService babyReadService;
 
+	@RequiredPermissions({4, 24})
 	@ApiOperation(value = "分页获取所有宝宝读内容", notes = "")
 	@RequestMapping(value = "/selectAllBabyRead", method = { RequestMethod.GET })
 	@ResponseBody
@@ -45,6 +40,7 @@ public class ManageBabyReadController {
 		return responseData;
 	}
 
+	@RequiredPermissions({1, 24})
 	@ApiOperation(value = "新建宝宝读内容", notes = "")
 	@RequestMapping(value = "/saveBabyReadInfo", method = { RequestMethod.POST })
 	@ResponseBody
@@ -65,6 +61,7 @@ public class ManageBabyReadController {
 		return responseData;
 	}
 
+	@RequiredPermissions({2, 24})
 	@ApiOperation(value = "删除宝宝读内容根据id", notes = "")
 	@RequestMapping(value = "/deleteBabyReadById/{id}", method = { RequestMethod.DELETE })
 	@ResponseBody
@@ -80,6 +77,7 @@ public class ManageBabyReadController {
 		return responseData;
 	}
 
+	@RequiredPermissions({3, 24})
 	@ApiOperation(value = "更新宝宝读内容根据id")
 	@RequestMapping(value = "/updataBabyReadById", method = { RequestMethod.POST })
 	@ResponseBody
@@ -106,7 +104,7 @@ public class ManageBabyReadController {
 		return responseData;
 	}
 
-
+	@RequiredPermissions({4, 24})
 	@ApiOperation(value = "根据宝宝读Id获取宝宝读内容", notes = "")
 	@RequestMapping(value = "/getBabyReadtById", method = { RequestMethod.GET })
 	@ResponseBody

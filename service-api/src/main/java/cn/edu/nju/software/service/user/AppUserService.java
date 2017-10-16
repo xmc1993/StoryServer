@@ -55,5 +55,5 @@ public interface AppUserService {
 
     Integer getListenCount(int userId);
 
-
+    boolean decreaseWorkCountSafely(int userId);
 }

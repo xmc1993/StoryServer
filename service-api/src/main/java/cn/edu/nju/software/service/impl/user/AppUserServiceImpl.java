@@ -209,4 +209,14 @@ public class AppUserServiceImpl implements AppUserService {
         return userDao.getListenCount(userId);
     }
 
+    @Override
+    public boolean decreaseWorkCountSafely(int userId) {
+        User user = userDao.getUserById(userId);
+        //防止出现-1的情况
+        if (user == null || 0 == user.getWorkCount()) {
+            return true;
+        }
+        return userDao.removeWork(userId);
+    }
+
 }
