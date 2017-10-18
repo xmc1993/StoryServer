@@ -419,6 +419,7 @@
     </select>
     <select id="getStoryListByClassifyFuzzyQueryIncludeDrafts" resultType="cn.edu.nju.software.entity.Story">
         select
+        story.setId,
         <include refid="multiTableFields"/>
         From story
         <if test=" tag!=null">

@@ -24,12 +24,9 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
-
 import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.vo.StoryAmbitusVo;
-
-
 
 /**
  * @author zs1996 E-mail:806949096@qq.com
@@ -46,8 +43,7 @@ public class ManageStoryAmbitusController {
 	@Autowired
 	StoryService storyService;
 
-
-	@RequiredPermissions({4, 17})
+	@RequiredPermissions({ 4, 17 })
 	@ApiOperation(value = "分页获取所有故事周边(包括故事名)", notes = "")
 	@RequestMapping(value = "/selectAllStoryAmbitus", method = { RequestMethod.GET })
 	@ResponseBody
@@ -56,42 +52,41 @@ public class ManageStoryAmbitusController {
 			HttpServletResponse response) {
 		ResponseData<List<StoryAmbitus>> responseData = new ResponseData<>();
 		responseData = storyAmbitusService.selectAllStoryAmbitus(page, pageSize);
-		
-		//需求修改 需要发返回故事名(这里纠结是把压力放在服务器还是数据库上，暂时先把压力放在数据库上，已做优化)
-		List<StoryAmbitus> list=responseData.getObj();
-		List<StoryAmbitusVo> storyAmbitusVoList=new ArrayList<>();
+
+		// 需求修改 需要发返回故事名(这里纠结是把压力放在服务器还是数据库上，暂时先把压力放在数据库上，已做优化)
+		List<StoryAmbitus> list = responseData.getObj();
+		List<StoryAmbitusVo> storyAmbitusVoList = new ArrayList<>();
 		for (StoryAmbitus storyAmbitus : list) {
-			StoryAmbitusVo storyAmbitusVo=new StoryAmbitusVo();
-			String storyName=storyService.getStoryNameById(storyAmbitus.getStoryid());
+			StoryAmbitusVo storyAmbitusVo = new StoryAmbitusVo();
+			String storyName = storyService.getStoryNameById(storyAmbitus.getStoryid());
 			BeanUtils.copyProperties(storyAmbitus, storyAmbitusVo);
 
 			storyAmbitusVo.setStoryName(storyName);
 			storyAmbitusVoList.add(storyAmbitusVo);
 		}
-		ResponseData<List<StoryAmbitusVo>> responseData2= new ResponseData<>();
+		ResponseData<List<StoryAmbitusVo>> responseData2 = new ResponseData<>();
 		responseData2.jsonFill(1, null, storyAmbitusVoList);
 		responseData2.setCount(responseData.getCount());
 		return responseData2;
 	}
-	
-	@RequiredPermissions({4, 17})
+
+	@RequiredPermissions({ 4, 17 })
 	@ApiOperation(value = "根据故事名字获取故事周边", notes = "分页，模糊查询")
-	@RequestMapping(value = "/selectStoryAmbitusByStoryTitle", method = { RequestMethod.GET})
+	@RequestMapping(value = "/selectStoryAmbitusByStoryTitle", method = { RequestMethod.GET })
 	@ResponseBody
-	public ResponseData<List<StoryAmbitus>> selectStoryAmbitusByStoryTitle(
-			@ApiParam("OFFSET") @RequestParam int offset, @ApiParam("LIMIT") @RequestParam int limit,
-			@ApiParam("storyTitle") @RequestParam String storyTitle, HttpServletRequest request,
-			HttpServletResponse response) {
-		ResponseData<List<StoryAmbitus>> responseData= new ResponseData<>();
+	public ResponseData<List<StoryAmbitus>> selectStoryAmbitusByStoryTitle(@ApiParam("OFFSET") @RequestParam int offset,
+			@ApiParam("LIMIT") @RequestParam int limit, @ApiParam("storyTitle") @RequestParam String storyTitle,
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<List<StoryAmbitus>> responseData = new ResponseData<>();
 		List<Story> stories = storyService.getStoryByFuzzyQuery(storyTitle, offset, limit);
-		if (stories==null||stories.isEmpty()) {
+		if (stories == null || stories.isEmpty()) {
 			responseData.jsonFill(2, "该故事没有故事周边", null);
 			return responseData;
 		}
-		List<StoryAmbitus> storyAmbitusList=new ArrayList<>();
+		List<StoryAmbitus> storyAmbitusList = new ArrayList<>();
 		for (Story story : stories) {
-			List<StoryAmbitus> storyAmbitusList2=storyAmbitusService.getStoryAmbitusByStoryId(story.getId());
-			if(storyAmbitusList==null||storyAmbitusList.isEmpty()){
+			List<StoryAmbitus> storyAmbitusList2 = storyAmbitusService.getStoryAmbitusByStoryId(story.getId(),0,1).getObj();
+			if (storyAmbitusList2 == null || storyAmbitusList2.isEmpty()) {
 				continue;
 			}
 			storyAmbitusList.add(storyAmbitusList2.get(0));
@@ -101,7 +96,7 @@ public class ManageStoryAmbitusController {
 		return responseData;
 	}
 
-	@RequiredPermissions({1, 17})
+	@RequiredPermissions({ 1, 17 })
 	@ApiOperation(value = "新建故事的周边", notes = "")
 	@RequestMapping(value = "/saveStoryAmbitus", method = { RequestMethod.POST })
 	@ResponseBody
@@ -130,7 +125,7 @@ public class ManageStoryAmbitusController {
 		return responseData;
 	}
 
-	@RequiredPermissions({2, 17})
+	@RequiredPermissions({ 2, 17 })
 	@ApiOperation(value = "删除故事周边根据id", notes = "")
 	@RequestMapping(value = "/deleteStoryAmbitusById/{id}", method = { RequestMethod.DELETE })
 	@ResponseBody
@@ -146,7 +141,7 @@ public class ManageStoryAmbitusController {
 		return responseData;
 	}
 
-	@RequiredPermissions({3, 17})
+	@RequiredPermissions({ 3, 17 })
 	@ApiOperation(value = "更新故事周边根据周边id")
 	@RequestMapping(value = "/updataStoryAmbitusById", method = { RequestMethod.POST })
 	@ResponseBody
@@ -183,24 +178,18 @@ public class ManageStoryAmbitusController {
 		return responseData;
 	}
 
-	@RequiredPermissions({4, 17})
+	@RequiredPermissions({ 4, 17 })
 	@ApiOperation(value = "根据故事Id获取故事周边", notes = "")
 	@RequestMapping(value = "/getStoryAmbitusByStoryId", method = { RequestMethod.GET })
 	@ResponseBody
 	public ResponseData<List<StoryAmbitus>> getStoryAmbitusByStoryId(@ApiParam("故事id") @RequestParam Integer storyId,
+			@ApiParam("page") @RequestParam Integer page, @ApiParam("pageSize") @RequestParam Integer pageSize,
 			HttpServletRequest request, HttpServletResponse response) {
-		ResponseData<List<StoryAmbitus>> responseData = new ResponseData<>();
-		List<StoryAmbitus> list = storyAmbitusService.getStoryAmbitusByStoryId(storyId);
-		if(null==list){
-			responseData.jsonFill(2, "该故事没有周边", null);
-			return responseData;
-		}
-		responseData.jsonFill(1, null, list);
-		responseData.setCount(list.size());
+		ResponseData<List<StoryAmbitus>> responseData = storyAmbitusService.getStoryAmbitusByStoryId(storyId,page,pageSize);
 		return responseData;
 	}
 
-	@RequiredPermissions({4, 17})
+	@RequiredPermissions({ 4, 17 })
 	@ApiOperation(value = "根据故事周边Id获取故事周边", notes = "")
 	@RequestMapping(value = "/getStoryAmbitusById", method = { RequestMethod.GET })
 	@ResponseBody
@@ -208,12 +197,12 @@ public class ManageStoryAmbitusController {
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<StoryAmbitus> responseData = new ResponseData<>();
 		StoryAmbitus storyAmbitus = storyAmbitusService.getStoryAmbitusById(id);
-		if(null==storyAmbitus){
+		if (null == storyAmbitus) {
 			responseData.jsonFill(2, "没有该周边", null);
 			return responseData;
 		}
 		responseData.jsonFill(1, null, storyAmbitus);
 		return responseData;
 	}
-	
+
 }
