@@ -363,6 +363,7 @@ public class StoryServiceImpl implements StoryService {
 		List<Story> storyList = storyDao.getRecommendedStoryListByPage(offset, limit);
 		return storyList;
 	}
+	
 
 	@Override
 	public PageInfo<Story> getStoryListByIdListByPage(List<Integer> storyIdList, Integer page, Integer pageSize) {
@@ -444,6 +445,12 @@ public class StoryServiceImpl implements StoryService {
 	@Override
 	public List<Story> getMostPopularStoryByPage(int page, int pageSize) {
 		return storyDao.getMostPopularStoryByPage(page * pageSize, pageSize);
+	}
+
+
+	@Override
+	public String getStoryNameById(Integer id) {
+		return storyDao.getStoryNameById(id);
 	}
 
 }

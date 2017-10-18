@@ -15,6 +15,6 @@ public interface StoryAmbitusService {
 	int saveStoryAmbitus(StoryAmbitus storyAmbitus);
 	int deleteById(Integer id);
 	int updataById(StoryAmbitus storyAmbitus);
-	List<StoryAmbitus> getStoryAmbitusByStoryId(Integer storyId);
+	ResponseData <List<StoryAmbitus>> getStoryAmbitusByStoryId(Integer storyId,Integer page, Integer pageSize);
 	StoryAmbitus getStoryAmbitusById(Integer id);
 }

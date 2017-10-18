@@ -1,5 +1,6 @@
 package cn.edu.nju.software.controller.manage;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.Album;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.AlbumService;
@@ -28,7 +29,7 @@ public class ManageAlbumController {
     private static final Logger logger = LoggerFactory.getLogger(ManageAlbumController.class);
     @Autowired
     private AlbumService albumService;
-
+    
     @ApiOperation(value = "新增专辑", notes = "")
     @RequestMapping(value = "/albums", method = {RequestMethod.POST})
     @ResponseBody

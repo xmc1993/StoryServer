@@ -155,6 +155,14 @@ public class UserPlayListController extends BaseController {
             responseData.jsonFill(2, "用户尚未登录。", null);
             return responseData;
         }
+        //我喜欢列表
+        if(playListId == 0){
+            agreeService.deleteAgree(worksId, user.getId());
+        }
+        //我的作品列表
+        if(playListId == -1){
+            worksService.deleteWorksById(worksId);
+        }
         //TODO 简单的校验
         boolean res = playListRelationService.deletePlayListRelationByPrimaryKey(worksId, playListId, user.getId());
         responseData.jsonFill(res ? 1 : 2, null, res);

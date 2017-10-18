@@ -11,4 +11,5 @@ public enum MessageType {
     NEW_COMPLETE,//完成作品的回调通知
     SYSTEM_NOTICE,//系统通知
     NEW_BABYREAD,//关注的人有宝宝读
+    NEW_FRIEND_STORY,//关注的人有新的原创故事
 }

@@ -1,28 +1,22 @@
 package cn.edu.nju.software.controller.manage;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.ReadingPlan;
 import cn.edu.nju.software.entity.ReadingPlanStoryGroup;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.ReadPlanService;
 import cn.edu.nju.software.service.ReadPlanStoryGroupService;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zs1996 E-mail:806949096@qq.com
@@ -38,6 +32,7 @@ public class ManageReadPlanController {
 	@Autowired
 	ReadPlanStoryGroupService readPlanStoryGroupService;
 
+	@RequiredPermissions({4, 23})
 	@ApiOperation(value = "分页获取所有阅读计划", notes = "")
 	@RequestMapping(value = "/selectAllReadPlan", method = { RequestMethod.GET })
 	@ResponseBody
@@ -49,6 +44,7 @@ public class ManageReadPlanController {
 		return responseData;
 	}
 
+	@RequiredPermissions({1, 23})
 	@ApiOperation(value = "新建阅读计划")
 	@RequestMapping(value = "/saveReadPlan", method = { RequestMethod.POST })
 	@ResponseBody
@@ -76,6 +72,7 @@ public class ManageReadPlanController {
 		return responseData;
 	}
 
+	@RequiredPermissions({1, 23})
 	@ApiOperation(value = "为阅读计划添加故事", notes = "添加可能有些慢因为得向数据库插入21条数据")
 	@RequestMapping(value = "/addStoryForReadPlan", method = { RequestMethod.POST })
 	@ResponseBody
@@ -98,6 +95,7 @@ public class ManageReadPlanController {
 		return responseData;
 	}
 
+	@RequiredPermissions({2, 23})
 	@ApiOperation(value = "删除阅读计划(包括添加的故事)", notes = "")
 	@RequestMapping(value = "/deleteReadPlan/{id}", method = { RequestMethod.DELETE })
 	@ResponseBody
@@ -114,6 +112,7 @@ public class ManageReadPlanController {
 		return responseData;
 	}
 
+	@RequiredPermissions({3, 23})
 	@ApiOperation(value = "修改阅读计划", notes = "")
 	@RequestMapping(value = "/updateReadPlanById", method = { RequestMethod.POST })
 	@ResponseBody
@@ -151,6 +150,7 @@ public class ManageReadPlanController {
 	}
 
 	// 这些接口都写得好烂啊啊啊，不是我写的，以后回来优化
+	@RequiredPermissions({3, 23})
 	@ApiOperation(value = "为阅读计划修改故事", notes = "这个反应可能也会有点慢")
 	@RequestMapping(value = "/updateStoryForReadPlan", method = { RequestMethod.POST })
 	@ResponseBody
@@ -174,6 +174,7 @@ public class ManageReadPlanController {
 		return responseData;
 	}
 
+	@RequiredPermissions({4, 23})
 	@ApiOperation(value = "根据阅读计划id分页查询故事组")
 	@RequestMapping(value = "/getStoryGroupByPlanId", method = { RequestMethod.GET })
 	@ResponseBody
@@ -186,6 +187,7 @@ public class ManageReadPlanController {
 		return responseData;
 	}
 
+	@RequiredPermissions({4, 23})
 	@ApiOperation(value = "根据阅读计划id查询阅读计划详情")
 	@RequestMapping(value = "/getReadPlanById", method = { RequestMethod.GET })
 	@ResponseBody

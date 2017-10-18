@@ -10,7 +10,8 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	<artifactId>user-spring</artifactId>
 	<packaging>war</packaging>
 	<name>user-spring Maven Webapp</name>
-	<url>http://maven.apache.org</url><properties>
+	<url>http://maven.apache.org</url>
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<webroot.path>src/main/webapp</webroot.path>
 		<spring-version>4.1.0.RELEASE</spring-version>
@@ -19,6 +20,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		<springfox.swagger.version>2.1.2</springfox.swagger.version>
 		<quartz.version>2.2.1</quartz.version>
 	</properties>
+
 	<build>
 		<finalName>${project.artifactId}</finalName>
 		<plugins>
@@ -169,6 +171,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 			</plugins>
 		</pluginManagement>
 	</build>
+
 	<dependencies>
 		<!-- test -->
 		<dependency>

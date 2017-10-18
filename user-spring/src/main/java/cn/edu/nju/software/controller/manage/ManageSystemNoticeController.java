@@ -1,5 +1,6 @@
 package cn.edu.nju.software.controller.manage;
 
+import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.dto.MsgVo;
 import cn.edu.nju.software.entity.Admin;
 import cn.edu.nju.software.entity.Feed;
@@ -42,6 +43,7 @@ public class ManageSystemNoticeController {
     @Autowired
     private MessageFeedService messageFeedService;
 
+    @RequiredPermissions({1, 20})
     @ApiOperation(value = "新增系统通知项", notes = "")
     @RequestMapping(value = "/systemNotices", method = {RequestMethod.POST})
     @ResponseBody
@@ -73,6 +75,7 @@ public class ManageSystemNoticeController {
         return systemNotice;
     }
 
+    @RequiredPermissions({3, 20})
     @ApiOperation(value = "更新系统通知项", notes = "")
     @RequestMapping(value = "/systemNotices/{id}", method = {RequestMethod.PUT})
     @ResponseBody
@@ -86,6 +89,7 @@ public class ManageSystemNoticeController {
 
     }
 
+    @RequiredPermissions({2, 20})
     @ApiOperation(value = "删除系统通知项", notes = "")
     @RequestMapping(value = "/systemNotices/{id}", method = {RequestMethod.DELETE})
     @ResponseBody
@@ -103,7 +107,7 @@ public class ManageSystemNoticeController {
         }
     }
 
-
+    @RequiredPermissions({4, 20})
     @ApiOperation(value = "根据ID获得系统通知项", notes = "")
     @RequestMapping(value = "/systemNotices/{id}", method = {RequestMethod.GET})
     @ResponseBody
@@ -118,6 +122,7 @@ public class ManageSystemNoticeController {
         }
     }
 
+    @RequiredPermissions({4, 20})
     @ApiOperation(value = "分页获得系统通知列表", notes = "")
     @RequestMapping(value = "/getSystemNoticeListByPage", method = {RequestMethod.GET})
     @ResponseBody

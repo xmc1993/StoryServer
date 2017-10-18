@@ -20,5 +20,7 @@ public interface UserStoryService {
     List<UserStory> getAllUserStoryByUserIdByPage(int userId, int visibility, int page, int pageSize);
 
     int getUserStoryCountByUserId(int userId, int visibility);
+    
+    boolean roseUserStoryTellCount(Integer id);
 
 }

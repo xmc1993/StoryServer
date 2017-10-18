@@ -29,6 +29,10 @@ public class AgreeServiceImpl implements AgreeService {
         if (worksDao.getWorksById(agree.getWorksId()) == null) {
             return false;
         }
+        Agree res = agreeDao.getAgree(agree.getUserId(), agree.getWorksId());
+        if(res != null){
+            return false;
+        }
         boolean res1 = agreeDao.saveAgree(agree);
         boolean res2 = false;
         if (res1) {

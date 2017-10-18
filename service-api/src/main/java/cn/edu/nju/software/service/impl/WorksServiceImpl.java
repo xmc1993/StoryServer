@@ -6,6 +6,7 @@ import cn.edu.nju.software.dao.user.AppUserDao;
 import cn.edu.nju.software.entity.TwoTuple;
 import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.service.WorksService;
+import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.util.Const;
 import it.sauronsoftware.jave.Encoder;
 import it.sauronsoftware.jave.EncoderException;
@@ -33,6 +34,8 @@ public class WorksServiceImpl implements WorksService {
 	private StoryDao storyDao;
 	@Autowired
 	private AppUserDao appUserDao;
+	@Autowired
+	private AppUserService appUserService;
 
 	@Override
 	public Works saveWorks(Works works) {
@@ -65,7 +68,7 @@ public class WorksServiceImpl implements WorksService {
 		if (res) {
 			Works works = worksDao.getWorksByIdHard(id);
 			storyDao.deleteTell(works.getStoryId());
-			appUserDao.removeWork(works.getUserId());
+			appUserService.decreaseWorkCountSafely(works.getUserId());
 		}
 		return res;
 	}
@@ -86,11 +89,24 @@ public class WorksServiceImpl implements WorksService {
 		limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
 		return worksDao.getWorksListByUserId(userId, offset, limit);
 	}
+	@Override
+	public List<Works> getWorksListByUserIdByPage(int userId, int page, int pageSize) {
+		int offset = page * pageSize;
+		int limit = pageSize;
+		return worksDao.getWorksListByUserId(userId, offset, limit);
+	}
 
 	@Override
 	public List<Works> getWorksListByStoryId(int storyId, int offset, int limit) {
 		offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
 		limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+		return worksDao.getWorksListByStoryId(storyId, offset, limit);
+	}
+
+	@Override
+	public List<Works> getWorksListByStoryIdByPage(int storyId, int page, int pageSize) {
+		int offset = page * pageSize;
+		int limit = pageSize;
 		return worksDao.getWorksListByStoryId(storyId, offset, limit);
 	}
 

@@ -34,7 +34,7 @@ import java.util.List;
 public class AccessTokenValidationInterceptor extends HandlerInterceptorAdapter {
 
     private static Logger logger = LoggerFactory.getLogger(AccessTokenValidationInterceptor.class);
-    //白名单
+    //白名单 TODO 改为配置 通用
     private static List<String> whileList = new ArrayList();
     static {
         whileList.add("/user/getStoryListByPage");
@@ -45,6 +45,9 @@ public class AccessTokenValidationInterceptor extends HandlerInterceptorAdapter 
         whileList.add("/user/getStoryIdListByFirstLevelTagId");
         whileList.add("/user/draftStories");
         whileList.add("/user/getBadgeListByTypeId");
+        whileList.add("/user/getMostPopularStoryByPage");
+        whileList.add("/user/getMostPopularByPage");
+        whileList.add("/user/getPopularOriginalStoryListByPage");
     }
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)

@@ -73,9 +73,8 @@
         <!-- 如果不加默认到 使用classpath下的 ValidationMessages.properties -->
         <property name="validationMessageSource" ref="messageSource"/>
     </bean>
-
-    <mvc:resources mapping="/**" location="/WEB-INF/home/"/>
     <mvc:resources mapping="/swagger/**" location="/WEB-INF/swagger/**"/>
+    <mvc:resources mapping="/**" location="/WEB-INF/home/"/>
 
     <mvc:interceptors>
         <!-- token拦截器 -->

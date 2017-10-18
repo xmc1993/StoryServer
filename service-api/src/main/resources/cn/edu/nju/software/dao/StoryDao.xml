@@ -27,7 +27,8 @@
         suggestedReadingDuration,
         isSet,
         setId,
-        readTime
+        readTime,
+        recommendTime
     </sql>
 
     <sql id="multiTableFields">
@@ -176,7 +177,8 @@
         #{suggestedReadingDuration},
         #{isSet},
         #{setId},
-        #{readTime}
+        #{readTime},
+        #{recommendTime}
         )
 
     </insert>
@@ -223,7 +225,7 @@
         select
         <include refid="fields"></include>
         from story
-        where id = #{0} and valid = 1 and isSet = 0
+        where id = #{0} and valid = 1
     </select>
 
     <select id="getStoryByIdHard" resultType="cn.edu.nju.software.entity.Story">
@@ -256,6 +258,13 @@
         where valid = 1 and draft = 0 and setId =0 and isSet = 0
         order by createTime ${sortByCreateTime}
         limit #{0},#{1}
+    </select>
+    
+    <select id="getStoryNameById" resultType="string">
+        select
+        title
+        from story
+        where valid = 1 and draft = 0 and id=#{id}
     </select>
 
     <select id="getStoryListByIdList" resultType="cn.edu.nju.software.entity.Story">
@@ -299,7 +308,8 @@
     <update id="recommendStory">
         update story
         set
-        recommend = 1
+        recommend = 1,
+        recommendTime = NOW()
         where valid = 1 and id=#{0} and recommend = 0 and draft = 0
     </update>
 
@@ -316,6 +326,7 @@
         <include refid="fields"></include>
         from story
         where valid = 1 and recommend = 1 and draft = 0 and isSet = 0
+        order by recommendTime DESC
         limit #{0},#{1}
     </select>
 
@@ -324,7 +335,7 @@
         <include refid="fields"></include>
         from story
         where valid = 1 and recommend = 1 and draft = 0 and setId=0
-        order by createTime DESC
+        order by recommendTime DESC
         limit #{0},#{1}
     </select>
 
@@ -408,6 +419,7 @@
     </select>
     <select id="getStoryListByClassifyFuzzyQueryIncludeDrafts" resultType="cn.edu.nju.software.entity.Story">
         select
+        story.setId,
         <include refid="multiTableFields"/>
         From story
         <if test=" tag!=null">

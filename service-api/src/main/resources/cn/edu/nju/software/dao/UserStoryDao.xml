@@ -78,5 +78,11 @@
         from story
         WHERE id = #{0} and valid = 1
     </select>
+    
+    <update id="roseUserStoryTellCount">
+		update story
+		set tellCount=tellCount+1
+		where id=#{id} and valid = 1 and isSet = 2
+	</update>
 
 </mapper>

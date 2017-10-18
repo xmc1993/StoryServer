@@ -52,4 +52,10 @@ public class UserStoryServiceImpl implements UserStoryService {
         return userStoryDao.getUserStoryCountByUserId(userId, visibility);
     }
 
+	@Override
+	public boolean roseUserStoryTellCount(Integer id) {
+		return userStoryDao.roseUserStoryTellCount(id);
+		
+	}
+
 }

@@ -52,5 +52,11 @@
         from power_code
         WHERE id = #{0}
     </select>
+    
+    <select id="getPowerCodeCount" resultType="java.lang.Integer">
+        select
+        count(*)
+        from power_code
+    </select>
 
 </mapper>
