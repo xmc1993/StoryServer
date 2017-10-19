@@ -233,7 +233,7 @@ public class UserStoryController extends BaseController {
 			user = new User();
 			user.setId(-1);
 		}
-		List<Story> storyList = storyService.getRecommendedStoryListByPage(offset, limit);
+		List<Story> storyList = storyService.getSetRecommendedStoryListByPage(offset, limit);
 		int count = storyService.getSetRecommendedStoryCount();
 		List<StoryNewVo> preList = storyList2VoList(storyList, user.getId());
 		transformStorySetList(preList);
