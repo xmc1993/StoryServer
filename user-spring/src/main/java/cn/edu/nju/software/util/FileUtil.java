@@ -86,4 +86,15 @@ public class FileUtil {
         file.delete();
     }
 
+    /**
+     * 通过文件的url得到文件名
+     * @param url
+     * @return
+     */
+    public static String getFileNameByUrl(String url){
+        String[] strings=url.split("/");
+        int count=strings.length;
+        return strings[count-1];
+    }
+
 }
