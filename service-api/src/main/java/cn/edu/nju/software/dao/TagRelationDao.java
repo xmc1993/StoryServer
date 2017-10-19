@@ -25,5 +25,5 @@ public interface TagRelationDao {
 
     List<Integer> getStoryIdListByTagIdList(@Param("idList") List<Integer> idList);
 
-    boolean deleteTagRelationsByStoryId(Integer storyId);
+
 }
