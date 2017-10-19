@@ -155,6 +155,8 @@
 
 			<mvc:mapping path="/user/getListenCount"/>
 			<mvc:mapping path="/user/getTotalRecordTime"/>
+			
+			<mvc:mapping path="/user/addReadStoryLog"/>
 
             <!-- 不需要拦截的uri -->
             <!--

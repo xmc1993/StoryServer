@@ -14,6 +14,8 @@ public interface TagRelationService {
     boolean deleteTagRelationById(int id);
 
     boolean deleteTagRelationByStoryIdAndTagId(int storyId, int tagId);
+    
+    boolean deleteTagRelationsByStoryId(int storyId);
 
     List<Integer> getStoryIdListByTagId(int tagId);
 
