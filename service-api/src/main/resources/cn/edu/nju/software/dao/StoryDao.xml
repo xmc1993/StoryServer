@@ -212,14 +212,6 @@
 		where
 		id=#{id}
 	</update>
-	
-	<update id="updateStoryIntroduction" parameterType="cn.edu.nju.software.entity.Story">
-		update story
-		set
-		introduction=#{introduction}
-		where
-		id=#{id}
-	</update>
 
     <update id="deleteStoryById">
         update story
@@ -232,14 +224,6 @@
     <select id="getStoryById" resultType="cn.edu.nju.software.entity.Story">
         select
         <include refid="fields"></include>
-        from story
-        where id = #{0} and valid = 1
-    </select>
-    
-    <select id="getStoryByIdWithIntroduction" resultType="cn.edu.nju.software.vo.StoryWithIntroduction">
-        select
-        <include refid="fields"></include>
-        introduction
         from story
         where id = #{0} and valid = 1
     </select>

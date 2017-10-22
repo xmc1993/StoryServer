@@ -8,7 +8,6 @@ import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.util.Const;
 import cn.edu.nju.software.vo.StoryVo;
-import cn.edu.nju.software.vo.StoryWithIntroduction;
 import it.sauronsoftware.jave.Encoder;
 import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.MultimediaInfo;
@@ -452,17 +451,6 @@ public class StoryServiceImpl implements StoryService {
 	@Override
 	public String getStoryNameById(Integer id) {
 		return storyDao.getStoryNameById(id);
-	}
-
-	@Override
-	public boolean updateStoryIntroduction(int storyId, String introduction) {
-		
-		return storyDao.updateStoryIntroduction(storyId, introduction);
-	}
-
-	@Override
-	public StoryWithIntroduction getStoryByIdWithIntroduction(int id) {
-		return storyDao.getStoryByIdWithIntroduction(id);
 	}
 
 }

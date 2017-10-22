@@ -2,8 +2,6 @@ package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.vo.StoryVo;
-import cn.edu.nju.software.vo.StoryWithIntroduction;
-
 import com.github.pagehelper.PageInfo;
 
 import java.io.File;
@@ -112,9 +110,5 @@ public interface StoryService {
     List<Story> getStoryListByReadLog(Integer storyId);
     
     List<Story> getMostPopularStoryByPage(int page, int pageSize);
-    
-    boolean updateStoryIntroduction(int storyId,String introduction);
-    
-    StoryWithIntroduction getStoryByIdWithIntroduction(int id);
 
 }
