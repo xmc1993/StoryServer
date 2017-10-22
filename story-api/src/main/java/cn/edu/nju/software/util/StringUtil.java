@@ -35,7 +35,7 @@ public class StringUtil {
 	 * @return
 	 */
 	public static boolean isEmpty(Long value) {
-		return (value == null || value == 0l);
+		return (value == null || value == 0L);
 	}
 	
 	/**
