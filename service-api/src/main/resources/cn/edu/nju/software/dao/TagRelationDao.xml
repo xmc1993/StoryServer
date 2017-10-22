@@ -74,8 +74,4 @@
         </foreach>
     </select>
 
-	<delete id="deleteTagRelationsByStoryId">
-        DELETE FROM tag_relation
-        WHERE storyId = #{0}
-    </delete>
 </mapper>

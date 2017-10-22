@@ -85,8 +85,7 @@ public class ManageStoryAmbitusController {
 		}
 		List<StoryAmbitus> storyAmbitusList = new ArrayList<>();
 		for (Story story : stories) {
-			List<StoryAmbitus> storyAmbitusList2 = storyAmbitusService.getStoryAmbitusByStoryId(story.getId(), 0, 1)
-					.getObj();
+			List<StoryAmbitus> storyAmbitusList2 = storyAmbitusService.getStoryAmbitusByStoryId(story.getId(),0,1).getObj();
 			if (storyAmbitusList2 == null || storyAmbitusList2.isEmpty()) {
 				continue;
 			}
@@ -180,19 +179,13 @@ public class ManageStoryAmbitusController {
 	}
 
 	@RequiredPermissions({ 4, 17 })
-	@ApiOperation(value = "根据故事Id获取故事周边(当故事id为空时，返回全部的故事周边)", notes = "")
+	@ApiOperation(value = "根据故事Id获取故事周边", notes = "")
 	@RequestMapping(value = "/getStoryAmbitusByStoryId", method = { RequestMethod.GET })
 	@ResponseBody
-	public ResponseData<List<StoryAmbitus>> getStoryAmbitusByStoryId(
-			@ApiParam("故事id") @RequestParam(value = "storyId", required = false) Integer storyId,
+	public ResponseData<List<StoryAmbitus>> getStoryAmbitusByStoryId(@ApiParam("故事id") @RequestParam Integer storyId,
 			@ApiParam("page") @RequestParam Integer page, @ApiParam("pageSize") @RequestParam Integer pageSize,
 			HttpServletRequest request, HttpServletResponse response) {
-		ResponseData<List<StoryAmbitus>> responseData = new ResponseData<>();
-		if (storyId == null) {
-			responseData = storyAmbitusService.selectAllStoryAmbitus(page, pageSize);
-			return responseData;
-		}
-		responseData = storyAmbitusService.getStoryAmbitusByStoryId(storyId, page, pageSize);
+		ResponseData<List<StoryAmbitus>> responseData = storyAmbitusService.getStoryAmbitusByStoryId(storyId,page,pageSize);
 		return responseData;
 	}
 

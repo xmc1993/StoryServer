@@ -15,237 +15,235 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd">
 
-	<context:component-scan base-package="cn.edu.nju.software.controller">
-		<context:include-filter type="annotation"
-			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
-	</context:component-scan>
 
-	<context:property-placeholder location="classpath:datasource.properties"
-		order="1" />
+    <context:component-scan base-package="cn.edu.nju.software.controller">
+        <context:include-filter type="annotation"
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
 
-	<mvc:annotation-driven validator="validator">
-		<mvc:message-converters register-defaults="true">
-			<bean
-				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-				<property name="objectMapper">
-					<bean class="com.fasterxml.jackson.databind.ObjectMapper">
-						<property name="dateFormat">
-							<bean class="java.text.SimpleDateFormat">
-								<constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss" />
-							</bean>
-						</property>
-					</bean>
-				</property>
-			</bean>
-		</mvc:message-converters>
-	</mvc:annotation-driven>
+    <context:property-placeholder location="classpath:datasource.properties"
+                                  order="1"/>
 
-
-	<bean id="jsonUtil" class="cn.edu.nju.software.util.JsonUtil" />
-
-	<!--<mvc:annotation-driven> -->
-	<!--<mvc:message-converters register-defaults="false"> -->
-	<!--&lt;!&ndash; 避免IE执行AJAX时,返回JSON出现下载文件 &ndash;&gt; -->
-	<!--<bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter"> -->
-	<!--<property name="supportedMediaTypes"> -->
-	<!--<list> -->
-	<!--&lt;!&ndash; 这里顺序不能反，一定先写text/html,不然ie下出现下载提示 &ndash;&gt; -->
-	<!--<value>text/html;charset=UTF-8</value> -->
-	<!--<value>application/json;charset=UTF-8</value> -->
-	<!--</list> -->
-	<!--</property> -->
-	<!--</bean> -->
-	<!--</mvc:message-converters> -->
-	<!--</mvc:annotation-driven> -->
-
-	<!-- <bean id="viewResolverOp" class="org.springframework.web.servlet.view.InternalResourceViewResolver" 
-		> <property name="prefix" value="/" /> <property name="suffix" value=".jsp" 
-		/> <property name="viewClass"> <value>org.springframework.web.servlet.view.InternalResourceView</value> 
-		</property> <property name="order" value="0" /> </bean> <mvc:resources mapping="/company/**" 
-		location="/company/" /> -->
+    <mvc:annotation-driven validator="validator">
+        <mvc:message-converters register-defaults="true">
+            <bean
+                    class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper">
+                    <bean class="com.fasterxml.jackson.databind.ObjectMapper">
+                        <property name="dateFormat">
+                            <bean class="java.text.SimpleDateFormat">
+                                <constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss"/>
+                            </bean>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
 
-	<!-- mvc校验器 -->
-	<bean id="validator"
-		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
-		<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
-		<!-- 如果不加默认到 使用classpath下的 ValidationMessages.properties -->
-		<property name="validationMessageSource" ref="messageSource" />
-	</bean>
-	<mvc:resources mapping="/swagger/**" location="/WEB-INF/swagger/**" />
-	<mvc:resources mapping="/**" location="/WEB-INF/home/" />
+    <bean id="jsonUtil" class="cn.edu.nju.software.util.JsonUtil"/>
 
-	<mvc:interceptors>
-		<!-- token拦截器 -->
-		<mvc:interceptor>
-			<mvc:mapping path="/user/setDislikeStory" />
-			<mvc:mapping path="/user/setLikeStory" />
-			<mvc:mapping path="/user/getUserSelfInfo" />
-			<mvc:mapping path="/user/updateUserSelfInfo" />
-			<mvc:mapping path="/user/rePublishWorks" />
-			<mvc:mapping path="/user/publishWorks" />
-			<mvc:mapping path="/user/deleteWorks" />
-			<mvc:mapping path="/user/unlikeWorks" />
-			<mvc:mapping path="/user/likeWorks" />
-			<mvc:mapping path="/user/follow" />
-			<mvc:mapping path="/user/unfollow" />
-			<mvc:mapping path="/user/updateHeadImg" />
-			<mvc:mapping path="/user/addBaby" />
-			<mvc:mapping path="/user/updateBaby" />
-			<mvc:mapping path="/user/deleteBaby" />
-			<mvc:mapping path="/user/getFollowerListByUserId" />
-			<mvc:mapping path="/user/getFolloweeListByUserId" />
-			<mvc:mapping path="/user/getWorksByUserId" />
-			<mvc:mapping path="/user/getWorksListByStoryId" />
-			<mvc:mapping path="/user/getAgreeWorksListByUserId" />
-			<mvc:mapping path="/user/getWorksById" />
-			<mvc:mapping path="/user/getWorkUrlByWorkId" />
-			<mvc:mapping path="/user/getFollowingStatus" />
-			<mvc:mapping path="/user/getWorksByUser" />
-			<mvc:mapping path="/user/getStoryById" />
-			<mvc:mapping path="/user/getStoryListByPage" />
-			<mvc:mapping path="/user/getStoryIdListByFirstLevelTagId" />
-			<mvc:mapping path="/user/getStoryIdListBySecondLevelTagId" />
-			<mvc:mapping path="/user/getStoryListByTitle" />
-			<mvc:mapping path="/user/getStoryByFuzzyQuery" />
-			<mvc:mapping path="/user/getFollowingStatus" />
-			<mvc:mapping path="/user/draftStories" />
-			<mvc:mapping path="/user/getStorysByUser" />
-			<mvc:mapping path="/user/newRecord" />
-			<mvc:mapping path="/user/getCurrentCount" />
-			<mvc:mapping path="/user/getHistoryMaxCount" />
-			<mvc:mapping path="/user/getLatestWorksByPage" />
-			<mvc:mapping path="/user/getMostPopularByPage" />
-			<mvc:mapping path="/user/getAllBageOfUser" />
-			<mvc:mapping path="/user/playList/getPlayListsByPage" />
-			<mvc:mapping path="/user/playList/getWorksListByPlayListIdByPage" />
-			<mvc:mapping path="/user/playList/addWorksToPlayList" />
-			<mvc:mapping path="/user/playList/removeWorksFromPlayList" />
-			<mvc:mapping path="/user/playList/newPlayList" />
-			<mvc:mapping path="/user/playList/removePlayList" />
-			<mvc:mapping path="/user/playList/updatePlayList" />
-			<mvc:mapping path="/user/getBadgeListByTypeId" />
-			<mvc:mapping path="/user/listenWorks" />
-			<mvc:mapping path="/user/submitAnswer" />
-			<mvc:mapping path="/user/submitIndividuationAnswer" />
-			<mvc:mapping path="/user/saveStoryUserLog" />
-			<mvc:mapping path="/user/getStoryListByBaby" />
-			<mvc:mapping path="/user/getMostPopularStoryByPage" />
-			<mvc:mapping path="/user/newUsage" />
-			<mvc:mapping path="/user/getUseRunningDays" />
-			<mvc:mapping path="/user/getUseHistoryMaxRunningDays" />
-			<mvc:mapping path="/user/uploadRoleAudioFile" />
-			<mvc:mapping path="/user/uploadRoleAudioFileList" />
-			<mvc:mapping path="/user/saveStoryRoleAudio" />
-			<mvc:mapping path="/user/getStoryRoleAudioById" />
-			<mvc:mapping path="/user/getStoryRoleAudioByUserId" />
+    <!--<mvc:annotation-driven>-->
+    <!--<mvc:message-converters register-defaults="false">-->
+    <!--&lt;!&ndash; 避免IE执行AJAX时,返回JSON出现下载文件 &ndash;&gt;-->
+    <!--<bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">-->
+    <!--<property name="supportedMediaTypes">-->
+    <!--<list>-->
+    <!--&lt;!&ndash; 这里顺序不能反，一定先写text/html,不然ie下出现下载提示 &ndash;&gt;-->
+    <!--<value>text/html;charset=UTF-8</value>-->
+    <!--<value>application/json;charset=UTF-8</value>-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--</bean>-->
+    <!--</mvc:message-converters>-->
+    <!--</mvc:annotation-driven>-->
 
-			<mvc:mapping path="/user/daily/**" />
-			<mvc:mapping path="/user/originalStory/**" />
-			<mvc:mapping path="/user/feed/**" />
-			<mvc:mapping path="getStoryRoleAudioByUserIdAndRoleId" />
-
-			<mvc:mapping path="/user/getStoryRoleAudioByUserIdAndRoleId" />
-			<mvc:mapping path="/user/getReadPlanByUser" />
-			<mvc:mapping path="/user/saveBabyRead" />
-			<mvc:mapping path="/user/getStoryGroupByPlanId" />
-			<mvc:mapping path="/user/uploadBabyReadAudioFile" />
-			<mvc:mapping path="/user/refreshToken" />
-			<mvc:mapping path="/user/getPopularOriginalStoryListByPage" />
-
-			<mvc:mapping path="/user/getListenCount" />
-			<mvc:mapping path="/user/getTotalRecordTime" />
-
-			<mvc:mapping path="/user/addReadStoryLog" />
-
-			<!-- 不需要拦截的uri -->
-			<!-- <mvc:exclude-mapping path="/user/getLandingPage"/> <mvc:exclude-mapping 
-				path="/**" /> -->
-			<mvc:exclude-mapping path="/swagger/**" />
-			<mvc:exclude-mapping path="/api-docs/**" />
-
-			<!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
-			<bean class="cn.edu.nju.software.filter.AccessTokenValidationInterceptor" />
-		</mvc:interceptor>
-
-		<mvc:interceptor>
-			<mvc:mapping path="/manage/**" />
-			<!-- 不需要拦截的uri -->
-			<mvc:exclude-mapping path="/swagger/**" />
-			<mvc:exclude-mapping path="/api-docs/**" />
-			<!--只有登录接口不需要Auth验证 -->
-			<mvc:exclude-mapping path="/manage/auth" />
-
-			<!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
-			<bean
-				class="cn.edu.nju.software.filter.AdminAccessTokenValidationInterceptor" />
-		</mvc:interceptor>
-
-		<mvc:interceptor>
-			<mvc:mapping path="/manage/**" />
-			<!-- 不需要拦截的uri -->
-			<mvc:exclude-mapping path="/swagger/**" />
-			<mvc:exclude-mapping path="/api-docs/**" />
-			<!--只有登录接口不需要Auth验证 -->
-			<mvc:exclude-mapping path="/manage/auth" />
-
-			<!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
-			<bean class="cn.edu.nju.software.filter.AuthInterceptor" />
-		</mvc:interceptor>
-	</mvc:interceptors>
+    <!-- <bean id="viewResolverOp" class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+        > <property name="prefix" value="/" /> <property name="suffix" value=".jsp"
+        /> <property name="viewClass"> <value>org.springframework.web.servlet.view.InternalResourceView</value>
+        </property> <property name="order" value="0" /> </bean> <mvc:resources mapping="/company/**"
+        location="/company/" /> -->
 
 
-	<!--&lt;!&ndash; Jackson转换器 &ndash;&gt; -->
-	<!--<bean id="mappingJacksonHttpMessageConverter" -->
-	<!--class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" 
-		/> -->
-	<!--&lt;!&ndash; enum枚举值的引用方法 &ndash;&gt; -->
-	<!--<bean id="DisableCircularReferenceDetect" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean" 
-		> -->
-	<!--<property name="staticField" value="com.alibaba.fastjson.serializer.SerializerFeature.DisableCircularReferenceDetect"></property> -->
-	<!--</bean> -->
-	<!--<bean id="WriteNullStringAsEmpty" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean" 
-		> -->
-	<!--<property name="staticField" value="com.alibaba.fastjson.serializer.SerializerFeature.WriteNullStringAsEmpty"></property> -->
-	<!--</bean> -->
-	<!--<bean id="WriteNullNumberAsZero" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean" 
-		> -->
-	<!--<property name="staticField" value="com.alibaba.fastjson.serializer.SerializerFeature.WriteNullNumberAsZero"></property> -->
-	<!--</bean> -->
-	<!--<bean id="WriteMapNullValue" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean" 
-		> -->
-	<!--<property name="staticField" value="com.alibaba.fastjson.serializer.SerializerFeature.WriteMapNullValue"></property> -->
-	<!--</bean> -->
-	<!--&lt;!&ndash; fastjson转换器 &ndash;&gt; -->
-	<!--<bean id="fastJsonHttpMessageConverter" -->
-	<!--class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter" 
-		> -->
-	<!--&lt;!&ndash; 避免IE执行AJAX时,返回JSON出现下载文件 &ndash;&gt; -->
-	<!--<property name="supportedMediaTypes"> -->
-	<!--<list> -->
-	<!--<value>text/html;charset=UTF-8</value> -->
-	<!--</list> -->
-	<!--</property> -->
-	<!--&lt;!&ndash; 转换时的特性设置 &ndash;&gt; -->
-	<!--<property name="features"> -->
-	<!--<array> -->
-	<!--&lt;!&ndash; 避免默认的循环引用替换 &ndash;&gt; -->
-	<!--<ref bean="DisableCircularReferenceDetect" /> -->
-	<!--<ref bean="WriteNullStringAsEmpty" /> -->
-	<!--<ref bean="WriteNullNumberAsZero" /> -->
-	<!--<ref bean="WriteMapNullValue" /> -->
-	<!--</array> -->
-	<!--</property> -->
-	<!--</bean> -->
-	<!--<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"> -->
-	<!--<property name="messageConverters"> -->
-	<!--<list> -->
-	<!--&lt;!&ndash; json转换器 &ndash;&gt; -->
-	<!--<ref bean="fastJsonHttpMessageConverter" /> -->
-	<!--</list> -->
-	<!--</property> -->
-	<!--</bean> -->
+    <!-- mvc校验器 -->
+    <bean id="validator"
+          class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <!-- 如果不加默认到 使用classpath下的 ValidationMessages.properties -->
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+    <mvc:resources mapping="/swagger/**" location="/WEB-INF/swagger/**"/>
+    <mvc:resources mapping="/**" location="/WEB-INF/home/"/>
 
-	<bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />
+    <mvc:interceptors>
+        <!-- token拦截器 -->
+        <mvc:interceptor>
+            <mvc:mapping path="/user/setDislikeStory"/>
+            <mvc:mapping path="/user/setLikeStory"/>
+            <mvc:mapping path="/user/getUserSelfInfo"/>
+            <mvc:mapping path="/user/updateUserSelfInfo"/>
+            <mvc:mapping path="/user/rePublishWorks"/>
+            <mvc:mapping path="/user/publishWorks"/>
+            <mvc:mapping path="/user/deleteWorks"/>
+            <mvc:mapping path="/user/unlikeWorks"/>
+            <mvc:mapping path="/user/likeWorks"/>
+            <mvc:mapping path="/user/follow"/>
+            <mvc:mapping path="/user/unfollow"/>
+            <mvc:mapping path="/user/updateHeadImg"/>
+            <mvc:mapping path="/user/addBaby"/>
+            <mvc:mapping path="/user/updateBaby"/>
+            <mvc:mapping path="/user/deleteBaby"/>
+            <mvc:mapping path="/user/getFollowerListByUserId"/>
+            <mvc:mapping path="/user/getFolloweeListByUserId"/>
+            <mvc:mapping path="/user/getWorksByUserId"/>
+            <mvc:mapping path="/user/getWorksListByStoryId"/>
+            <mvc:mapping path="/user/getAgreeWorksListByUserId"/>
+            <mvc:mapping path="/user/getWorksById"/>
+            <mvc:mapping path="/user/getFollowingStatus"/>
+            <mvc:mapping path="/user/getWorksByUser"/>
+            <mvc:mapping path="/user/getStoryById"/> 
+            <mvc:mapping path="/user/getStoryListByPage"/>
+            <mvc:mapping path="/user/getStoryIdListByFirstLevelTagId"/>
+            <mvc:mapping path="/user/getStoryIdListBySecondLevelTagId"/>
+            <mvc:mapping path="/user/getStoryListByTitle"/>
+            <mvc:mapping path="/user/getStoryByFuzzyQuery"/>
+            <mvc:mapping path="/user/getFollowingStatus"/>
+            <mvc:mapping path="/user/draftStories"/>
+            <mvc:mapping path="/user/getStorysByUser"/>
+            <mvc:mapping path="/user/newRecord"/>
+            <mvc:mapping path="/user/getCurrentCount"/>
+            <mvc:mapping path="/user/getHistoryMaxCount"/>
+            <mvc:mapping path="/user/getLatestWorksByPage"/>
+            <mvc:mapping path="/user/getMostPopularByPage"/>
+            <mvc:mapping path="/user/getAllBageOfUser"/>
+            <mvc:mapping path="/user/playList/getPlayListsByPage"/>
+            <mvc:mapping path="/user/playList/getWorksListByPlayListIdByPage"/>
+            <mvc:mapping path="/user/playList/addWorksToPlayList"/>
+            <mvc:mapping path="/user/playList/removeWorksFromPlayList"/>
+            <mvc:mapping path="/user/playList/newPlayList"/>
+            <mvc:mapping path="/user/playList/removePlayList"/>
+            <mvc:mapping path="/user/playList/updatePlayList"/>
+            <mvc:mapping path="/user/getBadgeListByTypeId"/>
+            <mvc:mapping path="/user/listenWorks"/>
+            <mvc:mapping path="/user/submitAnswer"/>
+            <mvc:mapping path="/user/submitIndividuationAnswer"/>
+            <mvc:mapping path="/user/saveStoryUserLog"/>
+            <mvc:mapping path="/user/getStoryListByBaby"/>
+            <mvc:mapping path="/user/getMostPopularStoryByPage"/>
+            <mvc:mapping path="/user/newUsage"/>
+            <mvc:mapping path="/user/getUseRunningDays"/>
+            <mvc:mapping path="/user/getUseHistoryMaxRunningDays"/>
+            <mvc:mapping path="/user/uploadRoleAudioFile"/>
+            <mvc:mapping path="/user/uploadRoleAudioFileList"/>
+            <mvc:mapping path="/user/saveStoryRoleAudio"/>
+            <mvc:mapping path="/user/getStoryRoleAudioById"/>
+            <mvc:mapping path="/user/getStoryRoleAudioByUserId"/>
+
+            <mvc:mapping path="/user/daily/**"/>
+            <mvc:mapping path="/user/originalStory/**"/>
+            <mvc:mapping path="/user/feed/**"/>
+            <mvc:mapping path="getStoryRoleAudioByUserIdAndRoleId"/>
+
+            <mvc:mapping path="/user/getStoryRoleAudioByUserIdAndRoleId"/>
+            <mvc:mapping path="/user/getReadPlanByUser"/>
+            <mvc:mapping path="/user/saveBabyRead"/>
+			<mvc:mapping path="/user/getStoryGroupByPlanId"/>
+			<mvc:mapping path="/user/uploadBabyReadAudioFile"/>
+			<mvc:mapping path="/user/refreshToken"/>
+			<mvc:mapping path="/user/getPopularOriginalStoryListByPage"/>
+
+			<mvc:mapping path="/user/getListenCount"/>
+			<mvc:mapping path="/user/getTotalRecordTime"/>
+
+            <!-- 不需要拦截的uri -->
+            <!--
+            <mvc:exclude-mapping path="/user/getLandingPage"/>
+             <mvc:exclude-mapping path="/**" /> -->
+            <mvc:exclude-mapping path="/swagger/**"/>
+            <mvc:exclude-mapping path="/api-docs/**"/>
+
+            <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
+            <bean class="cn.edu.nju.software.filter.AccessTokenValidationInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/manage/**"/>
+            <!-- 不需要拦截的uri -->
+            <mvc:exclude-mapping path="/swagger/**"/>
+            <mvc:exclude-mapping path="/api-docs/**"/>
+            <!--只有登录接口不需要Auth验证-->
+            <mvc:exclude-mapping path="/manage/auth"/>
+
+            <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
+            <bean class="cn.edu.nju.software.filter.AdminAccessTokenValidationInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/manage/**"/>
+            <!-- 不需要拦截的uri -->
+            <mvc:exclude-mapping path="/swagger/**"/>
+            <mvc:exclude-mapping path="/api-docs/**"/>
+            <!--只有登录接口不需要Auth验证-->
+            <mvc:exclude-mapping path="/manage/auth"/>
+
+            <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
+            <bean class="cn.edu.nju.software.filter.AuthInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+
+    <!--&lt;!&ndash; Jackson转换器 &ndash;&gt; -->
+    <!--<bean id="mappingJacksonHttpMessageConverter" -->
+    <!--class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"
+        /> -->
+    <!--&lt;!&ndash; enum枚举值的引用方法 &ndash;&gt; -->
+    <!--<bean id="DisableCircularReferenceDetect" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean"
+        > -->
+    <!--<property name="staticField" value="com.alibaba.fastjson.serializer.SerializerFeature.DisableCircularReferenceDetect"></property> -->
+    <!--</bean> -->
+    <!--<bean id="WriteNullStringAsEmpty" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean"
+        > -->
+    <!--<property name="staticField" value="com.alibaba.fastjson.serializer.SerializerFeature.WriteNullStringAsEmpty"></property> -->
+    <!--</bean> -->
+    <!--<bean id="WriteNullNumberAsZero" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean"
+        > -->
+    <!--<property name="staticField" value="com.alibaba.fastjson.serializer.SerializerFeature.WriteNullNumberAsZero"></property> -->
+    <!--</bean> -->
+    <!--<bean id="WriteMapNullValue" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean"
+        > -->
+    <!--<property name="staticField" value="com.alibaba.fastjson.serializer.SerializerFeature.WriteMapNullValue"></property> -->
+    <!--</bean> -->
+    <!--&lt;!&ndash; fastjson转换器 &ndash;&gt; -->
+    <!--<bean id="fastJsonHttpMessageConverter" -->
+    <!--class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter"
+        > -->
+    <!--&lt;!&ndash; 避免IE执行AJAX时,返回JSON出现下载文件 &ndash;&gt; -->
+    <!--<property name="supportedMediaTypes"> -->
+    <!--<list> -->
+    <!--<value>text/html;charset=UTF-8</value> -->
+    <!--</list> -->
+    <!--</property> -->
+    <!--&lt;!&ndash; 转换时的特性设置 &ndash;&gt; -->
+    <!--<property name="features"> -->
+    <!--<array> -->
+    <!--&lt;!&ndash; 避免默认的循环引用替换 &ndash;&gt; -->
+    <!--<ref bean="DisableCircularReferenceDetect" /> -->
+    <!--<ref bean="WriteNullStringAsEmpty" /> -->
+    <!--<ref bean="WriteNullNumberAsZero" /> -->
+    <!--<ref bean="WriteMapNullValue" /> -->
+    <!--</array> -->
+    <!--</property> -->
+    <!--</bean> -->
+    <!--<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"> -->
+    <!--<property name="messageConverters"> -->
+    <!--<list> -->
+    <!--&lt;!&ndash; json转换器 &ndash;&gt; -->
+    <!--<ref bean="fastJsonHttpMessageConverter" /> -->
+    <!--</list> -->
+    <!--</property> -->
+    <!--</bean> -->
+
+    <bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig"/>
 
 </beans>

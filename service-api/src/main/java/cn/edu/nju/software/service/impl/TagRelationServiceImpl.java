@@ -69,9 +69,4 @@ public class TagRelationServiceImpl implements TagRelationService {
         return tagRelationDao.getStoryIdListByTagId(tagId);
     }
 
-	@Override
-	public boolean deleteTagRelationsByStoryId(int storyId) {
-		return tagRelationDao.deleteTagRelationsByStoryId(storyId);
-	}
-
 }
