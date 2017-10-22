@@ -67,6 +67,15 @@ public class UserStoryController extends BaseController {
 		}
 		// 需求修改 这里需要返回故事简介
 		// Story story = storyService.getStoryById(id);
+		
+		//每次请求都是阅读一次故事，所以在这里添加阅读日志
+		StoryUserLog storyUserLog = new StoryUserLog();
+		storyUserLog.setAccessTime(new Date());
+		storyUserLog.setUserId(user.getId());
+		storyUserLog.setStoryId(id);
+		storyUserLog.setChannel("app");
+		storyUserLogService.saveLog(storyUserLog);
+		
 		StoryWithIntroduction story = storyService.getStoryByIdWithIntroduction(id);
 		responseData.jsonFill(1, null, story);
 		/*

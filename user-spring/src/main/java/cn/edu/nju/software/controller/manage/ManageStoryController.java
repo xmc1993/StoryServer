@@ -463,7 +463,7 @@ public class ManageStoryController {
 
 	@RequiredPermissions({ 3, 5 })
 	@ApiOperation(value = "添加故事简介")
-	@RequestMapping(value = "/addIntroductionForStory", method = { RequestMethod.GET })
+	@RequestMapping(value = "/addIntroductionForStory", method = { RequestMethod.POST })
 	@ResponseBody
 	public ResponseData<Boolean> addIntroductionForStory(@ApiParam("故事ID") @RequestParam("storyId") int storyId,
 			@ApiParam("故事简介") @RequestParam("introduction") String introduction, HttpServletRequest request,
