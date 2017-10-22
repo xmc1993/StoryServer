@@ -7,8 +7,6 @@ import cn.edu.nju.software.util.Const;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UserChecker;
 import cn.edu.nju.software.vo.StoryNewVo;
-import cn.edu.nju.software.vo.StoryWithIntroduction;
-
 import com.github.pagehelper.PageInfo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -57,22 +55,20 @@ public class UserStoryController extends BaseController {
 	@ApiOperation(value = "获取ID获取故事", notes = "")
 	@RequestMapping(value = "/getStoryById", method = { RequestMethod.GET })
 	@ResponseBody
-	public ResponseData<StoryWithIntroduction> getStoryById(@ApiParam("故事ID") @RequestParam("id") Integer id,
+	public ResponseData<StoryNewVo> getStoryById(@ApiParam("故事ID") @RequestParam("id") Integer id,
 			HttpServletRequest request, HttpServletResponse response) {
-		ResponseData<StoryWithIntroduction> responseData = new ResponseData();
+		ResponseData<StoryNewVo> responseData = new ResponseData();
 		User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
 		if (user == null) {
 			user = new User();
 			user.setId(-1);
 		}
-		// 需求修改 这里需要返回故事简介
-		// Story story = storyService.getStoryById(id);
-		StoryWithIntroduction story = storyService.getStoryByIdWithIntroduction(id);
-		responseData.jsonFill(1, null, story);
-		/*
-		 * if (story == null) { responseData.jsonFill(2, "该故事不存在", null); } else
-		 * { responseData.jsonFill(1, null, story2Vo(story, user.getId())); }
-		 */
+		Story story = storyService.getStoryById(id);
+		if (story == null) {
+			responseData.jsonFill(2, "该故事不存在", null);
+		} else {
+			responseData.jsonFill(1, null, story2Vo(story, user.getId()));
+		}
 		return responseData;
 	}
 
@@ -427,7 +423,7 @@ public class UserStoryController extends BaseController {
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<List<Story>> responseData = new ResponseData<>();
 		List<Story> storyList = storyService.getStoryListByReadLog(storyId);
-		if (storyList.size() >= 5) {
+		if (storyList.size()>=5) {
 			List<Story> list = storyList.subList(0, 5);
 			responseData.jsonFill(1, null, list);
 			return responseData;
@@ -470,13 +466,14 @@ public class UserStoryController extends BaseController {
 			@ApiParam("页大小") @RequestParam int pageSize, HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<List<Story>> responseData = new ResponseData<>();
 		User user = UserChecker.checkUser(request);
-
-		List<Story> list = storyService.getMostPopularStoryByPage(page, pageSize);
+	
+		List<Story> list=storyService.getMostPopularStoryByPage(page, pageSize);
 		responseData.jsonFill(1, null, list);
 		responseData.setCount(storyService.getSetStoryCount());
 		return responseData;
 	}
 
+	
 	@ApiOperation(value = "分页获得集合列表", notes = "")
 	@RequestMapping(value = "/getAllStorySetByPage", method = { RequestMethod.GET })
 	@ResponseBody
