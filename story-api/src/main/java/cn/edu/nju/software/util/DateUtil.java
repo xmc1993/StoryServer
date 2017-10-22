@@ -525,7 +525,7 @@
      }
 
      public static void main(String[] args) {
-         long time = 1758762l;//diffDateSecond(new Date(), getDateByString("2014-01-01 12:12:12","yyyy-MM-dd HH:mm:ss"))*1000;
+         long time = 1758762L;//diffDateSecond(new Date(), getDateByString("2014-01-01 12:12:12","yyyy-MM-dd HH:mm:ss"))*1000;
          long day = time / (24 * 60 * 60 * 1000);
          long hour = (time / (60 * 60 * 1000) - day * 24);
          long min = ((time / (60 * 1000)) - day * 24 * 60 - hour * 60);

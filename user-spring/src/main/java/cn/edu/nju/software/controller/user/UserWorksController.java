@@ -93,12 +93,13 @@ public class UserWorksController extends BaseController {
 	public ResponseData<List<WorksVo>> getMostPopularByPage(@ApiParam("页") @RequestParam int page,
 			@ApiParam("页大小") @RequestParam int pageSize, HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<List<WorksVo>> responseData = new ResponseData<>();
-//		User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
-//		if (user == null) {
-//			responseData.jsonFill(2, "请先登录", null);
-//			response.setStatus(401);
-//			return responseData;
-//		}
+		// User user = (User)
+		// request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+		// if (user == null) {
+		// responseData.jsonFill(2, "请先登录", null);
+		// response.setStatus(401);
+		// return responseData;
+		// }
 		User user = UserChecker.checkUser(request);
 
 		List<Works> worksList = worksService.getMostPopularByPage(page, pageSize);
@@ -384,7 +385,6 @@ public class UserWorksController extends BaseController {
 			messageFeedService.feedFollowers(feed, user.getId(), true);
 		}
 
-
 		WorksVo worksVo = new WorksVo();
 		if (res != null) {
 			List<Badge> badges = judgeUserAddBadgeByPublish(user, works);
@@ -458,9 +458,9 @@ public class UserWorksController extends BaseController {
 		}
 		// 最高连续阅读天数
 		int maxDays = recordStatisticService.getHistoryMaxCount(user.getId());
-		
+
 		recordStatisticService.saveRecord(user.getId());
-		
+
 		// 判断连续阅读故事的天数
 		int days = recordStatisticService.getCurCount(user.getId());
 		if (maxDays < days) {
@@ -614,12 +614,10 @@ public class UserWorksController extends BaseController {
 		return responseData;
 	}
 
-
 	@ApiOperation(value = "获得总的录制时长", notes = "需登录")
-		 @RequestMapping(value = "/getTotalRecordTime", method = { RequestMethod.GET })
-		 @ResponseBody
-		 public ResponseData<String> getTotalRecordTime(
-			HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/getTotalRecordTime", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<String> getTotalRecordTime(HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<String> responseData = new ResponseData();
 		User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
 		if (user == null) {
@@ -636,8 +634,7 @@ public class UserWorksController extends BaseController {
 	@ApiOperation(value = "获得收听数", notes = "需登录")
 	@RequestMapping(value = "/getListenCount", method = { RequestMethod.GET })
 	@ResponseBody
-	public ResponseData<Integer> getListenCount(
-			HttpServletRequest request, HttpServletResponse response) {
+	public ResponseData<Integer> getListenCount(HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<Integer> responseData = new ResponseData();
 		User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
 		if (user == null) {
@@ -649,6 +646,27 @@ public class UserWorksController extends BaseController {
 		Integer listenCount = appUserService.getListenCount(user.getId());
 		responseData.jsonFill(1, null, listenCount);
 		return responseData;
+	}
+
+	@ApiOperation(value = "根据workId获取作品的Url(分享时调用)", notes = "需登录")
+	@RequestMapping(value = "/getWorkUrlByWorkId", method = { RequestMethod.POST })
+	@ResponseBody
+	public ResponseData<String> getWorkUrlByWorkId(@ApiParam("作品ID") @RequestParam("worksId") int worksId,
+			HttpServletRequest request, HttpServletResponse response) { 
+		ResponseData<String> responseData=new ResponseData<>();
+		User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+		if (user == null) {
+			responseData.jsonFill(2, "请先登录", null);
+			response.setStatus(401);
+			return responseData;
+		}
+		Works works=worksService.getWorksById(worksId);
+		if(works!=null){
+			responseData.jsonFill(1, null, works.getUrl());
+			return responseData;
+		}
+			responseData.jsonFill(2, "该作品不存在", null);
+			return responseData;
 	}
 
 	// TODO 抽取service
