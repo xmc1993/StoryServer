@@ -2,6 +2,8 @@ package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.vo.StoryVo;
+import cn.edu.nju.software.vo.StoryWithIntroduction;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -24,6 +26,8 @@ public interface StoryDao {
     boolean deleteStoryById(int id);
 
     Story getStoryById(int id);
+    
+    StoryWithIntroduction getStoryByIdWithIntroduction(int id);
 
     Story getStoryByIdHard(int id);
 
@@ -32,6 +36,8 @@ public interface StoryDao {
     List<Story> getAllStoriesIncludeDrafts();
 
     boolean updateStory(Story story);
+    
+    boolean updateStoryIntroduction(@Param("id")int id,@Param("introduction")String introduction);
 
     boolean deleteHard(int id);
 

@@ -94,4 +94,18 @@ public class UserStoryTagController extends BaseController {
         return responseData;
     }
 
+    @ApiOperation(value = "获得热门搜索的标签", notes = "")
+    @RequestMapping(value = "/getHotTagList", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<StoryTag>> getHotTagList(
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<StoryTag>> responseData = new ResponseData<>();
+
+        //storyId为2表示后台需要显示的热搜标签
+        List<Integer> idList = tagRelationService.getTagIdListByStoryId(2);
+        List<StoryTag> storyTagList = storyTagService.getStoryTagListByIdList(idList);
+        responseData.jsonFill(1, null, storyTagList);
+        responseData.setCount(storyTagList.size());
+        return responseData;
+    }
 }
