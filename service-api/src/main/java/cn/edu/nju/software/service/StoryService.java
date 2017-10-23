@@ -117,6 +117,6 @@ public interface StoryService {
     
     StoryWithIntroduction getStoryByIdWithIntroduction(int id);
     
-    String getStoryIntorductionById(int id);
+    String getStoryIntroductionById(int id);
 
 }

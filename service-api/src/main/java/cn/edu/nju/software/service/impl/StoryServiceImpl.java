@@ -466,8 +466,8 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public String getStoryIntorductionById(int id) {
-		return storyDao.getStoryIntorductionById(id);
+	public String getStoryIntroductionById(int id) {
+		return storyDao.getStoryIntroductionById(id);
 	}
 
 }

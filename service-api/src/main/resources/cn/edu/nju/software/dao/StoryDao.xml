@@ -547,9 +547,9 @@
         where id = #{0} and valid = 1 and isSet = 0
     </select>
     
-    <select id="getStoryIntorductionById" resultType="string">
+    <select id="getStoryIntroductionById" resultType="string">
         select
-        intorduction
+        introduction
         from story
         where id = #{0} and valid = 1 and isSet = 0
     </select>

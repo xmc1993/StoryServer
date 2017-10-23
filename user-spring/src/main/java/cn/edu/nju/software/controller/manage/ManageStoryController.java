@@ -336,7 +336,7 @@ public class ManageStoryController {
 			 //由于需求改变又敢进度，所以临时用那么丑的办法
 			 StoryNewVoWithIntroduction sIntroduction=new StoryNewVoWithIntroduction();
 			 BeanUtils.copyProperties(storyNewVo,sIntroduction);
-			 sIntroduction.setIntroduction(storyService.getStoryIntorductionById(id));
+			 sIntroduction.setIntroduction(storyService.getStoryIntroductionById(id));
 			 return sIntroduction;
 		}
 	}
