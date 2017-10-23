@@ -64,7 +64,7 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public Story getStoryByIdIncludeDrafts(int id) {
+	public StoryWithIntroduction getStoryByIdIncludeDrafts(int id) {
 		return storyDao.getStoryByIdIncludeDrafts(id);
 	}
 

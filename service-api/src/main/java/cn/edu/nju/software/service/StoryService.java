@@ -19,7 +19,7 @@ public interface StoryService {
 
     Story getStoryById(int id);
 
-    Story getStoryByIdIncludeDrafts(int id);
+    StoryWithIntroduction getStoryByIdIncludeDrafts(int id);
 
     Story getStoryByIdHard(int id);
 

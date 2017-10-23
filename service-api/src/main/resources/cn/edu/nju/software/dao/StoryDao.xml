@@ -542,6 +542,7 @@
     </select>
     <select id="getStoryByIdIncludeDrafts" resultType="cn.edu.nju.software.entity.Story">
         select
+        introduction
         <include refid="fields"></include>
         from story
         where id = #{0} and valid = 1 and isSet = 0

@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * 
  * @author liuyu
@@ -34,78 +33,73 @@ import java.util.List;
 @Controller
 @RequestMapping("/user")
 public class UserBadgeController {
-	@Autowired 
+	@Autowired
 	BadgeService badgeService;
-	@Autowired 
+	@Autowired
 	BadgeTypeService badgeTypeService;
 	@Autowired
 	UserBadgeService userBadgeService;
 
 	@ApiOperation("获取用户的徽章列表")
-    @RequestMapping(value = "/getAllBageOfUser",method = {RequestMethod.GET})
-    @ResponseBody
-    public ResponseData<List<Badge>> getBadgeOfUser(
-    		HttpServletRequest request, HttpServletResponse response){
+	@RequestMapping(value = "/getAllBageOfUser", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<List<Badge>> getBadgeOfUser(HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<List<Badge>> responseData = new ResponseData<>();
-        User user = UserChecker.checkUser(request);
-        List<Badge> badgeList = badgeService.getBadgeOfUser(user.getId());
-        //Integer count = userBadgeService.getCountBageOfUser(user.getId());
-        responseData.jsonFill(1, null, badgeList);
-        responseData.setCount(badgeList.size());
+		User user = UserChecker.checkUser(request);
+		List<Badge> badgeList = badgeService.getBadgeOfUser(user.getId());
+		// Integer count = userBadgeService.getCountBageOfUser(user.getId());
+		responseData.jsonFill(1, null, badgeList);
+		responseData.setCount(badgeList.size());
 		return responseData;
 	}
-	
+
 	@ApiOperation("根据徽章获取所在徽章系统")
-    @RequestMapping(value = "/getBadgeTypeByBadgeId",method = {RequestMethod.GET})
-    @ResponseBody
-    public ResponseData<BadgeType> getBageTypeByBageId(
-    		@ApiParam("徽章id") @RequestParam(value="bageId") Integer bageId,
-    		HttpServletRequest request, HttpServletResponse response){
+	@RequestMapping(value = "/getBadgeTypeByBadgeId", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<BadgeType> getBageTypeByBageId(@ApiParam("徽章id") @RequestParam(value = "bageId") Integer bageId,
+			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<BadgeType> responseData = new ResponseData<>();
-        BadgeType badgeType = badgeTypeService.getBadgeTypeByBadgeId(bageId);
-        responseData.jsonFill(1, null, badgeType);
+		BadgeType badgeType = badgeTypeService.getBadgeTypeByBadgeId(bageId);
+		responseData.jsonFill(1, null, badgeType);
 		return responseData;
 	}
-	
+
 	@ApiOperation("获取徽章系统列表")
-    @RequestMapping(value = "/getBadgeTypeListByPage",method = {RequestMethod.GET})
-    @ResponseBody
-    public ResponseData<List<BadgeType>> getBadgeTypeListByPage(
-    		@ApiParam("页码") @RequestParam(value="page") Integer page,
-    		@ApiParam("页面大小") @RequestParam(value="pageSize") Integer pageSize,
-    		HttpServletRequest request, HttpServletResponse response){
+	@RequestMapping(value = "/getBadgeTypeListByPage", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<List<BadgeType>> getBadgeTypeListByPage(
+			@ApiParam("页码") @RequestParam(value = "page") Integer page,
+			@ApiParam("页面大小") @RequestParam(value = "pageSize") Integer pageSize, HttpServletRequest request,
+			HttpServletResponse response) {
 		ResponseData<List<BadgeType>> responseData = new ResponseData<>();
-		PageInfo<BadgeType> pageInfo = badgeTypeService.getBadgeTypeListByPage(page,pageSize);
-		responseData.jsonFill(1, null,pageInfo.getList());
-		responseData.setCount((int)pageInfo.getTotal());
+		PageInfo<BadgeType> pageInfo = badgeTypeService.getBadgeTypeListByPage(page, pageSize);
+		responseData.jsonFill(1, null, pageInfo.getList());
+		responseData.setCount((int) pageInfo.getTotal());
 		return responseData;
 	}
-	
+
 	@ApiOperation("获取徽章系统下的徽章列表")
-    @RequestMapping(value = "/getBadgeListByTypeId",method = {RequestMethod.GET})
-    @ResponseBody
-    public ResponseData<List<BadgeVo>> getBadgeListByTypeId(
-    		@ApiParam("徽章类型ID") @RequestParam(value="typeId") Integer typeId,
-    		HttpServletRequest request, HttpServletResponse response){
+	@RequestMapping(value = "/getBadgeListByTypeId", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<List<BadgeVo>> getBadgeListByTypeId(
+			@ApiParam("徽章类型ID") @RequestParam(value = "typeId") Integer typeId, HttpServletRequest request,
+			HttpServletResponse response) {
 		ResponseData<List<BadgeVo>> responseData = new ResponseData<>();
 		User user = UserChecker.checkUser(request);
 
 		List<Badge> badgeList = badgeService.getBadgeListByTypeId(typeId);
 		List<BadgeVo> badgeVoList = new ArrayList<>();
-		for (Badge badge: badgeList
-				) {
+		for (Badge badge : badgeList) {
 			BadgeVo badgeVo = new BadgeVo();
 			BeanUtils.copyProperties(badge, badgeVo);
 			badgeVoList.add(badgeVo);
 		}
 
-		if(user.getId() != -1){
+		if (user.getId() != -1) {
 			List<UserBadge> userBadgeList = userBadgeService.getUserBadgeByUserId(user.getId());
-			for (UserBadge userBadge:userBadgeList
-					) {
-				for (BadgeVo badgeVo : badgeVoList
-						) {
-					if(userBadge.getBadgeId()==badgeVo.getId()){
+			for (UserBadge userBadge : userBadgeList) {
+				for (BadgeVo badgeVo : badgeVoList) {
+					if (userBadge.getBadgeId() == badgeVo.getId()) {
 						badgeVo.setHasGet(true);
 					}
 				}

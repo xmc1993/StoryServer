@@ -7,6 +7,9 @@ import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.MyStringUtil;
 import cn.edu.nju.software.util.UploadFileUtil;
 import cn.edu.nju.software.vo.StoryNewVo;
+import cn.edu.nju.software.vo.StoryNewVoWithIntroduction;
+import cn.edu.nju.software.vo.StoryWithIntroduction;
+
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -323,13 +326,18 @@ public class ManageStoryController {
 	@ApiOperation(value = "根据ID获得故事", notes = "")
 	@RequestMapping(value = "/stories/{id}", method = { RequestMethod.GET })
 	@ResponseBody
-	public StoryNewVo getStoryId(@ApiParam("故事ID") @PathVariable int id, HttpServletRequest request,
+	public StoryNewVoWithIntroduction getStoryId(@ApiParam("故事ID") @PathVariable int id, HttpServletRequest request,
 			HttpServletResponse response) {
-		Story story = storyService.getStoryByIdIncludeDrafts(id);
+		StoryWithIntroduction story = storyService.getStoryByIdIncludeDrafts(id);
 		if (story == null) {
 			throw new RuntimeException("无效的ID");
 		} else {
-			return story2vo(story);
+			 StoryNewVo storyNewVo=story2vo(story);
+			 //由于需求改变又敢进度，所以临时用那么丑的办法
+			 StoryNewVoWithIntroduction sIntroduction=new StoryNewVoWithIntroduction();
+			 BeanUtils.copyProperties(storyNewVo,sIntroduction);
+			 sIntroduction.setIntroduction(story.getIntroduction());
+			 return sIntroduction;
 		}
 	}
 
