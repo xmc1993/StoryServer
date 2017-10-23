@@ -45,6 +45,7 @@ public class ManageInitImageController {
         InitImage initImage=new InitImage();
         initImage.setImgName(imgName);
         initImage.setImgUrl(initImageUrl);
+        initImage.setIsShow(0);
         initImage.setCreateTime(new Date());
         initImage.setValid(1);
         initImage=initImageService.addInitImage(initImage);
