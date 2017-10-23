@@ -540,7 +540,7 @@
         select count(id)
         from story WHERE valid = 1 and isSet = 0
     </select>
-    <select id="getStoryByIdIncludeDrafts" resultType="cn.edu.nju.software.entity.Story">
+    <select id="getStoryByIdIncludeDrafts" resultType="cn.edu.nju.software.vo.StoryWithIntroduction">
         select
         introduction
         <include refid="fields"></include>
