@@ -103,7 +103,9 @@ public interface StoryDao {
 
     Integer getStoryCountIncludeDrafts();
 
-    StoryWithIntroduction getStoryByIdIncludeDrafts(int id);
+    Story getStoryByIdIncludeDrafts(int id);
+    
+    String getStoryIntorductionById(int id);
 
     Integer getStoryCountByTitleIncludeDrafts(String query);
 

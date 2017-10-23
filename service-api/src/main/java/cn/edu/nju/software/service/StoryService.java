@@ -19,7 +19,7 @@ public interface StoryService {
 
     Story getStoryById(int id);
 
-    StoryWithIntroduction getStoryByIdIncludeDrafts(int id);
+    Story getStoryByIdIncludeDrafts(int id);
 
     Story getStoryByIdHard(int id);
 
@@ -116,5 +116,7 @@ public interface StoryService {
     boolean updateStoryIntroduction(int storyId,String introduction);
     
     StoryWithIntroduction getStoryByIdWithIntroduction(int id);
+    
+    String getStoryIntorductionById(int id);
 
 }

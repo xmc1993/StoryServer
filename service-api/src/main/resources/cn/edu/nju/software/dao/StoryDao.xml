@@ -540,13 +540,20 @@
         select count(id)
         from story WHERE valid = 1 and isSet = 0
     </select>
-    <select id="getStoryByIdIncludeDrafts" resultType="cn.edu.nju.software.vo.StoryWithIntroduction">
+    <select id="getStoryByIdIncludeDrafts" resultType="cn.edu.nju.software.entity.Story">
         select
-        introduction
         <include refid="fields"></include>
         from story
         where id = #{0} and valid = 1 and isSet = 0
     </select>
+    
+    <select id="getStoryIntorductionById" resultType="string">
+        select
+        intorduction
+        from story
+        where id = #{0} and valid = 1 and isSet = 0
+    </select>
+    
     <select id="getStoryCountByTitleIncludeDrafts" resultType="java.lang.Integer">
         select count(id)
         from story

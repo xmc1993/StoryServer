@@ -64,7 +64,7 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public StoryWithIntroduction getStoryByIdIncludeDrafts(int id) {
+	public Story getStoryByIdIncludeDrafts(int id) {
 		return storyDao.getStoryByIdIncludeDrafts(id);
 	}
 
@@ -463,6 +463,11 @@ public class StoryServiceImpl implements StoryService {
 	@Override
 	public StoryWithIntroduction getStoryByIdWithIntroduction(int id) {
 		return storyDao.getStoryByIdWithIntroduction(id);
+	}
+
+	@Override
+	public String getStoryIntorductionById(int id) {
+		return storyDao.getStoryIntorductionById(id);
 	}
 
 }

@@ -328,7 +328,7 @@ public class ManageStoryController {
 	@ResponseBody
 	public StoryNewVoWithIntroduction getStoryId(@ApiParam("故事ID") @PathVariable int id, HttpServletRequest request,
 			HttpServletResponse response) {
-		StoryWithIntroduction story = storyService.getStoryByIdIncludeDrafts(id);
+		Story story = storyService.getStoryByIdIncludeDrafts(id);
 		if (story == null) {
 			throw new RuntimeException("无效的ID");
 		} else {
@@ -336,7 +336,7 @@ public class ManageStoryController {
 			 //由于需求改变又敢进度，所以临时用那么丑的办法
 			 StoryNewVoWithIntroduction sIntroduction=new StoryNewVoWithIntroduction();
 			 BeanUtils.copyProperties(storyNewVo,sIntroduction);
-			 sIntroduction.setIntroduction(story.getIntroduction());
+			 sIntroduction.setIntroduction(storyService.getStoryIntorductionById(id));
 			 return sIntroduction;
 		}
 	}
