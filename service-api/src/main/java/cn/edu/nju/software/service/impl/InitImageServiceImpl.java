@@ -17,7 +17,7 @@ public class InitImageServiceImpl implements InitImageService{
     private InitImageDao initImageDao;
 
     @Override
-    public InitImage addInitImage(InitImage initImage) {
+    public boolean addInitImage(InitImage initImage) {
         return initImageDao.addInitImage(initImage);
     }
 

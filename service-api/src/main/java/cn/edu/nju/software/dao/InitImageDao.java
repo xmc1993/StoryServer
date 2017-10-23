@@ -10,7 +10,7 @@ import java.util.List;
  */
 @Repository
 public interface InitImageDao {
-    InitImage addInitImage(InitImage initImage);
+    boolean addInitImage(InitImage initImage);
     boolean deleteInitImageById(Integer id);
     boolean updateInitImage(InitImage initImage);
     boolean updateIsShow(Integer id,Integer isShow);

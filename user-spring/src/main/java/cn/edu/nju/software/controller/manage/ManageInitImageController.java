@@ -8,6 +8,7 @@ import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.service.InitImageService;
 import cn.edu.nju.software.util.FileUtil;
 import cn.edu.nju.software.util.UploadFileUtil;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -40,16 +41,19 @@ public class ManageInitImageController {
     @ApiOperation(value = "新增一张开屏图", notes = "新增一张开屏图")
     @RequestMapping(value = "addInitImage", method = {RequestMethod.POST})
     @ResponseBody
-    public InitImage addInitImage(@ApiParam("开屏图url") @RequestParam("initImageUrl") String initImageUrl){
+    public void addInitImage(@ApiParam("开屏图url") @RequestParam("initImageUrl") String initImageUrl){
         String imgName=FileUtil.getFileNameByUrl(initImageUrl);
+
         InitImage initImage=new InitImage();
         initImage.setImgName(imgName);
         initImage.setImgUrl(initImageUrl);
         initImage.setIsShow(0);
         initImage.setCreateTime(new Date());
         initImage.setValid(1);
-        initImage=initImageService.addInitImage(initImage);
-        return initImage;
+        boolean result=initImageService.addInitImage(initImage);
+        if (!result){
+            throw new RuntimeException("添加开屏图失败");
+        }
     }
 
     @ApiOperation(value = "从文件服务器删除一张开屏图", notes = "")
