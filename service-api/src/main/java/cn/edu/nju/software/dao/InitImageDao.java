@@ -14,7 +14,7 @@ public interface InitImageDao {
     boolean deleteInitImageById(Integer id);
     boolean updateInitImage(InitImage initImage);
     boolean updateIsShow(Integer id,Integer isShow);
-    List<InitImage> getInitImageList();
+    List<InitImage> getValidInitImageList();
     InitImage getInitImageById(Integer id);
     List<InitImage> getAllInitImageByPage(int offset, int limit);
 }

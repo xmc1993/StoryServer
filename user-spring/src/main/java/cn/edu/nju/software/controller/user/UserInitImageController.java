@@ -26,7 +26,7 @@ public class UserInitImageController {
     @Autowired
     private InitImageService initImageService;
 
-    @ApiOperation(value = "获取开屏图", notes = "")
+    @ApiOperation(value = "随机获取可用开屏图", notes = "")
     @RequestMapping(value = "getInitImage", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<InitImage> getInitImage(){

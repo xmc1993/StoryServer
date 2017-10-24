@@ -61,12 +61,12 @@
     <update id="updateIsShow">
         update initImage
         set
-        isShow=#{isShow}
+        isShow=#{1}
         where
-        id=#{id}
+        id=#{0}
     </update>
 
-    <select id="getInitImageList" resultType="cn.edu.nju.software.entity.InitImage">
+    <select id="getValidInitImageList" resultType="cn.edu.nju.software.entity.InitImage">
         select
         <include refid="fields"></include>
         from initImage

@@ -39,8 +39,10 @@ public class AdminController {
 	@ApiOperation(value = "登录", notes = "")
 	@RequestMapping(value = "/auth", method = { RequestMethod.POST })
 	@ResponseBody
-	public LoginResponseVo login(@ApiParam("用户名") @RequestParam("username") String username,
-			@ApiParam("密码(用md5加密)") @RequestParam("password") String password, HttpServletRequest request,
+	public LoginResponseVo login(
+			@ApiParam("用户名") @RequestParam("username") String username,
+			@ApiParam("密码(用md5加密)") @RequestParam("password") String password,
+			HttpServletRequest request,
 			HttpServletResponse response) {
 		Admin admin = adminService.getAdminByUsername(username);
 		if (admin == null) {

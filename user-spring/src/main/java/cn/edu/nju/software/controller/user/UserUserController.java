@@ -288,7 +288,7 @@ public class UserUserController extends BaseController {
 		String code = user.getVerifyCode();
 		LoginResponseVo loginResponseVo = new LoginResponseVo();
 		// 时间差，900秒5分钟
-		long dValue = new Date().getTime() - user.getExpireTime().getTime();
+		long dValue = System.currentTimeMillis() - user.getExpireTime().getTime();
 		if (dValue <= 900000L) {
 			if (verifyCode.equals(code)) {
 				// 0的话就是新用户

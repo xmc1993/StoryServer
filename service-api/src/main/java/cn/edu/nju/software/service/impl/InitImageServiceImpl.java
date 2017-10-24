@@ -12,7 +12,7 @@ import java.util.List;
  * @author zj
  */
 @Service
-public class InitImageServiceImpl implements InitImageService{
+public class InitImageServiceImpl implements InitImageService {
     @Autowired
     private InitImageDao initImageDao;
 
@@ -33,14 +33,15 @@ public class InitImageServiceImpl implements InitImageService{
 
     @Override
     public boolean updateIsShow(Integer id, Integer isShow) {
-        return initImageDao.updateIsShow(id,isShow);
+        return initImageDao.updateIsShow(id, isShow);
     }
 
     @Override
     public InitImage getInitImage() {
-        List initImageList=initImageDao.getInitImageList();
-        int i=(int)(Math.random()*(initImageList.size()-1));
-        InitImage initImage=(InitImage) initImageList.get(i);
+        List validInitImageList = initImageDao.getValidInitImageList();
+        int validImgCount = validInitImageList.size();
+        int i = (int) (Math.random() * (validImgCount - 1));
+        InitImage initImage = (InitImage) validInitImageList.get(i);
         return initImage;
     }
 
@@ -53,6 +54,6 @@ public class InitImageServiceImpl implements InitImageService{
     public List<InitImage> getAllInitImageByPage(int page, int pageSize) {
         int offset = page * pageSize;
         int limit = pageSize;
-        return initImageDao.getAllInitImageByPage(offset,limit);
+        return initImageDao.getAllInitImageByPage(offset, limit);
     }
 }

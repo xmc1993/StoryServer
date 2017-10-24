@@ -64,7 +64,6 @@ public class AdminAccessTokenValidationInterceptor extends HandlerInterceptorAda
                     //设置权限码
                     setPowerCodes(request, admin);
                     //刷新token的时间
-                    jedis.set(AccessToken.getBytes(), bytes);
                     jedis.expire(AccessToken.getBytes(), 60 * 60 * 6);//缓存用户信息30天
                 }
             }
