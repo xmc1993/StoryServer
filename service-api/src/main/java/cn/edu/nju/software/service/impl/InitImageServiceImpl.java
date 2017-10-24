@@ -38,10 +38,10 @@ public class InitImageServiceImpl implements InitImageService {
 
     @Override
     public InitImage getInitImage() {
-        List validInitImageList = initImageDao.getValidInitImageList();
-        int validImgCount = validInitImageList.size();
+        List showAbleInitImageList = initImageDao.getShowAbleInitImageList();
+        int validImgCount = showAbleInitImageList.size();
         int i = (int) (Math.random() * (validImgCount - 1));
-        InitImage initImage = (InitImage) validInitImageList.get(i);
+        InitImage initImage = (InitImage) showAbleInitImageList.get(i);
         return initImage;
     }
 

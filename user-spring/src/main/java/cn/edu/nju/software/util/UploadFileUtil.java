@@ -100,10 +100,13 @@ public final class UploadFileUtil {
      */
     public static boolean deleteFile(String fileUri) {
         if (StringUtil.isEmpty(fileUri)) return true;
+        System.err.println("deleteFile：文件url不为空");
         File file = new File(fileUri);
         if (file.exists()) {
+            System.err.println("文件存在，准备删除");
             return file.delete();
         }
+        System.err.println("deleteFile：文件不存在");
         return true;
     }
 
@@ -126,7 +129,9 @@ public final class UploadFileUtil {
      */
     public static boolean deleteFileByUrl(String url) {
         if (StringUtil.isEmpty(url)) return true;
+        System.err.println("url:"+url);
         String fileUri = getRealPathFromUrl(url);
+        System.err.println("fileUrl:"+fileUri);
         return deleteFile(fileUri);
     }
 

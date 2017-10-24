@@ -37,13 +37,10 @@
         )
     </insert>
 
-    <update id="deleteInitImageById">
-        update initImage
-        set
-        valid=0
-        where
-        id=#{0}
-    </update>
+    <delete id="deleteInitImageById">
+        DELETE FROM initImage
+        WHERE id = #{0}
+    </delete>
 
     <update id="updateInitImage" parameterType="cn.edu.nju.software.entity.InitImage">
         update initImage
@@ -66,18 +63,18 @@
         id=#{0}
     </update>
 
-    <select id="getValidInitImageList" resultType="cn.edu.nju.software.entity.InitImage">
+    <select id="getShowAbleInitImageList" resultType="cn.edu.nju.software.entity.InitImage">
         select
         <include refid="fields"></include>
         from initImage
-        where isShow=1
+        where isShow=1 and valid ='1'
     </select>
 
     <select id="getInitImageById" resultType="cn.edu.nju.software.entity.InitImage">
         select
         <include refid="fields"></include>
         from initImage
-        where id = #{0}
+        where id = #{0} and valid ='1'
     </select>
 
     <select id="getAllInitImageByPage" resultType="cn.edu.nju.software.entity.InitImage">

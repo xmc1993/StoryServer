@@ -68,11 +68,26 @@ public class ManageInitImageController {
     @RequestMapping(value = "deleteInitImageById", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<Boolean> deleteInitImageById(@ApiParam("开屏图ID") @RequestParam("id") Integer id){
+        ResponseData<Boolean> responseData = new ResponseData<>();
+
+        //从服务器上的开屏图片
         InitImage initImage=initImageService.getInitImageById(id);
         String imgUrl=initImage.getImgUrl();
         boolean res = UploadFileUtil.deleteFileByUrl(imgUrl);
-        ResponseData<Boolean> responseData = new ResponseData<>();
-        responseData.jsonFill(1, null, res);
+        if (!res){
+            responseData.jsonFill(2,"删除服务器上的开屏图片失败",false);
+            return responseData;
+        }
+
+        //从数据库删除开屏图
+        boolean result=initImageService.deleteInitImageById(id);
+        if (!result){
+            responseData.jsonFill(2,"从数据库删除开屏图失败",false);
+            return responseData;
+        }
+
+        //从服务器和数据库删除开屏图都成功。
+        responseData.jsonFill(1, null, true);
         return responseData;
     }
 
@@ -166,7 +181,8 @@ public class ManageInitImageController {
     @ApiOperation(value = "分页获取所有可用开屏图", notes = "")
     @RequestMapping(value = "getAllInitImageByPage", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<InitImage>> getAllInitImageByPage(@ApiParam("当前页") @RequestParam("page") int page,
+    public ResponseData<List<InitImage>> getAllInitImageByPage(
+            @ApiParam("当前页") @RequestParam("page") int page,
             @ApiParam("页数大小") @RequestParam("pageSize") int pageSize){
         ResponseData<List<InitImage>> responseData = new ResponseData<>();
         List<InitImage> initImageList = initImageService.getAllInitImageByPage(page, pageSize);
