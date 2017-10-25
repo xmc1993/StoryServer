@@ -69,7 +69,7 @@ public class ManageSystemNoticeController {
             feed.setContent(new Gson().toJson(msgVo));
             feed.setMid(systemNotice.getId());
             feed.setType(MessageType.SYSTEM_NOTICE);
-            messageFeedService.feed(feed, allUserIdList);
+            messageFeedService.savefeed(feed, allUserIdList);
         }
 
         return systemNotice;

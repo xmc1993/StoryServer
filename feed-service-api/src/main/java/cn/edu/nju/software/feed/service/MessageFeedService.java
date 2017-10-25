@@ -44,7 +44,7 @@ public interface MessageFeedService {
      * @param idList
      * @return
      */
-    boolean feed(Feed feed, List<Integer> idList);
+    boolean savefeed(Feed feed, List<Integer> idList);
 
     /**
      * 批量unfeed

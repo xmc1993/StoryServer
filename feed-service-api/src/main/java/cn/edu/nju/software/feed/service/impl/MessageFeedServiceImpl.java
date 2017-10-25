@@ -98,7 +98,7 @@ public class MessageFeedServiceImpl implements MessageFeedService{
     }
 
     @Override
-    public boolean feed(Feed feed, List<Integer> idList) {
+    public boolean savefeed(Feed feed, List<Integer> idList) {
         //TODO 转NoSql异步处理
         for (Integer tid : idList) {
             feed.setTid(tid);
