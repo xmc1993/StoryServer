@@ -157,6 +157,9 @@
 			<mvc:mapping path="/user/getTotalRecordTime" />
 
 			<mvc:mapping path="/user/addReadStoryLog" />
+			
+			<mvc:mapping path="/user/setStarForStory"/>
+			<mvc:mapping path="/user/getStoryStarByStoryIdUserId"/>
 
 			<!-- 不需要拦截的uri -->
 			<!-- <mvc:exclude-mapping path="/user/getLandingPage"/> <mvc:exclude-mapping 

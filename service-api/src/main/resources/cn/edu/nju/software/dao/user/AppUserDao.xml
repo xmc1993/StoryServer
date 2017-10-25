@@ -214,7 +214,7 @@
 		select * from user
 	</select>
 
-	<select id="getAllUserIdList">
+	<select id="getAllUserIdList" resultType="java.lang.Integer">
 		select id from user
 	</select>
 
