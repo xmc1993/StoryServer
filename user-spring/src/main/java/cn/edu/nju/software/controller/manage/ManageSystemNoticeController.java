@@ -133,6 +133,7 @@ public class ManageSystemNoticeController {
         ResponseData<List<SystemNotice>> responseData = new ResponseData<>();
         List<SystemNotice> systemNoticeList = systemNoticeService.getAllSystemNoticeByPage(page, pageSize);
         responseData.jsonFill(1, null, systemNoticeList);
+        responseData.setCount(systemNoticeService.getAllSystemNoticeCount());
         return responseData;
     }
 

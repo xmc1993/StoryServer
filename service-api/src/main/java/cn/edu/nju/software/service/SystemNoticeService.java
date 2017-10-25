@@ -18,5 +18,6 @@ public interface SystemNoticeService {
     SystemNotice getSystemNoticeById(int id);
 
     List<SystemNotice> getAllSystemNoticeByPage(int page, int pageSize);
-
+    
+    Integer getAllSystemNoticeCount();
 }

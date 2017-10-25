@@ -23,4 +23,6 @@ public interface SystemNoticeDao {
     List<SystemNotice> getAllSystemNoticeByPage(int offset, int limit);
 
 	List<SystemNotice> getSystemNoticeList();
+	
+	Integer getAllSystemNoticeCount();
 }

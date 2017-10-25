@@ -48,4 +48,9 @@ public class SystemNoticeServiceImpl implements SystemNoticeService {
         return systemNoticeDao.getAllSystemNoticeByPage(offset, limit);
     }
 
+	@Override
+	public Integer getAllSystemNoticeCount() {
+		return systemNoticeDao.getAllSystemNoticeCount();
+	}
+
 }
