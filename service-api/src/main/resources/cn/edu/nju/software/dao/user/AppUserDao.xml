@@ -150,7 +150,7 @@
 		<include refid="fields"></include>
 		FROM user
 		WHERE valid ='1'
-		limit #{0},#{1}		
+		limit #{0},#{1}
 	</select>
 
 	<select id="getUserById" resultType="cn.edu.nju.software.entity.User">

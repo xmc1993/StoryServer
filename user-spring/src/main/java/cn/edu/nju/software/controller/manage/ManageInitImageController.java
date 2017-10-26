@@ -104,7 +104,7 @@ public class ManageInitImageController {
         ResponseData<Boolean> responseData=new ResponseData<>();
         InitImage initImage=initImageService.getInitImageById(id);
         if(initImage==null){
-            responseData.jsonFill(2, "图片不存在", false);
+            responseData.jsonFill(2, "无效的图片id", false);
             return responseData;
         }
         if (!"".equals(imgName)&&null!=imgName){
@@ -132,10 +132,6 @@ public class ManageInitImageController {
             @ApiParam("开屏图ID") @RequestParam("id") Integer id,
             @ApiParam("是否可以展示") @RequestParam("isShow") Integer isShow){
         ResponseData<Boolean> responseData=new ResponseData<>();
-        if (id==null){
-            responseData.jsonFill(2, "id为空", false);
-            return responseData;
-        }
         if (isShow==null){
             responseData.jsonFill(2, "isShow为空", false);
             return responseData;
@@ -165,10 +161,6 @@ public class ManageInitImageController {
     @ResponseBody
     public ResponseData<InitImage> getInitImageById(@ApiParam("开屏图ID") @RequestParam("id") Integer id){
         ResponseData<InitImage> responseData=new ResponseData<>();
-        if (id==null){
-            responseData.jsonFill(2, "id为空", null);
-            return responseData;
-        }
         InitImage initImage=initImageService.getInitImageById(id);
         if (initImage==null){
             responseData.jsonFill(2, "这张图不存在或已被删除", null);
