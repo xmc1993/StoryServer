@@ -35,6 +35,7 @@ public class WxOAuthController {
         Map<String, String> signature = wxOAuthService.getSignature(url);
         if (signature == null) {
             responseData.jsonFill(2, "生成签名失败。", null);
+            return responseData;
         }
         JsSdkResponseVo jsSdkResponseVo = new JsSdkResponseVo();
         jsSdkResponseVo.setNonceStr(signature.get("nonceStr"));
