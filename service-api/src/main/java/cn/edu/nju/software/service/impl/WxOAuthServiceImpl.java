@@ -32,6 +32,9 @@ public class WxOAuthServiceImpl implements WxOAuthService {
     private final static String FETCH_ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
     private final static String FETCH_TICKET_URL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket";
 
+    private final static String APP_ID = "";
+    private final static String APP_SECRET = "";
+
     @Autowired
     private RequestConfig requestConfig;
     @Autowired
@@ -44,12 +47,10 @@ public class WxOAuthServiceImpl implements WxOAuthService {
             jedis = JedisUtil.getJedis();
             byte[] bytes = jedis.get(JS_SDK_ACCESS_TOKEN_REDIS_KEY.getBytes());
             if (bytes == null) {
-                //TODO
-                String accessToken = getAccessTokenFromWxApi("", "");
+                String accessToken = getAccessTokenFromWxApi(APP_ID, APP_SECRET);
                 if (accessToken != null) {
-                    //TODO 刷新accessToken
                     jedis.set(JS_SDK_ACCESS_TOKEN_REDIS_KEY.getBytes(), accessToken.getBytes());
-                    jedis.expire(JS_SDK_ACCESS_TOKEN_REDIS_KEY.getBytes(), 7200);
+                    jedis.expire(JS_SDK_ACCESS_TOKEN_REDIS_KEY.getBytes(), 7170);//默认7200但-30s 保证token的有效性
                 }
                 return accessToken;
             }
@@ -85,7 +86,6 @@ public class WxOAuthServiceImpl implements WxOAuthService {
                 String accessToken;
                 try {
                     accessToken = object.getString("access_token");
-                    //TODO AccessToken可以刷新？
                 } catch (Exception e) {
                     e.printStackTrace();
                     logger.error("js sdk获取accessToken失败");
@@ -129,7 +129,7 @@ public class WxOAuthServiceImpl implements WxOAuthService {
                 String ticket = getTicketFromWxApi(accessToken);
                 if (ticket != null) {
                     jedis.set(JS_API_TICKET_REDIS_KEY.getBytes(), ticket.getBytes());
-                    jedis.expire(JS_API_TICKET_REDIS_KEY.getBytes(), 7200);
+                    jedis.expire(JS_API_TICKET_REDIS_KEY.getBytes(), 7170);//默认7200但-30s 保证ticket的有效性
                 }
                 return ticket;
             }
