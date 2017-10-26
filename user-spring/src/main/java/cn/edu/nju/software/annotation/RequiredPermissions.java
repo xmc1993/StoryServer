@@ -16,5 +16,5 @@ public @interface RequiredPermissions {
     public int[] alliance() default {};
 
     public int[] task() default {};
-
+    
 }

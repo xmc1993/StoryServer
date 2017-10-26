@@ -55,15 +55,7 @@ public class PlayListServiceImpl implements PlayListService {
 
     @Override
     public List<PlayList> getAllPlayListByUserIdByPage(int userId, int page, int pageSize) {
-        int offset = page*pageSize;
-        int limit = pageSize;
-        List<PlayList> list = playListDao.getAllPlayListByUserIdByPage(userId, offset, limit);
-        //默认的“我喜欢的”文件夹每个用户都有
-        PlayList playList = new PlayList();
-        playList.setUserId(userId);
-        playList.setId(0);
-        playList.setName("我喜欢");
-        list.add(playList);
+    	List<PlayList> list=new ArrayList<>();
         //默认的“我的作品”文件夹每个用户都有
         PlayList myWorksList = new PlayList();
         myWorksList.setUserId(userId);
@@ -71,6 +63,18 @@ public class PlayListServiceImpl implements PlayListService {
         myWorksList.setName("我的作品");
         list.add(myWorksList);
         setCoverByPatch(list);
+        
+        //默认的“我喜欢的”文件夹每个用户都有
+        PlayList playList = new PlayList();
+        playList.setUserId(userId);
+        playList.setId(0);
+        playList.setName("我喜欢");
+        list.add(playList);
+        
+        int offset = page*pageSize;
+        int limit = pageSize;
+       list.addAll(playListDao.getAllPlayListByUserIdByPage(userId, offset, limit));
+
         return list;
     }
 

@@ -30,7 +30,7 @@ public class CrossDomainFilter implements Filter {
 	public void doFilter(ServletRequest rq, ServletResponse rs,
 			FilterChain filterChain) throws IOException, ServletException {
 
-		HttpServletRequest request = (HttpServletRequest) rq;
+	HttpServletRequest request = (HttpServletRequest) rq;
     HttpServletResponse response = (HttpServletResponse) rs;
     if (response.getContentType() == null || response.getContentType().isEmpty()) {
       response.setContentType(ContentType.APPLICATION_JSON.toString());

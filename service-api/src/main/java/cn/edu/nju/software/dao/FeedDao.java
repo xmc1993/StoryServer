@@ -27,4 +27,5 @@ public interface FeedDao {
 
     List<Feed> getFeedsByPage(@Param("userId")int userId, @Param("offset")int offset, @Param("limit")int limit, @Param("type")MessageType type);
 
+    Integer getFeedCountByUserId(int userId);
 }

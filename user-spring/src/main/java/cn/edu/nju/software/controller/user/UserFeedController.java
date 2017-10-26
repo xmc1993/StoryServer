@@ -48,8 +48,8 @@ public class UserFeedController extends BaseController {
 
         List<Feed> feedList = messageFeedService.getDisplayFeedsByPage(user.getId(), page, pageSize);
         responseData.jsonFill(1, null, feedList);
-        //获取访问者与被访者的关系
-
+        
+        responseData.setCount(messageFeedService.getFeedCountByUserId(user.getId()));
         return responseData;
     }
 

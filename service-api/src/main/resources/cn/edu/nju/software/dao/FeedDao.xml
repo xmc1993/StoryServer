@@ -74,4 +74,9 @@
         WHERE mid = #{0}
     </update>
 
+	<select id="getFeedCountByUserId" resultType="java.lang.Integer">
+		select count(id)
+		from feed WHERE userId=#{userId}
+	</select>
+	
 </mapper>

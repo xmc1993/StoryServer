@@ -144,4 +144,9 @@ public class MessageFeedServiceImpl implements MessageFeedService{
         return feedDao.deleteFeedByPatch(mid, userFollowerList);
     }
 
+	@Override
+	public Integer getFeedCountByUserId(int userId) {
+		return feedDao.getFeedCountByUserId(userId);
+	}
+
 }

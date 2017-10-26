@@ -13,6 +13,8 @@ import java.util.List;
 public interface MessageFeedService {
 
 
+	Integer getFeedCountByUserId(int userId);
+	
     List<Feed> getDisplayFeedsByPage(int userId, int page, int pageSize);
 
     /**
