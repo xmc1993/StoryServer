@@ -3,6 +3,7 @@ package cn.edu.nju.software.service;
 import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.vo.StoryVo;
 import cn.edu.nju.software.vo.StoryWithIntroduction;
+import cn.edu.nju.software.vo.StoryWithRealTellCount;
 
 import com.github.pagehelper.PageInfo;
 
@@ -118,5 +119,9 @@ public interface StoryService {
     StoryWithIntroduction getStoryByIdWithIntroduction(int id);
     
     String getStoryIntroductionById(int id);
+    
+    List<StoryWithRealTellCount> getMostPopularStoryByPageWithRealTellCount(int page, int pageSize);
+    
+    Boolean updateTellCountById(int storyId,int tellCount);
 
 }

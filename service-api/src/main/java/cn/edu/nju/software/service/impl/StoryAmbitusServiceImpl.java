@@ -28,7 +28,8 @@ public class StoryAmbitusServiceImpl implements StoryAmbitusService {
 
 	@Override
 	public ResponseData <List<StoryAmbitus>> selectAllStoryAmbitus(int page, int pageSize) {
-		PageHelper.startPage(page, pageSize);
+		//pageHelper是默认从1开始分页的，但是前端需要从0开始分页，所以这里加上1
+		PageHelper.startPage(page+1, pageSize);
 		StoryAmbitusExample storyAmbitusExample=new StoryAmbitusExample();
         //通过criteria构造查询条件
 		StoryAmbitusExample.Criteria criteria = storyAmbitusExample.createCriteria();

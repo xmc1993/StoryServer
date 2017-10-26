@@ -220,6 +220,14 @@
 		where
 		id=#{id}
 	</update>
+	
+	<update id="updateTellCountById">
+		update story
+		set
+		tellCount=#{tellCount}
+		where
+		id=#{id}
+	</update>
 
     <update id="deleteStoryById">
         update story
@@ -595,14 +603,14 @@
     <update id="newTell">
         update story
         set
-        tellCount = tellCount+1
+        realTellCount = realTellCount+1
         where valid = 1 and id=#{0}
     </update>
 
     <update id="deleteTell">
         update story
         set
-        tellCount = tellCount-1
+         realTellCount = realTellCount-1
         where valid = 1 and id=#{0}
     </update>
     <update id="setDraftCompleteByStoryId">
@@ -692,6 +700,16 @@
     <select id="getMostPopularStoryByPage" resultType="cn.edu.nju.software.entity.Story">
         select
         <include refid="fields"></include>
+        from story
+        where valid = 1 and draft = 0 and setId =0 and isSet = 0
+        ORDER by tellCount DESC, likeCount DESC
+        limit #{0},#{1}
+    </select>
+
+	<select id="getMostPopularStoryByPageWithRealTellCount" resultType="cn.edu.nju.software.vo.StoryWithRealTellCount">
+        select
+        <include refid="fields"></include>
+        realTellCount
         from story
         where valid = 1 and draft = 0 and setId =0 and isSet = 0
         ORDER by tellCount DESC, likeCount DESC

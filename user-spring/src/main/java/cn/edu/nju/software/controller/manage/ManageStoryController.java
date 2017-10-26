@@ -9,6 +9,7 @@ import cn.edu.nju.software.util.UploadFileUtil;
 import cn.edu.nju.software.vo.StoryNewVo;
 import cn.edu.nju.software.vo.StoryNewVoWithIntroduction;
 import cn.edu.nju.software.vo.StoryWithIntroduction;
+import cn.edu.nju.software.vo.StoryWithRealTellCount;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -332,12 +333,12 @@ public class ManageStoryController {
 		if (story == null) {
 			throw new RuntimeException("无效的ID");
 		} else {
-			 StoryNewVo storyNewVo=story2vo(story);
-			 //由于需求改变又敢进度，所以临时用那么丑的办法
-			 StoryNewVoWithIntroduction sIntroduction=new StoryNewVoWithIntroduction();
-			 BeanUtils.copyProperties(storyNewVo,sIntroduction);
-			 sIntroduction.setIntroduction(storyService.getStoryIntroductionById(id));
-			 return sIntroduction;
+			StoryNewVo storyNewVo = story2vo(story);
+			// 由于需求改变又敢进度，所以临时用那么丑的办法
+			StoryNewVoWithIntroduction sIntroduction = new StoryNewVoWithIntroduction();
+			BeanUtils.copyProperties(storyNewVo, sIntroduction);
+			sIntroduction.setIntroduction(storyService.getStoryIntroductionById(id));
+			return sIntroduction;
 		}
 	}
 
@@ -476,14 +477,40 @@ public class ManageStoryController {
 	public ResponseData<Boolean> addIntroductionForStory(@ApiParam("故事ID") @RequestParam("storyId") int storyId,
 			@ApiParam("故事简介") @RequestParam("introduction") String introduction, HttpServletRequest request,
 			HttpServletResponse response) {
-		ResponseData<Boolean> responseData=new ResponseData<>();
-		boolean res= storyService.updateStoryIntroduction(storyId, introduction);
-		if(res==true){
+		ResponseData<Boolean> responseData = new ResponseData<>();
+		boolean res = storyService.updateStoryIntroduction(storyId, introduction);
+		if (res == true) {
 			responseData.jsonFill(1, null, true);
 			return responseData;
 		}
 		responseData.jsonFill(2, "添加失败", false);
 		return responseData;
+	}
+
+	@RequiredPermissions({ 4, 5 })
+	@ApiOperation(value = "获得手机上热门显示的故事列表")
+	@RequestMapping(value = "/getHotStoryList", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<List<StoryWithRealTellCount>> getHotStoryList(@ApiParam("页") @RequestParam int page,
+			@ApiParam("页大小") @RequestParam int pageSize) {
+		ResponseData<List<StoryWithRealTellCount>> responseData = new ResponseData<>();
+		List<StoryWithRealTellCount> list = storyService.getMostPopularStoryByPageWithRealTellCount(page, pageSize);
+		responseData.jsonFill(1, null, list);
+		responseData.setCount(storyService.getSetStoryCount());
+		return responseData;
+	}
+
+	@RequiredPermissions({ 3, 5 })
+	@ApiOperation(value = "根据故事id修改读故事的次数(假数据)")
+	@RequestMapping(value = "/updateTellCountByStoryId", method = { RequestMethod.POST })
+	@ResponseBody
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void updateTellCountByStoryId(@ApiParam("故事ID") @RequestParam int id,
+			@ApiParam("修改成的阅读次数") @RequestParam int tellCount) {
+		boolean res = storyService.updateTellCountById(id, tellCount);
+		if (!res) {
+			throw new RuntimeException("修改失败");
+		}
 	}
 
 	/**
