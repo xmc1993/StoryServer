@@ -33,7 +33,7 @@ public class UserInitImageController {
         InitImage initImage=initImageService.getInitImage();
         ResponseData<InitImage> responseData=new ResponseData<>();
         if (initImage==null){
-            responseData.jsonFill(2, "没有可用的开屏图", null);
+            responseData.jsonFill(2, "没有可显示的开屏图", null);
             return responseData;
         }
         responseData.jsonFill(1,null,initImage);
