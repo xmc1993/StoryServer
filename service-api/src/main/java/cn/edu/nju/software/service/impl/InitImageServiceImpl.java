@@ -40,7 +40,7 @@ public class InitImageServiceImpl implements InitImageService {
     public InitImage getInitImage() {
         List showAbleInitImageList = initImageDao.getShowAbleInitImageList();
         int validImgCount = showAbleInitImageList.size();
-        int i = (int) (Math.random() * (validImgCount - 1));
+        int i = (int) (Math.random() * (validImgCount - 0.0001));
         InitImage initImage = (InitImage) showAbleInitImageList.get(i);
         return initImage;
     }
