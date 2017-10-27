@@ -11,10 +11,4 @@ public @interface RequiredPermissions {
 
     int[] value() default {};
 
-    public int[] affair() default {};
-
-    public int[] alliance() default {};
-
-    public int[] task() default {};
-    
 }

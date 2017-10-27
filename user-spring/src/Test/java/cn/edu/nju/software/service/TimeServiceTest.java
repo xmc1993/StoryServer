@@ -15,8 +15,10 @@ import java.util.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:/applicationContext.xml"})
 public class TimeServiceTest {
-    @Autowired
+//    @Autowired
     private WorksService worksService;
+    @Autowired
+    private WxOAuthService wxOAuthService;
 
     @Test
     public void getTime() {
@@ -44,4 +46,11 @@ public class TimeServiceTest {
             System.out.println(s);
         }
     }
+
+    @Test
+    public void getToken(){
+        String accessToken = wxOAuthService.getAccessToken();
+        System.out.println(accessToken);
+    }
+
 }

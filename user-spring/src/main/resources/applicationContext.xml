@@ -93,18 +93,11 @@
     <bean id="requestConfig" class="org.apache.http.client.config.RequestConfig" factory-bean="requestConfigBuilder" factory-method="build">
     </bean>
 
-    <!--<bean id="configProperties"
-          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-        <property name="locations">
-            <list>
-                <value>classpath:/sysconfig.properties</value>
-            </list>
-        </property>
-    </bean>-->
-
     <bean class="cn.edu.nju.software.entity.Business">
         <property name="wxAppId" value="wxfa4e5826ea6b4b24"></property>
         <property name="wxSecret" value="36ac964dd6f2fe408e14b5383e649257"></property>
+        <property name="wxPublicAccountAppId" value="mock"></property>
+        <property name="wxPublicAccountSecret" value="mock"></property>
     </bean>
 
 

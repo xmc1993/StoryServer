@@ -9,5 +9,6 @@ public class Business implements Serializable {
 	private static final long serialVersionUID = -4166473876462325421L;
     private String wxAppId;
     private String wxSecret;
-
+    private String wxPublicAccountAppId;
+    private String wxPublicAccountSecret;
 }
