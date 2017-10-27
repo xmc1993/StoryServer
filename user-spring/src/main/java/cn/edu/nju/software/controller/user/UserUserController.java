@@ -1,12 +1,7 @@
 package cn.edu.nju.software.controller.user;
 
 import cn.edu.nju.software.controller.BaseController;
-import cn.edu.nju.software.entity.Badge;
-import cn.edu.nju.software.entity.Business;
-import cn.edu.nju.software.entity.ResponseData;
-import cn.edu.nju.software.entity.TwoTuple;
-import cn.edu.nju.software.entity.User;
-import cn.edu.nju.software.entity.UserBase;
+import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.enums.GrantType;
 import cn.edu.nju.software.service.BadgeService;
 import cn.edu.nju.software.service.user.AppUserService;
@@ -16,7 +11,6 @@ import cn.edu.nju.software.util.*;
 import cn.edu.nju.software.vo.WeChatOAuthVo;
 import cn.edu.nju.software.vo.WeChatUserInfoVo;
 import cn.edu.nju.software.vo.response.LoginResponseVo;
-
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -33,10 +27,7 @@ import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Api("user controller")
 @Controller
@@ -249,8 +240,20 @@ public class UserUserController extends BaseController {
 		loginResponseVo.setIsNewUser(isNewUser);
 
 		// 登录信息写入缓存
-		JedisUtil.getJedis().set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
-		JedisUtil.getJedis().expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);// 缓存用户信息30天
+		Jedis jedis = null;
+		try {
+			jedis = JedisUtil.getJedis();
+			jedis.set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
+			jedis.expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);// 缓存用户信息30天
+		}catch (Exception e) {
+			e.printStackTrace();
+			responseData.jsonFill(2, "用户信息插入缓存失败", null);
+			return responseData;
+		}finally {
+			if (jedis != null) {
+				jedis.close();
+			}
+		}
 
 		// 对用户连续登陆天数处理
 		TwoTuple<Integer, Boolean> tt = userService.addContinusLandDay(user.getId());
@@ -305,8 +308,21 @@ public class UserUserController extends BaseController {
 
 
 				// 登录信息写入缓存
-				JedisUtil.getJedis().set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
-				JedisUtil.getJedis().expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);// 缓存用户信息30天
+				Jedis jedis = null;
+				try {
+					jedis = JedisUtil.getJedis();
+					jedis.set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
+					jedis.expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);
+				}catch (Exception e){
+					e.printStackTrace();
+					responseData.jsonFill(2, "信息插入缓存失败", null);
+					return responseData;
+				}finally {
+					if (jedis != null) {
+						jedis.close();
+					}
+				}
+
 
 				// 对用户连续登陆天数处理
 				TwoTuple<Integer, Boolean> tt = userService.addContinusLandDay(user.getId());
