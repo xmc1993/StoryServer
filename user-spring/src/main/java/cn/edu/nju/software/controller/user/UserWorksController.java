@@ -17,6 +17,8 @@ import com.google.gson.Gson;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+
+import org.apache.poi.hssf.record.PageBreakRecord.Break;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -456,63 +458,48 @@ public class UserWorksController extends BaseController {
 				badges.add(badge);
 			}
 		}
+
+		recordStatisticService.saveRecord(user.getId());
 		// 最高连续阅读天数
 		int maxDays = recordStatisticService.getHistoryMaxCount(user.getId());
 
-		recordStatisticService.saveRecord(user.getId());
-
-		// 判断连续阅读故事的天数
-		int days = recordStatisticService.getCurCount(user.getId());
-		if (maxDays < days) {
-			// 49的id是连续阅读一天的ID,后面依次类推
-			if (days < 3 && days >= 0) {
+		// 49的id是连续阅读一天的ID,后面依次类推
+		if (maxDays < 3 && maxDays >= 0) {
+			if (userBadgeService.getUserBadge(49, user.getId()) == null) {
 				UserBadge userBadge = new UserBadge();
 				userBadge.setUserId(user.getId());
 				userBadge.setBadgeId(49);
 				userBadgeService.saveUserBadge(userBadge);
 				Badge badge = badgeService.getBadgeById(49);
 				badges.add(badge);
-			} else if (days < 7 && days >= 3) {
+			}
+
+		} else if (maxDays < 7 && maxDays >= 3) {
+			if (userBadgeService.getUserBadge(50, user.getId()) == null) {
 				UserBadge userBadge = new UserBadge();
 				userBadge.setUserId(user.getId());
 				userBadge.setBadgeId(50);
 				userBadgeService.saveUserBadge(userBadge);
 				Badge badge = badgeService.getBadgeById(50);
 				badges.add(badge);
-			} else if (days < 15 && days >= 7) {
+			}
+
+		} else if (maxDays < 15 && maxDays >= 7) {
+			if (userBadgeService.getUserBadge(51, user.getId()) == null) {
 				UserBadge userBadge = new UserBadge();
 				userBadge.setUserId(user.getId());
 				userBadge.setBadgeId(51);
 				userBadgeService.saveUserBadge(userBadge);
 				Badge badge = badgeService.getBadgeById(51);
 				badges.add(badge);
-			} else if (days < 21 && days >= 15) {
+			}
+		} else if (maxDays < 21 && maxDays >= 15) {
+			if (userBadgeService.getUserBadge(52, user.getId()) == null) {
 				UserBadge userBadge = new UserBadge();
 				userBadge.setUserId(user.getId());
 				userBadge.setBadgeId(52);
 				userBadgeService.saveUserBadge(userBadge);
 				Badge badge = badgeService.getBadgeById(52);
-				badges.add(badge);
-			} else if (days < 30 && days >= 21) {
-				UserBadge userBadge = new UserBadge();
-				userBadge.setUserId(user.getId());
-				userBadge.setBadgeId(53);
-				userBadgeService.saveUserBadge(userBadge);
-				Badge badge = badgeService.getBadgeById(53);
-				badges.add(badge);
-			} else if (days < 50 && days >= 30) {
-				UserBadge userBadge = new UserBadge();
-				userBadge.setUserId(user.getId());
-				userBadge.setBadgeId(54);
-				userBadgeService.saveUserBadge(userBadge);
-				Badge badge = badgeService.getBadgeById(54);
-				badges.add(badge);
-			} else if (days < 100 && days >= 50) {
-				UserBadge userBadge = new UserBadge();
-				userBadge.setUserId(user.getId());
-				userBadge.setBadgeId(55);
-				userBadgeService.saveUserBadge(userBadge);
-				Badge badge = badgeService.getBadgeById(55);
 				badges.add(badge);
 			}
 		}
@@ -652,21 +639,21 @@ public class UserWorksController extends BaseController {
 	@RequestMapping(value = "/getWorkUrlByWorkId", method = { RequestMethod.POST })
 	@ResponseBody
 	public ResponseData<String> getWorkUrlByWorkId(@ApiParam("作品ID") @RequestParam("worksId") int worksId,
-			HttpServletRequest request, HttpServletResponse response) { 
-		ResponseData<String> responseData=new ResponseData<>();
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<String> responseData = new ResponseData<>();
 		User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
 		if (user == null) {
 			responseData.jsonFill(2, "请先登录", null);
 			response.setStatus(401);
 			return responseData;
 		}
-		Works works=worksService.getWorksById(worksId);
-		if(works!=null){
+		Works works = worksService.getWorksById(worksId);
+		if (works != null) {
 			responseData.jsonFill(1, null, works.getUrl());
 			return responseData;
 		}
-			responseData.jsonFill(2, "该作品不存在", null);
-			return responseData;
+		responseData.jsonFill(2, "该作品不存在", null);
+		return responseData;
 	}
 
 	// TODO 抽取service

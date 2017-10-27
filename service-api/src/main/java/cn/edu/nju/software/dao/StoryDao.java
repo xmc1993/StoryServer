@@ -3,6 +3,7 @@ package cn.edu.nju.software.dao;
 import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.vo.StoryVo;
 import cn.edu.nju.software.vo.StoryWithIntroduction;
+import cn.edu.nju.software.vo.StoryWithRealTellCount;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -38,6 +39,8 @@ public interface StoryDao {
     boolean updateStory(Story story);
     
     boolean updateStoryIntroduction(@Param("id")int id,@Param("introduction")String introduction);
+    
+    boolean updateTellCountById(@Param("id")int id,@Param("tellCount")int tellCount);
 
     boolean deleteHard(int id);
 
@@ -139,4 +142,6 @@ public interface StoryDao {
     List<Story> getStoryListByReadLog();
 
     List<Story> getMostPopularStoryByPage(int offset, int limit);
+    
+    List<StoryWithRealTellCount> getMostPopularStoryByPageWithRealTellCount(int offset, int limit);
 }

@@ -45,12 +45,24 @@
     <update id="updateInitImage" parameterType="cn.edu.nju.software.entity.InitImage">
         update initImage
         set
-        imgName=#{imgName},
-        imgUrl=#{imgUrl},
-        isShow=#{isShow},
-        createTime=#{createTime},
-        updateTime=#{updateTime},
-        valid=#{valid}
+        <if test="imgName != null" >
+            imgName=#{imgName},
+        </if>
+        <if test="imgUrl != null" >
+            imgUrl=#{imgUrl},
+        </if>
+        <if test="isShow != null" >
+            isShow=#{isShow},
+        </if>
+        <if test="createTime != null" >
+            createTime=#{createTime},
+        </if>
+        <if test="updateTime != null" >
+            updateTime=#{updateTime}
+        </if>
+        <if test="valid != null" >
+            valid=#{valid}
+        </if>
         where
         id=#{id}
     </update>

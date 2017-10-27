@@ -102,24 +102,13 @@ public class ManageInitImageController {
             @ApiParam("是否有效") @RequestParam(value = "valid", required = false) Integer valid
     ){
         ResponseData<Boolean> responseData=new ResponseData<>();
-        InitImage initImage=initImageService.getInitImageById(id);
-        if(initImage==null){
-            responseData.jsonFill(2, "无效的图片id", false);
-            return responseData;
-        }
-        if (!"".equals(imgName)&&null!=imgName){
-            initImage.setImgName(imgName);
-        }
-        if (!"".equals(imgUrl)&&null!=imgUrl){
-            initImage.setImgUrl(imgUrl);
-        }
-        if (null!=isShow){
-            initImage.setIsShow(isShow);
-        }
+        InitImage initImage=new InitImage();
+        initImage.setId(id);
+        initImage.setImgName(imgName);
+        initImage.setImgUrl(imgUrl);
+        initImage.setIsShow(isShow);
         initImage.setUpdateTime(new Date());
-        if (null!=valid){
-            initImage.setValid(valid);
-        }
+        initImage.setValid(valid);
         boolean result=initImageService.updateInitImage(initImage);
         responseData.jsonFill(result ? 1 : 2, null, result);
         return responseData;
