@@ -60,7 +60,7 @@ public class MessageFeedServiceImpl implements MessageFeedService{
                 break;
             case SYSTEM_NOTICE:
                 SystemNotice systemNotice = systemNoticeService.getSystemNoticeById(feed.getMid());
-                msgVo.setData(systemNotice);
+                msgVo.setData(systemNotice.getContent());
                 break;
              case NEW_BABYREAD:
             	 BabyRead babyRead=babyReadService.selectBabyReadById(feed.getMid());
