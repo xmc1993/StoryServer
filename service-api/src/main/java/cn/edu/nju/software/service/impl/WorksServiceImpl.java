@@ -41,6 +41,7 @@ public class WorksServiceImpl implements WorksService {
 	public Works saveWorks(Works works) {
 		boolean res = worksDao.saveWorks(works);
 		if (res) {
+			//同时对真实的tellCount和虚假的tellCount进行修改
 			storyDao.newTell(works.getStoryId());
 			appUserDao.newWork(works.getUserId());
 		}

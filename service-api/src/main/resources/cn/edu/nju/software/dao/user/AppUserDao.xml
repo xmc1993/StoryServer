@@ -372,5 +372,14 @@
 		where
 		id=#{0}
 	</update>
+	
+	<select id="getUserByFuzzyQuery" resultType="cn.edu.nju.software.entity.User">
+        select
+        <include refid="fields"></include>
+        From user
+        where valid = 1
+        and nickname like CONCAT('%', #{0} ,'%')
+    </select>
+	
 
 </mapper>

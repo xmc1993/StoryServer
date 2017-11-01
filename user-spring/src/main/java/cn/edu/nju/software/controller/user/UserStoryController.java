@@ -67,15 +67,15 @@ public class UserStoryController extends BaseController {
 		}
 		// 需求修改 这里需要返回故事简介
 		// Story story = storyService.getStoryById(id);
-		
-		//每次请求都是阅读一次故事，所以在这里添加阅读日志
+
+		// 每次请求都是阅读一次故事，所以在这里添加阅读日志
 		StoryUserLog storyUserLog = new StoryUserLog();
 		storyUserLog.setAccessTime(new Date());
 		storyUserLog.setUserId(user.getId());
 		storyUserLog.setStoryId(id);
 		storyUserLog.setChannel("app");
 		storyUserLogService.saveLog(storyUserLog);
-		
+
 		StoryWithIntroduction story = storyService.getStoryByIdWithIntroduction(id);
 		responseData.jsonFill(1, null, story);
 		/*
@@ -484,6 +484,24 @@ public class UserStoryController extends BaseController {
 		responseData.jsonFill(1, null, list);
 		responseData.setCount(storyService.getSetStoryCount());
 		return responseData;
+	}
+
+	@ApiOperation(value = "多标签搜索故事")
+	@RequestMapping(value = "/getStoryByTags", method = { RequestMethod.POST })
+	@ResponseBody
+	public ResponseData<List<Story>> getStoryByTags(@ApiParam("标签的id数租") List<Integer> tagIds,
+			@ApiParam("页") @RequestParam int page, @ApiParam("页大小") @RequestParam int pageSize,
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<List<Story>> responseData = new ResponseData<>();
+		List<Integer> storyIdList = tagRelationService.getStoryIdListByTagIds(tagIds, tagIds.size());
+		if (null == storyIdList) {
+			responseData.jsonFill(2, "不存在这样的故事", null);
+			return responseData;
+		}
+		List<Story> storyList = storyService.getStoryListByIdList(storyIdList, page, pageSize);
+		responseData.jsonFill(1, null, storyList);
+		return responseData;
+
 	}
 
 	@ApiOperation(value = "分页获得集合列表", notes = "")

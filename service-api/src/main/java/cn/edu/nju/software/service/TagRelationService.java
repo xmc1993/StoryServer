@@ -18,6 +18,9 @@ public interface TagRelationService {
     boolean deleteTagRelationsByStoryId(int storyId);
 
     List<Integer> getStoryIdListByTagId(int tagId);
+    
+    //多标签查询故事:下面的那个长得好像是取“或”，我是取“与”的。(size是代表想要获取的故事标签数要大于几)
+    List<Integer> getStoryIdListByTagIds(List<Integer> tagIds,Integer size);
 
     List<Integer> getTagIdListByStoryId(int storyId);
 

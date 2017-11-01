@@ -22,5 +22,6 @@ public interface StorySetService {
     StorySet getStorySetByStoryId(int storyId);
 
     int getAllStorySetCount();
-
+    
+    List<StorySet> getStorySetByFuzzyQuery(String query);
 }

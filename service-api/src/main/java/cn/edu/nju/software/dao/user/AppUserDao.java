@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import javax.jws.soap.SOAPBinding.Use;
+
 /**
  * 所有的传参顺序第一个都是businessId
  */
@@ -24,6 +26,8 @@ public interface AppUserDao {
 	User getUserByUnionId(String unionId);
 
 	List<User> getUserByNickname(String nickname);
+	
+	List<User> getUserByFuzzyQuery(String query);
 
 	User getUserByMobile(String mobile);
 

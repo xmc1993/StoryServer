@@ -23,7 +23,11 @@ public interface TagRelationDao {
 
     List<Integer> getTagIdListByStoryId(int storyId);
 
+    //这个是取"或"的
     List<Integer> getStoryIdListByTagIdList(@Param("idList") List<Integer> idList);
+    
+    //这个是取"与"的
+    List<Integer> getStoryIdListByTagIds(@Param("idList") List<Integer> idList,@Param("size") Integer size);
 
     boolean deleteTagRelationsByStoryId(Integer storyId);
 }

@@ -412,8 +412,6 @@ public class UserWorksController extends BaseController {
 
 		List<Integer> tagIdList = tagRelationService.getTagIdListByStoryId(works.getStoryId());
 
-		int[] workRecordDayCountArr = { 1, 3, 7, 15, 21, 30, 50, 100, 200, 365, 500, 1000 };
-
 		// 如果今天是十一
 		SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
 		Date date = new Date();

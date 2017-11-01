@@ -57,4 +57,9 @@ public class StorySetServiceImpl implements StorySetService {
     public int getAllStorySetCount() {
         return storySetDao.getAllStorySetCount();
     }
+
+	@Override
+	public List<StorySet> getStorySetByFuzzyQuery(String query) {
+		return storySetDao.getStorySetByFuzzyQuery(query);
+	}
 }

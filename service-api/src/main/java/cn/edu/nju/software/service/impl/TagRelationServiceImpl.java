@@ -74,4 +74,10 @@ public class TagRelationServiceImpl implements TagRelationService {
 		return tagRelationDao.deleteTagRelationsByStoryId(storyId);
 	}
 
+	@Override
+	public List<Integer> getStoryIdListByTagIds(List<Integer> tagIds, Integer size) {
+		//由于sql语句使用的是大于号这里减一
+		return tagRelationDao.getStoryIdListByTagIds(tagIds, size-1);
+	}
+
 }

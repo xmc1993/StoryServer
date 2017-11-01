@@ -63,6 +63,14 @@
         WHERE isSet = 1 and valid = 1
         limit #{0},#{1}
     </select>
+    
+    <select id="getStorySetByFuzzyQuery" resultType="cn.edu.nju.software.entity.StorySet">
+        select
+        <include refid="fields"></include>
+        from story
+        WHERE isSet = 1 and valid = 1
+        and title like CONCAT('%', #{0} ,'%')
+    </select>
 
     <select id="getAllStorySetCount" resultType="java.lang.Integer">
         select

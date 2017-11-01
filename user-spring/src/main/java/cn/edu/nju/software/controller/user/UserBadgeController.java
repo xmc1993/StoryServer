@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * 
@@ -106,6 +107,23 @@ public class UserBadgeController {
 			}
 		}
 		responseData.jsonFill(1, null, badgeVoList);
+		return responseData;
+	}
+	
+	@ApiOperation("随机获得徽章(测试用)")
+	@RequestMapping(value = "/getBadgeListForTest", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<List<Badge>> getBadgeListForTest( HttpServletRequest request,
+			HttpServletResponse response) {
+		ResponseData<List<Badge>> responseData = new ResponseData<>();
+
+		int number=new Random().nextInt(10)+1;
+		
+		List<Badge> badgeList =new ArrayList<>();
+				for (int i = 0; i < number; i++) {
+					badgeList.add(badgeService.getBadgeById(number+i));
+				}	
+		responseData.jsonFill(1, null, badgeList);
 		return responseData;
 	}
 }

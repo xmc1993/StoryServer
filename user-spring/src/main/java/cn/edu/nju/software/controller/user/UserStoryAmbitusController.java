@@ -39,7 +39,7 @@ public class UserStoryAmbitusController extends BaseController {
 	public ResponseData<List<StoryAmbitus>> getStoryAmbitusByStoryId(@ApiParam("故事id") @RequestParam Integer storyId,
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<List<StoryAmbitus>> responseData = new ResponseData<>();
-		List<StoryAmbitus> list = storyAmbitusService.getStoryAmbitusByStoryId(storyId,0,1).getObj();
+		List<StoryAmbitus> list = storyAmbitusService.getStoryAmbitusByStoryId(storyId,0,10).getObj();
 		if(null==list){
 			responseData.jsonFill(2, "该故事没有周边", null);
 			return responseData;

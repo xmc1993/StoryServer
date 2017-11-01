@@ -137,14 +137,12 @@ public class ManageTagRelationController {
 	@ApiOperation(value = "添加热搜标签", notes = "")
 	@RequestMapping(value = "/addTagToHotsearch", method = { RequestMethod.POST })
 	@ResponseBody
-	public ResponseData<Boolean> addTagToHotsearch(@ApiParam("标签ID的数租(按需要显示的顺序添加)") @RequestParam("tagIds") Integer[] tagIds,
-			HttpServletRequest request, HttpServletResponse response) {
-		ResponseData<Boolean> responseData=new ResponseData<>();
-		boolean res=tagRelationService.deleteTagRelationsByStoryId(HOTSEARCHTAGID);
-		if(res==false){
-			responseData.jsonFill(2,"添加前删除失败", false);
-			return responseData;
-		}
+	public ResponseData<Boolean> addTagToHotsearch(
+			@ApiParam("标签ID的数租(按需要显示的顺序添加)") @RequestParam("tagIds") Integer[] tagIds, HttpServletRequest request,
+			HttpServletResponse response) {
+		ResponseData<Boolean> responseData = new ResponseData<>();
+		tagRelationService.deleteTagRelationsByStoryId(HOTSEARCHTAGID);
+
 		for (Integer tagId : tagIds) {
 			TagRelation tagRelation = new TagRelation();
 			tagRelation.setTagId(tagId);
@@ -159,6 +157,24 @@ public class ManageTagRelationController {
 		}
 		responseData.jsonFill(1, null, true);
 		return responseData;
+	}
+	
+	@ApiOperation(value = "热搜标签的回显", notes = "")
+	@RequestMapping(value = "/getHotsearchTagList", method = { RequestMethod.GET})
+	@ResponseBody
+	public ResponseData<List<StoryTag>> getHotsearchTagList() {
+
+		List<Integer> idList = tagRelationService.getTagIdListByStoryId(2);
+		List<StoryTag> storyTagList = storyTagService.getStoryTagListByIdList(idList);
+		ResponseData<List<StoryTag>> result = new ResponseData<>();
+		if (storyTagList == null) {
+			result.jsonFill(2, "获取热门标签失败", null);
+			return result;
+		} else {
+			result.jsonFill(1, null, storyTagList);
+			result.setCount(storyTagList.size());
+			return result;
+		}
 	}
 
 }

@@ -1,6 +1,8 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.StorySet;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,4 +27,6 @@ public interface StorySetDao {
     Integer getStorySetIdByStoryId(int storyId);
 
     int getAllStorySetCount();
+    
+    List<StorySet> getStorySetByFuzzyQuery(String query);
 }

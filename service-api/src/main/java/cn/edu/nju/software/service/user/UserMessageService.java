@@ -15,6 +15,9 @@ public interface UserMessageService {
 
 	// 根据姓名查询用户
 	List<User> getUserByNickname(String nickname);
+	
+	//根据用户名模糊查询用户
+	List<User> getUserByFuzzyQuery(String query);
 
 	// 根据用户ID查询用户
 	User getUserById(int userId);

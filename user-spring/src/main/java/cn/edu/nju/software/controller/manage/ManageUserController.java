@@ -47,16 +47,26 @@ public class ManageUserController {
 		return responseData;
 	}
 
-	// 根据用户姓名查找
+	// 根据用户姓名模糊查找
 	@RequiredPermissions({4, 19})
-	@RequestMapping(value = "/getUserByNickname", method = { RequestMethod.GET })
-	@ApiOperation(value = "根据用户姓名查找", notes = "")
+	@RequestMapping(value = "/getUserByFuzzyQuery", method = { RequestMethod.GET })
+	@ApiOperation(value = "根据用户姓名模糊查找")
 	@ResponseBody
-	public ResponseData<List<User>> getUserByNickname(@ApiParam("nickName") @RequestParam String nickName,
+	public ResponseData<List<User>> getUserByNickname(
+			@ApiParam("PAGE") @RequestParam int page,
+			@ApiParam("SIZE") @RequestParam int pageSize,
+			@ApiParam("query") @RequestParam String query,
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<List<User>> responseData = new ResponseData<>();
-		List<User> userList = userMessageService.getUserByNickname(nickName);
-		if(userList==null){
+		//如果传过来的搜索条件为空的话，就分页返回所有的用户
+		if(query==null){
+			List<User> userList = userMessageService.getUserListByPage(page, pageSize);
+			responseData.jsonFill(1, null, userList);
+			responseData.setCount(userMessageService.getUserCount());
+			return responseData;
+		}
+		List<User> userList = userMessageService.getUserByFuzzyQuery(query);
+		if(userList==null||userList.isEmpty()){
 			responseData.jsonFill(2, "用户不存在", null);
 			return responseData;
 		}
