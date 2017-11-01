@@ -121,9 +121,9 @@ public class UserBadgeController {
 		
 		List<Badge> badgeList =new ArrayList<>();
 				for (int i = 0; i < number; i++) {
-					badgeList.add(badgeService.getBadgeById(number+i));
+					badgeList.add(badgeService.getBadgeById(number+i+10));
 				}	
-		responseData.jsonFill(1, null, badgeList);
+		responseData.setBadgeList(badgeList);
 		return responseData;
 	}
 }
