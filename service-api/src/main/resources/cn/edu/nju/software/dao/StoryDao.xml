@@ -603,7 +603,7 @@
     <update id="newTell">
         update story
         set
-        realTellCount = realTellCount+1
+        realTellCount = realTellCount+1,
         tellCount = tellCount+1
         where valid = 1 and id=#{0}
     </update>
@@ -611,7 +611,7 @@
     <update id="deleteTell">
         update story
         set
-        realTellCount = realTellCount-1
+        realTellCount = realTellCount-1,
         tellCount = tellCount-1
         where valid = 1 and id=#{0}
     </update>
