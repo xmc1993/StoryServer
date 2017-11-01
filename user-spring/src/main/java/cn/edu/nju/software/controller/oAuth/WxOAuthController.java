@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Api("tag controller")
 @Controller
-@RequestMapping("/oAuth")
+@RequestMapping("/mp")
 public class WxOAuthController {
     @Autowired
     private WxOAuthService wxOAuthService;
