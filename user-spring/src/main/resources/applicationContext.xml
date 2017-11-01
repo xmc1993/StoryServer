@@ -96,8 +96,8 @@
     <bean class="cn.edu.nju.software.entity.Business">
         <property name="wxAppId" value="wxfa4e5826ea6b4b24"></property>
         <property name="wxSecret" value="36ac964dd6f2fe408e14b5383e649257"></property>
-        <property name="wxPublicAccountAppId" value="mock"></property>
-        <property name="wxPublicAccountSecret" value="mock"></property>
+        <property name="wxPublicAccountAppId" value="wxdd57892cf267701b"></property>
+        <property name="wxPublicAccountSecret" value="6b116b9e0fd5ca49bd457c35f4b40790"></property>
     </bean>
 
 
