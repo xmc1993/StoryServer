@@ -64,10 +64,10 @@
         where storyId = #{0}
     </select>
 
-    <select id="getStoryIdListByTagIdList" resultType="java.lang.Integer">
-        select 
-        storyId 
-        from tag_relation 
+    <select id="getStoryIdListByTagIds" resultType="java.lang.Integer">
+        select
+        storyId
+        from tag_relation
         where tagId in
         <foreach collection="idList" item="id" index="index" open="(" separator="," close=")">
             #{id}
@@ -76,7 +76,7 @@
         having count(distinct tagId)>#{size}
     </select>
     
-     <select id="getStoryIdListByTagIds" resultType="java.lang.Integer">
+     <select id="getStoryIdListByTagIdList" resultType="java.lang.Integer">
         select distinct
         storyId
         from tag_relation
