@@ -3,8 +3,8 @@
 <mapper namespace="cn.edu.nju.software.dao.StoryStarMapper" >
   <resultMap id="BaseResultMap" type="cn.edu.nju.software.entity.StoryStar" >
     <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="storyId" property="storyid" jdbcType="INTEGER" />
-    <result column="userId" property="userid" jdbcType="INTEGER" />
+    <result column="storyId" property="storyId" jdbcType="INTEGER" />
+    <result column="userId" property="userId" jdbcType="INTEGER" />
     <result column="starNumber" property="starnumber" jdbcType="INTEGER" />
     <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="updateTime" property="updatetime" jdbcType="TIMESTAMP" />
@@ -105,7 +105,7 @@
     insert into story_star (id, storyId, userId, 
       starNumber, createTime, updateTime, 
       valid)
-    values (#{id,jdbcType=INTEGER}, #{storyid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{storyId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
       #{starnumber,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{updatetime,jdbcType=TIMESTAMP}, 
       #{valid,jdbcType=INTEGER})
   </insert>
@@ -115,10 +115,10 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="storyid != null" >
+      <if test="storyId != null" >
         storyId,
       </if>
-      <if test="userid != null" >
+      <if test="userId != null" >
         userId,
       </if>
       <if test="starnumber != null" >
@@ -138,11 +138,11 @@
       <if test="id != null" >
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="storyid != null" >
-        #{storyid,jdbcType=INTEGER},
+      <if test="storyId != null" >
+        #{storyId,jdbcType=INTEGER},
       </if>
-      <if test="userid != null" >
-        #{userid,jdbcType=INTEGER},
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
       </if>
       <if test="starnumber != null" >
         #{starnumber,jdbcType=INTEGER},
@@ -170,11 +170,11 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.storyid != null" >
-        storyId = #{record.storyid,jdbcType=INTEGER},
+      <if test="record.storyId != null" >
+        storyId = #{record.storyId,jdbcType=INTEGER},
       </if>
-      <if test="record.userid != null" >
-        userId = #{record.userid,jdbcType=INTEGER},
+      <if test="record.userId != null" >
+        userId = #{record.userId,jdbcType=INTEGER},
       </if>
       <if test="record.starnumber != null" >
         starNumber = #{record.starnumber,jdbcType=INTEGER},
@@ -196,8 +196,8 @@
   <update id="updateByExample" parameterType="map" >
     update story_star
     set id = #{record.id,jdbcType=INTEGER},
-      storyId = #{record.storyid,jdbcType=INTEGER},
-      userId = #{record.userid,jdbcType=INTEGER},
+      storyId = #{record.storyId,jdbcType=INTEGER},
+      userId = #{record.userId,jdbcType=INTEGER},
       starNumber = #{record.starnumber,jdbcType=INTEGER},
       createTime = #{record.createtime,jdbcType=TIMESTAMP},
       updateTime = #{record.updatetime,jdbcType=TIMESTAMP},
@@ -209,11 +209,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="cn.edu.nju.software.entity.StoryStar" >
     update story_star
     <set >
-      <if test="storyid != null" >
-        storyId = #{storyid,jdbcType=INTEGER},
+      <if test="storyId != null" >
+        storyId = #{storyId,jdbcType=INTEGER},
       </if>
-      <if test="userid != null" >
-        userId = #{userid,jdbcType=INTEGER},
+      <if test="userId != null" >
+        userId = #{userId,jdbcType=INTEGER},
       </if>
       <if test="starnumber != null" >
         starNumber = #{starnumber,jdbcType=INTEGER},
@@ -232,8 +232,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.edu.nju.software.entity.StoryStar" >
     update story_star
-    set storyId = #{storyid,jdbcType=INTEGER},
-      userId = #{userid,jdbcType=INTEGER},
+    set storyId = #{storyId,jdbcType=INTEGER},
+      userId = #{userId,jdbcType=INTEGER},
       starNumber = #{starnumber,jdbcType=INTEGER},
       createTime = #{createtime,jdbcType=TIMESTAMP},
       updateTime = #{updatetime,jdbcType=TIMESTAMP},
