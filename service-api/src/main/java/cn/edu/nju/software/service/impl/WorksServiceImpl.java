@@ -3,6 +3,7 @@ package cn.edu.nju.software.service.impl;
 import cn.edu.nju.software.dao.StoryDao;
 import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.dao.user.AppUserDao;
+import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.entity.TwoTuple;
 import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.service.WorksService;
@@ -68,6 +69,11 @@ public class WorksServiceImpl implements WorksService {
 		boolean res = worksDao.deleteWorksById(id);
 		if (res) {
 			Works works = worksDao.getWorksByIdHard(id);
+			//这里如果是该故事所属故事集，要给故事集的tellCount还有realTellCount减一
+			Story story=storyDao.getStoryById(works.getStoryId());
+			if(story.getSetId()!=0){
+				storyDao.deleteTell(story.getSetId());
+			}
 			storyDao.deleteTell(works.getStoryId());
 			appUserService.decreaseWorkCountSafely(works.getUserId());
 		}

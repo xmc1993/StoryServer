@@ -61,7 +61,9 @@ public class ManageSystemNoticeController {
             MsgVo msgVo = new MsgVo();
             msgVo.setUserId(user.getId());
             msgVo.setHeadImgUrl("");
-            msgVo.setUserName(user.getUsername());
+            
+            //msgVo.setUserName(user.getUsername());
+            msgVo.setUserName("暖音小助手");
             Feed feed = new Feed();
             feed.setCreateTime(new Date());
             feed.setUpdateTime(new Date());
