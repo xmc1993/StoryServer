@@ -57,7 +57,7 @@ public class ManageResourceController {
         resource.setResourceType(resourceType);
         resource.setUrl(url);
         resource.setDescription(description);
-        resource.setName(file.getName());
+        resource.setName(file.getOriginalFilename());
         resourceService.saveResource(resource);
         return resource;
     }
@@ -100,6 +100,7 @@ public class ManageResourceController {
         ResponseData<List<Resource>> responseData = new ResponseData<>();
         List<Resource> resourceList = resourceService.getAllResourceByPage(page, pageSize);
         responseData.jsonFill(1, null, resourceList);
+        responseData.setCount(resourceService.getAllResourceCount());
         return responseData;
     }
 

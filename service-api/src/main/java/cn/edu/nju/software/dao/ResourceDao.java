@@ -20,4 +20,6 @@ public interface ResourceDao {
 
     List<Resource> getAllResourceByPage(int offset, int limit);
 
+    int getAllResourceCount();
+
 }

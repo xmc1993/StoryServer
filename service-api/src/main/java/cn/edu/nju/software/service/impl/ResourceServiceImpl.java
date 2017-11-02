@@ -42,4 +42,9 @@ public class ResourceServiceImpl implements ResourceService {
         int limit = pageSize;
         return resourceDao.getAllResourceByPage(offset, limit);
     }
+
+    @Override
+    public int getAllResourceCount() {
+        return resourceDao.getAllResourceCount();
+    }
 }

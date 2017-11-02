@@ -17,4 +17,6 @@ public interface ResourceService {
 
     List<Resource> getAllResourceByPage(int page, int pageSize);
 
+    int getAllResourceCount();
+
 }

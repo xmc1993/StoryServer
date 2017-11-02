@@ -47,6 +47,13 @@
         limit #{0},#{1}
     </select>
 
+    <select id="getAllResourceCount" resultType="java.lang.Integer">
+        select
+        count(*)
+        from resource
+        where valid = 1
+    </select>
+
     <select id="getResourceById" resultType="cn.edu.nju.software.entity.Resource">
         select
         <include refid="fields"></include>
