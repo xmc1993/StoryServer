@@ -40,7 +40,7 @@ public class ManageResourceController {
     @ResponseStatus(HttpStatus.CREATED)
     public Resource publishResource(
             @ApiParam("文件描述") @RequestParam(value = "description", required = false) String description,
-            @ApiParam("文件类型") @RequestParam ResourceType resourceType,
+            @ApiParam("文件枚举类型 只能填写：ICON VIDEO AUDIO 三种值") @RequestParam ResourceType resourceType,
             @ApiParam("文件") @RequestParam MultipartFile file,
             HttpServletRequest request, HttpServletResponse response) {
         if (file == null || file.isEmpty()) {
