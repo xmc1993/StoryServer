@@ -72,6 +72,17 @@
 		<!-- 如果不加默认到 使用classpath下的 ValidationMessages.properties -->
 		<property name="validationMessageSource" ref="messageSource" />
 	</bean>
+
+	<mvc:annotation-driven  conversion-service="conversionService"/>
+	<bean id="conversionService"
+		  class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<set>
+				<bean class="cn.edu.nju.software.util.StringToEnumConverterFactory" />
+			</set>
+		</property>
+	</bean>
+
 	<mvc:resources mapping="/swagger/**" location="/WEB-INF/swagger/**" />
 	<mvc:resources mapping="/**" location="/WEB-INF/home/" />
 
