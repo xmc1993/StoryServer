@@ -489,7 +489,7 @@ public class UserStoryController extends BaseController {
 	@ApiOperation(value = "多标签搜索故事")
 	@RequestMapping(value = "/getStoryByTags", method = { RequestMethod.POST })
 	@ResponseBody
-	public ResponseData<List<Story>> getStoryByTags(@ApiParam("标签的id数租") List<Integer> tagIds,
+	public ResponseData<List<Story>> getStoryByTags(@ApiParam("标签的id集合") ArrayList<Integer> tagIds,
 			@ApiParam("页") @RequestParam int page, @ApiParam("页大小") @RequestParam int pageSize,
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<List<Story>> responseData = new ResponseData<>();
