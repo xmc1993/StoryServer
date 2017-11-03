@@ -249,7 +249,7 @@
 	<select id="getStoryByIdWithIntroduction" resultType="cn.edu.nju.software.vo.StoryWithIntroduction">
 		select
 		<include refid="fields"></include>
-		introduction
+		,introduction
 		from story
 		where id = #{0} and valid = 1
 	</select>

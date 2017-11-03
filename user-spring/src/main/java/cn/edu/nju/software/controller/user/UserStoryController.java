@@ -500,6 +500,7 @@ public class UserStoryController extends BaseController {
 		}
 		List<Story> storyList = storyService.getStoryListByIdList(storyIdList, page, pageSize);
 		responseData.jsonFill(1, null, storyList);
+		responseData.setCount(storyList.size());
 		return responseData;
 
 	}
