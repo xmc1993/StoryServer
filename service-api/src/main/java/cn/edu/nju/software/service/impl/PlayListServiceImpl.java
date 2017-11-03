@@ -70,6 +70,7 @@ public class PlayListServiceImpl implements PlayListService {
         playList.setId(0);
         playList.setName("我喜欢");
         list.add(playList);
+        setCoverByPatch(list);
         
         int offset = page*pageSize;
         int limit = pageSize;
