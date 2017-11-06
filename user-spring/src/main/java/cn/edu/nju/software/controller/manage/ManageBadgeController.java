@@ -2,7 +2,11 @@ package cn.edu.nju.software.controller.manage;
 
 import cn.edu.nju.software.entity.Badge;
 import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.service.BadgeService;
+import cn.edu.nju.software.service.UserService;
+import cn.edu.nju.software.vo.ShareBadgeVo;
+
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -15,8 +19,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by xmc1993 on 2017/5/15.
@@ -28,6 +35,8 @@ public class ManageBadgeController {
     private static final Logger logger = LoggerFactory.getLogger(ManageBadgeController.class);
     @Autowired
     private BadgeService badgeService;
+    @Autowired
+    private UserService userService;
 
     @ApiOperation(value = "新增徽章项", notes = "")
     @RequestMapping(value = "/badges", method = {RequestMethod.POST})
@@ -96,4 +105,32 @@ public class ManageBadgeController {
         return responseData;
     }
 
+	@ApiOperation("分享徽章")
+	@RequestMapping(value = "/shareBadge", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<ShareBadgeVo> shareBadge(@ApiParam("用户Id") @RequestParam(value = "userId") Integer userId,
+			@ApiParam("徽章Id") @RequestParam(value="badgeId") Integer badgeId,
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<ShareBadgeVo> responseData = new ResponseData<>();
+		User user=userService.getUserById(userId);
+		if(user==null){
+			responseData.jsonFill(2, "用户不存在", null);
+			return responseData;
+		}
+		Badge badge=badgeService.getBadgeById(badgeId);
+		if(badge==null){
+			responseData.jsonFill(2, "徽章不存在", null);
+			return responseData;
+		}
+		ShareBadgeVo shareBadgeVo=new ShareBadgeVo();
+		shareBadgeVo.setUserId(userId);
+		shareBadgeVo.setUserNickName(user.getNickname());
+		shareBadgeVo.setUserHeadImgUrl(user.getHeadImgUrl());
+		shareBadgeVo.setBadgeId(badgeId);
+		shareBadgeVo.setIcon(badge.getIcon());
+		shareBadgeVo.setDescription(badge.getDescription());
+		
+		responseData.jsonFill(1, null, shareBadgeVo);
+		return responseData;
+	}
 }

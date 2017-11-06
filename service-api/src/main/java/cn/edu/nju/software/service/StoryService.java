@@ -118,6 +118,8 @@ public interface StoryService {
     
     StoryWithIntroduction getStoryByIdWithIntroduction(int id);
     
+    List<StoryWithIntroduction> getStoryWithIntroductionByIdList(List<Integer> idList, Integer offset, Integer limit);
+    
     String getStoryIntroductionById(int id);
     
     List<StoryWithRealTellCount> getMostPopularStoryByPageWithRealTellCount(int page, int pageSize);

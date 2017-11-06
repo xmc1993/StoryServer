@@ -51,6 +51,8 @@ public interface StoryDao {
     List<Story> getSetStoryListByPage(int offset, int limit,@Param("sortByCreateTime") String sortByCreateTime);
 
     List<Story> getStoryListByIdList(@Param("idList") List<Integer> idList, @Param("offset")Integer offset,@Param("limit") Integer limit);
+    
+    List<StoryWithIntroduction> getStoryWithIntroductionByIdList(@Param("idList") List<Integer> idList, @Param("offset")Integer offset,@Param("limit") Integer limit);
 
     boolean recommendStory(int id);
 

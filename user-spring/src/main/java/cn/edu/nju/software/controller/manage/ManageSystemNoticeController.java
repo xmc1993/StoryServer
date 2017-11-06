@@ -60,10 +60,11 @@ public class ManageSystemNoticeController {
         if (systemNotice != null) {
             MsgVo msgVo = new MsgVo();
             msgVo.setUserId(user.getId());
-            msgVo.setHeadImgUrl("");
             
             //msgVo.setUserName(user.getUsername());
-            msgVo.setUserName("暖音小助手");
+            msgVo.setUserName("小P和小I");
+            //暖音小助手 头像URL
+            msgVo.setHeadImgUrl("http://47.93.242.215/source/head/4DYCFUt6eHA7TTvx.jpg");
             Feed feed = new Feed();
             feed.setCreateTime(new Date());
             feed.setUpdateTime(new Date());

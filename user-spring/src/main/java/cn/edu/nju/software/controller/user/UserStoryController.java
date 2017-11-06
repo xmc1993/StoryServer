@@ -258,22 +258,29 @@ public class UserStoryController extends BaseController {
 	@ApiOperation(value = "模糊查询获取故事", notes = "")
 	@RequestMapping(value = "/storiesByFuzzyQuery", method = { RequestMethod.GET })
 	@ResponseBody
-	public ResponseData<List<Story>> getStoryByFuzzyQuery(
+	public ResponseData<List<StoryWithIntroduction>> getStoryByFuzzyQuery(
 			@ApiParam("query") @RequestParam(value = "query") String query,
 			@ApiParam("OFFSET") @RequestParam int offset, @ApiParam("LIMIT") @RequestParam int limit,
 			HttpServletRequest request, HttpServletResponse response) {
-		ResponseData<List<Story>> responseData = new ResponseData<>();
+		ResponseData<List<StoryWithIntroduction>> responseData = new ResponseData<>();
 		User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
 		if (user == null) {
 			user = new User();
 			user.setId(-1);
 		}
 		List<Story> stories = storyService.getStoryByFuzzyQuery(query, offset, limit);
+		
 		if (stories == null) {
 			responseData.jsonFill(2, "模糊查询失败", null);
 			return responseData;
 		} else {
-			responseData.jsonFill(1, null, stories);
+			List<StoryWithIntroduction> list=new ArrayList<>();
+			for (Story story : stories) {
+				StoryWithIntroduction storyWithIntroduction=new StoryWithIntroduction();
+				storyWithIntroduction.setIntroduction(storyService.getStoryIntroductionById(story.getId()));
+				list.add(storyWithIntroduction);
+			}
+			responseData.jsonFill(1, null, list);
 			responseData.setCount(storyService.getStoryCountByFuzzyQuery(query));
 			return responseData;
 		}
@@ -489,20 +496,34 @@ public class UserStoryController extends BaseController {
 	@ApiOperation(value = "多标签搜索故事")
 	@RequestMapping(value = "/getStoryByTags", method = { RequestMethod.POST })
 	@ResponseBody
-	public ResponseData<List<Story>> getStoryByTags(@ApiParam("标签的id集合")@RequestParam("tagIds") ArrayList<Integer> tagIds,
+	public ResponseData<List<StoryWithIntroduction>> getStoryByTags(@ApiParam("标签的id集合")@RequestParam("tagIds") ArrayList<Integer> tagIds,
 			@ApiParam("页") @RequestParam int page, @ApiParam("页大小") @RequestParam int pageSize,
 			HttpServletRequest request, HttpServletResponse response) {
-		ResponseData<List<Story>> responseData = new ResponseData<>();
+		ResponseData<List<StoryWithIntroduction>> responseData = new ResponseData<>();
 		List<Integer> storyIdList = tagRelationService.getStoryIdListByTagIds(tagIds, tagIds.size());
 		if (null == storyIdList) {
 			responseData.jsonFill(2, "不存在这样的故事", null);
 			return responseData;
 		}
-		List<Story> storyList = storyService.getStoryListByIdList(storyIdList, page, pageSize);
+		List<StoryWithIntroduction> storyList = storyService.getStoryWithIntroductionByIdList(storyIdList, page, pageSize);
 		responseData.jsonFill(1, null, storyList);
 		responseData.setCount(storyList.size());
 		return responseData;
-
+	}
+	
+	@ApiOperation(value = "根据故事Id列表获取故事详情")
+	@RequestMapping(value = "/getStoryListByidList", method = { RequestMethod.POST })
+	@ResponseBody
+	public ResponseData<List<StoryWithIntroduction>> getStoryListByidList(@ApiParam("故事的id集合")@RequestParam("idList") ArrayList<Integer> idList,
+			HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<List<StoryWithIntroduction>> responseData = new ResponseData<>();
+		List<StoryWithIntroduction> list=new ArrayList<>();
+		for (Integer id : idList) {
+			list.add(storyService.getStoryByIdWithIntroduction(id));
+		}
+		responseData.jsonFill(1, null, list);
+		responseData.setCount(list.size());
+		return responseData;
 	}
 
 	@ApiOperation(value = "分页获得集合列表", notes = "")
