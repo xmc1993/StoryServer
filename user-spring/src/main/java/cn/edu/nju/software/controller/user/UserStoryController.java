@@ -277,6 +277,7 @@ public class UserStoryController extends BaseController {
 			List<StoryWithIntroduction> list=new ArrayList<>();
 			for (Story story : stories) {
 				StoryWithIntroduction storyWithIntroduction=new StoryWithIntroduction();
+				BeanUtils.copyProperties(story, storyWithIntroduction);
 				storyWithIntroduction.setIntroduction(storyService.getStoryIntroductionById(story.getId()));
 				list.add(storyWithIntroduction);
 			}
