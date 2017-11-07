@@ -1,5 +1,6 @@
 package cn.edu.nju.software.controller.oAuth;
 
+import cn.edu.nju.software.entity.Business;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.WxOAuthService;
 import cn.edu.nju.software.vo.response.JsSdkResponseVo;
@@ -23,6 +24,8 @@ import java.util.Map;
 public class WxOAuthController {
     @Autowired
     private WxOAuthService wxOAuthService;
+    @Autowired
+    private Business business;
 
     @ApiOperation(value = "获取Js-Sdk的签名")
     @RequestMapping(value = "/getJsSdkSignature", method = {RequestMethod.GET})
@@ -41,6 +44,7 @@ public class WxOAuthController {
         jsSdkResponseVo.setNonceStr(signature.get("nonceStr"));
         jsSdkResponseVo.setSignature(signature.get("signature"));
         jsSdkResponseVo.setTimestamp(signature.get("timestamp"));
+        jsSdkResponseVo.setAppId(business.getWxPublicAccountAppId());
         responseData.jsonFill(1, null, jsSdkResponseVo);
         return responseData;
     }
