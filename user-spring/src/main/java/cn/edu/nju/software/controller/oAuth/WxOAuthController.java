@@ -42,20 +42,6 @@ public class WxOAuthController {
         jsSdkResponseVo.setSignature(signature.get("signature"));
         jsSdkResponseVo.setTimestamp(signature.get("timestamp"));
         responseData.jsonFill(1, null, jsSdkResponseVo);
-        response.addHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
-        response.addHeader("Access-Control-Allow-Credentials", "true");
-
-        /**
-         * 处理 Preflight 情况下的额外返回数据:
-         * https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Preflighted_requests
-         * 需要确认 Preflight 是有效的请求，而不是直接进行的OPTIONS操作.
-         */
-        if (request.getHeader("Access-Control-Request-Method") != null
-                && "OPTIONS".equalsIgnoreCase(request.getMethod())) {
-            response.addHeader("Access-Control-Allow-Methods", "GET, POST");
-            response.addHeader("Access-Control-Allow-Headers",
-                    "X-Requested-With, Origin, Content-Type, Cookie, X-Access-Token");
-        }
         return responseData;
     }
 
