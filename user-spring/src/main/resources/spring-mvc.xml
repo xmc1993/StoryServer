@@ -73,17 +73,7 @@
 		<property name="validationMessageSource" ref="messageSource" />
 	</bean>
 
-	<mvc:annotation-driven  conversion-service="conversionService"/>
-	<bean id="conversionService"
-		  class="org.springframework.context.support.ConversionServiceFactoryBean">
-		<property name="converters">
-			<set>
-				<bean class="cn.edu.nju.software.util.StringToEnumConverterFactory" />
-			</set>
-		</property>
-	</bean>
-
-	<mvc:resources mapping="/swagger/**" location="/WEB-INF/swagger/**" />
+	<mvc:resources mapping="/swagger/**" location="/WEB-INF/swagger/" />
 	<mvc:resources mapping="/**" location="/WEB-INF/home/" />
 
 	<mvc:interceptors>
@@ -261,5 +251,15 @@
 	<!--</bean> -->
 
 	<bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />
+
+	<mvc:annotation-driven  conversion-service="conversionService"/>
+	<bean id="conversionService"
+		  class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<set>
+				<bean class="cn.edu.nju.software.util.StringToEnumConverterFactory" />
+			</set>
+		</property>
+	</bean>
 
 </beans>
