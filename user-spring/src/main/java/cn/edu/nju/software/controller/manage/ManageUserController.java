@@ -49,10 +49,10 @@ public class ManageUserController {
 
 	// 根据用户姓名模糊查找
 	@RequiredPermissions({4, 19})
-	@RequestMapping(value = "/getUserByFuzzyQuery", method = { RequestMethod.GET })
+	@RequestMapping(value = "/getUserByFuzzyQuery", method = {RequestMethod.GET})
 	@ApiOperation(value = "根据用户姓名模糊查找")
 	@ResponseBody
-	public ResponseData<List<User>> getUserByNickname(
+	public ResponseData<List<User>> getUserByFuzzyQuery(
 			@ApiParam("PAGE") @RequestParam int page,
 			@ApiParam("SIZE") @RequestParam int pageSize,
 			@ApiParam("query") @RequestParam String query,

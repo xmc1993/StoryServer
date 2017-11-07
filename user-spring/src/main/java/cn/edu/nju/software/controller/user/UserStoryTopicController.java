@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.edu.nju.software.vo.StoryWithIntroduction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,13 +43,13 @@ public class UserStoryTopicController extends BaseController{
 	@ApiOperation(value = "根据故事专题获得故事列表", notes = "")
 	@RequestMapping(value = "/getStorysByStoryTopic", method = { RequestMethod.GET })
 	@ResponseBody
-	public ResponseData<List<Story>> getStorysByStoryTopic(@ApiParam("专题id") @RequestParam Integer id,
-			HttpServletRequest request, HttpServletResponse response) {
-		ResponseData<List<Story>> responseData = new ResponseData<>();
-		List<Story> storyList = new ArrayList<Story>();
+	public ResponseData<List<StoryWithIntroduction>> getStorysByStoryTopic(@ApiParam("专题id") @RequestParam Integer id,
+																		   HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<List<StoryWithIntroduction>> responseData = new ResponseData<>();
+		List<StoryWithIntroduction> storyList = new ArrayList<>();
 		List<StoryTopicRelation> list = storyTopicServcie.getStoryListByTopicId(id);
 		for (StoryTopicRelation storyTopicRelation : list) {
-			storyList.add(storyService.getStoryById(storyTopicRelation.getstoryId()));
+			storyList.add(storyService.getStoryByIdWithIntroduction(storyTopicRelation.getstoryId()));
 		}
 		responseData.jsonFill(1, null, storyList);
 		return responseData;

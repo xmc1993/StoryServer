@@ -68,24 +68,30 @@
 		story.content as story_content,
 		story.press as story_press,
 		story.guide as story_guide,
-		story.coverUrl as story_coverUrl,
+		story.coverUrl
+		as story_coverUrl,
 		story.preCoverUrl as story_preCoverUrl,
 		story.backgroundUrl as story_backgroundUrl,
-		story.originSoundUrl as story_originSoundUrl,
+		story.originSoundUrl as
+		story_originSoundUrl,
 		story.readGuide as story_readGuide,
-		story.price as story_price,
+		story.price as
+		story_price,
 		story.createTime as story_createTime,
-		story.updateTime as story_updateTime,
+		story.updateTime as
+		story_updateTime,
 		story.valid as story_valid
 		story.isSet as story_isSet
 		story.readTime as story_readTime
 	</sql>
 	<sql id="story_tag_fields">
 		story_tag.id as story_tag_id,
-		story_tag.parentId as story_tag_parentId,
+		story_tag.parentId as
+		story_tag_parentId,
 		story_tag.content as story_tag_content,
 		story_tag.createTime as story_tag_createTime,
-		story_tag.updateTime as story_tag_updateTime,
+		story_tag.updateTime as
+		story_tag_updateTime,
 		story_tag.valid as story_tag_valid,
 		story_tag.iconUrl as story_tag_iconUrl
 	</sql>
@@ -187,7 +193,8 @@
 	<insert id="addStoryLikeCount">
 		update story
 		set likeCount=likeCount+1
-		where id=#{0} and valid = 1 and draft = 0
+		where id=#{0}
+		and valid = 1 and draft = 0
 	</insert>
 
 	<update id="updateStory" parameterType="cn.edu.nju.software.entity.Story">
@@ -273,7 +280,8 @@
 		<include refid="fields"></include>
 		from story
 		where valid = 1 and draft = 0 and isSet = 0
-		order by createTime ${sortByCreateTime}
+		order by
+		createTime ${sortByCreateTime}
 		limit #{0},#{1}
 	</select>
 
@@ -306,11 +314,26 @@
 		limit #{offset},#{limit}
 	</select>
 
+	<select id="getStoryWithIntroductionByIdList" resultType="cn.edu.nju.software.vo.StoryWithIntroduction">
+		select
+		<include refid="fields"></include>
+		,introduction
+		from story
+		where valid = 1 and draft = 0 and id in
+		<foreach collection="idList" item="id" index="index" open="("
+			separator="," close=")">
+			#{id}
+		</foreach>
+		order by createTime desc
+		limit #{offset},#{limit}
+	</select>
+
 	<select id="getStoryListByTitle" resultType="cn.edu.nju.software.entity.Story">
 		select
 		<include refid="fields"></include>
 		from story
-		where title like CONCAT('%', #{0} ,'%') and valid = 1 and draft = 0 and
+		where title like CONCAT('%', #{0} ,'%') and valid = 1 and
+		draft = 0 and
 		isSet = 0
 		limit #{1},#{2}
 	</select>
@@ -330,7 +353,8 @@
 	<delete id="delStoryLikeCount">
 		update story
 		set likeCount=likeCount-1
-		where id=#{0} and draft = 0
+		where id=#{0}
+		and draft = 0
 	</delete>
 
 	<update id="recommendStory">
@@ -346,14 +370,16 @@
 		update story
 		set
 		recommend = 0
-		where valid = 1 and id=#{0} and recommend = 1
+		where valid = 1 and
+		id=#{0} and recommend = 1
 	</update>
 
 	<select id="getRecommendedStoryListByPage" resultType="cn.edu.nju.software.entity.Story">
 		select
 		<include refid="fields"></include>
 		from story
-		where valid = 1 and recommend = 1 and draft = 0 and isSet = 0
+		where valid = 1 and recommend = 1 and draft = 0 and isSet =
+		0
 		order by recommendTime DESC
 		limit #{0},#{1}
 	</select>
@@ -369,24 +395,28 @@
 
 	<select id="getStoryCount" resultType="java.lang.Integer">
 		select count(id)
-		from story WHERE valid = 1 and draft = 0 and isSet = 0
+		from story
+		WHERE valid = 1 and draft = 0 and isSet = 0
 	</select>
 
 	<select id="getSetStoryCount" resultType="java.lang.Integer">
 		select count(id)
-		from story WHERE valid = 1 and draft = 0 and setId = 0
+		from
+		story WHERE valid = 1 and draft = 0 and setId = 0
 	</select>
 
 	<select id="getStoryCountByTitle" resultType="java.lang.Integer">
 		select count(id)
 		from story
-		where title like CONCAT('%', #{0} ,'%') and valid = 1 and draft = 0 and
+		where title like CONCAT('%', #{0} ,'%') and valid = 1 and
+		draft = 0 and
 		isSet = 0
 	</select>
 	<select id="getStoryIdCountByTagIdList" resultType="java.lang.Integer">
 		select count(id)
 		from story
-		where valid = 1 and draft = 0 and isSet = 0 and id in
+		where valid = 1 and draft = 0 and isSet = 0
+		and id in
 		<foreach collection="idList" item="id" index="index" open="("
 			separator="," close=")">
 			#{id}
@@ -397,21 +427,24 @@
 		select
 		count(id)
 		from story
-		where valid = 1 and recommend = 1 and draft = 0 and isSet = 0
+		where valid = 1 and recommend = 1 and draft = 0 and
+		isSet = 0
 	</select>
 
 	<select id="getSetRecommendedStoryCount" resultType="java.lang.Integer">
 		select
 		count(id)
 		from story
-		where valid = 1 and recommend = 1 and draft = 0 and setId = 0
+		where valid = 1 and recommend = 1 and draft = 0 and
+		setId = 0
 	</select>
 
 	<select id="getStoryCountByIdList" resultType="java.lang.Integer">
 		select
 		count(id)
 		from story
-		where valid = 1 and draft = 0 and isSet = 0 and id in
+		where valid = 1 and draft = 0 and isSet = 0
+		and id in
 		<foreach collection="idList" item="id" index="index" open="("
 			separator="," close=")">
 			#{id}
@@ -422,7 +455,8 @@
 		select
 		count(id)
 		from story
-		where valid = 1 and draft = 0 and setId = 0 and id in
+		where valid = 1 and draft = 0 and setId = 0
+		and id in
 		<foreach collection="idList" item="id" index="index" open="("
 			separator="," close=")">
 			#{id}
@@ -435,17 +469,21 @@
 		From story
 		LEFT JOIN tag_relation ON story.id = tag_relation.storyId
 		LEFT JOIN story_tag ON tag_relation.tagId = story_tag.id
-		where story.valid = 1 and draft = 0 and story.isSet = 0
+		where
+		story.valid = 1 and draft = 0 and story.isSet = 0
 		AND
 		<foreach collection="queryList" item="query" index="index"
 			open="(" separator=" OR " close=")">
-			story.title like CONCAT('%', #{query} ,'%')
+			story.title like CONCAT('%', #{query}
+			,'%')
 
 			OR story.author like CONCAT('%', #{query} ,'%')
 
-			OR story.press like CONCAT('%', #{query} ,'%')
+			OR story.press
+			like CONCAT('%', #{query} ,'%')
 
-			OR story_tag.content like CONCAT('%', #{query} ,'%')
+			OR story_tag.content like CONCAT('%',
+			#{query} ,'%')
 		</foreach>
 		GROUP BY story.id
 		limit #{offset},#{limit}
@@ -526,19 +564,25 @@
 		select
 		count(DISTINCT story.id)
 		From story
-		LEFT JOIN tag_relation ON story.id = tag_relation.storyId
-		LEFT JOIN story_tag ON tag_relation.tagId = story_tag.id
-		where story.valid = 1 and draft = 0 and story.isSet = 0
+		LEFT JOIN tag_relation ON
+		story.id = tag_relation.storyId
+		LEFT JOIN story_tag ON
+		tag_relation.tagId = story_tag.id
+		where story.valid = 1 and draft = 0
+		and story.isSet = 0
 		AND
 		<foreach collection="queryList" item="query" index="index"
 			open="(" separator=" OR " close=")">
-			story.title like CONCAT('%', #{query} ,'%')
+			story.title like CONCAT('%', #{query}
+			,'%')
 
 			OR story.author like CONCAT('%', #{query} ,'%')
 
-			OR story.press like CONCAT('%', #{query} ,'%')
+			OR story.press
+			like CONCAT('%', #{query} ,'%')
 
-			OR story_tag.content like CONCAT('%', #{query} ,'%')
+			OR story_tag.content like CONCAT('%',
+			#{query} ,'%')
 		</foreach>
 
 	</select>
@@ -554,10 +598,12 @@
 		from story
 		where valid = 1 and isSet = 0
 		order by createTime desc
-		limit #{0},#{1}
+		limit
+		#{0},#{1}
 	</select>
 	<select id="getStoryCountIncludeDrafts" resultType="java.lang.Integer">
-		select count(id)
+		select
+		count(id)
 		from story WHERE valid = 1 and isSet = 0
 	</select>
 	<select id="getStoryByIdIncludeDrafts" resultType="cn.edu.nju.software.entity.Story">
@@ -577,7 +623,8 @@
 	<select id="getStoryCountByTitleIncludeDrafts" resultType="java.lang.Integer">
 		select count(id)
 		from story
-		where title like CONCAT('%', #{0} ,'%') and valid = 1 and isSet = 0
+		where title like CONCAT('%', #{0} ,'%') and
+		valid = 1 and isSet = 0
 	</select>
 	<select id="getExactStoryByTitle" resultType="cn.edu.nju.software.entity.Story">
 		select
@@ -593,27 +640,32 @@
 		<foreach collection="idList" item="id" open="(" separator=","
 			close=")">#{id}</foreach>
 		) as story
-		left outer join (SELECT storyId,tagId FROM tag_relation ) AS tag_relation
+		left outer join (SELECT storyId,tagId FROM tag_relation ) AS
+		tag_relation
 		ON tag_relation.storyId=story.id
 		left outer join (SELECT
 		id,parentId,content,createTIme,updateTime,valid,iconUrl FROM story_tag
 		WHERE parentId =
 		100038 AND valid = 1)
-		AS story_tag ON story_tag.id = tag_relation.tagId
+		AS story_tag ON story_tag.id =
+		tag_relation.tagId
 	</select>
 
 	<select id="getRecommendedStoryIdListByPage" resultType="java.lang.Integer">
-		select id
+		select
+		id
 		from story
 		where valid = 1 and recommend = 1 and isSet = 0
-		limit #{offset},#{limit}
+		limit
+		#{offset},#{limit}
 	</select>
 
 	<select id="getRecommendStoryListByPage" resultType="java.lang.Integer">
 		select id
 		from story
 		where valid = 1 and recommend = 1 and isSet = 0
-		limit #{offset},#{limit}
+		limit
+		#{offset},#{limit}
 	</select>
 
 
@@ -691,7 +743,8 @@
 		select
 		<include refid="multiTableFields"></include>
 		from tag_relation tr left join story on tr.storyId = story.id
-		where tr.tagId = #{tagId} and story.valid = 1 and story.draft = 0 and
+		where
+		tr.tagId = #{tagId} and story.valid = 1 and story.draft = 0 and
 		visibility = 255
 		order by story.createTime DESC
 		limit #{offset},#{limit}
@@ -700,8 +753,10 @@
 	<select id="getStoryCountBySecondLevelTagId" resultType="java.lang.Integer">
 		select
 		count(story.id)
-		from tag_relation tr left join story on tr.storyId = story.id
-		where tr.tagId = #{tagId} and story.valid = 1 and story.draft = 0 and
+		from tag_relation tr left join story on tr.storyId =
+		story.id
+		where tr.tagId = #{tagId} and story.valid = 1 and story.draft
+		= 0 and
 		visibility = 255
 	</select>
 
@@ -709,7 +764,8 @@
 		select
 		<include refid="multiTableFields"></include>
 		from tag_relation tr left join story on tr.storyId = story.id
-		where tr.tagId = 100124 and story.valid = 1 and story.draft = 0 and
+		where
+		tr.tagId = 100124 and story.valid = 1 and story.draft = 0 and
 		visibility = 255
 		order by story.tellCount DESC, story.likeCount DESC
 		limit #{offset},#{limit}
@@ -737,7 +793,8 @@
 		<include refid="fields"></include>
 		realTellCount
 		from story
-		where valid = 1 and draft = 0 and setId =0 and isSet = 0
+		where valid = 1 and draft = 0 and setId =0 and
+		isSet = 0
 		ORDER by tellCount DESC, likeCount DESC
 		limit #{0},#{1}
 	</select>

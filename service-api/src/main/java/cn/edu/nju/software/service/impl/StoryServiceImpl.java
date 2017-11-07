@@ -481,4 +481,13 @@ public class StoryServiceImpl implements StoryService {
 		return storyDao.updateTellCountById(storyId, tellCount);
 	}
 
+	@Override
+	public List<StoryWithIntroduction> getStoryWithIntroductionByIdList(List<Integer> idList, Integer offset,
+			Integer limit) {
+		idList.add(-1);// 防止mybatis查询出错
+		offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
+		limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
+		return storyDao.getStoryWithIntroductionByIdList(idList, offset, limit);
+	}
+
 }

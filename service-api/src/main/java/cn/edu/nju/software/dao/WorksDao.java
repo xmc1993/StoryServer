@@ -27,7 +27,7 @@ public interface WorksDao {
 
     Works getWorksByIdHard(int id);
     
-    Works getWorksByUserAndStory(@Param("userId") Integer userId,@Param("storyId") Integer storyId);
+    List<Works> getWorksByUserAndStory(@Param("userId") Integer userId,@Param("storyId") Integer storyId);
 
     List<Works> getWorksListByIdList(@Param("idList")List<Integer> idList);
 

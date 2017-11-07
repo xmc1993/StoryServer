@@ -6,6 +6,8 @@ import cn.edu.nju.software.service.BadgeTypeService;
 import cn.edu.nju.software.service.UserBadgeService;
 import cn.edu.nju.software.util.UserChecker;
 import cn.edu.nju.software.vo.BadgeVo;
+import cn.edu.nju.software.vo.ShareBadgeVo;
+
 import com.github.pagehelper.PageInfo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -109,20 +111,19 @@ public class UserBadgeController {
 		responseData.jsonFill(1, null, badgeVoList);
 		return responseData;
 	}
-	
+
 	@ApiOperation("随机获得徽章(测试用)")
 	@RequestMapping(value = "/getBadgeListForTest", method = { RequestMethod.GET })
 	@ResponseBody
-	public ResponseData<List<Badge>> getBadgeListForTest( HttpServletRequest request,
-			HttpServletResponse response) {
+	public ResponseData<List<Badge>> getBadgeListForTest(HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<List<Badge>> responseData = new ResponseData<>();
 
-		int number=new Random().nextInt(10)+1;
-		
-		List<Badge> badgeList =new ArrayList<>();
-				for (int i = 0; i < number; i++) {
-					badgeList.add(badgeService.getBadgeById(number+i+10));
-				}	
+		int number = new Random().nextInt(10) + 1;
+
+		List<Badge> badgeList = new ArrayList<>();
+		for (int i = 0; i < number; i++) {
+			badgeList.add(badgeService.getBadgeById(number + i + 10));
+		}
 		responseData.setBadgeList(badgeList);
 		return responseData;
 	}
