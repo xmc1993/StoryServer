@@ -17,10 +17,16 @@
         <property name="caches">
             <set>
                 <!-- 用微信js-sdk相关的accessToken以及ticket信息 -->
-                <bean class="cn.edu.nju.software.util.cache.JedisSpringCache">
+                <bean class="cn.edu.nju.software.util.cache.JedisSpringCache" id="wxJedisSpringCache">
                     <property name="name" value="wxAccessToken"/>
                     <!-- 默认是2个小时 7200s但是考虑到sdk通信的时间差减少30s来保证缓存始终有效 -->
                     <property name="expiredDuration" value="7170"/>
+                </bean>
+                <!-- 保存徽章信息的接口 -->
+                <bean class="cn.edu.nju.software.util.cache.JedisSpringCache" id="badgeJedisSpringCache">
+                    <property name="name" value="badge"/>
+                    <!-- 用户的徽章信息默认两小时失效 -->
+                    <property name="expiredDuration" value="7200"/>
                 </bean>
             </set>
         </property>

@@ -4,6 +4,7 @@ import cn.edu.nju.software.dao.UserBadgeDao;
 import cn.edu.nju.software.entity.UserBadge;
 import cn.edu.nju.software.service.UserBadgeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class UserBadgeServiceImpl implements UserBadgeService {
     @Autowired
     UserBadgeDao userBadgeDao;
 
+    @CacheEvict(value = "badge", key = "#userBadge.userId")
     @Override
     public Boolean saveUserBadge(UserBadge userBadge) {
         //如果徽章已经存在则不再重复获取 TODO 更高层判断
@@ -27,6 +29,7 @@ public class UserBadgeServiceImpl implements UserBadgeService {
         return aBoolean;
     }
 
+    @CacheEvict(value = "badge", key = "#userId")
     @Override
     public Boolean deleteUserBadgeByUserId(Integer userId) {
         return userBadgeDao.deleteUserBadgeByUserId(userId);

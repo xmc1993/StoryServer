@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.cache.Cache;
 import org.springframework.cache.support.SimpleValueWrapper;
-import org.springframework.util.Assert;
 import redis.clients.jedis.Jedis;
 
 import javax.annotation.PreDestroy;
@@ -17,7 +16,7 @@ public class JedisSpringCache implements Cache, InitializingBean {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private Jedis jedis = JedisUtil.getJedis();
+    private Jedis jedis;
     private String name;
 
     /**
@@ -47,14 +46,12 @@ public class JedisSpringCache implements Cache, InitializingBean {
 
     @PreDestroy
     public void destroyMethod() throws Exception {
-        if (this.jedis != null) {
-            this.jedis.close();//释放资源
-        }
+        releaseLocalJedis();
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Assert.notNull(jedis, "jeids must not be null!");
+//        Assert.notNull(jedis, "jeids must not be null!");
     }
 
     @Override
@@ -64,11 +61,32 @@ public class JedisSpringCache implements Cache, InitializingBean {
 
     @Override
     public Jedis getNativeCache() {
+        setLocalJedis();
         return this.jedis;
+    }
+
+    /**
+     * 获取本地的Jedis连接
+     */
+    private void setLocalJedis(){
+        if(this.jedis == null){
+            this.jedis = JedisUtil.getJedis();
+        }
+    }
+
+    /**
+     * 释放本地的Jedis连接
+     */
+    private void releaseLocalJedis(){
+        if (this.jedis != null) {
+            jedis.close();
+            this.jedis = null;
+        }
     }
 
     @Override
     public ValueWrapper get(Object key) {
+        setLocalJedis();
         String cacheKey = getCacheKey(key);
         try {
             byte[] value = jedis.get(cacheKey.getBytes());
@@ -78,6 +96,8 @@ public class JedisSpringCache implements Cache, InitializingBean {
             logger.error("读取jedis缓存发生异常, key={}, server={}", cacheKey,
                     jedis.getClient().getHost(), e.getCause());
             return null;
+        }finally {
+            releaseLocalJedis();
         }
     }
 
@@ -95,6 +115,7 @@ public class JedisSpringCache implements Cache, InitializingBean {
 
     @Override
     public void put(Object key, Object value) {
+        setLocalJedis();
         String cacheKey = getCacheKey(key);
         logger.info("放入缓存的Key:{}, Value:{}, StoreValue:{}", cacheKey, value, toStoreValue(value));
         int expiration = expiredDuration;
@@ -118,6 +139,8 @@ public class JedisSpringCache implements Cache, InitializingBean {
         } catch (Exception e) {
             logger.error("jedis写入缓存发生异常, key={}, server={}", cacheKey,
                     jedis.getClient().getHost(), e);
+        }finally {
+            releaseLocalJedis();
         }
     }
 
@@ -137,10 +160,14 @@ public class JedisSpringCache implements Cache, InitializingBean {
 
     @Override
     public void clear() {
+        //TODO 清除指定值开头的缓存
+        setLocalJedis();
         try {
             jedis.flushAll();
         } catch (Exception e) {
             logger.error("jedis执行flush出现异常", e);
+        }finally {
+            releaseLocalJedis();
         }
     }
 

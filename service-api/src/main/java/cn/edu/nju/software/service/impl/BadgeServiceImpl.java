@@ -4,6 +4,7 @@ import cn.edu.nju.software.dao.BadgeDao;
 import cn.edu.nju.software.entity.Badge;
 import cn.edu.nju.software.service.BadgeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,19 +49,20 @@ public class BadgeServiceImpl implements BadgeService {
 
     @Override
     public List<Badge> getAllBadgeByPage(int page, int pageSize) {
-        int offset = page*pageSize;
+        int offset = page * pageSize;
         int limit = pageSize;
         return badgeDao.getAllBadgeByPage(offset, limit);
     }
 
-	@Override
-	public List<Badge> getBadgeOfUser(Integer userId) {
-		return badgeDao.getBadgeOfUser(userId);
-	}
+    @Cacheable(value = "badge", key = "#userId")
+    @Override
+    public List<Badge> getBadgeOfUser(Integer userId) {
+        return badgeDao.getBadgeOfUser(userId);
+    }
 
-	@Override
-	public Badge getBadgeByMeasureAndType(int measure, int badgeTypeId) {
-		return badgeDao.getBadgeByMeasureAndType(measure,badgeTypeId);
-	}
+    @Override
+    public Badge getBadgeByMeasureAndType(int measure, int badgeTypeId) {
+        return badgeDao.getBadgeByMeasureAndType(measure, badgeTypeId);
+    }
 
 }
