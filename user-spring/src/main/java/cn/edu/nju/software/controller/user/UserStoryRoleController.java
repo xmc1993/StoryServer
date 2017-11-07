@@ -35,7 +35,7 @@ import cn.edu.nju.software.util.UploadFileUtil;
  * @version 创建时间：2017年9月19日
  */
 
-@Api("用户故事角色控制器")
+@Api("storyRole")
 @Controller
 @RequestMapping("/user")
 public class UserStoryRoleController {

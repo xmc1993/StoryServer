@@ -32,7 +32,7 @@ import java.util.Random;
  *
  */
 
-@Api("用户徽章控制器")
+@Api("badge")
 @Controller
 @RequestMapping("/user")
 public class UserBadgeController {

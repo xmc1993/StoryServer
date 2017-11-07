@@ -23,7 +23,7 @@
 	<context:property-placeholder location="classpath:datasource.properties"
 		order="1" />
 
-	<mvc:annotation-driven validator="validator">
+	<mvc:annotation-driven conversion-service="conversionService" validator="validator">
 		<mvc:message-converters register-defaults="true">
 			<bean
 				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
@@ -252,7 +252,6 @@
 
 	<bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />
 
-	<mvc:annotation-driven  conversion-service="conversionService"/>
 	<bean id="conversionService"
 		  class="org.springframework.context.support.ConversionServiceFactoryBean">
 		<property name="converters">
