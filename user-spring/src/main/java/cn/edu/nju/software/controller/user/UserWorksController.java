@@ -505,7 +505,8 @@ public class UserWorksController extends BaseController {
 				badges.add(badge);
 			}
 		}
-
+		//用户的作品数和缓存的作品数可能不对应，说以这里要从数据库拿用户的workCount,也就是刷新下workCount数
+		user=appUserService.getUserById(user.getId());
 		// 作品数量徽章
 		for (int i = 0; i < workCountBadgeArr.length; i++) {
 			if (user.getWorkCount() == workCountBadgeArr[i]) {

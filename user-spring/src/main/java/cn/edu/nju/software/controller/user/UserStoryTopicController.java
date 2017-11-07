@@ -43,8 +43,7 @@ public class UserStoryTopicController extends BaseController{
 	@ApiOperation(value = "根据故事专题获得故事列表", notes = "")
 	@RequestMapping(value = "/getStorysByStoryTopic", method = { RequestMethod.GET })
 	@ResponseBody
-	public ResponseData<List<StoryWithIntroduction>> getStorysByStoryTopic(@ApiParam("专题id") @RequestParam Integer id,
-																		   HttpServletRequest request, HttpServletResponse response) {
+	public ResponseData<List<StoryWithIntroduction>> getStorysByStoryTopic(@ApiParam("专题id") @RequestParam Integer id) {
 		ResponseData<List<StoryWithIntroduction>> responseData = new ResponseData<>();
 		List<StoryWithIntroduction> storyList = new ArrayList<>();
 		List<StoryTopicRelation> list = storyTopicServcie.getStoryListByTopicId(id);
