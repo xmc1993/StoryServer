@@ -417,8 +417,21 @@ public class UserUserController extends BaseController {
 		Util.setNewAccessToken(user);
 		// TODO 更新数据库
 		// 登录信息写入缓存
-		JedisUtil.getJedis().set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
-		JedisUtil.getJedis().expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);// 缓存用户信息30天
+		Jedis jedis = null;
+		try {
+			jedis = JedisUtil.getJedis();
+			jedis.set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
+			jedis.expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);
+		}catch (Exception e){
+			e.printStackTrace();
+			responseData.jsonFill(2, "信息插入缓存失败", null);
+			return responseData;
+		}finally {
+			if (jedis != null) {
+				jedis.close();
+			}
+		}
+
 
 		// 对用户连续登陆天数处理
 		TwoTuple<Integer, Boolean> tt = userService.addContinusLandDay(user.getId());
