@@ -99,9 +99,22 @@ public class UserUserController extends BaseController {
 			return responseData;
 		}
 		user = userService.getUserById(user.getId());
-		Jedis jedis = JedisUtil.getJedis();
-		jedis.set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
-		jedis.close();
+
+		// 登录信息写入缓存
+		Jedis jedis = null;
+		try {
+			jedis = JedisUtil.getJedis();
+			jedis.set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
+		}catch (Exception e) {
+			e.printStackTrace();
+			responseData.jsonFill(2, "用户信息插入缓存失败", null);
+			return responseData;
+		}finally {
+			if (jedis != null) {
+				jedis.close();
+			}
+		}
+
 		user.setVerifyCode(null);
 		user.setExpireTime(null);
 		user.setWxUnionId(null);
