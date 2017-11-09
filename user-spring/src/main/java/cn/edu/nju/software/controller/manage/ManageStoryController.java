@@ -318,6 +318,7 @@ public class ManageStoryController {
 			HttpServletResponse response) {
 		ResponseData<Boolean> responseData = new ResponseData<>();
 		boolean success = storyService.deleteStoryById(id);
+
 		if (!success) {
 			throw new RuntimeException("删除失败");
 		}
