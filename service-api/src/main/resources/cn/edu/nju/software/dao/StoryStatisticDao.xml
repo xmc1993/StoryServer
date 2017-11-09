@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.StoryStatisticDao">
+
+    <sql id="fields">
+        id,
+        storyId,
+        tellCount,
+        likeCount,
+        realTellCount,
+        viewCount,
+        commentCount,
+        createTime,
+        updateTime
+    </sql>
+
+    <insert id="saveStoryStatistic" parameterType="cn.edu.nju.software.entity.StoryStatistic" keyProperty="id"
+            useGeneratedKeys="true">
+        insert into story_statistic(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{storyId},
+        #{tellCount},
+        #{likeCount},
+        #{realTellCount},
+        #{viewCount},
+        #{commentCount},
+        #{createTime},
+        #{updateTime}
+        )
+    </insert>
+
+    <update id="updateStoryStatistic" parameterType="cn.edu.nju.software.entity.StoryStatistic">
+        UPDATE story_statistic
+        SET
+        tellCount=#{tellCount},
+        likeCount=#{likeCount},
+        realTellCount=#{realTellCount},
+        viewCount=#{viewCount},
+        commentCount=#{commentCount},
+        updateTime=#{updateTime}
+        WHERE id = #{id}
+    </update>
+
+    <select id="getStoryStatisticByStoryId" resultType="cn.edu.nju.software.entity.StoryStatistic">
+        select
+        <include refid="fields"></include>
+        from story_statistic
+        WHERE storyId = #{0}
+    </select>
+
+    <update id="newLike">
+        update
+        story_statistic
+        set likeCount = likeCount + 1
+        where storyId = #{0}
+    </update>
+
+    <update id="removeLike">
+        update
+        story_statistic
+        set likeCount = likeCount - 1
+        where storyId = #{0}
+    </update>
+
+    <update id="newTell">
+        update
+        story_statistic
+        set tellCount = tellCount + 1
+        where storyId = #{0}
+    </update>
+
+    <update id="removeTell">
+        update
+        story_statistic
+        set tellCount = tellCount - 1
+        where storyId = #{0}
+    </update>
+
+    <update id="newView">
+        update
+        story_statistic
+        set viewCount = viewCount + 1
+        where storyId = #{0}
+    </update>
+
+    <update id="removeView">
+        update
+        story_statistic
+        set viewCount = viewCount - 1
+        where storyId = #{0}
+    </update>
+
+    <update id="newComment">
+        update
+        story_statistic
+        set commentCount = commentCount + 1
+        where storyId = #{0}
+    </update>
+
+    <update id="removeComment">
+        update
+        story_statistic
+        set commentCount = commentCount - 1
+        where storyId = #{0}
+    </update>
+
+</mapper>
