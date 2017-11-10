@@ -105,32 +105,4 @@ public class ManageBadgeController {
         return responseData;
     }
 
-	@ApiOperation("分享徽章")
-	@RequestMapping(value = "/shareBadge", method = { RequestMethod.GET })
-	@ResponseBody
-	public ResponseData<ShareBadgeVo> shareBadge(@ApiParam("用户Id") @RequestParam(value = "userId") Integer userId,
-			@ApiParam("徽章Id") @RequestParam(value="badgeId") Integer badgeId,
-			HttpServletRequest request, HttpServletResponse response) {
-		ResponseData<ShareBadgeVo> responseData = new ResponseData<>();
-		User user=userService.getUserById(userId);
-		if(user==null){
-			responseData.jsonFill(2, "用户不存在", null);
-			return responseData;
-		}
-		Badge badge=badgeService.getBadgeById(badgeId);
-		if(badge==null){
-			responseData.jsonFill(2, "徽章不存在", null);
-			return responseData;
-		}
-		ShareBadgeVo shareBadgeVo=new ShareBadgeVo();
-		shareBadgeVo.setUserId(userId);
-		shareBadgeVo.setUserNickName(user.getNickname());
-		shareBadgeVo.setUserHeadImgUrl(user.getHeadImgUrl());
-		shareBadgeVo.setBadgeId(badgeId);
-		shareBadgeVo.setIcon(badge.getIcon());
-		shareBadgeVo.setDescription(badge.getDescription());
-		
-		responseData.jsonFill(1, null, shareBadgeVo);
-		return responseData;
-	}
 }

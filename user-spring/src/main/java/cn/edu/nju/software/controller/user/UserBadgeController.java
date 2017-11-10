@@ -4,6 +4,7 @@ import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.BadgeService;
 import cn.edu.nju.software.service.BadgeTypeService;
 import cn.edu.nju.software.service.UserBadgeService;
+import cn.edu.nju.software.service.UserService;
 import cn.edu.nju.software.util.UserChecker;
 import cn.edu.nju.software.vo.BadgeVo;
 import cn.edu.nju.software.vo.ShareBadgeVo;
@@ -42,6 +43,8 @@ public class UserBadgeController {
 	BadgeTypeService badgeTypeService;
 	@Autowired
 	UserBadgeService userBadgeService;
+	@Autowired
+	UserService userService;
 
 	@ApiOperation("获取用户的徽章列表")
 	@RequestMapping(value = "/getAllBageOfUser", method = { RequestMethod.GET })
@@ -125,6 +128,35 @@ public class UserBadgeController {
 			badgeList.add(badgeService.getBadgeById(number + i + 10));
 		}
 		responseData.setBadgeList(badgeList);
+		return responseData;
+	}
+
+	@ApiOperation("分享徽章")
+	@RequestMapping(value = "/shareBadge", method = { RequestMethod.GET })
+	@ResponseBody
+	public ResponseData<ShareBadgeVo> shareBadge(@ApiParam("用户Id") @RequestParam(value = "userId") Integer userId,
+												 @ApiParam("徽章Id") @RequestParam(value="badgeId") Integer badgeId,
+												 HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<ShareBadgeVo> responseData = new ResponseData<>();
+		User user=userService.getUserById(userId);
+		if(user==null){
+			responseData.jsonFill(2, "用户不存在", null);
+			return responseData;
+		}
+		Badge badge=badgeService.getBadgeById(badgeId);
+		if(badge==null){
+			responseData.jsonFill(2, "徽章不存在", null);
+			return responseData;
+		}
+		ShareBadgeVo shareBadgeVo=new ShareBadgeVo();
+		shareBadgeVo.setUserId(userId);
+		shareBadgeVo.setUserNickName(user.getNickname());
+		shareBadgeVo.setUserHeadImgUrl(user.getHeadImgUrl());
+		shareBadgeVo.setBadgeId(badgeId);
+		shareBadgeVo.setIcon(badge.getIcon());
+		shareBadgeVo.setDescription(badge.getDescription());
+
+		responseData.jsonFill(1, null, shareBadgeVo);
 		return responseData;
 	}
 }
