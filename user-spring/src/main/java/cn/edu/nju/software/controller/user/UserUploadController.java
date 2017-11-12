@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by xmc1993 on 2017/5/15.
@@ -48,21 +49,42 @@ public class UserUploadController {
         return responseData;
     }
 
+    @ApiOperation(value = "上传多个icon", notes = "")
+    @RequestMapping(value = "/uploadIcons", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<List<UploadResVo>> uploadIcons(
+            @ApiParam("ICON") @RequestParam(value = "icon") MultipartFile[] icons) {
+        ResponseData<List<UploadResVo>> responseData = new ResponseData<>();
+        List<UploadResVo> list = new ArrayList<>();
+        for (MultipartFile icon : icons) {
+            String url = uploadFile(icon, ICON_ROOT);
+            if (url == null) {
+                responseData.jsonFill(2, "上传失败", null);
+                return responseData;
+            }
+            UploadResVo uploadResVo = new UploadResVo();
+            uploadResVo.setUrl(url);
+            list.add(uploadResVo);
+        }
+        responseData.jsonFill(1, null, list);
+        return responseData;
+    }
+
 
     @ApiOperation(value = "批量上传文件", notes = "")
     @RequestMapping(value = "/uploadMulti", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<UploadResVo> uploadMulti(
             @ApiParam("多文件") @RequestParam(value = "files", required = true) MultipartFile[] files,
-                                    HttpServletRequest request, HttpServletResponse response) {
+            HttpServletRequest request, HttpServletResponse response) {
         ResponseData<UploadResVo> responseData = new ResponseData<>();
         UploadResVo uploadResVo = new UploadResVo();
         ArrayList<String> urls = new ArrayList<>();
         uploadResVo.setMultiUrls(urls);
         responseData.jsonFill(1, null, uploadResVo);
-        if (files != null){
+        if (files != null) {
             for (MultipartFile file : files) {
-                if (!file.isEmpty()){
+                if (!file.isEmpty()) {
                     urls.add(uploadFile(file, ICON_ROOT));
                 }
             }

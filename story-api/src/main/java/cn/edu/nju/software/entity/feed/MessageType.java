@@ -12,4 +12,5 @@ public enum MessageType {
     SYSTEM_NOTICE,//系统通知
     NEW_BABYREAD,//关注的人有宝宝读
     NEW_FRIEND_STORY,//关注的人有新的原创故事
+    OTHER,//其他类型
 }

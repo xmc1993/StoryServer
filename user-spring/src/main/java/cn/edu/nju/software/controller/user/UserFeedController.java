@@ -4,6 +4,7 @@ import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.entity.Feed;
+import cn.edu.nju.software.entity.feed.MessageType;
 import cn.edu.nju.software.feed.service.MessageFeedService;
 import cn.edu.nju.software.util.TokenConfig;
 import com.wordnik.swagger.annotations.Api;
@@ -15,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import redis.clients.jedis.BinaryClient;
 
+import javax.print.attribute.standard.MediaSize;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,8 +52,22 @@ public class UserFeedController extends BaseController {
 
         List<Feed> feedList = messageFeedService.getDisplayFeedsByPage(user.getId(), page, pageSize);
         responseData.jsonFill(1, null, feedList);
-        
+
         responseData.setCount(messageFeedService.getFeedCountByUserId(user.getId()));
+        return responseData;
+    }
+
+    @ApiOperation(value = "模拟返回其他类型的feed类型")
+    @RequestMapping(value = "/mockGetFeed", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<Feed>> getFeedListByPage() {
+        ResponseData<List<Feed>> responseData = new ResponseData();
+
+        List<Feed> list = new ArrayList<>();
+        Feed feed = new Feed();
+        feed.setType(MessageType.OTHER);
+        list.add(feed);
+        responseData.jsonFill(1, null, list);
         return responseData;
     }
 
