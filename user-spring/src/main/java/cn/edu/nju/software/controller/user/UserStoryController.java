@@ -75,6 +75,9 @@ public class UserStoryController extends BaseController {
 		storyUserLog.setStoryId(id);
 		storyUserLog.setChannel("app");
 		storyUserLogService.saveLog(storyUserLog);
+		//为故事的添加阅读次数
+		storyService.newView(id);
+		storyService.newSetView(id);
 
 		StoryWithIntroduction story = storyService.getStoryByIdWithIntroduction(id);
 		responseData.jsonFill(1, null, story);

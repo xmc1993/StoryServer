@@ -62,6 +62,10 @@ public interface StoryDao {
 
     List<Story> getSetRecommendedStoryListByPage(int offset, int limit);
 
+    boolean newView(int id);
+
+    boolean newSetView(int id);
+
     boolean newTell(int id);
 
     boolean deleteTell(int id);

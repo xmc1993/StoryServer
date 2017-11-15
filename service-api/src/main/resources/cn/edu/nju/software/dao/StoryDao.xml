@@ -668,22 +668,35 @@
 		#{offset},#{limit}
 	</select>
 
+	<update id="newView">
+		update story
+		set
+		tellCount = tellCount+1
+		where valid = 1 and id=#{0} and isSet in (0,2)
+	</update>
+
+	<update id="newSetView">
+		update story
+		set
+		tellCount = tellCount+1
+		where valid = 1 and id=#{0} and isSet =1
+	</update>
+
 
 	<update id="newTell">
 		update story
 		set
-		realTellCount = realTellCount+1,
-		tellCount = tellCount+1
+		realTellCount = realTellCount+1
 		where valid = 1 and id=#{0}
 	</update>
 
 	<update id="deleteTell">
 		update story
 		set
-		realTellCount = realTellCount-1,
-		tellCount = tellCount-1
+		realTellCount = realTellCount-1
 		where valid = 1 and id=#{0}
 	</update>
+
 	<update id="setDraftCompleteByStoryId">
 		update story
 		set

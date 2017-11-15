@@ -53,6 +53,10 @@ public interface StoryService {
     Integer getSetRecommendedStoryCount();
 
     boolean newTell(int id);
+
+    boolean newView(int id);
+
+    boolean newSetView(int id);
     
     boolean deleteTell(int id);
 

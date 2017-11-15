@@ -181,6 +181,16 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
+	public boolean newView(int id) {
+		return storyDao.newView(id);
+	}
+
+	@Override
+	public boolean newSetView(int id) {
+		return storyDao.newSetView(id);
+	}
+
+	@Override
 	public boolean deleteTell(int id) {
 		return storyDao.deleteTell(id);
 	}

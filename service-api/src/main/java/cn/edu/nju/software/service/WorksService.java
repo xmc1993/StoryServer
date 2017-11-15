@@ -52,6 +52,8 @@ public interface WorksService {
 
     Integer getUserIdByWorkId(int worksId);
 
+    List<Integer> getWorkIdListByUserId(int userId);
+
     Integer getWorksAfterSomeDate(Integer userId, String date);
     
     String getOriginSoundLength(File file);

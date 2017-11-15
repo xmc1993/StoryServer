@@ -502,16 +502,29 @@ public class ManageStoryController {
 	}
 
 	@RequiredPermissions({ 3, 5 })
-	@ApiOperation(value = "根据故事id修改读故事的次数(假数据)")
+	@ApiOperation(value = "根据故事id修改看故事的次数(假数据)")
 	@RequestMapping(value = "/updateTellCountByStoryId", method = { RequestMethod.POST })
 	@ResponseBody
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void updateTellCountByStoryId(@ApiParam("故事ID") @RequestParam int id,
 			@ApiParam("修改成的阅读次数") @RequestParam int tellCount) {
+
+		Story story=storyService.getStoryById(id);
+		//记录差值
+		int dValue=tellCount-story.getTellCount();
 		boolean res = storyService.updateTellCountById(id, tellCount);
 		if (!res) {
-			throw new RuntimeException("修改失败");
+			throw new RuntimeException("故事阅读次数修改失败");
 		}
+		//如果该故事属于故事集为故事集修改阅读次数
+		if(story.getSetId()!=0){
+			Story story1=storyService.getStoryById(story.getSetId());
+			boolean succes = storyService.updateTellCountById(story.getSetId(),story1.getTellCount()+dValue);
+			if (!succes) {
+				throw new RuntimeException("故事集阅读次数修改失败");
+			}
+		}
+
 	}
 
 	/**

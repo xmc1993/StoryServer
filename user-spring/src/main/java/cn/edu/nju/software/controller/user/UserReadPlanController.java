@@ -193,7 +193,7 @@ public class UserReadPlanController extends BaseController {
 		BeanUtils.copyProperties(story, storyWorkVo);
 		if (userId > 0) {
 			boolean isWorks = worksService.getWorksByUserAndStory(userId, story.getId());
-			storyWorkVo.setisWorks(isWorks);
+			storyWorkVo.setWorks(isWorks);
 		}
 		return storyWorkVo;
 	}

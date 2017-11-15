@@ -42,8 +42,11 @@ public class WorksServiceImpl implements WorksService {
 	public Works saveWorks(Works works) {
 		boolean res = worksDao.saveWorks(works);
 		if (res) {
-			//同时对真实的tellCount和虚假的tellCount进行修改
 			storyDao.newTell(works.getStoryId());
+			Story story=storyDao.getStoryById(works.getStoryId());
+			if(story.getSetId()!=0){
+				storyDao.newTell(story.getSetId());
+			}
 			appUserDao.newWork(works.getUserId());
 		}
 		return works;
@@ -179,6 +182,11 @@ public class WorksServiceImpl implements WorksService {
 	}
 
 	@Override
+	public List<Integer> getWorkIdListByUserId(int userId) {
+		return worksDao.getWorkIdListByUserId(userId);
+	}
+
+	@Override
 	public Integer getWorksAfterSomeDate(Integer userId, String date) {
 		return worksDao.getWorksAfterSomeDate(userId, date);
 	}
@@ -208,7 +216,8 @@ public class WorksServiceImpl implements WorksService {
 
 	@Override
 	public boolean getWorksByUserAndStory(Integer userId, Integer storyId) {
-		if (worksDao.getWorksByUserAndStory(userId, storyId) == null)
+		List<Works> worksList=worksDao.getWorksByUserAndStory(userId,storyId);
+		if (worksList==null||worksList.isEmpty())
 			return false;
 		return true;
 	}

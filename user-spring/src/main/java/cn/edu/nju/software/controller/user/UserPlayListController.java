@@ -197,6 +197,38 @@ public class UserPlayListController extends BaseController {
         return responseData;
     }
 
+    @ApiOperation(value = "一键添加别人的作品到播放列表", notes = "")
+    @RequestMapping(value = "/getUserWorksToPlayList", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Boolean> getUserWorksToPlayList(
+            @ApiParam("播放列表的名字") @RequestParam int playListId,
+            @ApiParam("对方的用户Id") @RequestParam int userId,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Boolean> responseData = new ResponseData<>();
+        User user = (User)request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "用户尚未登录。", null);
+            return responseData;
+        }
+        List<Integer> workIdList =worksService.getWorkIdListByUserId(userId);
+        PlayListRelation playListRelation=new PlayListRelation();
+        playListRelation.setCreateTime(new Date());
+        playListRelation.setUpdateTime(new Date());
+        playListRelation.setPlayListId(playListId);
+        playListRelation.setUserId(userId);
+        for (Integer id : workIdList) {
+            playListRelation.setWorksId(id);
+            boolean res=playListRelationService.savePlayListRelation(playListRelation);
+            if (res == false){
+                responseData.jsonFill(2,"添加出错",null);
+                return  responseData;
+            }
+        }
+        responseData.jsonFill(1,null,true);
+        return responseData;
+    }
+
+
     @ApiOperation(value = "删除播放列表", notes = "")
     @RequestMapping(value = "/removePlayList", method = {RequestMethod.POST})
     @ResponseBody

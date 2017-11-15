@@ -172,6 +172,13 @@
         where userId = #{0} and valid = 1
     </select>
 
+    <select id="getWorkIdListByUserId" resultType="java.lang.Integer">
+        select
+        id
+        from works
+        where userId = #{0} and valid = 1
+    </select>
+
     <select id="getWorksListByUserId" resultType="cn.edu.nju.software.entity.Works">
         select
         <include refid="fields"></include>
