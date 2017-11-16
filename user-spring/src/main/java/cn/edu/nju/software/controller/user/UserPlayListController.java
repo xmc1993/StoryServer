@@ -59,25 +59,25 @@ public class UserPlayListController extends BaseController {
         }
         List<PlayList> playLists = playListService.getAllPlayListByUserIdByPage(user.getId(), page, pageSize);
         List<Integer> playIdList = new ArrayList<>();
-        for(PlayList p:playLists){
-        	playIdList.add(p.getId());
+        for (PlayList p : playLists) {
+            playIdList.add(p.getId());
         }
         //获取专辑下的第一个Works对象
-        List<TwoTuple<Integer,String>> workList = worksService.getFirstWorkByPlayIdList(playIdList);
-        
-        List<PlayListVo> playListVos =  new ArrayList<>();
-        for(PlayList p:playLists){
-        	PlayListVo plv = new PlayListVo();
-        	BeanUtils.copyProperties(p, plv);
-        	for(TwoTuple<Integer,String> tt:workList){
-        		if(tt.getId() == p.getId()){
-        			plv.setCover(tt.getValue());
-        			break;
-        		}
-        	}
-        	playListVos.add(plv);
+        List<TwoTuple<Integer, String>> workList = worksService.getFirstWorkByPlayIdList(playIdList);
+
+        List<PlayListVo> playListVos = new ArrayList<>();
+        for (PlayList p : playLists) {
+            PlayListVo plv = new PlayListVo();
+            BeanUtils.copyProperties(p, plv);
+            for (TwoTuple<Integer, String> tt : workList) {
+                if (tt.getId() == p.getId()) {
+                    plv.setCover(tt.getValue());
+                    break;
+                }
+            }
+            playListVos.add(plv);
         }
-        
+
         responseData.jsonFill(1, null, playListVos);
         return responseData;
     }
@@ -98,7 +98,7 @@ public class UserPlayListController extends BaseController {
         }
         //如果是我的作品这个播放列表 TODO 抽取出来
         if (playListId == -1) {
-            responseData.jsonFill(1, null, worksList2VoList(worksService.getWorksListByUserId(user.getId(), page*pageSize, pageSize), user.getId()));
+            responseData.jsonFill(1, null, worksList2VoList(worksService.getWorksListByUserId(user.getId(), page * pageSize, pageSize), user.getId()));
             return responseData;
         }
         List<Integer> idList = playListRelationService.getWorksIdListByPlayListIdAndUserIdByPage(playListId, user.getId(), page, pageSize);
@@ -156,11 +156,11 @@ public class UserPlayListController extends BaseController {
             return responseData;
         }
         //我喜欢列表
-        if(playListId == 0){
+        if (playListId == 0) {
             agreeService.deleteAgree(worksId, user.getId());
         }
         //我的作品列表
-        if(playListId == -1){
+        if (playListId == -1) {
             worksService.deleteWorksById(worksId);
         }
         //TODO 简单的校验
@@ -201,30 +201,40 @@ public class UserPlayListController extends BaseController {
     @RequestMapping(value = "/getUserWorksToPlayList", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> getUserWorksToPlayList(
-            @ApiParam("播放列表的名字") @RequestParam int playListId,
+            @ApiParam("播放列表的Id") @RequestParam int playListId,
             @ApiParam("对方的用户Id") @RequestParam int userId,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Boolean> responseData = new ResponseData<>();
-        User user = (User)request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "用户尚未登录。", null);
             return responseData;
         }
-        List<Integer> workIdList =worksService.getWorkIdListByUserId(userId);
-        PlayListRelation playListRelation=new PlayListRelation();
+
+        List<Integer> workIdList = worksService.getWorkIdListByUserId(userId);
+        //先要查重播放列表原来的worksIdList
+        List<Integer> idList = playListRelationService.getWorksIdListByPlayListIdAndUserIdByPage(playListId, user.getId(), 0, 1000);
+
+        PlayListRelation playListRelation = new PlayListRelation();
         playListRelation.setCreateTime(new Date());
         playListRelation.setUpdateTime(new Date());
         playListRelation.setPlayListId(playListId);
         playListRelation.setUserId(userId);
         for (Integer id : workIdList) {
+            //如果包含的话，就跳出此次循环
+            if (idList.contains(id)) {
+                continue;
+            }
             playListRelation.setWorksId(id);
-            boolean res=playListRelationService.savePlayListRelation(playListRelation);
-            if (res == false){
-                responseData.jsonFill(2,"添加出错",null);
-                return  responseData;
+            boolean res = playListRelationService.savePlayListRelation(playListRelation);
+            //由于会返回自增主键，所有把id置null
+            playListRelation.setId(null);
+            if (res == false) {
+                responseData.jsonFill(2, "添加出错", null);
+                return responseData;
             }
         }
-        responseData.jsonFill(1,null,true);
+        responseData.jsonFill(1, null, true);
         return responseData;
     }
 
@@ -246,7 +256,7 @@ public class UserPlayListController extends BaseController {
             responseData.jsonFill(2, "列表不存在。", null);
             return responseData;
         }
-        if (user.getId().compareTo(playList.getUserId())!=0) {
+        if (user.getId().compareTo(playList.getUserId()) != 0) {
             responseData.jsonFill(2, "非法请求。", null);
             return responseData;
         }
@@ -260,10 +270,10 @@ public class UserPlayListController extends BaseController {
     @RequestMapping(value = "/updatePlayList", method = {RequestMethod.PUT})
     @ResponseBody
     public ResponseData<Boolean> updatePlayList(
-    		@ApiParam("播放列表的名字") @RequestParam(value="name") String name,
-    		@ApiParam("PlayList的ID") @RequestParam(value="playListId") int playListId,
-            HttpServletRequest request, HttpServletResponse response){
-    	ResponseData<Boolean> responseData = new ResponseData<>();
+            @ApiParam("播放列表的名字") @RequestParam(value = "name") String name,
+            @ApiParam("PlayList的ID") @RequestParam(value = "playListId") int playListId,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Boolean> responseData = new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "用户尚未登录。", null);
@@ -274,16 +284,16 @@ public class UserPlayListController extends BaseController {
             responseData.jsonFill(2, "列表不存在。", null);
             return responseData;
         }
-        if (user.getId().compareTo(playList.getUserId())!=0) {
+        if (user.getId().compareTo(playList.getUserId()) != 0) {
             responseData.jsonFill(2, "非法请求。", null);
             return responseData;
         }
-        
+
         PlayList pl = new PlayList();
         pl.setUpdateTime(new Date());
         pl.setName(name);
         pl.setId(playListId);
-        
+
         boolean res = playListService.updatePlayList(pl);
         responseData.jsonFill(res ? 1 : 2, null, res);
         return responseData;
@@ -298,7 +308,7 @@ public class UserPlayListController extends BaseController {
         return worksVoList;
     }
 
-    private WorksVo works2Vo(Works works, int userId){
+    private WorksVo works2Vo(Works works, int userId) {
         WorksVo worksVo = new WorksVo();
         BeanUtils.copyProperties(works, worksVo);
         if (agreeService.getAgree(userId, works.getId()) != null) {
@@ -309,5 +319,5 @@ public class UserPlayListController extends BaseController {
         worksVo.setTagList(tagList);
         return worksVo;
     }
-    	
+
 }

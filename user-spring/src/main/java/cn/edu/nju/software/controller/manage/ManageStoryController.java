@@ -85,7 +85,7 @@ public class ManageStoryController {
 		ResponseData<StoryNewVo> result = new ResponseData<>();
 		Story dbStory = storyService.getExactStoryByTitle(title);
 		if (dbStory != null&&dbStory.getAuthor().equals(author)) {
-			result.jsonFill(2, "重复的标题名称", story2vo(dbStory));
+			result.jsonFill(2, "重复的故事", story2vo(dbStory));
 			return result;
 		}
 		Story story = new Story();
