@@ -14,7 +14,7 @@ import java.io.IOException;
 public final class UploadFileUtil {
     private static final Logger logger = LoggerFactory.getLogger(UploadFileUtil.class);
 //    public static String SOURCE_BASE_URL = "http://120.27.219.173/source";
-    public static String SOURCE_BASE_URL = "http://47.93.242.215/source";
+    public static String SOURCE_BASE_URL = "http://www.warmtale.com/source";
 
 //    static {
 //        String url = System.getenv().get("SOURCE_BASE_URL") != null ? System.getenv().get("SOURCE_BASE_URL") : "http://120.27.219.173/source";
