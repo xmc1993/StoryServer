@@ -93,7 +93,7 @@ public class UserUploadController {
         return responseData;
     }
 
-    @ApiOperation(value = "上传icon", notes = "")
+    @ApiOperation(value = "上传音频", notes = "")
     @RequestMapping(value = "/uploadAudio", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<UploadResVo> uploadAudio(

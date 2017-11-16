@@ -125,6 +125,7 @@
 			<mvc:mapping path="/user/playList/newPlayList" />
 			<mvc:mapping path="/user/playList/removePlayList" />
 			<mvc:mapping path="/user/playList/updatePlayList" />
+			<mvc:mapping path="/user/playList/getUserWorksToPlayList"/>
 			<mvc:mapping path="/user/getBadgeListByTypeId" />
 			<mvc:mapping path="/user/listenWorks" />
 			<mvc:mapping path="/user/submitAnswer" />

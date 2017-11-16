@@ -84,7 +84,7 @@ public class ManageStoryController {
 			HttpServletRequest request, HttpServletResponse response) {
 		ResponseData<StoryNewVo> result = new ResponseData<>();
 		Story dbStory = storyService.getExactStoryByTitle(title);
-		if (dbStory != null) {
+		if (dbStory != null&&dbStory.getAuthor().equals(author)) {
 			result.jsonFill(2, "重复的标题名称", story2vo(dbStory));
 			return result;
 		}

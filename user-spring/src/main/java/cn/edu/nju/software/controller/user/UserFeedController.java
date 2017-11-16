@@ -2,10 +2,12 @@ package cn.edu.nju.software.controller.user;
 
 import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.entity.SystemNotice;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.entity.Feed;
 import cn.edu.nju.software.entity.feed.MessageType;
 import cn.edu.nju.software.feed.service.MessageFeedService;
+import cn.edu.nju.software.service.SystemNoticeService;
 import cn.edu.nju.software.util.TokenConfig;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -34,6 +36,8 @@ import java.util.List;
 public class UserFeedController extends BaseController {
     @Autowired
     MessageFeedService messageFeedService;
+    @Autowired
+    SystemNoticeService systemNoticeService;
 
     @ApiOperation(value = "获取某个用户的动态列表", notes = "需要登录")
     @RequestMapping(value = "/getFeedListByPage", method = {RequestMethod.GET})
@@ -54,6 +58,20 @@ public class UserFeedController extends BaseController {
         responseData.jsonFill(1, null, feedList);
 
         responseData.setCount(messageFeedService.getFeedCountByUserId(user.getId()));
+        return responseData;
+    }
+
+    @ApiOperation(value = "获取所有系统通知列表")
+    @RequestMapping(value = "/getSystemNoticeListByPage", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<SystemNotice>> getSystemNoticeListByPage(
+            @ApiParam("page") @RequestParam int page,
+            @ApiParam("pageSize") @RequestParam int pageSize) {
+        //以feed的形式返回给APP
+        ResponseData<List<SystemNotice>> responseData = new ResponseData<>();
+        List<SystemNotice> systemNoticeList = systemNoticeService.getAllSystemNoticeByPage(page, pageSize);
+        responseData.jsonFill(1, null, systemNoticeList);
+        responseData.setCount(systemNoticeService.getAllSystemNoticeCount());
         return responseData;
     }
 

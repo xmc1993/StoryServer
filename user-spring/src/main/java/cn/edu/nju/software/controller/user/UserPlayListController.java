@@ -198,7 +198,7 @@ public class UserPlayListController extends BaseController {
     }
 
     @ApiOperation(value = "一键添加别人的作品到播放列表", notes = "")
-    @RequestMapping(value = "/getUserWorksToPlayList", method = {RequestMethod.GET})
+    @RequestMapping(value = "/getUserWorksToPlayList", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> getUserWorksToPlayList(
             @ApiParam("播放列表的名字") @RequestParam int playListId,
