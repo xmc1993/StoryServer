@@ -13,7 +13,7 @@ import java.util.Date;
  * Created by xmc1993 on 2017/5/20.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath*:/test/context/config/spring-test.xml"})
+@ContextConfiguration(locations = {"classpath*:/spring-test.xml"})
 public class WorksDaoTest {
     @Autowired
     private WorksDao worksDao;

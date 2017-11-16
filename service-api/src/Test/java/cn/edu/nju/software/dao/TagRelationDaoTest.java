@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * Created by xmc1993 on 2017/5/20.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath*:/test/context/config/spring-test.xml"})
+@ContextConfiguration(locations = {"classpath*:/spring-test.xml"})
 public class TagRelationDaoTest {
     @Autowired
     private TagRelationDao tagRelationDao;

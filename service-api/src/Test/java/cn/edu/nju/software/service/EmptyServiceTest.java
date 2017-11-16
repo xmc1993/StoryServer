@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath*:/test/context/config/spring-test.xml"})
+@ContextConfiguration(locations = {"classpath*:/spring-test.xml"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EmptyServiceTest {
 

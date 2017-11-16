@@ -155,7 +155,14 @@ public class JedisSpringCache implements Cache, InitializingBean {
 
     @Override
     public void evict(Object key) {
-        jedis.del(key.toString());
+        setLocalJedis();
+        try {
+            jedis.del(key.toString());
+        } catch (Exception e) {
+            logger.error("jedis执行flush出现异常", e);
+        }finally {
+            releaseLocalJedis();
+        }
     }
 
     @Override

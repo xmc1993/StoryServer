@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+	    http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.1.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
+
+    <!-- 加载properties文件 -->
+    <!--<context:property-placeholder location="classpath:sysconfig.properties"
+                                  order="1"/>-->
+    <context:property-placeholder location="classpath:/datasource.properties"/>
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+
+
+    <!-- 资源文件 -->
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>classpath:messages/messages</value>
+            </list>
+        </property>
+        <property name="useCodeAsDefaultMessage" value="true"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="cacheSeconds" value="60"/>
+    </bean>
+
+    <import resource="classpath:applicationContext-*.xml"/>
+
+    <!-- httpclient线程池 -->
+    <!--<bean id="connectionManagerParams"-->
+    <!--class="org.apache.commons.httpclient.params.HttpConnectionManagerParams">-->
+    <!--<property name="connectionTimeout" value="10000"/>-->
+    <!--<property name="soTimeout" value="10000"/>-->
+    <!--<property name="maxTotalConnections" value="30"/>-->
+    <!--<property name="defaultMaxConnectionsPerHost" value="20"/>-->
+    <!--</bean>-->
+
+    <!--<bean id="connectionManager"-->
+    <!--class="org.apache.commons.httpclient.MultiThreadedHttpConnectionManager">-->
+    <!--<property name="params" ref="connectionManagerParams"/>-->
+    <!--</bean>-->
+
+    <!-- 定义连接管理器 -->
+    <bean id="httpClientConnectionManager"
+          class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager"
+          destroy-method="close">
+        <!-- 最大连接数 -->
+        <property name="maxTotal" value="${http.maxTotal}" />
+
+        <!-- 设置每个主机地址的并发数 -->
+        <property name="defaultMaxPerRoute" value="${http.defaultMaxPerRoute}" />
+    </bean>
+
+    <!-- httpclient对象构建器 -->
+    <bean id="httpClientBuilder" class="org.apache.http.impl.client.HttpClientBuilder">
+        <!-- 设置连接管理器 -->
+        <property name="connectionManager" ref="httpClientConnectionManager" />
+    </bean>
+
+    <!-- 定义Httpclient对象 -->
+    <bean id="httpClient" class="org.apache.http.impl.client.CloseableHttpClient"
+          factory-bean="httpClientBuilder" factory-method="build" scope="prototype">
+    </bean>
+
+    <!-- 定义清理无效连接 -->
+    <!--<bean class="cn.edu.nju.software.util.IdleConnectionEvictor"-->
+          <!--destroy-method="shutdown">-->
+        <!--<constructor-arg index="0" ref="httpClientConnectionManager" />-->
+    <!--</bean>-->
+
+    <bean id="requestConfigBuilder" class="org.apache.http.client.config.RequestConfig.Builder">
+        <!-- 创建连接的最长时间 -->
+        <property name="connectTimeout" value="${http.connectTimeout}"/>
+        <!-- 从连接池中获取到连接的最长时间 -->
+        <property name="connectionRequestTimeout" value="${http.connectionRequestTimeout}"/>
+        <!-- 数据传输的最长时间 -->
+        <property name="socketTimeout" value="${http.socketTimeout}"/>
+        <!-- 提交请求前测试连接是否可用 -->
+        <property name="staleConnectionCheckEnabled" value="${http.staleConnectionCheckEnabled}"/>
+    </bean>
+    <!-- 定义请求参数 -->
+    <bean id="requestConfig" class="org.apache.http.client.config.RequestConfig" factory-bean="requestConfigBuilder" factory-method="build">
+    </bean>
+
+    <bean class="cn.edu.nju.software.entity.Business">
+        <property name="wxAppId" value="wxfa4e5826ea6b4b24"></property>
+        <property name="wxSecret" value="36ac964dd6f2fe408e14b5383e649257"></property>
+        <property name="wxPublicAccountAppId" value="wxdd57892cf267701b"></property>
+        <property name="wxPublicAccountSecret" value="6b116b9e0fd5ca49bd457c35f4b40790"></property>
+    </bean>
+
+
+</beans>

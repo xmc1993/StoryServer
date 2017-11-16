@@ -21,7 +21,7 @@ import java.util.*;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath*:/test/context/config/spring-test.xml"})
+@ContextConfiguration(locations = {"classpath*:/spring-test.xml"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SoundEffectServiceTest {
 
