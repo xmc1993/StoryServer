@@ -5,26 +5,8 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          id="WebApp_ID" version="3.0">
 
-    <!-- <display-name>NuoxinEnterpriseAppOps</display-name> -->
+     <display-name>WarmTaleApp</display-name>
 
-    <!-- for shared session -->
-    <!--  <context-param>
-       <param-name>sharedSessionTimeout</param-name>
-       <param-value>1800</param-value>
-     </context-param>
-     <context-param>
-       <param-name>memcachedClientBeanId</param-name>
-       <param-value>memcachedClient</param-value>
-     </context-param>
-
-     <context-param>
-       <param-name>sharedSessionIdCookieName</param-name>
-       <param-value>sessid</param-value>
-     </context-param>
-     <context-param>
-       <param-name>sharedSessionIdCookieSecure</param-name>
-       <param-value>false</param-value>
-     </context-param> -->
      <listener>
         <listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>
      </listener>
@@ -85,34 +67,6 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    <!-- ocs-based shared session  -->
-    <!--   <filter>
-        <filter-name>ocsSessionFilter</filter-name>
-        <filter-class>com.lianchuang.common.web.http.session.sharedsession.MemcachedSessionFilter</filter-class>
-        <init-param>
-          <param-name>sessionIdName</param-name>
-          <param-value>sessid</param-value>
-        </init-param>
-      </filter>
-      <filter-mapping>
-        <filter-name>ocsSessionFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-      </filter-mapping> -->
-
-    <!-- 跨域设置filter，在spring servlet前 -->
-    <!--<filter>-->
-        <!--<filter-name>crossDomain</filter-name>-->
-        <!--<filter-class>cn.edu.nju.software.filter.CrossDomainFilter</filter-class>-->
-        <!--<init-param>-->
-            <!--<param-name>allowCrossDomain</param-name>-->
-            <!--<param-value>true</param-value>-->
-        <!--</init-param>-->
-    <!--</filter>-->
-    <!--<filter-mapping>-->
-        <!--<filter-name>crossDomain</filter-name>-->
-        <!--<url-pattern>/*</url-pattern>-->
-    <!--</filter-mapping>-->
-
     <!-- Http方法转换filter -->
     <filter>
         <filter-name>HiddenHttpMethodFilter</filter-name>
@@ -137,42 +91,5 @@
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-
-    <!-- for kaptcha-->
-    <!--  <servlet>
-       <servlet-name>Kaptcha</servlet-name>
-       <servlet-class>com.google.code.kaptcha.servlet.KaptchaServlet</servlet-class>
-       <init-param>
-         <param-name>kaptcha.border</param-name>
-         <param-value>no</param-value>
-       </init-param>
-       <init-param>
-         <param-name>kaptcha.textproducer.font.color</param-name>
-         <param-value>black</param-value>
-       </init-param>
-       <init-param>
-         <param-name>kaptcha.textproducer.char.space</param-name>
-         <param-value>5</param-value>
-       </init-param>
-       <init-param>
-         <param-name>kaptcha.session.key</param-name>
-         <param-value>KAPTCHA_SESSION_KEY - Guess me if you can</param-value>
-       </init-param>
-     </servlet>
-     <servlet-mapping>
-       <servlet-name>Kaptcha</servlet-name>
-       <url-pattern>/validate.jpg</url-pattern>
-     </servlet-mapping> -->
-
-    <!-- filter for xss -->
-    <!--  <filter>
-       <filter-name>xssFilter</filter-name>
-       <filter-class>com.nuoxin.bankend.business.utils.security.XSSFilter</filter-class>
-     </filter>
-     <filter-mapping>
-       <filter-name>xssFilter</filter-name>
-       <url-pattern>/*</url-pattern>
-       <dispatcher>REQUEST</dispatcher>
-     </filter-mapping> -->
 
 </web-app>
