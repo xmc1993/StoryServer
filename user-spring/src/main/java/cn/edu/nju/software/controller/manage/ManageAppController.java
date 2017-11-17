@@ -196,4 +196,12 @@ public class ManageAppController {
 		return result;
 	}
 
+	@ApiOperation(value = "获取最新app的url")
+	@RequestMapping(value = "/getLastApp", method = {RequestMethod.GET})
+	@ResponseBody
+	public ResponseData<String> getLastApp () {
+		ResponseData<String> result = new ResponseData<>();
+		result.jsonFill(1, null, appService.getLastApp().getUrl());
+		return result;
+	}
 }

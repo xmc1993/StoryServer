@@ -16,5 +16,5 @@ public class StoryNewWorksVo extends Story{
     private List<StoryTag> tagList;
 
     //改用户是否录制过该故事。
-	private boolean isWorks=false;
+	private boolean finish =false;
 }

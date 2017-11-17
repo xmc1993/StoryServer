@@ -25,4 +25,6 @@ public interface AppService {
     List<App> getAppListByPageDesc(int offset, int limit);
 
     Integer getAppCount();
+
+    App getLastApp();
 }

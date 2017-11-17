@@ -1,6 +1,7 @@
 package cn.edu.nju.software.controller.user;
 
 import cn.edu.nju.software.controller.BaseController;
+import cn.edu.nju.software.dto.MsgVo;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.SystemNotice;
 import cn.edu.nju.software.entity.User;
@@ -9,6 +10,7 @@ import cn.edu.nju.software.entity.feed.MessageType;
 import cn.edu.nju.software.feed.service.MessageFeedService;
 import cn.edu.nju.software.service.SystemNoticeService;
 import cn.edu.nju.software.util.TokenConfig;
+import com.google.gson.Gson;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -24,6 +26,7 @@ import javax.print.attribute.standard.MediaSize;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -64,13 +67,30 @@ public class UserFeedController extends BaseController {
     @ApiOperation(value = "获取所有系统通知列表")
     @RequestMapping(value = "/getSystemNoticeListByPage", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<SystemNotice>> getSystemNoticeListByPage(
+    public ResponseData<List<Feed>> getSystemNoticeListByPage(
             @ApiParam("page") @RequestParam int page,
             @ApiParam("pageSize") @RequestParam int pageSize) {
         //以feed的形式返回给APP
-        ResponseData<List<SystemNotice>> responseData = new ResponseData<>();
+        ResponseData<List<Feed>> responseData = new ResponseData<>();
         List<SystemNotice> systemNoticeList = systemNoticeService.getAllSystemNoticeByPage(page, pageSize);
-        responseData.jsonFill(1, null, systemNoticeList);
+        List<Feed> list=new ArrayList<>();
+        MsgVo msgVo=new MsgVo();
+        //这些数据是写死的，系统通知员的Id是2
+        msgVo.setUserId(2);
+        msgVo.setUserName("小P和小I");
+        //暖音小助手 头像URL
+        msgVo.setHeadImgUrl("http://47.93.242.215/source/head/4DYCFUt6eHA7TTvx.jpg");
+        Feed feed = new Feed();
+        Gson gson=new Gson();
+        feed.setFid(2);
+        feed.setType(MessageType.SYSTEM_NOTICE);
+        for (SystemNotice notice : systemNoticeList) {
+            feed.setMid(notice.getId());
+            msgVo.setData(notice);
+            feed.setContent(gson.toJson(msgVo));
+            list.add(feed);
+        }
+        responseData.jsonFill(1, null, list);
         responseData.setCount(systemNoticeService.getAllSystemNoticeCount());
         return responseData;
     }

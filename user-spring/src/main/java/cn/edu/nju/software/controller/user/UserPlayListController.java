@@ -79,6 +79,7 @@ public class UserPlayListController extends BaseController {
         }
 
         responseData.jsonFill(1, null, playListVos);
+        responseData.setCount(playListVos.size());
         return responseData;
     }
 
@@ -219,7 +220,7 @@ public class UserPlayListController extends BaseController {
         playListRelation.setCreateTime(new Date());
         playListRelation.setUpdateTime(new Date());
         playListRelation.setPlayListId(playListId);
-        playListRelation.setUserId(userId);
+        playListRelation.setUserId(user.getId());
         for (Integer id : workIdList) {
             //如果包含的话，就跳出此次循环
             if (idList.contains(id)) {

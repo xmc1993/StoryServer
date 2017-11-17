@@ -22,7 +22,7 @@ import cn.edu.nju.software.service.ReadPlanStoryGroupService;
 @Service
 public class ReadPlanStoryGroupServiceImpl implements ReadPlanStoryGroupService {
 	@Autowired
-	ReadingPlanStoryGroupMapper  readingPlanStoryGroupMapper;
+	ReadingPlanStoryGroupMapper readingPlanStoryGroupMapper;
 
 	@Override
 	public int saveReadPlanStory(ReadingPlanStoryGroup readingPlanStoryGroup) {
@@ -70,8 +70,18 @@ public class ReadPlanStoryGroupServiceImpl implements ReadPlanStoryGroupService 
 		return list;
 	}
 
-
-	
-	
+	@Override
+	public ReadingPlanStoryGroup getReadPlanStoryByIdAndMyOrder(Integer readPlanId, Integer myOrder) {
+		ReadingPlanStoryGroupExample readingPlanStoryGroupExample=new ReadingPlanStoryGroupExample();
+		//通过criteria构造查询条件
+		ReadingPlanStoryGroupExample.Criteria criteria = readingPlanStoryGroupExample.createCriteria();
+		criteria.andReadingplanidEqualTo(readPlanId);
+		criteria.andMyorderEqualTo(myOrder);
+		List<ReadingPlanStoryGroup> list=readingPlanStoryGroupMapper.selectByExample(readingPlanStoryGroupExample);
+		if (list==null||list.isEmpty()){
+			return  null;
+		}
+		return list.get(0);
+	}
 
 }

@@ -56,4 +56,9 @@ public class AppServiceImpl implements AppService {
     public Integer getAppCount(){
         return appDao.getAppCount();
     }
+
+    @Override
+    public App getLastApp() {
+        return appDao.getLastApp();
+    }
 }

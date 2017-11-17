@@ -15,4 +15,5 @@ public interface ReadPlanStoryGroupService {
 	ReadingPlanStoryGroup getReadPlanStoryGroupById(Integer id);
 	ResponseData<List<ReadingPlanStoryGroup>> getReadPlanStoryGroupByPlanId(Integer readPlanId,Integer page,Integer pageSize);
 	List<ReadingPlanStoryGroup> getReadPlanStoryGroupByPlanId(Integer readPlanId);
+	ReadingPlanStoryGroup getReadPlanStoryByIdAndMyOrder(Integer readPlanId,Integer myOrder);
 }

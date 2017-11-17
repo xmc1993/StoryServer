@@ -23,4 +23,7 @@ public interface AppDao {
 
 
     Integer getAppCount();
+
+    //获得最新的App
+    App getLastApp();
 }

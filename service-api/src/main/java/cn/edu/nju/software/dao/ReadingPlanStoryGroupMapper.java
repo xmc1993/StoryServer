@@ -4,7 +4,9 @@ import cn.edu.nju.software.entity.ReadingPlanStoryGroup;
 import cn.edu.nju.software.entity.ReadingPlanStoryGroupExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ReadingPlanStoryGroupMapper {
     int countByExample(ReadingPlanStoryGroupExample example);
 

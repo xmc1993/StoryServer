@@ -222,5 +222,20 @@ public class UserOriginalStoryController extends BaseController {
         responseData.jsonFill(1, null, true);
         return responseData;
     }
+
+    @ApiOperation(value = "分享原创故事")
+    @RequestMapping(value = "/shareUserStory", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<UserStory> shareUserStory(
+            @ApiParam("原创故事ID") @RequestParam("userStoryId") int userStoryId){
+        ResponseData<UserStory> responseData = new ResponseData<>();
+        UserStory userStory = userStoryService.getUserStoryById(userStoryId);
+        if (userStory == null) {
+            responseData.jsonFill(2, "故事不存在。", null);
+            return responseData;
+        }
+        responseData.jsonFill(1, null, userStory);
+        return responseData;
+    }
     
 }
