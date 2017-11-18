@@ -202,6 +202,11 @@
 			<mvc:exclude-mapping path="/manage/uploadUEditorImage"/>
 			<mvc:exclude-mapping path="/manage/uploadUEditorVideo"/>
 
+			<!--官网获取最新app的Url不需要拦截 -->
+			<mvc:exclude-mapping path="/manage/getLastApp"/>
+
+
+
 			<!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
 			<bean class="cn.edu.nju.software.filter.AuthInterceptor" />
 		</mvc:interceptor>
