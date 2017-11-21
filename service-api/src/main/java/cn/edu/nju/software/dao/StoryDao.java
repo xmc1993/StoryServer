@@ -1,6 +1,7 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.Story;
+import cn.edu.nju.software.vo.StoryTitleVo;
 import cn.edu.nju.software.vo.StoryVo;
 import cn.edu.nju.software.vo.StoryWithIntroduction;
 import cn.edu.nju.software.vo.StoryWithRealTellCount;
@@ -150,4 +151,6 @@ public interface StoryDao {
     List<Story> getMostPopularStoryByPage(int offset, int limit);
     
     List<StoryWithRealTellCount> getMostPopularStoryByPageWithRealTellCount(int offset, int limit);
+
+    List<StoryTitleVo> getAllStoryTitle();
 }

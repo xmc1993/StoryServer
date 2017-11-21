@@ -108,7 +108,10 @@ public class UploadFileController extends BaseController {
         worksService.updateHeadImg(user.getId(),url);
 
         //删除旧的头像
-        UploadFileUtil.deleteFileByUrl(oldHeadImgUrl);
+        //如果是默认头像就不要删掉
+        if(oldHeadImgUrl!="http://www.warmtale.com/source/head/default_avatar.jpg"||oldHeadImgUrl.equals("http://www.warmtale.com/source/head/default_avatar.jpg")){
+            UploadFileUtil.deleteFileByUrl(oldHeadImgUrl);
+        }
         //更新Session中的用户信息
         String AccessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
         Jedis jedis = JedisUtil.getJedis();

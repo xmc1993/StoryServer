@@ -7,6 +7,7 @@ import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.util.Const;
+import cn.edu.nju.software.vo.StoryTitleVo;
 import cn.edu.nju.software.vo.StoryVo;
 import cn.edu.nju.software.vo.StoryWithIntroduction;
 import cn.edu.nju.software.vo.StoryWithRealTellCount;
@@ -489,6 +490,11 @@ public class StoryServiceImpl implements StoryService {
 	@Override
 	public Boolean updateTellCountById(int storyId, int tellCount) {
 		return storyDao.updateTellCountById(storyId, tellCount);
+	}
+
+	@Override
+	public List<StoryTitleVo> getAllStoryTitle() {
+		return storyDao.getAllStoryTitle();
 	}
 
 	@Override

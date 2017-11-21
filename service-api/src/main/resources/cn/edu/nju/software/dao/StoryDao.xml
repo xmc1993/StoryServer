@@ -275,6 +275,15 @@
 		where valid = 1 and draft = 0 and isSet = 0
 	</select>
 
+	<select id="getAllStoryTitle" resultType="cn.edu.nju.software.vo.StoryTitleVo">
+		select
+		id,
+		title
+		from story
+		where valid = 1 and draft = 0 and isSet = 0
+	</select>
+
+
 	<select id="getStoryListByPage" resultType="cn.edu.nju.software.entity.Story">
 		select
 		<include refid="fields"></include>
