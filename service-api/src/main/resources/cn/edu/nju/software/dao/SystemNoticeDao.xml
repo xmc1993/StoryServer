@@ -49,7 +49,7 @@
         WHERE id = #{0}
     </select>
 
-	<select id="getSystemNoticeList" resultType="cn.edu.nju.software.entity.SystemNotice">
+	<select id="ssgetSystemNoticeList" resultType="cn.edu.nju.software.entity.SystemNotice">
 		select * from system_notice
 	</select>
 	

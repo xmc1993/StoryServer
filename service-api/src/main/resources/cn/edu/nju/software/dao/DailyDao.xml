@@ -13,7 +13,8 @@
         draft,
         readCount,
         createTime,
-        updateTime
+        updateTime,
+        picUrls
     </sql>
 
     <insert id="saveDaily" parameterType="cn.edu.nju.software.entity.Daily" keyProperty="id"
@@ -33,7 +34,8 @@
         #{draft},
         #{readCount},
         #{createTime},
-        #{updateTime}
+        #{updateTime},
+        #{picUrls}
         )
     </insert>
 

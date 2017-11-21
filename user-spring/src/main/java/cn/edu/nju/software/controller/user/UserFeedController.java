@@ -86,7 +86,7 @@ public class UserFeedController extends BaseController {
         feed.setType(MessageType.SYSTEM_NOTICE);
         for (SystemNotice notice : systemNoticeList) {
             feed.setMid(notice.getId());
-            msgVo.setData(notice);
+            msgVo.setData(notice.getContent());
             feed.setContent(gson.toJson(msgVo));
             list.add(feed);
         }

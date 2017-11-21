@@ -14,7 +14,8 @@ import lombok.Data;
 @Data
 public class StoryNewWorksVo extends Story{
     private List<StoryTag> tagList;
-
+    //故事简介
+    private String introduction;
     //改用户是否录制过该故事。
 	private boolean finish =false;
 }

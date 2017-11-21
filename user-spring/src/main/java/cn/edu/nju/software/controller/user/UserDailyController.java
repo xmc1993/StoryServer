@@ -136,7 +136,8 @@ public class UserDailyController extends BaseController {
     public ResponseData<Daily> publishDaily(
             @ApiParam("标题") @RequestParam("title") String title,
             @ApiParam("内容") @RequestParam("content") String content,
-            @ApiParam("图片url") @RequestParam("picUrl") String picUrl,
+            @ApiParam("单图片url") @RequestParam(value = "picUrl",required = false) String picUrl,
+            @ApiParam("多图片url") @RequestParam(value = "picUrl",required = false) String picUrls,
             @ApiParam("可见性") @RequestParam("visibility") int visibility,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Daily> responseData = new ResponseData();
@@ -150,7 +151,10 @@ public class UserDailyController extends BaseController {
         daily.setUserId(user.getId());
         daily.setTitle(title);
         daily.setContent(content);
-        daily.setPicUrl(picUrl);
+        if (picUrl!=null)
+            daily.setPicUrl(picUrl);
+        if (picUrls!=null)
+            daily.setPicUrls(picUrls);
         daily.setVisibility(visibility);
         daily.setCreateTime(new Date());
         daily.setUpdateTime(new Date());
@@ -186,7 +190,8 @@ public class UserDailyController extends BaseController {
     public ResponseData<Daily> publishDraftDaily(
             @ApiParam("标题") @RequestParam("title") String title,
             @ApiParam("内容") @RequestParam("content") String content,
-            @ApiParam("图片url") @RequestParam("picUrl") String picUrl,
+            @ApiParam("单图片url") @RequestParam(value ="picUrl",required = false) String picUrl,
+            @ApiParam("多图片url") @RequestParam(value ="picUrls",required = false) String picUrls,
             @ApiParam("可见性") @RequestParam("visibility") int visibility,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Daily> responseData = new ResponseData();
@@ -200,7 +205,13 @@ public class UserDailyController extends BaseController {
         daily.setUserId(user.getId());
         daily.setTitle(title);
         daily.setContent(content);
-        daily.setPicUrl(picUrl);
+
+        if (picUrl!=null){
+            daily.setPicUrl(picUrl);
+        }
+        if (picUrls!=null){
+            daily.setPicUrls(picUrls);
+        }
         daily.setVisibility(visibility);
         daily.setCreateTime(new Date());
         daily.setUpdateTime(new Date());

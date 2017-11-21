@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.edu.nju.software.vo.ShareWorkWithreadPlan;
+import cn.edu.nju.software.vo.StoryWithIntroduction;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -136,9 +137,10 @@ public class UserReadPlanController extends BaseController {
         List<ReadingPlanStoryGroup> list = readPlanStoryGroupService.getReadPlanStoryGroupByPlanId(ReadingPlanId);
         List<StoryNewWorksVo> storyNewWorksVoList = new ArrayList<StoryNewWorksVo>();
         for (ReadingPlanStoryGroup readingPlanStoryGroup : list) {
-            Story story = storyService.getStoryById(readingPlanStoryGroup.getStoryid());
+            StoryWithIntroduction storyWithIntroduction = storyService.getStoryByIdWithIntroduction(readingPlanStoryGroup.getStoryid());
             StoryNewWorksVo storyNewWorksVo = new StoryNewWorksVo();
-            storyNewWorksVo = story2Vo(story, user.getId());
+            storyNewWorksVo = story2Vo(storyWithIntroduction, user.getId());
+
             storyNewWorksVoList.add(storyNewWorksVo);
         }
         responseData.jsonFill(1, null, storyNewWorksVoList);

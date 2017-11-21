@@ -30,6 +30,8 @@ public class UserUploadController {
 
     private static final String ICON_ROOT = "/icons/";
     private static final String AUDIO_ROOT = "/audios/";
+    //意见反馈的图片
+    private static final String OPINION_ROOT = "/opinion/";
 
     @ApiOperation(value = "上传icon", notes = "")
     @RequestMapping(value = "/uploadIcon", method = {RequestMethod.POST})
@@ -58,6 +60,27 @@ public class UserUploadController {
         List<UploadResVo> list = new ArrayList<>();
         for (MultipartFile icon : icons) {
             String url = uploadFile(icon, ICON_ROOT);
+            if (url == null) {
+                responseData.jsonFill(2, "上传失败", null);
+                return responseData;
+            }
+            UploadResVo uploadResVo = new UploadResVo();
+            uploadResVo.setUrl(url);
+            list.add(uploadResVo);
+        }
+        responseData.jsonFill(1, null, list);
+        return responseData;
+    }
+
+    @ApiOperation(value = "上传多个意见反馈的图片", notes = "")
+    @RequestMapping(value = "/uploadOpinionPics", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<List<UploadResVo>> uploadOpinionPics(
+            @ApiParam("opinionPics") @RequestParam(value = "opinionPics") MultipartFile[] opinionPics) {
+        ResponseData<List<UploadResVo>> responseData = new ResponseData<>();
+        List<UploadResVo> list = new ArrayList<>();
+        for (MultipartFile opinionPic : opinionPics) {
+            String url = uploadFile(opinionPic, OPINION_ROOT);
             if (url == null) {
                 responseData.jsonFill(2, "上传失败", null);
                 return responseData;
@@ -110,6 +133,7 @@ public class UserUploadController {
         }
         return responseData;
     }
+
 
     /**
      * 上传ICON文件
