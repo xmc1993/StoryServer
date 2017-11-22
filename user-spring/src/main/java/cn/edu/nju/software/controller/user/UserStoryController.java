@@ -80,7 +80,7 @@ public class UserStoryController extends BaseController {
 
         StoryWithIntroduction story = storyService.getStoryByIdWithIntroduction(id);
         //给故事集添加阅读次数
-        if(story.getSetId()!=0){
+        if (story.getSetId() != 0) {
             storyService.newSetView(story.getSetId());
         }
 
@@ -99,16 +99,16 @@ public class UserStoryController extends BaseController {
         ResponseData<String> responseData = new ResponseData();
 
         String introduction = storyService.getStoryIntroductionById(id);
-        if (introduction!=null){
+        if (introduction != null) {
             responseData.jsonFill(1, null, introduction);
             return responseData;
         }
-        Story story=storyService.getStoryById(id);
-        if (story!=null){
-            responseData.jsonFill(1,null,story.getContent());
-            return  responseData;
+        Story story = storyService.getStoryById(id);
+        if (story != null) {
+            responseData.jsonFill(1, null, story.getContent());
+            return responseData;
         }
-        responseData.jsonFill(2,"该故事不存在",null);
+        responseData.jsonFill(2, "该故事不存在", null);
         return responseData;
     }
 
@@ -278,6 +278,21 @@ public class UserStoryController extends BaseController {
         List<StoryNewVo> preList = storyList2VoList(storyList, user.getId());
         transformStorySetList(preList);
         responseData.jsonFill(1, null, preList);
+        responseData.setCount(count);
+        return responseData;
+    }
+
+    @ApiOperation(value = "根据推荐故事列表(v3.1.1)", notes = "3.1.1版本后接上的优化后的接口")
+    @RequestMapping(value = "/v3/getRecommendedStoryListByPage", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<StoryWithIntroduction>> getRecommendedStoryByBabyByPage(
+            @ApiParam("pageSize") @RequestParam("pageSize") int pageSize,
+            @ApiParam("page") @RequestParam("page") int page) {
+        ResponseData<List<StoryWithIntroduction>> responseData = new ResponseData<>();
+
+        List<StoryWithIntroduction> storyList = storyService.getSetRecommendedStoryWithIntroductionListByPage(page * pageSize, pageSize);
+        int count = storyService.getRecommendedStoryCount();
+        responseData.jsonFill(1, null, storyList);
         responseData.setCount(count);
         return responseData;
     }
@@ -510,12 +525,11 @@ public class UserStoryController extends BaseController {
     @ApiOperation(value = "分页获取热门故事", notes = "需登录")
     @RequestMapping(value = "/getMostPopularStoryByPage", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<Story>> getMostPopularStoryByPage(@ApiParam("页") @RequestParam int page,
-                                                               @ApiParam("页大小") @RequestParam int pageSize, HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<Story>> responseData = new ResponseData<>();
+    public ResponseData<List<StoryWithIntroduction>> getMostPopularStoryByPage(@ApiParam("页") @RequestParam int page,
+                                                                               @ApiParam("页大小") @RequestParam int pageSize, HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<List<StoryWithIntroduction>> responseData = new ResponseData<>();
         User user = UserChecker.checkUser(request);
-
-        List<Story> list = storyService.getMostPopularStoryByPage(page, pageSize);
+        List<StoryWithIntroduction> list = storyService.getMostPopularStoryByPage(page, pageSize);
         responseData.jsonFill(1, null, list);
         responseData.setCount(storyService.getSetStoryCount());
         return responseData;

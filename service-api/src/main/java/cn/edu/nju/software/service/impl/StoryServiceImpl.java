@@ -167,6 +167,11 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
+	public List<StoryWithIntroduction> getSetRecommendedStoryWithIntroductionListByPage(int offset, int limit) {
+		return storyDao.getSetRecommendedStoryWithIntroductionListByPage(offset, limit);
+	}
+
+	@Override
 	public Integer getRecommendedStoryCount() {
 		return storyDao.getRecommendedStoryCount();
 	}
@@ -456,7 +461,7 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public List<Story> getMostPopularStoryByPage(int page, int pageSize) {
+	public List<StoryWithIntroduction> getMostPopularStoryByPage(int page, int pageSize) {
 		return storyDao.getMostPopularStoryByPage(page * pageSize, pageSize);
 	}
 

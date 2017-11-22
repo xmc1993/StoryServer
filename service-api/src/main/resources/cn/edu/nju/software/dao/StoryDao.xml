@@ -402,6 +402,16 @@
 		limit #{0},#{1}
 	</select>
 
+	<select id="getSetRecommendedStoryWithIntroductionListByPage" resultType="cn.edu.nju.software.vo.StoryWithIntroduction">
+		select
+		<include refid="fields"></include>
+		,introduction
+		from story
+		where valid = 1 and recommend = 1 and draft = 0 and setId=0
+		order by recommendTime DESC
+		limit #{0},#{1}
+	</select>
+
 	<select id="getStoryCount" resultType="java.lang.Integer">
 		select count(id)
 		from story
@@ -800,9 +810,10 @@
 		where valid = 1 and recommend = 1 and isSet = 0
 	</select>
 
-	<select id="getMostPopularStoryByPage" resultType="cn.edu.nju.software.entity.Story">
+	<select id="getMostPopularStoryByPage" resultType="cn.edu.nju.software.vo.StoryWithIntroduction">
 		select
 		<include refid="fields"></include>
+		,introduction
 		from story
 		where valid = 1 and draft = 0 and setId =0 and isSet = 0
 		ORDER by tellCount DESC, likeCount DESC

@@ -514,7 +514,6 @@ public class ManageStoryController {
     @ApiOperation(value = "根据故事id修改看故事的次数(假数据)")
     @RequestMapping(value = "/updateTellCountByStoryId", method = {RequestMethod.POST})
     @ResponseBody
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateTellCountByStoryId(@ApiParam("故事ID") @RequestParam int id,
                                          @ApiParam("修改成的阅读次数") @RequestParam int tellCount) {
 

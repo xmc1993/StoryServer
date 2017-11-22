@@ -63,6 +63,8 @@ public interface StoryDao {
 
     List<Story> getSetRecommendedStoryListByPage(int offset, int limit);
 
+    List<StoryWithIntroduction> getSetRecommendedStoryWithIntroductionListByPage(int offset, int limit);
+
     boolean newView(int id);
 
     boolean newSetView(int id);
@@ -148,7 +150,7 @@ public interface StoryDao {
     
     List<Story> getStoryListByReadLog();
 
-    List<Story> getMostPopularStoryByPage(int offset, int limit);
+    List<StoryWithIntroduction> getMostPopularStoryByPage(int offset, int limit);
     
     List<StoryWithRealTellCount> getMostPopularStoryByPageWithRealTellCount(int offset, int limit);
 

@@ -49,6 +49,8 @@ public interface StoryService {
 
     List<Story> getSetRecommendedStoryListByPage(int offset, int limit);
 
+    List<StoryWithIntroduction> getSetRecommendedStoryWithIntroductionListByPage(int offset, int limit);
+
     Integer getRecommendedStoryCount();
 
     Integer getSetRecommendedStoryCount();
@@ -117,7 +119,7 @@ public interface StoryService {
     
     List<Story> getStoryListByReadLog(Integer storyId);
     
-    List<Story> getMostPopularStoryByPage(int page, int pageSize);
+    List<StoryWithIntroduction> getMostPopularStoryByPage(int page, int pageSize);
     
     boolean updateStoryIntroduction(int storyId,String introduction);
     
