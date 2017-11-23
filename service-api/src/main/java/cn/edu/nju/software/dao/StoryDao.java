@@ -38,6 +38,10 @@ public interface StoryDao {
     List<Story> getAllStoriesIncludeDrafts();
 
     boolean updateStory(Story story);
+
+    boolean updateDefaultStory(@Param("rank")int rank,@Param("id")Integer id);
+
+    Story getDefaultStory();
     
     boolean updateStoryIntroduction(@Param("id")int id,@Param("introduction")String introduction);
     

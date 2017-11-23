@@ -84,4 +84,18 @@ public class ReadPlanStoryGroupServiceImpl implements ReadPlanStoryGroupService 
 		return list.get(0);
 	}
 
+	@Override
+	public ReadingPlanStoryGroup getReadPlanStoryByIdAndStory(Integer readPlanId, Integer storyId) {
+		ReadingPlanStoryGroupExample readingPlanStoryGroupExample=new ReadingPlanStoryGroupExample();
+		//通过criteria构造查询条件
+		ReadingPlanStoryGroupExample.Criteria criteria = readingPlanStoryGroupExample.createCriteria();
+		criteria.andReadingplanidEqualTo(readPlanId);
+		criteria.andStoryidEqualTo(storyId);
+		List<ReadingPlanStoryGroup> list=readingPlanStoryGroupMapper.selectByExample(readingPlanStoryGroupExample);
+		if (list==null||list.isEmpty()){
+			return  null;
+		}
+		return list.get(0);
+	}
+
 }

@@ -8,6 +8,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.edu.nju.software.entity.*;
+import cn.edu.nju.software.service.*;
 import cn.edu.nju.software.vo.ShareWorkWithreadPlan;
 import cn.edu.nju.software.vo.StoryWithIntroduction;
 import org.springframework.beans.BeanUtils;
@@ -23,22 +25,9 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
 import cn.edu.nju.software.controller.BaseController;
-import cn.edu.nju.software.entity.Baby;
-import cn.edu.nju.software.entity.ReadingPlan;
-import cn.edu.nju.software.entity.ReadingPlanStoryGroup;
-import cn.edu.nju.software.entity.ResponseData;
-import cn.edu.nju.software.entity.Story;
-import cn.edu.nju.software.entity.StoryTag;
-import cn.edu.nju.software.entity.User;
-import cn.edu.nju.software.service.BabyService;
-import cn.edu.nju.software.service.ReadPlanService;
-import cn.edu.nju.software.service.ReadPlanStoryGroupService;
-import cn.edu.nju.software.service.StoryService;
-import cn.edu.nju.software.service.StoryTagService;
-import cn.edu.nju.software.service.TagRelationService;
-import cn.edu.nju.software.service.WorksService;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.vo.StoryNewWorksVo;
+import sun.security.provider.SHA;
 
 /**
  * @author zs
@@ -63,6 +52,8 @@ public class UserReadPlanController extends BaseController {
     WorksService worksService;
     @Autowired
     StoryService storyService;
+    @Autowired
+    UserService userService;
 
     @ApiOperation(value = "获取用户的阅读计划", notes = "需要登录")
     @RequestMapping(value = "/getReadPlanByUser", method = {RequestMethod.GET})
@@ -92,35 +83,96 @@ public class UserReadPlanController extends BaseController {
         return responseData;
     }
 
-/*    @ApiOperation(value = "分享阅读计划的中的作品")
+    @ApiOperation(value = "分享阅读计划的中的作品(网页分享)")
     @RequestMapping(value = "/shareWorksForReadPlan", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<ShareWorkWithreadPlan> shareWorksForReadPlan(
-            @ApiParam("阅读计划的id") @RequestParam Integer readPlanId,
-            @ApiParam("用户id") @RequestParam Integer userId,
-            @ApiParam("阅读计划中的第几天") @RequestParam Integer day, HttpServletRequest request,
-            HttpServletResponse response) {
+            @ApiParam("作品id") @RequestParam Integer workId,
+            @ApiParam("用户id") @RequestParam Integer userId) {
         ResponseData<ShareWorkWithreadPlan> responseData = new ResponseData<>();
 
-        ReadingPlanStoryGroup readingPlan=readPlanStoryGroupService.getReadPlanStoryByIdAndMyOrder(readPlanId,userId);
-        if (readingPlan==null){
-            responseData.jsonFill(2,"该阅读计划不存在",null);
-            return  responseData;
+        User user = userService.getUserById(userId);
+        if (user == null) {
+            responseData.jsonFill(2, "用户不存在", null);
+            return responseData;
         }
-
-
-        List<ReadingPlanStoryGroup> list = readPlanStoryGroupService.getReadPlanStoryGroupByPlanId(ReadingPlanId);
-        List<StoryNewWorksVo> storyNewWorksVoList = new ArrayList<StoryNewWorksVo>();
-        for (ReadingPlanStoryGroup readingPlanStoryGroup : list) {
-            Story story = storyService.getStoryById(readingPlanStoryGroup.getStoryid());
-            StoryNewWorksVo storyNewWorksVo = new StoryNewWorksVo();
-            storyNewWorksVo = story2Vo(story, user.getId());
-            storyNewWorksVoList.add(storyNewWorksVo);
+        ShareWorkWithreadPlan shareWorkWithreadPlan = new ShareWorkWithreadPlan();
+        shareWorkWithreadPlan.setUserName(user.getNickname());
+        Works works = worksService.getWorksById(workId);
+        if (works == null) {
+            responseData.jsonFill(2, "作品不存在", null);
+            return responseData;
         }
-        responseData.jsonFill(1, null, storyNewWorksVoList);
+        shareWorkWithreadPlan.setWorks(works);
+
+        // 根据用户id获取用户选中的宝宝
+        Baby baby = babyService.getSelectedBaby(user.getId());
+        if (baby == null) {
+            List<Baby> babyList = babyService.getBabyListByParentId(user.getId());
+            if (babyList == null || babyList.isEmpty()) {
+                responseData.jsonFill(2, "用户没有宝宝", null);
+                return responseData;
+            }
+            List<ReadingPlan> readPlanlist = getBabyReadPlan(babyList.get(0));
+
+            ReadingPlanStoryGroup storyGroup = readPlanStoryGroupService.getReadPlanStoryByIdAndStory(readPlanlist.get(0).getId(), works.getStoryId());
+            shareWorkWithreadPlan.setDay(storyGroup.getMyorder());
+            responseData.jsonFill(1, null, shareWorkWithreadPlan);
+            return responseData;
+        }
+        List<ReadingPlan> list = getBabyReadPlan(baby);
+        ReadingPlanStoryGroup storyGroup = readPlanStoryGroupService.getReadPlanStoryByIdAndStory(list.get(0).getId(), works.getStoryId());
+        shareWorkWithreadPlan.setDay(storyGroup.getMyorder());
+        responseData.jsonFill(1, null, shareWorkWithreadPlan);
         return responseData;
-    }*/
+    }
 
+    @ApiOperation(value = "判断该作品是否是属于阅读计划里的")
+    @RequestMapping(value = "/worksBeLongToReadPlan", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<ShareWorkWithreadPlan> shareWorksForReadPlan(
+            @ApiParam("作品id") @RequestParam Integer workId, HttpServletRequest request, HttpServletResponse response) {
+
+        ResponseData<ShareWorkWithreadPlan> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
+
+        ShareWorkWithreadPlan shareWorkWithreadPlan = new ShareWorkWithreadPlan();
+        shareWorkWithreadPlan.setUserName(user.getNickname());
+        Works works = worksService.getWorksById(workId);
+        if (works == null) {
+            responseData.jsonFill(2, "作品不存在", null);
+            return responseData;
+        }
+        shareWorkWithreadPlan.setWorks(works);
+
+        // 根据用户id获取用户选中的宝宝
+        Baby baby = babyService.getSelectedBaby(user.getId());
+        if (baby == null) {
+            List<Baby> babyList = babyService.getBabyListByParentId(user.getId());
+            if (babyList == null || babyList.isEmpty()) {
+                responseData.jsonFill(2, "用户没有宝宝", null);
+                return responseData;
+            }
+            List<ReadingPlan> readPlanlist = getBabyReadPlan(babyList.get(0));
+
+            ReadingPlanStoryGroup storyGroup = readPlanStoryGroupService.getReadPlanStoryByIdAndStory(readPlanlist.get(0).getId(), works.getStoryId());
+            shareWorkWithreadPlan.setDay(storyGroup.getMyorder());
+            responseData.jsonFill(1, null, shareWorkWithreadPlan);
+            return responseData;
+        }
+        List<ReadingPlan> list = getBabyReadPlan(baby);
+        ReadingPlanStoryGroup storyGroup = readPlanStoryGroupService.getReadPlanStoryByIdAndStory(list.get(0).getId(), works.getStoryId());
+        shareWorkWithreadPlan.setDay(storyGroup.getMyorder());
+        responseData.jsonFill(1, null, shareWorkWithreadPlan);
+        return responseData;
+    }
+
+    
     @ApiOperation(value = "根据阅读计划id查询故事组")
     @RequestMapping(value = "/getStoryGroupByPlanId", method = {RequestMethod.GET})
     @ResponseBody

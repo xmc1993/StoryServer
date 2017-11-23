@@ -568,6 +568,16 @@ public class UserStoryController extends BaseController {
         return responseData;
     }
 
+    @ApiOperation(value = "获取默认播放列表的故事")
+    @RequestMapping(value = "/getDefaultStory", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Story> getDefaultStory() {
+        ResponseData<Story> responseData = new ResponseData<>();
+        Story story = storyService.getDefaultStory();
+        responseData.jsonFill(1, null, story);
+        return responseData;
+    }
+
     @ApiOperation(value = "分页获得集合列表", notes = "")
     @RequestMapping(value = "/getAllStorySetByPage", method = {RequestMethod.GET})
     @ResponseBody

@@ -437,6 +437,21 @@ public class UserWorksController extends BaseController {
 			}
 		}
 
+		// "感谢有你"徽章
+		if ("20171123".equals(format)) {
+				// 如果没有拥有过这个徽章
+				if (userBadgeService.getUserBadge(Const.Thinking_BADGE_ID, user.getId()) == null) {
+					UserBadge userBadge = new UserBadge();
+					userBadge.setUserId(user.getId());
+					userBadge.setBadgeId(Const.Thinking_BADGE_ID);
+					userBadgeService.saveUserBadge(userBadge);
+					Badge badge = badgeService.getBadgeById(Const.Thinking_BADGE_ID);
+					badges.add(badge);
+				}
+			}
+
+
+
 		// 魔法骑士
 		if (tagIdList.contains(Const.FANTASY_STORY_TAG_ID)) {
 			if (userBadgeService.getUserBadge(Const.MAGIC_KNIGHT_BADGE_ID, user.getId()) == null) {

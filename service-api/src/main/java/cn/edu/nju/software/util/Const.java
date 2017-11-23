@@ -15,6 +15,7 @@ public class Const {
     public static final Integer MAGIC_KNIGHT_BADGE_ID = 17;//魔法骑士
     public static final Integer PATRIOT_BADGE_ID = 18;//小小爱国者
     public static final Integer FANTASY_STORY_TAG_ID = 100051;//奇幻故事的标签ID
+    public static final Integer Thinking_BADGE_ID = 61;//感谢有你
 
     public static void main(String[] args) {
         Date now = new Date();

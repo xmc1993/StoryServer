@@ -511,6 +511,17 @@ public class ManageStoryController {
     }
 
     @RequiredPermissions({3, 5})
+    @ApiOperation(value = "添加默认播放的故事")
+    @RequestMapping(value = "/addDefaultStory", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Story> addDefaultStory(@ApiParam("故事Id") @RequestParam Integer storyId) {
+        ResponseData<Story> responseData = new ResponseData<>();
+        Story story = storyService.addDefaultStory(storyId);
+        responseData.jsonFill(1, null, story);
+        return responseData;
+    }
+
+    @RequiredPermissions({3, 5})
     @ApiOperation(value = "根据故事id修改看故事的次数(假数据)")
     @RequestMapping(value = "/updateTellCountByStoryId", method = {RequestMethod.POST})
     @ResponseBody

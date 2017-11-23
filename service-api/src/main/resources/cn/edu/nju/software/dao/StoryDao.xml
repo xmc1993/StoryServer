@@ -222,6 +222,21 @@
 		id=#{id}
 	</update>
 
+	<update id="updateDefaultStory" parameterType="cn.edu.nju.software.entity.Story">
+		update story
+		set
+		rank=#{rank}
+		where
+		id=#{id}
+	</update>
+
+	<select id="getDefaultStory" resultType="cn.edu.nju.software.entity.Story">
+		select
+		<include refid="fields"></include>
+		from story
+		where rank=1
+	</select>
+
 	<update id="updateStoryIntroduction" parameterType="cn.edu.nju.software.entity.Story">
 		update story
 		set
