@@ -4,6 +4,8 @@ package cn.edu.nju.software.service.wxpay.util;
  * Created by xmc1993 on 2017/4/23.
  */
 
+import org.apache.poi.util.SystemOutLogger;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -70,7 +72,12 @@ public class RandCharsUtils {
         System.out.println(StringEscapeUtils.unescapeJava(test));*/
 //        System.out.println(timeStart());
 //        System.out.println(timeExpire());
+/*        System.out.print("张");*/
+
+        }
+
+
     }
 
-}
+
 

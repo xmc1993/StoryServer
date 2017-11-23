@@ -87,7 +87,7 @@
 	</resultMap>
 
 	<insert id="saveUser" parameterType="cn.edu.nju.software.entity.User"
-		useGeneratedKeys="true">
+			keyProperty="id" useGeneratedKeys="true">
 		insert into user (
 		<include refid="fields"></include>
 		) values (
