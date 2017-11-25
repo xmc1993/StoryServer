@@ -100,5 +100,10 @@
         <property name="wxPublicAccountSecret" value="6b116b9e0fd5ca49bd457c35f4b40790"></property>
     </bean>
 
+    <bean class="com.aliyun.oss.OSSClient">
+        <constructor-arg name="accessKeyId" value="LTAIQLXhrN5gIJlk"></constructor-arg>
+        <constructor-arg name="secretAccessKey" value="xxxx"></constructor-arg>
+        <constructor-arg name="endpoint" value="oss-cn-hangzhou.aliyuncs.com"></constructor-arg>
+    </bean>
 
 </beans>

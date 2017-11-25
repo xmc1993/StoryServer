@@ -7,11 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Map;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:/spring-test.xml"})
 public class BadgeServiceTest {
     @Autowired
     UserBadgeService userBadgeService;
+    @Autowired
+    OssService ossService;
     @Test
     public void testSaveBadge(){
         UserBadge userBadge = new UserBadge();
@@ -19,4 +23,11 @@ public class BadgeServiceTest {
         userBadge.setBadgeId(12);
         userBadgeService.saveUserBadge(userBadge);
     }
+
+    @Test
+    public void testGetToken(){
+        Map<String, String> token = ossService.getToken();
+        System.out.println("");
+    }
+
 }

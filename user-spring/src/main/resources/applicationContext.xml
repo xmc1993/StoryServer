@@ -39,16 +39,16 @@
 
     <!-- httpclient线程池 -->
     <!--<bean id="connectionManagerParams"-->
-          <!--class="org.apache.commons.httpclient.params.HttpConnectionManagerParams">-->
-        <!--<property name="connectionTimeout" value="10000"/>-->
-        <!--<property name="soTimeout" value="10000"/>-->
-        <!--<property name="maxTotalConnections" value="30"/>-->
-        <!--<property name="defaultMaxConnectionsPerHost" value="20"/>-->
+    <!--class="org.apache.commons.httpclient.params.HttpConnectionManagerParams">-->
+    <!--<property name="connectionTimeout" value="10000"/>-->
+    <!--<property name="soTimeout" value="10000"/>-->
+    <!--<property name="maxTotalConnections" value="30"/>-->
+    <!--<property name="defaultMaxConnectionsPerHost" value="20"/>-->
     <!--</bean>-->
 
     <!--<bean id="connectionManager"-->
-          <!--class="org.apache.commons.httpclient.MultiThreadedHttpConnectionManager">-->
-        <!--<property name="params" ref="connectionManagerParams"/>-->
+    <!--class="org.apache.commons.httpclient.MultiThreadedHttpConnectionManager">-->
+    <!--<property name="params" ref="connectionManagerParams"/>-->
     <!--</bean>-->
 
     <!-- 定义连接管理器 -->
@@ -56,16 +56,16 @@
           class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager"
           destroy-method="close">
         <!-- 最大连接数 -->
-        <property name="maxTotal" value="${http.maxTotal}" />
+        <property name="maxTotal" value="${http.maxTotal}"/>
 
         <!-- 设置每个主机地址的并发数 -->
-        <property name="defaultMaxPerRoute" value="${http.defaultMaxPerRoute}" />
+        <property name="defaultMaxPerRoute" value="${http.defaultMaxPerRoute}"/>
     </bean>
 
     <!-- httpclient对象构建器 -->
     <bean id="httpClientBuilder" class="org.apache.http.impl.client.HttpClientBuilder">
         <!-- 设置连接管理器 -->
-        <property name="connectionManager" ref="httpClientConnectionManager" />
+        <property name="connectionManager" ref="httpClientConnectionManager"/>
     </bean>
 
     <!-- 定义Httpclient对象 -->
@@ -76,7 +76,7 @@
     <!-- 定义清理无效连接 -->
     <bean class="cn.edu.nju.software.util.IdleConnectionEvictor"
           destroy-method="shutdown">
-        <constructor-arg index="0" ref="httpClientConnectionManager" />
+        <constructor-arg index="0" ref="httpClientConnectionManager"/>
     </bean>
 
     <bean id="requestConfigBuilder" class="org.apache.http.client.config.RequestConfig.Builder">
@@ -90,7 +90,8 @@
         <property name="staleConnectionCheckEnabled" value="${http.staleConnectionCheckEnabled}"/>
     </bean>
     <!-- 定义请求参数 -->
-    <bean id="requestConfig" class="org.apache.http.client.config.RequestConfig" factory-bean="requestConfigBuilder" factory-method="build">
+    <bean id="requestConfig" class="org.apache.http.client.config.RequestConfig" factory-bean="requestConfigBuilder"
+          factory-method="build">
     </bean>
 
     <bean class="cn.edu.nju.software.entity.Business">
@@ -100,5 +101,10 @@
         <property name="wxPublicAccountSecret" value="6b116b9e0fd5ca49bd457c35f4b40790"></property>
     </bean>
 
+    <bean class="com.aliyun.oss.OSSClient">
+        <constructor-arg name="accessKeyId" value="LTAIQLXhrN5gIJlk"></constructor-arg>
+        <constructor-arg name="secretAccessKey" value="xxxx"></constructor-arg>
+        <constructor-arg name="endpoint" value="oss-cn-hangzhou.aliyuncs.com"></constructor-arg>
+    </bean>
 
 </beans>
