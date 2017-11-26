@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -137,7 +138,7 @@ public class UserDailyController extends BaseController {
             @ApiParam("标题") @RequestParam("title") String title,
             @ApiParam("内容") @RequestParam("content") String content,
             @ApiParam("单图片url") @RequestParam(value = "picUrl",required = false) String picUrl,
-            @ApiParam("多图片url") @RequestParam(value = "picUrl",required = false) String picUrls,
+            @ApiParam("多图片url") @RequestParam(value = "picUrl",required = false) ArrayList<String> picUrls,
             @ApiParam("可见性") @RequestParam("visibility") int visibility,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Daily> responseData = new ResponseData();
@@ -154,7 +155,7 @@ public class UserDailyController extends BaseController {
         if (picUrl!=null)
             daily.setPicUrl(picUrl);
         if (picUrls!=null)
-            daily.setPicUrls(picUrls);
+            daily.setPicUrls(new Gson().toJson(picUrls));
         daily.setVisibility(visibility);
         daily.setCreateTime(new Date());
         daily.setUpdateTime(new Date());

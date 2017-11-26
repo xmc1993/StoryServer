@@ -116,6 +116,10 @@ public class UserReadPlanController extends BaseController {
             List<ReadingPlan> readPlanlist = getBabyReadPlan(babyList.get(0));
 
             ReadingPlanStoryGroup storyGroup = readPlanStoryGroupService.getReadPlanStoryByIdAndStory(readPlanlist.get(0).getId(), works.getStoryId());
+            if(storyGroup==null){
+                responseData.jsonFill(1,null,null);
+                return  responseData;
+            }
             shareWorkWithreadPlan.setDay(storyGroup.getMyorder());
             responseData.jsonFill(1, null, shareWorkWithreadPlan);
             return responseData;
@@ -143,6 +147,7 @@ public class UserReadPlanController extends BaseController {
 
         ShareWorkWithreadPlan shareWorkWithreadPlan = new ShareWorkWithreadPlan();
         shareWorkWithreadPlan.setUserName(user.getNickname());
+        shareWorkWithreadPlan.setUserId(user.getId());
         Works works = worksService.getWorksById(workId);
         if (works == null) {
             responseData.jsonFill(2, "作品不存在", null);
@@ -167,6 +172,11 @@ public class UserReadPlanController extends BaseController {
         }
         List<ReadingPlan> list = getBabyReadPlan(baby);
         ReadingPlanStoryGroup storyGroup = readPlanStoryGroupService.getReadPlanStoryByIdAndStory(list.get(0).getId(), works.getStoryId());
+        //当故事不属于阅读计划里边的返回空
+        if(storyGroup==null){
+            responseData.jsonFill(1,null,null);
+            return  responseData;
+        }
         shareWorkWithreadPlan.setDay(storyGroup.getMyorder());
         responseData.jsonFill(1, null, shareWorkWithreadPlan);
         return responseData;
