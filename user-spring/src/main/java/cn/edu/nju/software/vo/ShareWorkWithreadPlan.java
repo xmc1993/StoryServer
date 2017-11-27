@@ -15,5 +15,7 @@ public class ShareWorkWithreadPlan {
 
     private String userName;
 
+    private Integer userId;
+
 }
 

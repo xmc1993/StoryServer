@@ -221,10 +221,13 @@ public class ManageUserController {
             StringBuilder headImgUrl = new StringBuilder();
             headImgUrl.append("https://picsum.photos/80?image=").append(rand.nextInt(400) + 100);
             user.setHeadImgUrl(headImgUrl.toString());
+            //僵尸粉的valid设置为2
+            user.setValid(2);
             user = userMessageService.saveUser(user);
 
             //为该用户添加宝宝
             baby.setParentId(user.getId());
+
             //给用户id赋空,否则会起冲突。
             user.setId(null);
             baby.setAge(rand.nextInt(4));

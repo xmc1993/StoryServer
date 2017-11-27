@@ -84,6 +84,14 @@
 		id=#{id}
 	</update>
 
+	<update id="updateDummyTime" parameterType="java.lang.Integer">
+		update user
+		set
+		updateTime=NOW()
+		WHERE
+		id=#{0} AND valid=2
+	</update>
+
 	<select id="getUserById" resultType="cn.edu.nju.software.entity.User">
 		select
 		<include refid="fields"></include>
@@ -131,5 +139,14 @@
 		from user
 		where id = #{userId}
 	</select>
+	<select id="getDummyIdListByCount" resultType="java.lang.Integer">
+		select
+		id
+		from user
+		where valid = 2
+		order by updateTime desc
+		limit #{0}
+	</select>
+
 
 </mapper>

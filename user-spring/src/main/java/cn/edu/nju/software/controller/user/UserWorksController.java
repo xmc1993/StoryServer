@@ -68,6 +68,8 @@ public class UserWorksController extends BaseController {
     private RecordStatisticService recordStatisticService;
     @Autowired
     private BadgeCheckService badgeCheckService;
+    @Autowired
+    private FollowService followService;
 
     @ApiOperation(value = "获得最新的作品列表", notes = "需要登录")
     @RequestMapping(value = "/getLatestWorksByPage", method = {RequestMethod.GET})
@@ -330,11 +332,10 @@ public class UserWorksController extends BaseController {
     @ApiOperation(value = "发布作品", notes = "需登录")
     @RequestMapping(value = "/publishWorks", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<WorksVo> publishWorks(
-            @ApiParam("故事ID") @RequestParam("storyId") int storyId,
-            @ApiParam("音频长度") @RequestParam("duration") String duration,
-            @ApiParam("音频文件") @RequestParam(value = "uploadFile") MultipartFile uploadFile,
-            HttpServletRequest request, HttpServletResponse response) {
+    public ResponseData<WorksVo> publishWorks(@ApiParam("故事ID") @RequestParam("storyId") int storyId,
+                                              @ApiParam("音频长度") @RequestParam("duration") String duration,
+                                              @ApiParam("音频文件") @RequestParam(value = "uploadFile") MultipartFile uploadFile, HttpServletRequest request,
+                                              HttpServletResponse response) {
         ResponseData<WorksVo> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
@@ -357,6 +358,14 @@ public class UserWorksController extends BaseController {
         if (url == null) {
             responseData.jsonFill(2, "文件上传失败", null);
             return responseData;
+        }
+        //判断是否为第一次上传作品，如果是第一次上传，则用僵尸粉关注该用户
+        if (worksService.getWorkIdListByUserId(user.getId()) == null) {
+            try {
+                followService.dummyFollowRelation(user.getId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         Works works = new Works();
         works.setDuration(duration);

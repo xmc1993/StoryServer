@@ -17,6 +17,8 @@ public interface UserDao {
 
 	public boolean updateUser(User user);
 
+	public boolean updateDummyTime(Integer id);
+
 	public User getUserById(int businessId, int userId);
 
 	public List<User> getAllUsers(int businessId);
@@ -36,4 +38,6 @@ public interface UserDao {
     List<User> getUserListByIdList(@Param("idList") List<Integer> idList, @Param("offset") int offset, @Param("limit") int limit);
 
 	User getUserByPrimaryKey(int userId);
+
+	List<Integer> getDummyIdListByCount(int limit);
 }
