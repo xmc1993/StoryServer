@@ -17,6 +17,8 @@ public interface UserDao {
 
 	public boolean updateUser(User user);
 
+	public boolean updateDummyTime(Integer id);
+
 	public User getUserById(int businessId, int userId);
 
 	public List<User> getAllUsers(int businessId);
@@ -37,5 +39,5 @@ public interface UserDao {
 
 	User getUserByPrimaryKey(int userId);
 
-	List<Integer> getDummyIdListByPage(int limit);
+	List<Integer> getDummyIdListByCount(int limit);
 }

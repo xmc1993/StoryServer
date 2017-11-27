@@ -10,6 +10,7 @@ import cn.edu.nju.software.util.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -124,7 +125,26 @@ public class FollowServiceImpl implements FollowService {
         Random random=new Random();
         //随机获取2-14个僵尸粉的id
         int count=random.nextInt(14)+2;
+        List<Integer> list=userDao.getDummyIdListByCount(count);
 
-        return null;
+        FollowRelation followRelation = new FollowRelation();
+        followRelation.setCreateTime(new Date());
+        followRelation.setUpdateTime(new Date());
+        followRelation.setFolloweeId(userId);
+
+        for (Integer dummyId : list) {
+            followRelation.setFollowerId(dummyId);
+            boolean res1 = followRelationDao.saveFollowRelation(followRelation);
+            if (!res1) return false;
+            //刷新僵尸粉的关注时间(使他关注平均)
+            userDao.updateDummyTime(dummyId);
+            boolean res2 = appUserDao.newFollower(followRelation.getFolloweeId());//被关注的人粉丝+1
+            boolean res3 = appUserDao.newFollowee(followRelation.getFollowerId());//关注者关注的人数+1
+            //如果失败了就返回false
+            if (!(res2 && res3)){
+                return false;
+            }
+        }
+        return true;
     }
 }

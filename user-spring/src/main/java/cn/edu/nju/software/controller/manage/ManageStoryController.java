@@ -454,6 +454,7 @@ public class ManageStoryController {
         return result;
     }
 
+
     @RequiredPermissions({4, 5})
     @ApiOperation(value = "获取所有故事的题目和id")
     @RequestMapping(value = "/getAllStoryTitle", method = {RequestMethod.GET})
@@ -464,6 +465,7 @@ public class ManageStoryController {
         result.jsonFill(1, null, storyTitleList);
         return result;
     }
+
 
     @RequiredPermissions({4, 5})
     @ApiOperation(value = "推荐列表")
@@ -512,7 +514,7 @@ public class ManageStoryController {
 
     @RequiredPermissions({3, 5})
     @ApiOperation(value = "添加默认播放的故事")
-    @RequestMapping(value = "/addDefaultStory", method = {RequestMethod.POST})
+    @RequestMapping(value = "/addDefaultStory", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<Story> addDefaultStory(@ApiParam("故事Id") @RequestParam Integer storyId) {
         ResponseData<Story> responseData = new ResponseData<>();
