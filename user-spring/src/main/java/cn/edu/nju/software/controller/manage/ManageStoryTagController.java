@@ -56,7 +56,7 @@ public class ManageStoryTagController {
         }
         if (!uploadFile.isEmpty()) {
             String url = uploadFile(uploadFile);
-            if (url == null){
+            if (url == null) {
                 throw new RuntimeException("上传图标失败");
             }
             storyTag.setIconUrl(url);
@@ -67,6 +67,54 @@ public class ManageStoryTagController {
         storyTag.setValid(1);
         storyTagService.saveStoryTag(storyTag);
         return storyTag;
+    }
+
+    @RequiredPermissions({1, 6})
+    @ApiOperation(value = "新增标签V3", notes = "")
+    @RequestMapping(value = "/v3/storyTags", method = {RequestMethod.POST})
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
+    public StoryTag publishStoryTagV3(
+            @ApiParam("icon文件url") @RequestParam(value = "url", required = false) String url,
+            @ApiParam("标签文字") @RequestParam("content") String content,
+            @ApiParam("父标签ID") @RequestParam("parentId") int parentId,
+            HttpServletRequest request, HttpServletResponse response) {
+        StoryTag storyTag = new StoryTag();
+        storyTag.setParentId(parentId);
+        if (storyTag.getParentId() != 0 && !checkValidService.isTagExist(storyTag.getParentId())) {
+            logger.error("无效的parentId");
+            throw new RuntimeException("无效的parentId");
+        }
+        storyTag.setIconUrl(url);
+        storyTag.setContent(content);
+        storyTag.setCreateTime(new Date());
+        storyTag.setUpdateTime(new Date());
+        storyTag.setValid(1);
+        storyTagService.saveStoryTag(storyTag);
+        return storyTag;
+    }
+
+    @RequiredPermissions({3, 6})
+    @ApiOperation(value = "更新标签")
+    @RequestMapping(value = "/v3/storyTags/{id}", method = {RequestMethod.POST})
+    @ResponseBody
+    public StoryTag updateStoryTagV3(
+            @ApiParam("标签ID") @PathVariable int id,
+            @ApiParam("icon文件") @RequestParam(value = "url", required = false) String url,
+            @ApiParam("标签文字") @RequestParam("content") String content,
+            @ApiParam("父标签ID") @RequestParam("parentId") int parentId,
+            HttpServletRequest request, HttpServletResponse response) {
+        StoryTag storyTag = storyTagService.getStoryTagById(id);
+        if (storyTag == null) {
+            throw new RuntimeException("标签不存在");
+        }
+        storyTag.setContent(content);
+        storyTag.setParentId(parentId);
+        if (url != null) {
+            storyTag.setIconUrl(url);
+        }
+        storyTag.setUpdateTime(new Date());
+        return storyTagService.updateStoryTag(storyTag);
     }
 
     @RequiredPermissions({3, 6})
@@ -80,14 +128,14 @@ public class ManageStoryTagController {
             @ApiParam("父标签ID") @RequestParam("parentId") int parentId,
             HttpServletRequest request, HttpServletResponse response) {
         StoryTag storyTag = storyTagService.getStoryTagById(id);
-        if (storyTag == null){
+        if (storyTag == null) {
             throw new RuntimeException("标签不存在");
         }
         storyTag.setContent(content);
         storyTag.setParentId(parentId);
         if (!uploadFile.isEmpty()) {
             String url = uploadFile(uploadFile);
-            if (url == null){
+            if (url == null) {
                 throw new RuntimeException("上传图标失败");
             }
             UploadFileUtil.deleteFileByUrl(storyTag.getIconUrl());
@@ -95,7 +143,6 @@ public class ManageStoryTagController {
         }
         storyTag.setUpdateTime(new Date());
         return storyTagService.updateStoryTag(storyTag);
-
     }
 
     @RequiredPermissions({2, 6})
@@ -130,12 +177,11 @@ public class ManageStoryTagController {
             throw new RuntimeException("无效的parentId");
         }
         List<StoryTag> tagList = storyTagService.getStoryTagListByParentId(id);
-        if(tagList==null){
-            result.jsonFill(2,"获取一个标签的子标签列表失败",null);
+        if (tagList == null) {
+            result.jsonFill(2, "获取一个标签的子标签列表失败", null);
             return result;
-        }
-        else{
-            result.jsonFill(1,null,tagList);
+        } else {
+            result.jsonFill(1, null, tagList);
             result.setCount(tagList.size());
             return result;
         }
@@ -165,13 +211,12 @@ public class ManageStoryTagController {
             @ApiParam("LIMIT") @RequestParam int limit,
             HttpServletRequest request, HttpServletResponse response) {
         List<StoryTag> tagList = storyTagService.getStoryTagsByPage(offset, limit);
-        ResponseData<List<StoryTag>> result=new ResponseData<>();
-        if(tagList==null){
-            result.jsonFill(2,"获取故事标签列表失败",null);
+        ResponseData<List<StoryTag>> result = new ResponseData<>();
+        if (tagList == null) {
+            result.jsonFill(2, "获取故事标签列表失败", null);
             return result;
-        }
-        else{
-            result.jsonFill(1,null,tagList);
+        } else {
+            result.jsonFill(1, null, tagList);
             result.setCount(storyTagService.getStoryTagCount());
             return result;
         }
@@ -192,7 +237,7 @@ public class ManageStoryTagController {
     @ApiOperation(value = "获取故事标签数量", notes = "")
     @RequestMapping(value = "/storyTagCount", method = {RequestMethod.GET})
     @ResponseBody
-    public Integer getStoryTagCount(){
+    public Integer getStoryTagCount() {
         return storyTagService.getStoryTagCount();
     }
 }

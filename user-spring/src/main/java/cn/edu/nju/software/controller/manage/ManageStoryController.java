@@ -173,6 +173,199 @@ public class ManageStoryController {
         return result;
     }
 
+
+    @RequiredPermissions({1, 5})
+    @ApiOperation(value = "新增故事V3", notes = "草稿状态1为草稿0为完成")
+    @RequestMapping(value = "/v3/stories", method = {RequestMethod.POST})
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseData<StoryNewVo> publicStoryV3(
+            @ApiParam("故事标题") @RequestParam(value = "title", required = false) String title,
+            @ApiParam("作者") @RequestParam(value = "author", required = false) String author,
+            @ApiParam("内容") @RequestParam(value = "content", required = false) String content,
+            @ApiParam("出版社") @RequestParam(value = "press", required = false) String press,
+            @ApiParam("阅读指导") @RequestParam(value = "guide", required = false) String guide,
+            @ApiParam("价格") @RequestParam(value = "price", required = false) String price,
+            @ApiParam("草稿状态") @RequestParam(value = "draft") int draft,
+            @ApiParam("朗读指导") @RequestParam(value = "readGuide", required = false) String readGuide,
+            @ApiParam("默认背景音ID") @RequestParam Integer defaultBackGroundMusicId,
+            @ApiParam("封面") @RequestParam(value = "coverFile", required = false) String coverFile,
+            @ApiParam("预览封面") @RequestParam(value = "preCoverFile", required = false) String preCoverFile,
+            @ApiParam("录制背景") @RequestParam(value = "backgroundFile", required = false) String backgroundFile,
+            @ApiParam("原音") @RequestParam(value = "originSoundFile", required = false) String originSoundFile,
+            @ApiParam("标签列表") @RequestParam(value = "tagList", required = false) String tagList,
+            @ApiParam("角色名") @RequestParam(value = "roleName", required = false) String roleName,
+            @ApiParam("角色图标") @RequestParam(value = "roleIconFile", required = false) String roleIconFile,
+            @ApiParam("角色音频") @RequestParam(value = "roleAudioFile", required = false) String roleAudioFile,
+            @ApiParam("角色其他信息") @RequestParam(value = "roleExtra", required = false) String roleExtra,
+            @ApiParam("建议阅读时间（单位s）") @RequestParam(value = "suggestedReadingDuration", required = false) Integer suggestedReadingDuration,
+            @ApiParam("所属专辑id(传多个用逗号分隔)") @RequestParam(value = "albumId", required = false) String albumIdStr,
+            @ApiParam("故事集ID") @RequestParam(value = "setId", required = false) Integer setId,
+            @ApiParam("阅读时长") @RequestParam(value = "readTime", required = false) String readTime,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<StoryNewVo> result = new ResponseData<>();
+        Story dbStory = storyService.getExactStoryByTitle(title);
+        if (dbStory != null && dbStory.getAuthor().equals(author)) {
+            result.jsonFill(2, "重复的故事", story2vo(dbStory));
+            return result;
+        }
+        Story story = new Story();
+
+        story.setCoverUrl(coverFile);
+        story.setPreCoverUrl(preCoverFile);
+        story.setBackgroundUrl(backgroundFile);
+        //TODO 计算时长
+        story.setOriginSoundUrl(originSoundFile);
+
+        if (title != null)
+            story.setTitle(title);
+        if (author != null)
+            story.setAuthor(author);
+        if (content != null)
+            story.setContent(content);
+        if (press != null)
+            story.setPress(press);
+        if (guide != null)
+            story.setGuide(guide);
+        if (price != null)
+            story.setPrice(price);
+        if (readGuide != null)
+            story.setReadGuide(readGuide);
+        if (readTime != null)
+            story.setReadTime(readTime);
+        if (setId != null)
+            story.setSetId(setId);
+
+        story.setValid(1);
+        story.setDefaultBackGroundMusicId(defaultBackGroundMusicId);
+        story.setCreateTime(new Date());
+        story.setUpdateTime(new Date());
+        story.setRecommendTime(new Date());
+        story.setDraft(draft);
+        story.setLikeCount(0);
+        if (suggestedReadingDuration != null) {
+            story.setSuggestedReadingDuration(suggestedReadingDuration);
+        }
+        Story res = storyService.saveStory(story);
+        if (res == null) {
+            throw new RuntimeException("发布故事失败");
+        }
+        if (tagList != null) {
+            String[] tags = tagList.split(",");
+            for (String tag : tags) {
+                TagRelation tagRelation = new TagRelation();
+                tagRelation.setStoryId(story.getId());
+                tagRelation.setTagId(Integer.parseInt(tag));
+                tagRelation.setCreateTime(new Date());
+                tagRelation.setUpdateTime(new Date());
+                tagRelationService.saveTagRelation(tagRelation);
+            }
+        }
+
+        if (roleName != null) {
+            StoryRole storyRole = new StoryRole();
+            storyRole.setIcon(roleIconFile);
+            storyRole.setIcon(roleAudioFile);
+            storyRole.setCreateTime(new Date());
+            storyRole.setExtra(roleExtra);
+            storyRole.setStoryId(story.getId());
+            storyRole.setName(roleName);
+            storyRoleService.saveStoryRole(storyRole);
+        }
+
+        // 保存故事专辑对应关系
+        List<Integer> albumIdList = MyStringUtil.strToIntList(albumIdStr, ",");
+        if (albumIdList.size() != 0) {
+            storyAlbumService.saveStoryAlbumRel(res.getId(), albumIdList);
+        }
+        // 保存角色信息
+        StoryNewVo snv = story2vo(story);
+        snv.setAlbumIdList(albumIdList);
+        result.jsonFill(1, null, snv);
+        return result;
+    }
+
+    @RequiredPermissions({3, 5})
+    @ApiOperation(value = "更新故事")
+    @RequestMapping(value = "/v3/stories/{id}", method = {RequestMethod.POST})
+    @ResponseBody
+    public StoryNewVo updateStoryTagV3(@ApiParam("故事ID") @PathVariable int id,
+                                       @ApiParam("故事标题") @RequestParam(value = "title", required = false) String title,
+                                       @ApiParam("作者") @RequestParam(value = "author", required = false) String author,
+                                       @ApiParam("内容") @RequestParam(value = "content", required = false) String content,
+                                       @ApiParam("出版社") @RequestParam(value = "press", required = false) String press,
+                                       @ApiParam("阅读指导") @RequestParam(value = "guide", required = false) String guide,
+                                       @ApiParam("价格") @RequestParam(value = "price", required = false) String price,
+                                       @ApiParam("草稿状态") @RequestParam("draft") int draft,
+                                       @ApiParam("默认背景音ID") @RequestParam Integer defaultBackGroundMusicId,
+                                       @ApiParam("朗读指导") @RequestParam(value = "readGuide", required = false) String readGuide,
+                                       @ApiParam("封面") @RequestParam(value = "coverFile", required = false) String coverFile,
+                                       @ApiParam("预览封面") @RequestParam(value = "preCoverFile", required = false) String preCoverFile,
+                                       @ApiParam("录制背景") @RequestParam(value = "backgroundFile", required = false) String backgroundFile,
+                                       @ApiParam("原音") @RequestParam(value = "originSoundFile", required = false) String originSoundFile,
+                                       @ApiParam("建议阅读时间（单位s）") @RequestParam(value = "suggestedReadingDuration", required = false) Integer suggestedReadingDuration,
+                                       @ApiParam("所属专辑id(传多个用逗号分隔)") @RequestParam(value = "albumId", required = false) String albumIdStr,
+                                       @ApiParam("故事集ID") @RequestParam(value = "setId", required = false) Integer setId,
+                                       @ApiParam("阅读时长") @RequestParam(value = "readTime", required = false) String readTime,
+                                       HttpServletRequest request, HttpServletResponse response) {
+        Story story = storyService.getStoryById(id);
+        if (story == null) {
+            throw new RuntimeException("无效的故事id");
+        }
+        if (coverFile != null) {
+            story.setCoverUrl(coverFile);
+        }
+        if (preCoverFile != null) {
+            story.setPreCoverUrl(preCoverFile);
+        }
+        if (backgroundFile != null) {
+            story.setBackgroundUrl(backgroundFile);
+        }
+        //TODO 计算时长
+        if (originSoundFile != null) {
+            story.setOriginSoundUrl(originSoundFile);
+        }
+
+        if (title != null)
+            story.setTitle(title);
+        if (content != null)
+            story.setContent(content);
+        if (author != null)
+            story.setAuthor(author);
+        if (press != null)
+            story.setPress(press);
+        if (guide != null)
+            story.setGuide(guide);
+        if (price != null)
+            story.setPrice(price);
+        if (readGuide != null)
+            story.setReadGuide(readGuide);
+        if (suggestedReadingDuration != null)
+            story.setSuggestedReadingDuration(suggestedReadingDuration);
+        if (readTime != null)
+            story.setReadTime(readTime);
+        if (setId != null)
+            story.setSetId(setId);
+
+        story.setDefaultBackGroundMusicId(defaultBackGroundMusicId);
+        story.setUpdateTime(new Date());
+        story.setDraft(draft);
+        Story result = storyService.updateStory(story);
+        if (result == null) {
+            throw new RuntimeException("更新失败");
+        }
+        // 跟新专辑和故事对应关系
+        List<Integer> albumIdList = MyStringUtil.strToIntList(albumIdStr, ",");
+        storyAlbumService.delStoryAlbumRel(id);
+        if (albumIdList.size() != 0) {
+            storyAlbumService.saveStoryAlbumRel(id, albumIdList);
+        }
+
+        StoryNewVo snv = story2vo(result);
+        snv.setAlbumIdList(albumIdList);
+        return snv;
+    }
+
     @RequiredPermissions({3, 5})
     @ApiOperation(value = "更新故事", notes = "")
     @RequestMapping(value = "/stories/{id}", method = {RequestMethod.POST})

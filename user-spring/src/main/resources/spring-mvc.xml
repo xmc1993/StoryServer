@@ -166,6 +166,10 @@
 
             <mvc:mapping path="/user/worksBeLongToReadPlan"/>
 
+            <mvc:mapping path="/user/v3/rePublishWorks"/>
+            <mvc:mapping path="/user/v3/publishWorks"/>
+            <mvc:mapping path="/user/v3/updateHeadImg"/>
+
             <!-- 不需要拦截的uri -->
             <!-- <mvc:exclude-mapping path="/user/getLandingPage"/> <mvc:exclude-mapping
                 path="/**" /> -->

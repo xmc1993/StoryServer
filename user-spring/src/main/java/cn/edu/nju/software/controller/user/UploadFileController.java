@@ -12,12 +12,14 @@ import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UploadFileUtil;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import redis.clients.jedis.Jedis;
@@ -32,26 +34,26 @@ import java.util.List;
 @Controller
 @RequestMapping("/user")
 public class UploadFileController extends BaseController {
-	private static final Logger logger = LoggerFactory.getLogger(UploadFileController.class);
-	private final String default_avatar = "default_avatar.jpg";
-	private static final String SUFFIX = ".jpg";
-	private static final String HEAD_ROOT = "/head/"; // 头像的基础路径
-	private static final List<String> VALID_SUFFIX = new ArrayList<>();
+    private static final Logger logger = LoggerFactory.getLogger(UploadFileController.class);
+    private final String default_avatar = "default_avatar.jpg";
+    private static final String SUFFIX = ".jpg";
+    private static final String HEAD_ROOT = "/head/"; // 头像的基础路径
+    private static final List<String> VALID_SUFFIX = new ArrayList<>();
 
-	// 初始化支持的头像类型
-	static {
-		VALID_SUFFIX.add("jpg");
-		VALID_SUFFIX.add("jpeg");
-		VALID_SUFFIX.add("bmp");
-		VALID_SUFFIX.add("gif");
-	}
+    // 初始化支持的头像类型
+    static {
+        VALID_SUFFIX.add("jpg");
+        VALID_SUFFIX.add("jpeg");
+        VALID_SUFFIX.add("bmp");
+        VALID_SUFFIX.add("gif");
+    }
 
-	@Autowired
-	private AppUserService userService;
-	@Autowired
-	private WorksService worksService;
+    @Autowired
+    private AppUserService userService;
+    @Autowired
+    private WorksService worksService;
 
-	@ApiOperation(value = "上传头像", notes = "上传头像")
+    @ApiOperation(value = "上传头像", notes = "上传头像")
     @RequestMapping(value = "/updateHeadImg", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData uploadFile(MultipartFile uploadFile,
@@ -72,7 +74,7 @@ public class UploadFileController extends BaseController {
         if (uploadFile.getSize() > 2097152L) {
             responseData.jsonFill(2, "头像不允许超过2M", null);
             return responseData;
-       }
+        }
         //如果头像的格式不符合要求
         if (!VALID_SUFFIX.contains(UploadFileUtil.getSuffix(uploadFile.getOriginalFilename()))) {
             responseData.jsonFill(2, "头像类型只支持jpg,jpeg,bmp,gif。", null);
@@ -103,15 +105,46 @@ public class UploadFileController extends BaseController {
             responseData.jsonFill(2, "更新失败", null);
             return responseData;
         }
-        
+
         //更新work数据库表中的HeadImgUrl字段
-        worksService.updateHeadImg(user.getId(),url);
+        worksService.updateHeadImg(user.getId(), url);
 
         //删除旧的头像
         //如果是默认头像就不要删掉
-        if(oldHeadImgUrl!="http://www.warmtale.com/source/head/default_avatar.jpg"||oldHeadImgUrl.equals("http://www.warmtale.com/source/head/default_avatar.jpg")){
+        if (oldHeadImgUrl != "http://www.warmtale.com/source/head/default_avatar.jpg" || oldHeadImgUrl.equals("http://www.warmtale.com/source/head/default_avatar.jpg")) {
             UploadFileUtil.deleteFileByUrl(oldHeadImgUrl);
         }
+        //更新Session中的用户信息
+        String AccessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
+        Jedis jedis = JedisUtil.getJedis();
+        jedis.set(AccessToken.getBytes(), ObjectAndByte.toByteArray(userInDB));
+        jedis.close();
+        responseData.jsonFill(1, null, "success");
+        return responseData;
+    }
+
+    @ApiOperation(value = "上传头像v3", notes = "上传头像")
+    @RequestMapping(value = "/v3/updateHeadImg", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData uploadFileV3(@ApiParam("头像url") @RequestParam(value = "url") String url,
+                                     HttpServletRequest request, HttpServletResponse response) throws Exception {
+        ResponseData responseData = new ResponseData();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "用户尚未登录。", false);
+            return responseData;
+        }
+
+        User userInDB = userService.getUserByMobileOrId(String.valueOf(user.getId()));
+        userInDB.setUpdateTime(new Date());
+        userInDB.setHeadImgUrl(url);
+        User result = userService.addOrUpdateUser(userInDB);
+        if (result == null) {
+            responseData.jsonFill(2, "更新失败", null);
+            return responseData;
+        }
+        //更新work数据库表中的HeadImgUrl字段
+        worksService.updateHeadImg(user.getId(), url);
         //更新Session中的用户信息
         String AccessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
         Jedis jedis = JedisUtil.getJedis();

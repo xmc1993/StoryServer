@@ -413,6 +413,112 @@ public class UserWorksController extends BaseController {
 
     }
 
+    @ApiOperation(value = "发布作品v3", notes = "需登录")
+    @RequestMapping(value = "/v3/publishWorks", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<WorksVo> publishWorksV3(@ApiParam("故事ID") @RequestParam("storyId") int storyId,
+                                                @ApiParam("音频长度") @RequestParam("duration") String duration,
+                                                @ApiParam("作品url") @RequestParam(value = "url") String url, HttpServletRequest request,
+                                                HttpServletResponse response) {
+        ResponseData<WorksVo> responseData = new ResponseData();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
+        Story story = storyService.getStoryById(storyId);
+        if (story == null) {
+            responseData.jsonFill(2, "无效的故事ID", null);
+            response.setStatus(404);
+            return responseData;
+        }
+
+        //判断是否为第一次上传作品，如果是第一次上传，则用僵尸粉关注该用户
+        if (worksService.getWorkIdListByUserId(user.getId()) == null) {
+            try {
+                followService.dummyFollowRelation(user.getId());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        Works works = new Works();
+        works.setDuration(duration);
+        works.setCreateTime(new Date());
+        works.setUpdateTime(new Date());
+        works.setStoryId(storyId);
+        works.setStoryTitle(story.getTitle());
+        works.setCoverUrl(story.getCoverUrl());
+        works.setUserId(user.getId());
+        works.setUsername(user.getNickname());
+        works.setUrl(url);
+        works.setHeadImgUrl(user.getHeadImgUrl());
+        Works res = worksService.saveWorks(works);
+        //还得判断该故事是否有故事集，如果有故事集给故事集的tellCount，realTellCount加一
+        if (story.getSetId() != 0) {
+            storyService.newTell(story.getSetId());
+        }
+        if (res != null) {
+            appUserService.updateTotalRecordTime(user.getId(), works.getDuration(), true);
+            MsgVo msgVo = new MsgVo();
+            msgVo.setUserId(user.getId());
+            msgVo.setHeadImgUrl(user.getHeadImgUrl());
+            msgVo.setUserName(user.getNickname());
+            Feed feed = new Feed();
+            feed.setCreateTime(new Date());
+            feed.setUpdateTime(new Date());
+            feed.setFid(user.getId());
+            feed.setContent(new Gson().toJson(msgVo));
+            feed.setMid(res.getId());
+            feed.setType(MessageType.NEW_WORKS);
+            messageFeedService.feedFollowers(feed, user.getId(), true);
+        }
+
+        WorksVo worksVo = new WorksVo();
+        if (res != null) {
+            List<Badge> badges = badgeCheckService.judgeUserAddBadgeByPublish(user, works);
+            BeanUtils.copyProperties(works, worksVo);
+            responseData.jsonFill(1, null, worksVo);
+            responseData.setBadgeList(badges);
+        } else {
+            responseData.jsonFill(2, "发布失败", null);
+        }
+        return responseData;
+
+    }
+
+    @ApiOperation(value = "重新发布作品v3", notes = "需登录")
+    @RequestMapping(value = "/v3/rePublishWorks", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Works> rePublishWorksV3(@ApiParam("作品ID") @RequestParam("worksId") int worksId,
+                                              @ApiParam("音频长度") @RequestParam("duration") String duration,
+                                              @ApiParam("作品url") @RequestParam("url") String url, HttpServletRequest request,
+                                              HttpServletResponse response) {
+        ResponseData<Works> responseData = new ResponseData();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+
+        Works works = worksService.getWorksById(worksId);
+        if (works == null) {
+            responseData.jsonFill(2, "无效的作品ID", null);
+            response.setStatus(404);
+            return responseData;
+        }
+        if (works.getUserId() != user.getId()) {
+            responseData.jsonFill(2, "非法请求。", null);
+            response.setStatus(401);
+            return responseData;
+        }
+        works.setDuration(duration);
+        works.setUpdateTime(new Date());
+        works.setUrl(url);
+        boolean res = worksService.updateWorks(works);
+        if (res) {
+            responseData.jsonFill(1, null, works);
+        } else {
+            responseData.jsonFill(2, "发布失败", null);
+        }
+        return responseData;
+    }
 
     @ApiOperation(value = "重新发布作品", notes = "需登录")
     @RequestMapping(value = "/rePublishWorks", method = {RequestMethod.POST})
