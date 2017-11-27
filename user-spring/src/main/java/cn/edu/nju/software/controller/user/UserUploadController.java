@@ -54,42 +54,42 @@ public class UserUploadController {
     @ApiOperation(value = "上传多个icon", notes = "")
     @RequestMapping(value = "/uploadIcons", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<List<UploadResVo>> uploadIcons(
+    public ResponseData<UploadResVo> uploadIcons(
             @ApiParam("ICON") @RequestParam(value = "icons") MultipartFile[] icons) {
-        ResponseData<List<UploadResVo>> responseData = new ResponseData<>();
-        List<UploadResVo> list = new ArrayList<>();
+        ResponseData<UploadResVo> responseData = new ResponseData<>();
+        List<String> list = new ArrayList<>();
         for (MultipartFile icon : icons) {
             String url = uploadFile(icon, ICON_ROOT);
             if (url == null) {
                 responseData.jsonFill(2, "上传失败", null);
                 return responseData;
             }
-            UploadResVo uploadResVo = new UploadResVo();
-            uploadResVo.setUrl(url);
-            list.add(uploadResVo);
+            list.add(url);
         }
-        responseData.jsonFill(1, null, list);
+        UploadResVo uploadResVo=new UploadResVo();
+        uploadResVo.setMultiUrls(list);
+        responseData.jsonFill(1, null, uploadResVo);
         return responseData;
     }
 
     @ApiOperation(value = "上传多个意见反馈的图片", notes = "")
     @RequestMapping(value = "/uploadOpinionPics", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<List<UploadResVo>> uploadOpinionPics(
+    public ResponseData<UploadResVo> uploadOpinionPics(
             @ApiParam("opinionPics") @RequestParam(value = "opinionPics") MultipartFile[] opinionPics) {
-        ResponseData<List<UploadResVo>> responseData = new ResponseData<>();
-        List<UploadResVo> list = new ArrayList<>();
+        ResponseData<UploadResVo> responseData = new ResponseData<>();
+        List<String> list = new ArrayList<>();
         for (MultipartFile opinionPic : opinionPics) {
             String url = uploadFile(opinionPic, OPINION_ROOT);
             if (url == null) {
                 responseData.jsonFill(2, "上传失败", null);
                 return responseData;
             }
-            UploadResVo uploadResVo = new UploadResVo();
-            uploadResVo.setUrl(url);
-            list.add(uploadResVo);
+            list.add(url);
         }
-        responseData.jsonFill(1, null, list);
+        UploadResVo uploadResVo = new UploadResVo();
+        uploadResVo.setMultiUrls(list);
+        responseData.jsonFill(1, null, uploadResVo);
         return responseData;
     }
 
