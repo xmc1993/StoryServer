@@ -1,6 +1,7 @@
 package cn.edu.nju.software.service.impl;
 
 import cn.edu.nju.software.dao.FollowRelationDao;
+import cn.edu.nju.software.dao.UserDao;
 import cn.edu.nju.software.dao.user.AppUserDao;
 import cn.edu.nju.software.entity.FollowRelation;
 import cn.edu.nju.software.enums.Visibility;
@@ -22,7 +23,7 @@ public class FollowServiceImpl implements FollowService {
     @Autowired
     private AppUserDao appUserDao;
     @Autowired
-    private
+    private UserDao userDao;
 
 
     @Override
