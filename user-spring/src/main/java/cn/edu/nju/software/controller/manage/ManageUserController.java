@@ -227,6 +227,7 @@ public class ManageUserController {
 
             //为该用户添加宝宝
             baby.setParentId(user.getId());
+
             //给用户id赋空,否则会起冲突。
             user.setId(null);
             baby.setAge(rand.nextInt(4));

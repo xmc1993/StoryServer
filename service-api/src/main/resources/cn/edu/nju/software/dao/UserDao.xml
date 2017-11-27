@@ -137,8 +137,7 @@
 		from user
 		where valid = 2
 		order by updateTime desc
-		limit
-		#{0},#{1}
+		limit #{0}
 	</select>
 
 

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by xmc1993 on 2017/5/12.
@@ -20,6 +21,8 @@ public class FollowServiceImpl implements FollowService {
     private FollowRelationDao followRelationDao;
     @Autowired
     private AppUserDao appUserDao;
+    @Autowired
+    private
 
 
     @Override
@@ -117,6 +120,9 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     public Boolean dummyFollowRelation(int userId) {
+        Random random=new Random();
+        //随机获取2-14个僵尸粉的id
+        int count=random.nextInt(14)+2;
 
         return null;
     }

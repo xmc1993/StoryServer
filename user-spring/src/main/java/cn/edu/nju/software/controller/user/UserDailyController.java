@@ -138,7 +138,7 @@ public class UserDailyController extends BaseController {
             @ApiParam("标题") @RequestParam("title") String title,
             @ApiParam("内容") @RequestParam("content") String content,
             @ApiParam("单图片url") @RequestParam(value = "picUrl",required = false) String picUrl,
-            @ApiParam("多图片url") @RequestParam(value = "picUrl",required = false) ArrayList<String> picUrls,
+            @ApiParam("多图片url") @RequestParam(value = "picUrls",required = false) ArrayList<String> picUrls,
             @ApiParam("可见性") @RequestParam("visibility") int visibility,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Daily> responseData = new ResponseData();

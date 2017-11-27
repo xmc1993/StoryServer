@@ -37,5 +37,5 @@ public interface UserDao {
 
 	User getUserByPrimaryKey(int userId);
 
-	List<Integer> getDummyIdListByPage(int offset, int limit);
+	List<Integer> getDummyIdListByPage(int limit);
 }
