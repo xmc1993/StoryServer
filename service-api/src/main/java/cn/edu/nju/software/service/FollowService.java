@@ -26,5 +26,7 @@ public interface FollowService {
     int getStatusBetween(int curUserId, int userId);
 
     int getRelation(Integer visitedUserId, Integer visitorId);
+
+    Boolean dummyFollowRelation(int userId);
 }
 

@@ -393,6 +393,8 @@ public class UserWorksController extends BaseController {
 		if (res != null) {
 			List<Badge> badges = badgeCheckService.judgeUserAddBadgeByPublish(user, works);
 			BeanUtils.copyProperties(works, worksVo);
+			//当作品上传成功的时候，判断是否为第一次上传作品，如果是第一次上传，则用僵尸粉关注该用户
+
 			responseData.jsonFill(1, null, worksVo);
 			responseData.setBadgeList(badges);
 		} else {

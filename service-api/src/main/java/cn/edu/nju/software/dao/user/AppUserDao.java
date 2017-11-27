@@ -72,7 +72,6 @@ public interface AppUserDao {
 	List<User> getAllUserList();
 
 	List<Integer> getAllUserIdList();
-
 	
 	boolean deleteUserById(int id);
 	
@@ -83,5 +82,4 @@ public interface AppUserDao {
 	String getTotalRecordTime(int id);
 
 	boolean updateTotalRecordTime(int id, String time);
-
 }

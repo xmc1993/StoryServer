@@ -131,5 +131,15 @@
 		from user
 		where id = #{userId}
 	</select>
+	<select id="getDummyIdListByPage" resultType="java.lang.Integer">
+		select
+		id
+		from user
+		where valid = 2
+		order by updateTime desc
+		limit
+		#{0},#{1}
+	</select>
+
 
 </mapper>

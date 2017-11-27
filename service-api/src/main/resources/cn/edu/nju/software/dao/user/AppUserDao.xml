@@ -149,7 +149,7 @@
 		SELECT
 		<include refid="fields"></include>
 		FROM user
-		WHERE valid ='1'
+		WHERE valid in (1,2)
 		limit #{0},#{1}
 	</select>
 

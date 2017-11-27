@@ -114,4 +114,10 @@ public class FollowServiceImpl implements FollowService {
                 return 0;
         }
     }
+
+    @Override
+    public Boolean dummyFollowRelation(int userId) {
+
+        return null;
+    }
 }

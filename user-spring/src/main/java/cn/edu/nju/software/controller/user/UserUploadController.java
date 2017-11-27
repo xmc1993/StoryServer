@@ -55,7 +55,7 @@ public class UserUploadController {
     @RequestMapping(value = "/uploadIcons", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<List<UploadResVo>> uploadIcons(
-            @ApiParam("ICON") @RequestParam(value = "icon") MultipartFile[] icons) {
+            @ApiParam("ICON") @RequestParam(value = "icons") MultipartFile[] icons) {
         ResponseData<List<UploadResVo>> responseData = new ResponseData<>();
         List<UploadResVo> list = new ArrayList<>();
         for (MultipartFile icon : icons) {

@@ -36,4 +36,6 @@ public interface UserDao {
     List<User> getUserListByIdList(@Param("idList") List<Integer> idList, @Param("offset") int offset, @Param("limit") int limit);
 
 	User getUserByPrimaryKey(int userId);
+
+	List<Integer> getDummyIdListByPage(int offset, int limit);
 }

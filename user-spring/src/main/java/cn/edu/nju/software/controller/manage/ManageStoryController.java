@@ -512,7 +512,7 @@ public class ManageStoryController {
 
     @RequiredPermissions({3, 5})
     @ApiOperation(value = "添加默认播放的故事")
-    @RequestMapping(value = "/addDefaultStory", method = {RequestMethod.GET})
+    @RequestMapping(value = "/addDefaultStory", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Story> addDefaultStory(@ApiParam("故事Id") @RequestParam Integer storyId) {
         ResponseData<Story> responseData = new ResponseData<>();
