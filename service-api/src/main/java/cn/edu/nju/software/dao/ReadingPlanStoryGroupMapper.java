@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
+
 @Repository
 public interface ReadingPlanStoryGroupMapper {
     int countByExample(ReadingPlanStoryGroupExample example);
@@ -29,4 +31,6 @@ public interface ReadingPlanStoryGroupMapper {
     int updateByPrimaryKeySelective(ReadingPlanStoryGroup record);
 
     int updateByPrimaryKey(ReadingPlanStoryGroup record);
+
+    List<Integer> getStoryIdListInReadPlanByPlanId(Integer planId);
 }

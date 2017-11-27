@@ -17,4 +17,5 @@ public interface ReadPlanStoryGroupService {
 	List<ReadingPlanStoryGroup> getReadPlanStoryGroupByPlanId(Integer readPlanId);
 	ReadingPlanStoryGroup getReadPlanStoryByIdAndMyOrder(Integer readPlanId,Integer myOrder);
 	ReadingPlanStoryGroup getReadPlanStoryByIdAndStory(Integer readPlanId,Integer storyId);
+	List<Integer> getStoryIdListInReadPlanByPlanId(Integer planId);
 }

@@ -2,6 +2,7 @@ package cn.edu.nju.software.service;
 
 import java.util.List;
 
+import cn.edu.nju.software.entity.Baby;
 import cn.edu.nju.software.entity.ReadingPlan;
 import cn.edu.nju.software.entity.ResponseData;
 
@@ -15,5 +16,5 @@ public interface ReadPlanService {
 	int deleteReadPlan(Integer id);
 	int updateReadPlan(ReadingPlan readPlan);
 	ReadingPlan selectReadPlanById(Integer id);
-	List<ReadingPlan> getReadingPlanByTime(String days,String timePoint);
+	List<ReadingPlan> getReadingPlanByTime(Baby baby);
 }

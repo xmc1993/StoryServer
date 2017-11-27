@@ -98,4 +98,9 @@ public class ReadPlanStoryGroupServiceImpl implements ReadPlanStoryGroupService 
 		return list.get(0);
 	}
 
+	@Override
+	public List<Integer> getStoryIdListInReadPlanByPlanId(Integer planId) {
+		return readingPlanStoryGroupMapper.getStoryIdListInReadPlanByPlanId(planId);
+	}
+
 }

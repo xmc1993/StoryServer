@@ -79,7 +79,7 @@
 	</select>
 	
 	<select id="getBadgeByMeasureAndType" resultType="cn.edu.nju.software.entity.Badge">
-		select 
+		select
 		<include refid="fields"></include>
         from badge
         where badgeTypeId = #{badgeTypeId} and measure = #{measure}
