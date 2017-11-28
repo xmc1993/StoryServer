@@ -9,9 +9,9 @@ import java.util.List;
 @Service
 public interface BadgeCheckService {
 
-    List<Badge> judgeUserAddBadgeByPublish(User user, Works works);
+    List<Badge> judgeAddBadgesWhenPublish(User user, Works works);
 
-    List<Badge> checkoutListenBadge(User user, Works works);
+    List<Badge> judgeAddBadgeWhenListen(User user);
 
     void judgeUserAddBadgeByListen(Integer authorId);
 }

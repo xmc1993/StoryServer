@@ -31,33 +31,38 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
     UserBadgeService userBadgeService;
     @Autowired
     private RecordStatisticService recordStatisticService;
+    @Autowired
+    private ReadPlanService readPlanService;
+    @Autowired
+    private BabyService babyService;
+    @Autowired
+    private ReadPlanStoryGroupService readPlanStoryGroupService;
 
 
     @Override
-    public List<Badge> judgeUserAddBadgeByPublish(User user, Works works) {
+    public List<Badge> judgeAddBadgesWhenPublish(User user, Works works) {
         List<Badge> badges = new ArrayList<>();
         int[] workCountBadgeArr = {5000, 2000, 1000, 500, 300, 200, 150, 100, 30, 10, 3};
 
         List<Integer> tagIdList = tagRelationService.getTagIdListByStoryId(works.getStoryId());
 
-        // 如果今天是十一
         SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
         Date date = new Date();
         String format = sf.format(date);
 
         // 小小爱国徽章
+        // 如果今天是十月一
         if ("20171001".equals(format)) {
-            // 如果今天有听过过故事
-            if (workUserLogService.getLogAfterSomeDate(user.getId(), "2017-10-1 00:00:00") > 0) {
-                // 如果没有拥有过这个徽章
-                if (userBadgeService.getUserBadge(Const.PATRIOT_BADGE_ID, user.getId()) == null) {
-                    UserBadge userBadge = new UserBadge();
-                    userBadge.setUserId(user.getId());
-                    userBadge.setBadgeId(Const.PATRIOT_BADGE_ID);
-                    userBadgeService.saveUserBadge(userBadge);
-                    Badge badge = badgeService.getBadgeById(Const.PATRIOT_BADGE_ID);
-                    badges.add(badge);
-                }
+            // 如果今天有上传过作品
+            //if (worksService.getWorksAfterSomeDate(user.getId(), "2017-10-1 00:00:00") > 0) {}
+            // 如果没有拥有过这个徽章
+            if (userBadgeService.getUserBadge(Const.PATRIOT_BADGE_ID, user.getId()) == null) {
+                UserBadge userBadge = new UserBadge();
+                userBadge.setUserId(user.getId());
+                userBadge.setBadgeId(Const.PATRIOT_BADGE_ID);
+                userBadgeService.saveUserBadge(userBadge);
+                Badge badge = badgeService.getBadgeById(Const.PATRIOT_BADGE_ID);
+                badges.add(badge);
             }
         }
 
@@ -76,6 +81,7 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
 
 
         // 魔法骑士
+        //zj:如果上传的作品对应的故事对应的tag列表中包含“奇幻故事”标签
         if (tagIdList.contains(Const.FANTASY_STORY_TAG_ID)) {
             if (userBadgeService.getUserBadge(Const.MAGIC_KNIGHT_BADGE_ID, user.getId()) == null) {
                 UserBadge userBadge = new UserBadge();
@@ -98,6 +104,7 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
                 badges.add(badge);
             }
         }
+
 
         recordStatisticService.saveRecord(user.getId());
         // 最高连续阅读天数
@@ -157,33 +164,82 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
                 return badges;
             }
         }
+
+        //阅读计划类徽章-完成该月计划徽章
+        Integer userId = user.getId();
+        Baby baby = babyService.getSelectedBaby(userId);
+        //为空说明没有添加宝宝或者没有选中任何宝宝
+        if (baby == null) {
+            List<Baby> babyList = babyService.getBabyListByParentId(userId);
+            //有baby但是没有选中
+            if (babyList != null && !babyList.isEmpty()) {
+                baby = babyList.get(0);
+            }
+
+        }
+        //由于getReadingPlanByTime方法调用了select*ByExample方法，所以虽然是只返回一个对象也用list装
+        List<ReadingPlan> planList = readPlanService.getReadingPlanByTime(baby);
+        Integer planId = planList.get(0).getId();
+        List<Integer> storyIdList = readPlanStoryGroupService.getStoryIdListInReadPlanByPlanId(planId);
+        boolean flag = true;
+        for (Integer storyId : storyIdList) {
+            //游客状态id为-1
+            if (userId > 0) {
+                boolean finish = worksService.getWorksByUserAndStory(userId, storyId);
+                if (!finish) {
+                    flag = false;
+                    break;
+                }
+            }
+        }
+        //如果阅读计划全部完成
+        if (flag) {
+            //如果没有获得过这个徽章
+            if (userBadgeService.getUserBadge(Const.MONTH_READING_PLAN_BADGE_ID, user.getId()) == null) {
+                UserBadge userBadge = new UserBadge();
+                userBadge.setUserId(userId);
+                userBadge.setBadgeId(Const.MONTH_READING_PLAN_BADGE_ID);
+                userBadgeService.saveUserBadge(userBadge);
+                Badge badge = badgeService.getBadgeById(Const.MONTH_READING_PLAN_BADGE_ID);
+                badges.add(badge);
+            }
+        }
         return badges;
+
+
     }
 
+    /**
+     * 验证用户是否可以获取“小小爱国者徽章”。如果十月一日录制过故事且这天还没有获得过此徽章就触发
+     */
     @Override
-    public List<Badge> checkoutListenBadge(User user, Works works) {
+    public List<Badge> judgeAddBadgeWhenListen(User user) {
         List<Badge> badges = new ArrayList<>();
-        // 如果今天是十一
         SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
         Date date = new Date();
         String format = sf.format(date);
+
         if ("20171001".equals(format)) {
-            // 如果今天有录制过故事
-            if (worksService.getWorksAfterSomeDate(user.getId(), "2017-10-1 00:00:00") > 0) {
-                // 如果没有拥有过这个徽章
-                if (userBadgeService.getUserBadge(Const.PATRIOT_BADGE_ID, user.getId()) == null) {
-                    UserBadge userBadge = new UserBadge();
-                    userBadge.setUserId(user.getId());
-                    userBadge.setBadgeId(Const.PATRIOT_BADGE_ID);
-                    userBadgeService.saveUserBadge(userBadge);
-                    Badge badge = badgeService.getBadgeById(Const.PATRIOT_BADGE_ID);
-                    badges.add(badge);
-                }
+            // 如果今天有收听过故事
+            //if (workUserLogService.getLogAfterSomeDate(user.getId(), "2017-10-1 00:00:00") > 0) {}
+            // 如果没有拥有过这个徽章,这个if是从上一个if里提取出来的，控制器中收听接口中收听成功了才调用的这个方法，所以这里不用
+
+            //如果没有获得过这个徽章
+            if (userBadgeService.getUserBadge(Const.PATRIOT_BADGE_ID, user.getId()) == null) {
+                UserBadge userBadge = new UserBadge();
+                userBadge.setUserId(user.getId());
+                userBadge.setBadgeId(Const.PATRIOT_BADGE_ID);
+                userBadgeService.saveUserBadge(userBadge);
+                Badge badge = badgeService.getBadgeById(Const.PATRIOT_BADGE_ID);
+                badges.add(badge);
             }
         }
         return badges;
     }
 
+    /**
+     * @param authorId 传入作者id判断作者是否可以获取“被收听徽章”
+     */
     @Override
     public void judgeUserAddBadgeByListen(Integer authorId) {
         UserBase userBase = appUserService.getUserBaseById(authorId);

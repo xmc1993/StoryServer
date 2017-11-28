@@ -225,4 +225,12 @@
       myorder = #{myorder,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+  <select id="getStoryIdListInReadPlanByPlanId" resultType="arraylist" parameterType="integer" >
+    select
+    storyId
+    from reading_plan_story_group
+  </select>
+
 </mapper>
