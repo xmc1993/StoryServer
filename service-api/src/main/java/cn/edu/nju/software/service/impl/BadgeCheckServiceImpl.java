@@ -37,6 +37,8 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
     private BabyService babyService;
     @Autowired
     private ReadPlanStoryGroupService readPlanStoryGroupService;
+    @Autowired
+    private StoryTopicServcie storyTopicServcie;
 
 
     @Override
@@ -183,13 +185,10 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
         List<Integer> storyIdList = readPlanStoryGroupService.getStoryIdListInReadPlanByPlanId(planId);
         boolean flag = true;
         for (Integer storyId : storyIdList) {
-            //游客状态id为-1
-            if (userId > 0) {
-                boolean finish = worksService.getWorksByUserAndStory(userId, storyId);
-                if (!finish) {
-                    flag = false;
-                    break;
-                }
+            boolean finish = worksService.getWorksByUserAndStory(userId, storyId);
+            if (!finish) {
+                flag = false;
+                break;
             }
         }
         //如果阅读计划全部完成
@@ -204,6 +203,24 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
                 badges.add(badge);
             }
         }
+
+        //专题徽章
+        if (userBadgeService.getUserBadge(Const.DOUBLE_ELEVEN_BADGE_ID, user.getId()) == null) {
+            List<StoryTopicRelation> list = storyTopicServcie.getStoryListByTopicId(Const.DOUBLE_ELEVEN_STORY_TOPIC);
+            for (StoryTopicRelation storyTopicRelation : list) {
+                Integer storyId = storyTopicRelation.getstoryId();
+                if (works.getStoryId().equals(storyId)) {
+                    UserBadge userBadge = new UserBadge();
+                    userBadge.setUserId(userId);
+                    userBadge.setBadgeId(Const.DOUBLE_ELEVEN_BADGE_ID);
+                    userBadgeService.saveUserBadge(userBadge);
+                    Badge badge = badgeService.getBadgeById(Const.DOUBLE_ELEVEN_BADGE_ID);
+                    badges.add(badge);
+                    break;
+                }
+            }
+        }
+
         return badges;
 
 

@@ -401,7 +401,10 @@ public class UserWorksController extends BaseController {
 
         WorksVo worksVo = new WorksVo();
         if (res != null) {
-            List<Badge> badges = badgeCheckService.judgeAddBadgesWhenPublish(user, works);
+            List<Badge> badges=null;
+            if (user.getId() > 0) {
+                badges=badgeCheckService.judgeAddBadgesWhenPublish(user, works);
+            }
             BeanUtils.copyProperties(works, worksVo);
             responseData.jsonFill(1, null, worksVo);
             responseData.setBadgeList(badges);
