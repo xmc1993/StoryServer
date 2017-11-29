@@ -401,9 +401,11 @@ public class UserWorksController extends BaseController {
 
         WorksVo worksVo = new WorksVo();
         if (res != null) {
-            List<Badge> badges = badgeCheckService.judgeUserAddBadgeByPublish(user, works);
+            List<Badge> badges=null;
+            if (user.getId() > 0) {
+                badges=badgeCheckService.judgeAddBadgesWhenPublish(user, works);
+            }
             BeanUtils.copyProperties(works, worksVo);
-
             responseData.jsonFill(1, null, worksVo);
             responseData.setBadgeList(badges);
         } else {
@@ -491,7 +493,7 @@ public class UserWorksController extends BaseController {
             workUserLog.setUserId(user.getId());
             workUserLogService.saveWorkUserLog(workUserLog);
         }
-        responseData.setBadgeList(badgeCheckService.checkoutListenBadge(user, works));
+        responseData.setBadgeList(badgeCheckService.judgeAddBadgeWhenListen(user));
         responseData.jsonFill(1, null, res);
         return responseData;
     }

@@ -1,7 +1,10 @@
 package cn.edu.nju.software.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import cn.edu.nju.software.entity.Baby;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +49,18 @@ public class ReadPlanServiceImpl implements ReadPlanService {
 	}
 
 	@Override
+	public List<ReadingPlan> getReadingPlanByTime(String ageGroup, String timePoint) {
+		ReadingPlanExample readingPlanExample=new ReadingPlanExample();
+		//通过criteria构造查询条件
+		ReadingPlanExample.Criteria criteria = readingPlanExample.createCriteria();
+		criteria.andAgegroupEqualTo(ageGroup);
+		criteria.andTimepointEqualTo(timePoint);
+		//数据库中有大文本文件 查询使用这个方法，selectByExampleWithBLOBs
+		List<ReadingPlan> list = readingPlanMapper.selectByExampleWithBLOBs(readingPlanExample);
+		return list;
+	}
+
+	@Override
 	public ResponseData<List<ReadingPlan>> getAllReadPlan(Integer page,Integer pageSize) {
 		PageHelper.startPage(page, pageSize);
 		ReadingPlanExample readingPlanExample=new ReadingPlanExample();
@@ -62,16 +77,9 @@ public class ReadPlanServiceImpl implements ReadPlanService {
 		return responseData;
 	}
 
-	//这里的days是baby属于哪个年龄段的最大天数
-	@Override
-	public List<ReadingPlan> getReadingPlanByTime(String days,String timePoint) {
-		ReadingPlanExample readingPlanExample=new ReadingPlanExample();
-        //通过criteria构造查询条件
-		ReadingPlanExample.Criteria criteria = readingPlanExample.createCriteria();
-        criteria.andAgegroupEqualTo(days);
-        criteria.andTimepointEqualTo(timePoint);
-        List<ReadingPlan> list=readingPlanMapper.selectByExampleWithBLOBs(readingPlanExample);
-        return list;
-	}
+
+
+
+
 
 }

@@ -13,5 +13,4 @@ public interface BabyReadPlanDao {
     boolean updateBabyReadPlan(BabyReadPlan babyReadPlan);
     BabyReadPlan getBabyReadPlanById(int id);
     BabyReadPlan getBabyReadPlanByBabyId(int babyId);
-
 }
