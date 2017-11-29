@@ -143,11 +143,11 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
                 badges.add(badge);
             }
         }
-        //用户的作品数和缓存的作品数可能不对应，说以这里要从数据库拿用户的workCount,也就是刷新下workCount数
-        user = appUserService.getUserById(user.getId());
+
         // 作品数量徽章
         for (int i = 0; i < workCountBadgeArr.length; i++) {
-            if (user.getWorkCount() == workCountBadgeArr[i]) {
+            //因为他上传了故事但缓存中没有变
+            if (user.getWorkCount()+1 == workCountBadgeArr[i]) {
                 UserBadge userBadge = new UserBadge();
                 userBadge.setUserId(user.getId());
                 Badge badge = badgeService.getBadgeByMeasureAndType(workCountBadgeArr[i], 5);

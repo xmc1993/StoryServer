@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -174,7 +175,7 @@ public class UserPlayListController extends BaseController {
     @ApiOperation(value = "新增播放列表", notes = "")
     @RequestMapping(value = "/newPlayList", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<PlayList> newPlayList(
+    public ResponseData<PlayList> newPlayList (
             @ApiParam("播放列表的名字") @RequestParam String name,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<PlayList> responseData = new ResponseData<>();
@@ -189,9 +190,10 @@ public class UserPlayListController extends BaseController {
         playList.setUserId(user.getId());
         playList.setCreateTime(new Date());
         playList.setUpdateTime(new Date());
+
         PlayList res = playListService.savePlayList(playList);
         if (res == null) {
-            responseData.jsonFill(2, "创建失败", null);
+            responseData.jsonFill(2, "作品集命名不能出现特殊字符哟～", null);
         } else {
             responseData.jsonFill(1, null, res);
         }

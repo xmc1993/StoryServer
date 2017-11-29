@@ -10,6 +10,7 @@ import cn.edu.nju.software.service.StoryUserLogService;
 import cn.edu.nju.software.util.Const;
 import cn.edu.nju.software.vo.StoryUserLogVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -91,4 +92,5 @@ public class StoryUserLogServiceImpl implements StoryUserLogService{
     public List<StoryUserLog> extractNewRecords(Date lastExtractTime) {
         return storyUserLogDao.extractNewRecords(lastExtractTime);
     }
+
 }

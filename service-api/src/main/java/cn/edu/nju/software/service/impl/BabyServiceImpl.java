@@ -2,6 +2,9 @@ package cn.edu.nju.software.service.impl;
 
 import cn.edu.nju.software.dao.BabyDao;
 import cn.edu.nju.software.entity.Baby;
+import cn.edu.nju.software.entity.ReadingPlan;
+import cn.edu.nju.software.entity.ReadingPlanStoryGroup;
+import cn.edu.nju.software.service.BabyReadPlanService;
 import cn.edu.nju.software.service.BabyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +19,16 @@ public class BabyServiceImpl implements BabyService {
 
     @Autowired
     private BabyDao babyDao;
+    @Autowired
+    private BabyReadPlanService babyReadPlanService;
+
 
 
     @Override
     public Baby saveBaby(Baby baby) {
         if (babyDao.saveBaby(baby)) {
+            //如果添加宝宝成功为该宝宝添加阅读计划
+            babyReadPlanService.saveBabyReadPlan(baby);
             return baby;
         }
         return null;
@@ -66,4 +74,17 @@ public class BabyServiceImpl implements BabyService {
 			return sucess;
 		}
 	}
+
+    @Override
+    public Baby getUserOneBaby(int userId) {
+        Baby baby = babyDao.getSelectedBaby(userId);
+        if (baby == null) {
+            List<Baby> babyList = babyDao.getBabyListByParentId(userId);
+            if (babyList == null || babyList.isEmpty()) {
+                return null;
+            }
+            return babyList.get(0);
+        }
+        return baby;
+    }
 }
