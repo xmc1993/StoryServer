@@ -121,7 +121,7 @@ public class UserReadPlanController extends BaseController {
     @ApiOperation(value = "判断该作品是否是属于阅读计划里的")
     @RequestMapping(value = "/worksBeLongToReadPlan", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<ShareWorkWithreadPlan> shareWorksForReadPlan(
+    public ResponseData<ShareWorkWithreadPlan> worksBeLongToReadPlan(
             @ApiParam("作品id") @RequestParam Integer workId, HttpServletRequest request, HttpServletResponse response) {
 
         ResponseData<ShareWorkWithreadPlan> responseData = new ResponseData<>();
@@ -215,7 +215,7 @@ public class UserReadPlanController extends BaseController {
         return responseData;
     }
 
-    @ApiOperation(value = "初始化BabyReadPlan")
+/*    @ApiOperation(value = "初始化BabyReadPlan")
     @RequestMapping(value = "/initReadPlanIdTable", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<Boolean> initReadPlanIdTable(
@@ -225,7 +225,7 @@ public class UserReadPlanController extends BaseController {
         babyReadPlanService.initBabyReadPlan();
         responseData.jsonFill(1, null, true);
         return responseData;
-    }
+    }*/
 
     // 根据故事和用户id获得一个故事vo类(故事的标签，用户是否完成过这个故事)
     private StoryNewWorksVo story2Vo(Story story, int userId) {

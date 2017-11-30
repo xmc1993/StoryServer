@@ -193,7 +193,7 @@ public class UserPlayListController extends BaseController {
 
         PlayList res = playListService.savePlayList(playList);
         if (res == null) {
-            responseData.jsonFill(2, "作品集命名不能出现特殊字符哟～", null);
+            responseData.jsonFill(2, "作品集创建失败", null);
         } else {
             responseData.jsonFill(1, null, res);
         }
