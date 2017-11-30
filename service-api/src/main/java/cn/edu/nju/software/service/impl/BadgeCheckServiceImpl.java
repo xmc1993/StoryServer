@@ -1,6 +1,7 @@
 package cn.edu.nju.software.service.impl;
 
 import cn.edu.nju.software.dao.BabyReadPlanDao;
+import cn.edu.nju.software.dao.user.AppUserDao;
 import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.*;
 import cn.edu.nju.software.service.user.AppUserService;
@@ -19,9 +20,7 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
     @Autowired
     private WorksService worksService;
     @Autowired
-    private WorkUserLogService workUserLogService;
-    @Autowired
-    StoryTagService storyTagService;
+    private AppUserDao appUserDao;
     @Autowired
     TagRelationService tagRelationService;
     @Autowired
@@ -32,8 +31,6 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
     UserBadgeService userBadgeService;
     @Autowired
     private RecordStatisticService recordStatisticService;
-    @Autowired
-    private ReadPlanService readPlanService;
     @Autowired
     private BabyReadPlanDao babyReadPlanDao;
     @Autowired
@@ -264,5 +261,50 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
                 userBadgeService.saveUserBadge(userBadge);
             }
         }
+    }
+
+    @Override
+    public Boolean freshBadge() {
+        List<User> list = appUserDao.getAllUserList();
+        for (User user : list) {
+            if (user.getListenCount() < 100 && user.getListenCount() >= 10) {
+                if (userBadgeService.getUserBadge(23, user.getId()) == null) {
+                    UserBadge userBadge = new UserBadge();
+                    userBadge.setUserId(user.getId());
+                    userBadge.setBadgeId(23);
+                    userBadgeService.saveUserBadge(userBadge);
+                }
+            } else if (user.getListenCount() < 1000 && user.getListenCount() >= 100) {
+                if (userBadgeService.getUserBadge(24, user.getId()) == null) {
+                    UserBadge userBadge = new UserBadge();
+                    userBadge.setUserId(user.getId());
+                    userBadge.setBadgeId(24);
+                    userBadgeService.saveUserBadge(userBadge);
+                }
+            } else if (user.getListenCount() < 2000 && user.getListenCount() >= 1000) {
+                if (userBadgeService.getUserBadge(25, user.getId()) == null) {
+                    UserBadge userBadge = new UserBadge();
+                    userBadge.setUserId(user.getId());
+                    userBadge.setBadgeId(25);
+                    userBadgeService.saveUserBadge(userBadge);
+                }
+            } else if (user.getListenCount() < 5000 && user.getListenCount() >= 2000) {
+                if (userBadgeService.getUserBadge(27, user.getId()) == null) {
+                    UserBadge userBadge = new UserBadge();
+                    userBadge.setUserId(user.getId());
+                    userBadge.setBadgeId(27);
+                    userBadgeService.saveUserBadge(userBadge);
+                }
+            } else if (user.getListenCount() < 10000 && user.getListenCount() >= 5000) {
+                if (userBadgeService.getUserBadge(28, user.getId()) == null) {
+                    UserBadge userBadge = new UserBadge();
+                    userBadge.setUserId(user.getId());
+                    userBadge.setBadgeId(28);
+                    userBadgeService.saveUserBadge(userBadge);
+                }
+            }
+
+        }
+        return true;
     }
 }

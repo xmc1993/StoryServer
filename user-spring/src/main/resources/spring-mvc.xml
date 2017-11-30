@@ -168,7 +168,7 @@
             <mvc:mapping path="/user/getStoryStarByStoryIdUserId"/>
 
             <mvc:mapping path="/user/worksBeLongToReadPlan"/>
-
+            <mvc:mapping path="/user/addOpinionFeedback"/>
             <!-- 不需要拦截的uri -->
             <!-- <mvc:exclude-mapping path="/user/getLandingPage"/> <mvc:exclude-mapping
                 path="/**" /> -->

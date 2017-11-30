@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.nju.software.dao.user.AppUserDao">
-	<sql id="fields">
+    <sql id="fields">
 		id,
 		nickname,
 		accessToken,
@@ -29,7 +29,7 @@
 		likeStoryCount
 	</sql>
 
-	<sql id="baseFields">
+    <sql id="baseFields">
 		id,
 		nickname,
 		sex,
@@ -43,84 +43,84 @@
 		likeStoryCount
 	</sql>
 
-	<resultMap id="userBase" type="cn.edu.nju.software.entity.UserBase">
-		<id column="id" property="id" />
-		<id column="nickname" property="nickname" />
-		<id column="sex" property="sex" />
-		<id column="headImgUrl" property="headImgUrl" />
-		<id column="followerCount" property="followerCount" />
-		<id column="followeeCount" property="followeeCount" />
-		<id column="workCount" property="workCount" />
-		<id column="likeCount" property="likeCount" />
-		<id column="listenCount" property="listenCount" />
-		<id column="listenedCount" property="listenedCount" />
-		<id column="likeStoryCount" property="likeStoryCount" />
-	</resultMap>
+    <resultMap id="userBase" type="cn.edu.nju.software.entity.UserBase">
+        <id column="id" property="id"/>
+        <id column="nickname" property="nickname"/>
+        <id column="sex" property="sex"/>
+        <id column="headImgUrl" property="headImgUrl"/>
+        <id column="followerCount" property="followerCount"/>
+        <id column="followeeCount" property="followeeCount"/>
+        <id column="workCount" property="workCount"/>
+        <id column="likeCount" property="likeCount"/>
+        <id column="listenCount" property="listenCount"/>
+        <id column="listenedCount" property="listenedCount"/>
+        <id column="likeStoryCount" property="likeStoryCount"/>
+    </resultMap>
 
-	<resultMap id="user" type="cn.edu.nju.software.entity.User">
-		<id column="id" property="id" />
-		<id column="nickname" property="nickname" />
-		<id column="accessToken" property="accessToken" />
-		<id column="sex" property="sex" />
-		<id column="headImgUrl" property="headImgUrl" />
-		<id column="wxUnionId" property="wxUnionId" />
-		<id column="createTime" property="createTime" />
-		<id column="updateTime" property="updateTime" />
-		<id column="mobile" property="mobile" />
-		<id column="verifyCode" property="verifyCode" />
-		<id column="expireTime" property="expireTime" />
-		<id column="password" property="password" />
-		<id column="company" property="company" />
-		<id column="city" property="city" />
-		<id column="email" property="email" />
-		<id column="weChatOpenId" property="weChatOpenId" />
-		<id column="weChatAccessToken" property="weChatAccessToken" />
-		<id column="weChatAccessToken" property="weChatAccessToken" />
-		<id column="weChatRefreshToken" property="weChatRefreshToken" />
-		<id column="followerCount" property="followerCount" />
-		<id column="followeeCount" property="followeeCount" />
-		<id column="workCount" property="workCount" />
-		<id column="likeCount" property="likeCount" />
-		<id column="deviceId" property="deviceId" />
-		<id column="listenedCount" property="listenedCount" />
-		<id column="likeStoryCount" property="likeStoryCount" />
-	</resultMap>
+    <resultMap id="user" type="cn.edu.nju.software.entity.User">
+        <id column="id" property="id"/>
+        <id column="nickname" property="nickname"/>
+        <id column="accessToken" property="accessToken"/>
+        <id column="sex" property="sex"/>
+        <id column="headImgUrl" property="headImgUrl"/>
+        <id column="wxUnionId" property="wxUnionId"/>
+        <id column="createTime" property="createTime"/>
+        <id column="updateTime" property="updateTime"/>
+        <id column="mobile" property="mobile"/>
+        <id column="verifyCode" property="verifyCode"/>
+        <id column="expireTime" property="expireTime"/>
+        <id column="password" property="password"/>
+        <id column="company" property="company"/>
+        <id column="city" property="city"/>
+        <id column="email" property="email"/>
+        <id column="weChatOpenId" property="weChatOpenId"/>
+        <id column="weChatAccessToken" property="weChatAccessToken"/>
+        <id column="weChatAccessToken" property="weChatAccessToken"/>
+        <id column="weChatRefreshToken" property="weChatRefreshToken"/>
+        <id column="followerCount" property="followerCount"/>
+        <id column="followeeCount" property="followeeCount"/>
+        <id column="workCount" property="workCount"/>
+        <id column="likeCount" property="likeCount"/>
+        <id column="deviceId" property="deviceId"/>
+        <id column="listenedCount" property="listenedCount"/>
+        <id column="likeStoryCount" property="likeStoryCount"/>
+    </resultMap>
 
-	<insert id="saveUser" parameterType="cn.edu.nju.software.entity.User"
-			keyProperty="id" useGeneratedKeys="true">
-		insert into user (
-		<include refid="fields"></include>
-		) values (
-		#{id},
-		#{nickname},
-		#{accessToken},
-		#{sex},
-		#{headImgUrl},
-		#{wxUnionId},
-		#{createTime},
-		#{updateTime},
-		#{mobile},
-		#{verifyCode},
-		#{expireTime},
-		#{password},
-		#{company},
-		#{city},
-		#{email},
-		#{weChatOpenId},
-		#{weChatAccessToken},
-		#{weChatRefreshToken},
-		#{followerCount},
-		#{followeeCount},
-		#{workCount},
-		#{likeCount},
-		#{deviceId},
-		#{listenedCount},
-		#{likeStoryCount}
-		)
-	</insert>
+    <insert id="saveUser" parameterType="cn.edu.nju.software.entity.User"
+            keyProperty="id" useGeneratedKeys="true">
+        insert into user (
+        <include refid="fields"></include>
+        ) values (
+        #{id},
+        #{nickname},
+        #{accessToken},
+        #{sex},
+        #{headImgUrl},
+        #{wxUnionId},
+        #{createTime},
+        #{updateTime},
+        #{mobile},
+        #{verifyCode},
+        #{expireTime},
+        #{password},
+        #{company},
+        #{city},
+        #{email},
+        #{weChatOpenId},
+        #{weChatAccessToken},
+        #{weChatRefreshToken},
+        #{followerCount},
+        #{followeeCount},
+        #{workCount},
+        #{likeCount},
+        #{deviceId},
+        #{listenedCount},
+        #{likeStoryCount}
+        )
+    </insert>
 
 
-	<update id="updateUser" parameterType="cn.edu.nju.software.entity.User">
+    <update id="updateUser" parameterType="cn.edu.nju.software.entity.User">
 		update user
 		set
 		nickname=#{nickname},
@@ -145,87 +145,87 @@
 		id=#{id}
 	</update>
 
-	<select id="getUserListByPage" resultType="cn.edu.nju.software.entity.User">
-		SELECT
-		<include refid="fields"></include>
-		FROM user
-		WHERE valid in (1,2)
-		limit #{0},#{1}
-	</select>
+    <select id="getUserListByPage" resultType="cn.edu.nju.software.entity.User">
+        SELECT
+        <include refid="fields"></include>
+        FROM user
+        WHERE valid in (1,2)
+        limit #{0},#{1}
+    </select>
 
-	<select id="getUserById" resultType="cn.edu.nju.software.entity.User">
-		select
-		<include refid="fields"></include>
-		from user
-		where id = #{0}
-	</select>
+    <select id="getUserById" resultType="cn.edu.nju.software.entity.User">
+        select
+        <include refid="fields"></include>
+        from user
+        where id = #{0}
+    </select>
 
-	<select id="getUserBaseById" resultType="cn.edu.nju.software.entity.UserBase">
-		select
-		<include refid="baseFields"></include>
-		from user
-		where id = #{0}
-	</select>
+    <select id="getUserBaseById" resultType="cn.edu.nju.software.entity.UserBase">
+        select
+        <include refid="baseFields"></include>
+        from user
+        where id = #{0}
+    </select>
 
-	<select id="getUserByMobile" resultType="cn.edu.nju.software.entity.User">
-		select
-		<include refid="fields"></include>
-		from user
-		where mobile = #{0}
-	</select>
+    <select id="getUserByMobile" resultType="cn.edu.nju.software.entity.User">
+        select
+        <include refid="fields"></include>
+        from user
+        where mobile = #{0}
+    </select>
 
-	<select id="getUserByNickname" resultType="cn.edu.nju.software.entity.User">
-		select
-		<include refid="fields"></include>
-		from user
-		where nickname = #{0}
-	</select>
+    <select id="getUserByNickname" resultType="cn.edu.nju.software.entity.User">
+        select
+        <include refid="fields"></include>
+        from user
+        where nickname = #{0}
+    </select>
 
-	<select id="getUserByUnionId" resultType="cn.edu.nju.software.entity.User">
-		select
-		<include refid="fields"></include>
-		from user
-		where wxUnionId = #{0}
-	</select>
+    <select id="getUserByUnionId" resultType="cn.edu.nju.software.entity.User">
+        select
+        <include refid="fields"></include>
+        from user
+        where wxUnionId = #{0}
+    </select>
 
-	<select id="getUserByDeviceId" resultType="cn.edu.nju.software.entity.User">
-		select
-		<include refid="fields"></include>
-		from user
-		where deviceId = #{0}
-	</select>
+    <select id="getUserByDeviceId" resultType="cn.edu.nju.software.entity.User">
+        select
+        <include refid="fields"></include>
+        from user
+        where deviceId = #{0}
+    </select>
 
-	<select id="getUserBaseListByUserIdList" resultType="cn.edu.nju.software.entity.UserBase">
-		select
-		<include refid="baseFields"></include>
-		from user
-		where id in
-		<foreach collection="idList" item="id" index="index" open="("
-			separator="," close=")">
-			#{id}
-		</foreach>
-	</select>
+    <select id="getUserBaseListByUserIdList" resultType="cn.edu.nju.software.entity.UserBase">
+        select
+        <include refid="baseFields"></include>
+        from user
+        where id in
+        <foreach collection="idList" item="id" index="index" open="("
+                 separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
 
-	<select id="getNewestId" resultType="java.lang.Integer">
+    <select id="getNewestId" resultType="java.lang.Integer">
 		select max(id) from user
 	</select>
 
-	<select id="getAllUserList">
-		select * from user
+    <select id="getAllUserList" resultType="cn.edu.nju.software.entity.User">
+		select * from user WHERE valid =1 and listenCount > 9
 	</select>
 
-	<select id="getAllUserIdList" resultType="java.lang.Integer">
+    <select id="getAllUserIdList" resultType="java.lang.Integer">
 		select id from user
 	</select>
 
-	<select id="getUserCount" resultType="java.lang.Integer">
+    <select id="getUserCount" resultType="java.lang.Integer">
 		select
 		count(id)
 		from user
 		where valid = 1
 	</select>
 
-	<update id="deleteUserById">
+    <update id="deleteUserById">
 		update user
 		set
 		valid=0
@@ -233,19 +233,19 @@
 		id=#{0}
 	</update>
 
-	<update id="recoverUserById">
+    <update id="recoverUserById">
 		update user
 		set
 		valid=1
 		where
 		id=#{0}
 	</update>
-	
-	<delete id="deleteUser">
+
+    <delete id="deleteUser">
 		DELETE FROM user WHERE id = #{0}
 	</delete>
 
-	<update id="newFollower">
+    <update id="newFollower">
 		update user
 		set
 		followerCount = followerCount + 1
@@ -253,7 +253,7 @@
 		id=#{0}
 	</update>
 
-	<update id="loseFollower">
+    <update id="loseFollower">
 		update user
 		set
 		followerCount = followerCount + 1
@@ -261,7 +261,7 @@
 		id=#{0}
 	</update>
 
-	<update id="newFollowee">
+    <update id="newFollowee">
 		update user
 		set
 		followeeCount = followeeCount + 1
@@ -269,7 +269,7 @@
 		id=#{0}
 	</update>
 
-	<update id="removeFollowee">
+    <update id="removeFollowee">
 		update user
 		set
 		followeeCount = followeeCount - 1
@@ -277,7 +277,7 @@
 		id=#{0}
 	</update>
 
-	<update id="newWork">
+    <update id="newWork">
 		update user
 		set
 		workCount = workCount + 1
@@ -285,7 +285,7 @@
 		id=#{0}
 	</update>
 
-	<update id="removeWork">
+    <update id="removeWork">
 		update user
 		set
 		workCount = workCount - 1
@@ -293,7 +293,7 @@
 		id=#{0}
 	</update>
 
-	<update id="newLike">
+    <update id="newLike">
 		update user
 		set
 		likeCount = likeCount + 1
@@ -301,7 +301,7 @@
 		id=#{0}
 	</update>
 
-	<update id="removeListen">
+    <update id="removeListen">
 		update user
 		set
 		listenCount = listenCount - 1
@@ -309,7 +309,7 @@
 		id=#{0}
 	</update>
 
-	<update id="newListen">
+    <update id="newListen">
 		update user
 		set
 		listenCount = listenCount + 1
@@ -317,7 +317,7 @@
 		id=#{0}
 	</update>
 
-	<update id="newListened">
+    <update id="newListened">
 		update user
 		set
 		listenedCount = listenedCount + 1
@@ -325,7 +325,7 @@
 		id=#{0}
 	</update>
 
-	<update id="removeLike">
+    <update id="removeLike">
 		update user
 		set
 		likeCount = likeCount - 1
@@ -333,7 +333,7 @@
 		id=#{0}
 	</update>
 
-	<update id="updateUserWorkCount">
+    <update id="updateUserWorkCount">
 		update user
 		SET
 		workCount = #{workCount}
@@ -341,15 +341,15 @@
 		id=#{userId}
 	</update>
 
-	<update id="updateListenCountByUserId">
+    <update id="updateListenCountByUserId">
 		update USER
 		SET
-		listenCount = listenCount+1
+		listenCount = listenCount+#{listenCount}
 		where
-		id=#{0}
+		id=#{userId}
 	</update>
 
-	<select id="getListenCount" resultType="java.lang.Integer">
+    <select id="getListenCount" resultType="java.lang.Integer">
 		select
 		listenCount
 		from
@@ -357,7 +357,7 @@
 		where id = #{0}
 	</select>
 
-	<select id="getTotalRecordTime" resultType="java.lang.String">
+    <select id="getTotalRecordTime" resultType="java.lang.String">
 		select
 		totalRecordTime
 		from
@@ -365,21 +365,21 @@
 		where id = #{0}
 	</select>
 
-	<update id="updateTotalRecordTime">
+    <update id="updateTotalRecordTime">
 		update user
 		SET
 		totalRecordTime = #{1}
 		where
 		id=#{0}
 	</update>
-	
-	<select id="getUserByFuzzyQuery" resultType="cn.edu.nju.software.entity.User">
+
+    <select id="getUserByFuzzyQuery" resultType="cn.edu.nju.software.entity.User">
         select
         <include refid="fields"></include>
         From user
         where valid = 1
         and nickname like CONCAT('%', #{0} ,'%')
     </select>
-	
+
 
 </mapper>

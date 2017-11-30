@@ -1,10 +1,13 @@
 package cn.edu.nju.software.controller.manage;
 
 import cn.edu.nju.software.annotation.RequiredPermissions;
+import cn.edu.nju.software.dao.user.AppUserDao;
 import cn.edu.nju.software.dto.WorksVo;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.Works;
+import cn.edu.nju.software.service.UserService;
 import cn.edu.nju.software.service.WorksService;
+import cn.edu.nju.software.service.user.AppUserService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -31,6 +34,8 @@ import java.util.List;
 public class ManageWorkController {
     @Autowired
     private WorksService worksService;
+    @Autowired
+    private AppUserService appUserService;
 
     @RequiredPermissions({4, 18})
     @ApiOperation(value = "根据id获取故事", notes = "")
@@ -136,9 +141,24 @@ public class ManageWorkController {
             works.setStoryTitle(storyTitle);
         if (reviewCount != null)
             works.setReviewCount(reviewCount);
-        if (listenCount != null)
+        int dValue = 0;
+        if (listenCount != null) {
             works.setListenCount(listenCount);
+            //修改作品的同时，修改用户表的作品收听量
+            //记录差值
+            dValue = listenCount - works.getListenCount();
+        }
+
         boolean res = worksService.updateWorks(works);
+        //假如修改成功才改用户的收听量
+        if (listenCount != null && res) {
+            //直接传修改量进去就可以
+            boolean success = appUserService.updateListenCountByUserId(dValue, works.getUserId());
+            if (success) {
+                responseData.jsonFill(2, "修改收听量失败", null);
+                return responseData;
+            }
+        }
         responseData.jsonFill(res ? 1 : 2, null, res);
         return responseData;
     }

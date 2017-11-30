@@ -532,6 +532,18 @@ public class UserWorksController extends BaseController {
         return responseData;
     }
 
+    @ApiOperation(value = "偷偷加徽章")
+    @RequestMapping(value = "/freshBadge", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Boolean> freshBadge(HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Boolean> responseData = new ResponseData();
+
+        badgeCheckService.freshBadge();
+        responseData.jsonFill(1,null,true);
+        return responseData;
+
+    }
+
     @ApiOperation(value = "根据workId获取作品的Url(分享时调用)", notes = "需登录")
     @RequestMapping(value = "/getWorkUrlByWorkId", method = {RequestMethod.POST})
     @ResponseBody
