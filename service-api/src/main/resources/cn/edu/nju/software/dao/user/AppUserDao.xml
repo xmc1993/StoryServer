@@ -211,7 +211,7 @@
 	</select>
 
     <select id="getAllUserList" resultType="cn.edu.nju.software.entity.User">
-		select * from user WHERE valid =1 and listenCount > 9
+		select * from user WHERE valid =1
 	</select>
 
     <select id="getAllUserIdList" resultType="java.lang.Integer">

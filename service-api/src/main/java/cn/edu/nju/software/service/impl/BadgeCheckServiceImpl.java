@@ -263,6 +263,7 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
         }
     }
 
+    /*//这个是后台人员瞎改数据后，刷出收听次数的服务，没啥用，不用看
     @Override
     public Boolean freshBadge() {
         List<User> list = appUserDao.getAllUserList();
@@ -306,5 +307,5 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
 
         }
         return true;
-    }
+    }*/
 }

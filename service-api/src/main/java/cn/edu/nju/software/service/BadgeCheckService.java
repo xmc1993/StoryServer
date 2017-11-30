@@ -15,5 +15,5 @@ public interface BadgeCheckService {
 
     void judgeUserAddBadgeByListen(Integer authorId);
 
-    Boolean freshBadge();
+    /*Boolean freshBadge();*/
 }
