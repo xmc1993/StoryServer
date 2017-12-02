@@ -14,12 +14,15 @@ import java.io.IOException;
 public final class UploadFileUtil {
     private static final Logger logger = LoggerFactory.getLogger(UploadFileUtil.class);
 //    public static String SOURCE_BASE_URL = "http://120.27.219.173/source";
+
+
     public static String SOURCE_BASE_URL = "http://www.warmtale.com/source";
 
-//    static {
-//        String url = System.getenv().get("SOURCE_BASE_URL") != null ? System.getenv().get("SOURCE_BASE_URL") : "http://120.27.219.173/source";
-//        SOURCE_BASE_URL = url;
-//    }
+    static {
+        String url = System.getenv().get("SOURCE_BASE_URL") != null ? System.getenv().get("SOURCE_BASE_URL") : "http://www.warmtale.com/source";
+        SOURCE_BASE_URL = url;
+    }
+
 
     //资源服务器的base url
 
@@ -58,7 +61,6 @@ public final class UploadFileUtil {
         String res = fileName.substring(fileName.lastIndexOf(".") + 1);
         return res;
     }
-
 
 
     /**
@@ -120,7 +122,6 @@ public final class UploadFileUtil {
     }
 
 
-
     /**
      * 根据数据库中的url删除服务器中的文件
      *
@@ -129,9 +130,9 @@ public final class UploadFileUtil {
      */
     public static boolean deleteFileByUrl(String url) {
         if (StringUtil.isEmpty(url)) return true;
-        System.err.println("url:"+url);
+        System.err.println("url:" + url);
         String fileUri = getRealPathFromUrl(url);
-        System.err.println("fileUrl:"+fileUri);
+        System.err.println("fileUrl:" + fileUri);
         return deleteFile(fileUri);
     }
 
@@ -145,6 +146,7 @@ public final class UploadFileUtil {
         String url = UploadFileUtil.SOURCE_BASE_URL + root + fileName;
         return url;
     }
+
     public static String uploadDiscovery(MultipartFile file, String root) {
         String realPath = UploadFileUtil.getBaseUrl() + root;
         String fileName = file.getOriginalFilename();
@@ -155,10 +157,9 @@ public final class UploadFileUtil {
         String url = UploadFileUtil.SOURCE_BASE_URL + root + fileName;
         return url;
     }
+
     public static void main(String[] args) {
-//        String result = getRealPathFromUrl("http://120.27.219.173/source/cover/XKpa5J5vOj9rQVnn.jpg");
-//        System.out.println(result);
-        System.out.println(System.getenv().get("STORY_HOME"));
+        System.out.println(SOURCE_BASE_URL);
     }
 
 

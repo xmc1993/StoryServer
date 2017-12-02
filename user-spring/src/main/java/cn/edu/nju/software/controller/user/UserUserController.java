@@ -459,11 +459,10 @@ public class UserUserController extends BaseController {
 		return responseData;
 	}
 
-	@RequestMapping(value = "/testError", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = "/getSourceBaseUrl", method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
-	public boolean testError() {
-		logger.error("ERROR");
-		return true;
+	public String testError() {
+		return UploadFileUtil.SOURCE_BASE_URL;
 	}
 
 	@RequestMapping(value = "/test", method = { RequestMethod.GET, RequestMethod.POST })
