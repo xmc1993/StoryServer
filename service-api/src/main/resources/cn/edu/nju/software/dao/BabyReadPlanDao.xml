@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nju.software.dao.BabyReadPlanDao">
+    <sql id="fields">
+        id,
+        babyId,
+        readPlanId
+    </sql>
+
+
+    <resultMap id="babyReadPlan" type="cn.edu.nju.software.entity.BabyReadPlan">
+        <id column="id" property="id"/>
+        <id column="babyId" property="babyId"/>
+        <id column="readPlanId" property="readPlanId"/>
+    </resultMap>
+
+    <insert id="saveBabyReadPlan" parameterType="cn.edu.nju.software.entity.BabyReadPlan">
+        insert into baby_read_plan(
+        <include refid="fields"></include>
+        )
+        VALUES
+        (
+        #{id},
+        #{babyId},
+        #{readPlanId}
+        )
+    </insert>
+
+    <update id="updateBabyReadPlan"  parameterType="cn.edu.nju.software.entity.BabyReadPlan">
+        UPDATE baby_read_plan
+        SET
+        readPlanId=#{readPlanId}
+        WHERE babyId = #{babyId}
+    </update>
+
+
+    <select id="getBabyReadPlanById" resultType="cn.edu.nju.software.entity.BabyReadPlan">
+        select
+        <include refid="fields"></include>
+        from baby_read_plan
+        WHERE id = #{id}
+    </select>
+
+    <select id="getBabyReadPlanByBabyId" resultType="cn.edu.nju.software.entity.BabyReadPlan">
+        select
+        <include refid="fields"></include>
+        from baby_read_plan
+        WHERE babyId = #{babyId}
+    </select>
+
+
+</mapper>

@@ -14,4 +14,6 @@ public interface BadgeCheckService {
     List<Badge> judgeAddBadgeWhenListen(User user);
 
     void judgeUserAddBadgeByListen(Integer authorId);
+
+    /*Boolean freshBadge();*/
 }

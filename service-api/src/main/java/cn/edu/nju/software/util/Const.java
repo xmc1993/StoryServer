@@ -18,8 +18,12 @@ public class Const {
     public static final Integer PATRIOT_BADGE_ID = 18;//小小爱国者
     public static final Integer FANTASY_STORY_TAG_ID = 100051;//奇幻故事的标签ID
     public static final Integer Thinking_BADGE_ID = 61;//感谢有你
+    public static final Integer MONTH_READING_PLAN_BADGE_ID = 67;//月阅读计划徽章ID（21天）
+    public static final Integer WEEK_READING_PLAN_BADGE_ID = 66;//周阅读计划徽章ID（完成前7天）
+    public static final Integer DOUBLE_ELEVEN_BADGE_ID = 64;//理财小达人
 
-    public static final Integer MONTH_READING_PLAN_BADGE_ID=  -1;//id待定
+    //故事专题常量
+    public static final Integer DOUBLE_ELEVEN_STORY_TOPIC = 18;//双十一故事专题
 
     public static void main(String[] args) {
         Date now = new Date();

@@ -684,7 +684,7 @@ public class ManageStoryController {
                                                          HttpServletResponse response) {
         ResponseData<Boolean> responseData = new ResponseData<>();
         boolean res = storyService.updateStoryIntroduction(storyId, introduction);
-        if (res == true) {
+        if (res) {
             responseData.jsonFill(1, null, true);
             return responseData;
         }

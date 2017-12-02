@@ -227,10 +227,11 @@
   </update>
 
 
-  <select id="getStoryIdListInReadPlanByPlanId" resultType="arraylist" parameterType="integer" >
+  <select id="getStoryIdListInReadPlanByPlanId" resultType="java.lang.Integer" parameterType="java.lang.Integer" >
     select
     storyId
     from reading_plan_story_group
+    WHERE readingPlanId=#{0}
   </select>
 
 </mapper>

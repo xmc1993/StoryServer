@@ -25,4 +25,7 @@ public interface BabyService {
     
     boolean selectBaby(int parentId,int id);
 
+    //获得用户的一个宝宝（先拿选中的，没有的话拿他第一个宝宝）
+    Baby getUserOneBaby(int userId);
+
 }

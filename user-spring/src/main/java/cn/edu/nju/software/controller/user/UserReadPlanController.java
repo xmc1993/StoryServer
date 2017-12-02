@@ -54,6 +54,8 @@ public class UserReadPlanController extends BaseController {
     StoryService storyService;
     @Autowired
     UserService userService;
+    @Autowired
+    private BabyReadPlanService babyReadPlanService;
 
     @ApiOperation(value = "获取用户的阅读计划", notes = "需要登录")
     @RequestMapping(value = "/getReadPlanByUser", method = {RequestMethod.GET})
@@ -67,21 +69,14 @@ public class UserReadPlanController extends BaseController {
             return responseData;
         }
         // 根据用户id获取用户选中的宝宝
-        Baby baby = babyService.getSelectedBaby(user.getId());
-        //为空说明没有添加宝宝或者没有选中任何宝宝
+        Baby baby = babyService.getUserOneBaby(user.getId());
         if (baby == null) {
-            List<Baby> babyList = babyService.getBabyListByParentId(user.getId());
-            //没有注册宝宝或者用户不存在
-            if (babyList == null || babyList.isEmpty()) {
-                responseData.jsonFill(2, "用户没有宝宝或者用户不存在", null);
-                return responseData;
-            } else {
-                List<ReadingPlan> list = readPlanService.getReadingPlanByTime(babyList.get(0));
-                responseData.jsonFill(1, null, list);
-                return responseData;
-            }
+            responseData.jsonFill(2, "用户没有宝宝", null);
+            return responseData;
         }
-        List<ReadingPlan> list = readPlanService.getReadingPlanByTime(baby);
+        ReadingPlan readingPlan = readPlanService.selectReadPlanById(babyReadPlanService.getBabyReadPlanByBabyId(baby.getId()).getReadPlanId());
+        List<ReadingPlan> list = new ArrayList<>();
+        list.add(readingPlan);
         responseData.jsonFill(1, null, list);
         return responseData;
     }
@@ -107,31 +102,17 @@ public class UserReadPlanController extends BaseController {
             return responseData;
         }
         shareWorkWithreadPlan.setWorks(works);
-
-        // 根据用户id获取用户选中的宝宝
-        Baby baby = babyService.getSelectedBaby(user.getId());
-        //为空说明没有添加宝宝或者没有选中任何宝宝
+        Baby baby = babyService.getUserOneBaby(user.getId());
         if (baby == null) {
-            List<Baby> babyList = babyService.getBabyListByParentId(user.getId());
-            //没有注册宝宝
-            if (babyList == null || babyList.isEmpty()) {
-                responseData.jsonFill(2, "用户没有宝宝", null);
-                return responseData;
-            } else {//注册了宝宝，但是没有选中宝宝的情况。默认根据第一个宝宝推送阅读计划
-                List<ReadingPlan> readPlanlist = readPlanService.getReadingPlanByTime(babyList.get(0));
-                //阅读计划中的其中一个故事
-                ReadingPlanStoryGroup storyGroup = readPlanStoryGroupService.getReadPlanStoryByIdAndStory(readPlanlist.get(0).getId(), works.getStoryId());
-                if(storyGroup==null){
-                    responseData.jsonFill(1,null,null);
-                    return  responseData;
-                }
-                shareWorkWithreadPlan.setDay(storyGroup.getMyorder());
-                responseData.jsonFill(1, null, shareWorkWithreadPlan);
-                return responseData;
-            }
+            responseData.jsonFill(2, "用户没有宝宝", null);
+            return responseData;
         }
-        List<ReadingPlan> list = readPlanService.getReadingPlanByTime(baby);
-        ReadingPlanStoryGroup storyGroup = readPlanStoryGroupService.getReadPlanStoryByIdAndStory(list.get(0).getId(), works.getStoryId());
+        int readPlanId = babyReadPlanService.getBabyReadPlanByBabyId(baby.getId()).getReadPlanId();
+        ReadingPlanStoryGroup storyGroup = readPlanStoryGroupService.getReadPlanStoryByIdAndStory(readPlanId, works.getStoryId());
+        if (storyGroup == null) {
+            responseData.jsonFill(1, null, null);
+            return responseData;
+        }
         shareWorkWithreadPlan.setDay(storyGroup.getMyorder());
         responseData.jsonFill(1, null, shareWorkWithreadPlan);
         return responseData;
@@ -144,7 +125,6 @@ public class UserReadPlanController extends BaseController {
             @ApiParam("作品id") @RequestParam Integer workId, HttpServletRequest request, HttpServletResponse response) {
 
         ResponseData<ShareWorkWithreadPlan> responseData = new ResponseData<>();
-
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "请先登录", null);
@@ -161,37 +141,54 @@ public class UserReadPlanController extends BaseController {
             return responseData;
         }
         shareWorkWithreadPlan.setWorks(works);
-
-        // 根据用户id获取用户选中的宝宝
-        Baby baby = babyService.getSelectedBaby(user.getId());
-        //为空说明没有添加宝宝或者没有选中任何宝宝
+        Baby baby = babyService.getUserOneBaby(user.getId());
         if (baby == null) {
-            List<Baby> babyList = babyService.getBabyListByParentId(user.getId());
-            //没有注册宝宝或者用户不存在
-            if (babyList == null || babyList.isEmpty()) {
-                responseData.jsonFill(2, "用户没有宝宝", null);
-                return responseData;
-            } else {//注册了宝宝，但是没有选中宝宝的情况。默认根据第一个宝宝推送阅读计划
-                List<ReadingPlan> readPlanlist = readPlanService.getReadingPlanByTime(babyList.get(0));
-                //阅读计划中的其中一个故事
-                ReadingPlanStoryGroup storyGroup = readPlanStoryGroupService.getReadPlanStoryByIdAndStory(readPlanlist.get(0).getId(), works.getStoryId());
-                shareWorkWithreadPlan.setDay(storyGroup.getMyorder());
-                responseData.jsonFill(1, null, shareWorkWithreadPlan);
-                return responseData;
-            }
+            responseData.jsonFill(2, "用户没有宝宝", null);
+            return responseData;
         }
-        List<ReadingPlan> list = readPlanService.getReadingPlanByTime(baby);
-        ReadingPlanStoryGroup storyGroup = readPlanStoryGroupService.getReadPlanStoryByIdAndStory(list.get(0).getId(), works.getStoryId());
-        //当故事不属于阅读计划里边的返回空
-        if(storyGroup==null){
-            responseData.jsonFill(1,null,null);
-            return  responseData;
+        int readPlanId = babyReadPlanService.getBabyReadPlanByBabyId(baby.getId()).getReadPlanId();
+        ReadingPlanStoryGroup storyGroup = readPlanStoryGroupService.getReadPlanStoryByIdAndStory(readPlanId, works.getStoryId());
+        if (storyGroup == null) {
+            responseData.jsonFill(1, null, null);
+            return responseData;
         }
         shareWorkWithreadPlan.setDay(storyGroup.getMyorder());
         responseData.jsonFill(1, null, shareWorkWithreadPlan);
         return responseData;
     }
 
+//这个接口先不用
+/*    @ApiOperation(value = "获取阅读计划的故事(v3.1.1版本后使用这个接口获取阅读计划的故事)",notes ="需登录")
+    @RequestMapping(value = "/v3/getReadPlan", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<StoryNewWorksVo>> getReadPlan(
+             HttpServletRequest request,
+            HttpServletResponse response) {
+        ResponseData<List<StoryNewWorksVo>> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
+        Baby baby=babyService.getUserOneBaby(user.getId());
+        if(baby==null){
+            responseData.jsonFill(1,null,null);
+            return responseData;
+        }
+        BabyReadPlan babyReadPlan=babyReadPlanService.getBabyReadPlanByBabyId(baby.getId());
+        List<ReadingPlanStoryGroup> list = readPlanStoryGroupService.getReadPlanStoryGroupByPlanId(babyReadPlan.getReadPlanId());
+        List<StoryNewWorksVo> storyNewWorksVoList = new ArrayList<StoryNewWorksVo>();
+        for (ReadingPlanStoryGroup readingPlanStoryGroup : list) {
+            StoryWithIntroduction storyWithIntroduction = storyService.getStoryByIdWithIntroduction(readingPlanStoryGroup.getStoryid());
+            StoryNewWorksVo storyNewWorksVo = new StoryNewWorksVo();
+            storyNewWorksVo = story2Vo(storyWithIntroduction, user.getId());
+
+            storyNewWorksVoList.add(storyNewWorksVo);
+        }
+        responseData.jsonFill(1, null, storyNewWorksVoList);
+        return responseData;
+    }*/
 
     @ApiOperation(value = "根据阅读计划id查询故事组")
     @RequestMapping(value = "/getStoryGroupByPlanId", method = {RequestMethod.GET})
@@ -210,14 +207,25 @@ public class UserReadPlanController extends BaseController {
         List<StoryNewWorksVo> storyNewWorksVoList = new ArrayList<StoryNewWorksVo>();
         for (ReadingPlanStoryGroup readingPlanStoryGroup : list) {
             StoryWithIntroduction storyWithIntroduction = storyService.getStoryByIdWithIntroduction(readingPlanStoryGroup.getStoryid());
-            StoryNewWorksVo storyNewWorksVo = new StoryNewWorksVo();
-            storyNewWorksVo = story2Vo(storyWithIntroduction, user.getId());
+            StoryNewWorksVo storyNewWorksVo = story2Vo(storyWithIntroduction, user.getId());
 
             storyNewWorksVoList.add(storyNewWorksVo);
         }
         responseData.jsonFill(1, null, storyNewWorksVoList);
         return responseData;
     }
+
+/*    @ApiOperation(value = "初始化BabyReadPlan")
+    @RequestMapping(value = "/initReadPlanIdTable", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Boolean> initReadPlanIdTable(
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        ResponseData<Boolean> responseData = new ResponseData<>();
+        babyReadPlanService.initBabyReadPlan();
+        responseData.jsonFill(1, null, true);
+        return responseData;
+    }*/
 
     // 根据故事和用户id获得一个故事vo类(故事的标签，用户是否完成过这个故事)
     private StoryNewWorksVo story2Vo(Story story, int userId) {
@@ -235,4 +243,5 @@ public class UserReadPlanController extends BaseController {
         }
         return storyWorkVo;
     }
+
 }

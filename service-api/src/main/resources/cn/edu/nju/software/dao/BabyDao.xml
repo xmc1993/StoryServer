@@ -73,6 +73,7 @@
         select
         <include refid="fields"></include>
         from baby
+        WHERE birthday is not NULL
     </select>
 
     <select id="getBabyById" resultType="cn.edu.nju.software.entity.Baby">

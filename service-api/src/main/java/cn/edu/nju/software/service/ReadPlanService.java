@@ -16,5 +16,5 @@ public interface ReadPlanService {
 	int deleteReadPlan(Integer id);
 	int updateReadPlan(ReadingPlan readPlan);
 	ReadingPlan selectReadPlanById(Integer id);
-	List<ReadingPlan> getReadingPlanByTime(Baby baby);
+	List<ReadingPlan> getReadingPlanByTime(String ageGroup,String timePoint);
 }

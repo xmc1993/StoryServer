@@ -144,8 +144,8 @@
 		id
 		from user
 		where valid = 2
-		order by updateTime desc
-		limit #{0}
+		order by updateTime asc
+		limit #{limit}
 	</select>
 
 

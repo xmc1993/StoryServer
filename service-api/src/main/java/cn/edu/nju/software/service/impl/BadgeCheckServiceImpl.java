@@ -1,5 +1,7 @@
 package cn.edu.nju.software.service.impl;
 
+import cn.edu.nju.software.dao.BabyReadPlanDao;
+import cn.edu.nju.software.dao.user.AppUserDao;
 import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.*;
 import cn.edu.nju.software.service.user.AppUserService;
@@ -18,9 +20,7 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
     @Autowired
     private WorksService worksService;
     @Autowired
-    private WorkUserLogService workUserLogService;
-    @Autowired
-    StoryTagService storyTagService;
+    private AppUserDao appUserDao;
     @Autowired
     TagRelationService tagRelationService;
     @Autowired
@@ -32,17 +32,20 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
     @Autowired
     private RecordStatisticService recordStatisticService;
     @Autowired
-    private ReadPlanService readPlanService;
+    private BabyReadPlanDao babyReadPlanDao;
     @Autowired
     private BabyService babyService;
     @Autowired
     private ReadPlanStoryGroupService readPlanStoryGroupService;
+    @Autowired
+    private StoryTopicServcie storyTopicServcie;
 
 
     @Override
     public List<Badge> judgeAddBadgesWhenPublish(User user, Works works) {
         List<Badge> badges = new ArrayList<>();
         int[] workCountBadgeArr = {5000, 2000, 1000, 500, 300, 200, 150, 100, 30, 10, 3};
+        int[] readDayCountBadgeArr = {1, 3, 7, 15, 21, 30, 50, 100, 200, 365, 500, 1000};
 
         List<Integer> tagIdList = tagRelationService.getTagIdListByStoryId(works.getStoryId());
 
@@ -105,56 +108,28 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
             }
         }
 
-
+        //刷新下阅读天数
         recordStatisticService.saveRecord(user.getId());
         // 最高连续阅读天数
         int maxDays = recordStatisticService.getHistoryMaxCount(user.getId());
 
         // 49的id是连续阅读一天的ID,后面依次类推
-        if (maxDays < 3 && maxDays >= 0) {
-            if (userBadgeService.getUserBadge(49, user.getId()) == null) {
+        for (int i = 0; i < readDayCountBadgeArr.length; i++) {
+            if (maxDays == readDayCountBadgeArr[i]) {
                 UserBadge userBadge = new UserBadge();
                 userBadge.setUserId(user.getId());
-                userBadge.setBadgeId(49);
+                Badge badge = badgeService.getBadgeByMeasureAndType(readDayCountBadgeArr[i], 6);
+                userBadge.setBadgeId(badge.getId());
                 userBadgeService.saveUserBadge(userBadge);
-                Badge badge = badgeService.getBadgeById(49);
-                badges.add(badge);
-            }
-
-        } else if (maxDays < 7 && maxDays >= 3) {
-            if (userBadgeService.getUserBadge(50, user.getId()) == null) {
-                UserBadge userBadge = new UserBadge();
-                userBadge.setUserId(user.getId());
-                userBadge.setBadgeId(50);
-                userBadgeService.saveUserBadge(userBadge);
-                Badge badge = badgeService.getBadgeById(50);
-                badges.add(badge);
-            }
-
-        } else if (maxDays < 15 && maxDays >= 7) {
-            if (userBadgeService.getUserBadge(51, user.getId()) == null) {
-                UserBadge userBadge = new UserBadge();
-                userBadge.setUserId(user.getId());
-                userBadge.setBadgeId(51);
-                userBadgeService.saveUserBadge(userBadge);
-                Badge badge = badgeService.getBadgeById(51);
-                badges.add(badge);
-            }
-        } else if (maxDays < 21 && maxDays >= 15) {
-            if (userBadgeService.getUserBadge(52, user.getId()) == null) {
-                UserBadge userBadge = new UserBadge();
-                userBadge.setUserId(user.getId());
-                userBadge.setBadgeId(52);
-                userBadgeService.saveUserBadge(userBadge);
-                Badge badge = badgeService.getBadgeById(52);
                 badges.add(badge);
             }
         }
-        //用户的作品数和缓存的作品数可能不对应，说以这里要从数据库拿用户的workCount,也就是刷新下workCount数
-        user = appUserService.getUserById(user.getId());
+
+
         // 作品数量徽章
         for (int i = 0; i < workCountBadgeArr.length; i++) {
-            if (user.getWorkCount() == workCountBadgeArr[i]) {
+            //因为他上传了故事但缓存中没有变
+            if (user.getWorkCount() + 1 == workCountBadgeArr[i]) {
                 UserBadge userBadge = new UserBadge();
                 userBadge.setUserId(user.getId());
                 Badge badge = badgeService.getBadgeByMeasureAndType(workCountBadgeArr[i], 5);
@@ -165,45 +140,78 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
             }
         }
 
-        //阅读计划类徽章-完成该月计划徽章
+        //阅读计划完成前7天的徽章
         Integer userId = user.getId();
-        Baby baby = babyService.getSelectedBaby(userId);
-        //为空说明没有添加宝宝或者没有选中任何宝宝
-        if (baby == null) {
-            List<Baby> babyList = babyService.getBabyListByParentId(userId);
-            //有baby但是没有选中
-            if (babyList != null && !babyList.isEmpty()) {
-                baby = babyList.get(0);
+        Baby baby = babyService.getUserOneBaby(userId);
+        boolean flag2 = true;
+        List<Integer> storyIdList = new ArrayList<>();
+        if (baby != null) {
+            Integer planId = babyReadPlanDao.getBabyReadPlanByBabyId(baby.getId()).getReadPlanId();
+            storyIdList = readPlanStoryGroupService.getStoryIdListInReadPlanByPlanId(planId);
+            //取前7条判断
+            for (Integer storyId : storyIdList.subList(0, 7)) {
+                boolean finish = worksService.getWorksByUserAndStory(userId, storyId);
+                if (!finish) {
+                    flag2 = false;
+                    break;
+                }
             }
-
+        } else {
+            flag2 = false;
         }
-        //由于getReadingPlanByTime方法调用了select*ByExample方法，所以虽然是只返回一个对象也用list装
-        List<ReadingPlan> planList = readPlanService.getReadingPlanByTime(baby);
-        Integer planId = planList.get(0).getId();
-        List<Integer> storyIdList = readPlanStoryGroupService.getStoryIdListInReadPlanByPlanId(planId);
-        boolean flag = true;
-        for (Integer storyId : storyIdList) {
-            //游客状态id为-1
-            if (userId > 0) {
+
+        //当前7条完成时
+        if (flag2) {
+            boolean flag = true;
+            //如果没有获得过这个徽章
+            if (userBadgeService.getUserBadge(Const.WEEK_READING_PLAN_BADGE_ID, user.getId()) == null) {
+                UserBadge userBadge = new UserBadge();
+                userBadge.setUserId(userId);
+                userBadge.setBadgeId(Const.WEEK_READING_PLAN_BADGE_ID);
+                userBadgeService.saveUserBadge(userBadge);
+                Badge badge = badgeService.getBadgeById(Const.WEEK_READING_PLAN_BADGE_ID);
+                badges.add(badge);
+            }
+            //阅读计划类徽章-完成该月计划徽章
+            for (Integer storyId : storyIdList) {
                 boolean finish = worksService.getWorksByUserAndStory(userId, storyId);
                 if (!finish) {
                     flag = false;
                     break;
                 }
             }
-        }
-        //如果阅读计划全部完成
-        if (flag) {
-            //如果没有获得过这个徽章
-            if (userBadgeService.getUserBadge(Const.MONTH_READING_PLAN_BADGE_ID, user.getId()) == null) {
-                UserBadge userBadge = new UserBadge();
-                userBadge.setUserId(userId);
-                userBadge.setBadgeId(Const.MONTH_READING_PLAN_BADGE_ID);
-                userBadgeService.saveUserBadge(userBadge);
-                Badge badge = badgeService.getBadgeById(Const.MONTH_READING_PLAN_BADGE_ID);
-                badges.add(badge);
+            //如果阅读计划全部完成
+            if (flag) {
+                //如果没有获得过这个徽章
+                if (userBadgeService.getUserBadge(Const.MONTH_READING_PLAN_BADGE_ID, user.getId()) == null) {
+                    UserBadge userBadge = new UserBadge();
+                    userBadge.setUserId(userId);
+                    userBadge.setBadgeId(Const.MONTH_READING_PLAN_BADGE_ID);
+                    userBadgeService.saveUserBadge(userBadge);
+                    Badge badge = badgeService.getBadgeById(Const.MONTH_READING_PLAN_BADGE_ID);
+                    badges.add(badge);
+                }
             }
         }
+
+
+        //专题徽章
+        if (userBadgeService.getUserBadge(Const.DOUBLE_ELEVEN_BADGE_ID, user.getId()) == null) {
+            List<StoryTopicRelation> list = storyTopicServcie.getStoryListByTopicId(Const.DOUBLE_ELEVEN_STORY_TOPIC);
+            for (StoryTopicRelation storyTopicRelation : list) {
+                Integer storyId = storyTopicRelation.getstoryId();
+                if (works.getStoryId().equals(storyId)) {
+                    UserBadge userBadge = new UserBadge();
+                    userBadge.setUserId(userId);
+                    userBadge.setBadgeId(Const.DOUBLE_ELEVEN_BADGE_ID);
+                    userBadgeService.saveUserBadge(userBadge);
+                    Badge badge = badgeService.getBadgeById(Const.DOUBLE_ELEVEN_BADGE_ID);
+                    badges.add(badge);
+                    break;
+                }
+            }
+        }
+
         return badges;
 
 
@@ -254,4 +262,50 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
             }
         }
     }
+
+    /*//这个是后台人员瞎改数据后，刷出收听次数的服务，没啥用，不用看
+    @Override
+    public Boolean freshBadge() {
+        List<User> list = appUserDao.getAllUserList();
+        for (User user : list) {
+            if (user.getListenCount() < 100 && user.getListenCount() >= 10) {
+                if (userBadgeService.getUserBadge(23, user.getId()) == null) {
+                    UserBadge userBadge = new UserBadge();
+                    userBadge.setUserId(user.getId());
+                    userBadge.setBadgeId(23);
+                    userBadgeService.saveUserBadge(userBadge);
+                }
+            } else if (user.getListenCount() < 1000 && user.getListenCount() >= 100) {
+                if (userBadgeService.getUserBadge(24, user.getId()) == null) {
+                    UserBadge userBadge = new UserBadge();
+                    userBadge.setUserId(user.getId());
+                    userBadge.setBadgeId(24);
+                    userBadgeService.saveUserBadge(userBadge);
+                }
+            } else if (user.getListenCount() < 2000 && user.getListenCount() >= 1000) {
+                if (userBadgeService.getUserBadge(25, user.getId()) == null) {
+                    UserBadge userBadge = new UserBadge();
+                    userBadge.setUserId(user.getId());
+                    userBadge.setBadgeId(25);
+                    userBadgeService.saveUserBadge(userBadge);
+                }
+            } else if (user.getListenCount() < 5000 && user.getListenCount() >= 2000) {
+                if (userBadgeService.getUserBadge(27, user.getId()) == null) {
+                    UserBadge userBadge = new UserBadge();
+                    userBadge.setUserId(user.getId());
+                    userBadge.setBadgeId(27);
+                    userBadgeService.saveUserBadge(userBadge);
+                }
+            } else if (user.getListenCount() < 10000 && user.getListenCount() >= 5000) {
+                if (userBadgeService.getUserBadge(28, user.getId()) == null) {
+                    UserBadge userBadge = new UserBadge();
+                    userBadge.setUserId(user.getId());
+                    userBadge.setBadgeId(28);
+                    userBadgeService.saveUserBadge(userBadge);
+                }
+            }
+
+        }
+        return true;
+    }*/
 }

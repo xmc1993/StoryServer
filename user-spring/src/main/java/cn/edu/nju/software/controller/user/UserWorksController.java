@@ -360,13 +360,13 @@ public class UserWorksController extends BaseController {
             return responseData;
         }
         //判断是否为第一次上传作品，如果是第一次上传，则用僵尸粉关注该用户
-        if (worksService.getWorkIdListByUserId(user.getId()) == null) {
-            try {
+        //这里不能拿缓存
+        //用户的作品数和缓存的作品数可能不对应，说以这里要从数据库拿用户的workCount,也就是刷新下workCount数
+        user = appUserService.getUserById(user.getId());
+            if (user.getWorkCount()==0){
                 followService.dummyFollowRelation(user.getId());
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-        }
+
         Works works = new Works();
         works.setDuration(duration);
         works.setCreateTime(new Date());
@@ -401,7 +401,10 @@ public class UserWorksController extends BaseController {
 
         WorksVo worksVo = new WorksVo();
         if (res != null) {
-            List<Badge> badges = badgeCheckService.judgeAddBadgesWhenPublish(user, works);
+            List<Badge> badges=null;
+            if (user.getId() > 0) {
+                badges=badgeCheckService.judgeAddBadgesWhenPublish(user, works);
+            }
             BeanUtils.copyProperties(works, worksVo);
             responseData.jsonFill(1, null, worksVo);
             responseData.setBadgeList(badges);
@@ -634,6 +637,19 @@ public class UserWorksController extends BaseController {
         responseData.jsonFill(1, null, listenCount);
         return responseData;
     }
+
+    //刷新数据用的，不用管
+/*    @ApiOperation(value = "偷偷加徽章")
+    @RequestMapping(value = "/freshBadge", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Boolean> freshBadge(HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Boolean> responseData = new ResponseData();
+
+        badgeCheckService.freshBadge();
+        responseData.jsonFill(1,null,true);
+        return responseData;
+
+    }*/
 
     @ApiOperation(value = "根据workId获取作品的Url(分享时调用)", notes = "需登录")
     @RequestMapping(value = "/getWorkUrlByWorkId", method = {RequestMethod.POST})
