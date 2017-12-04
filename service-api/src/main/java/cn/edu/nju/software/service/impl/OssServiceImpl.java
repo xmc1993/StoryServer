@@ -17,7 +17,7 @@ import java.util.Map;
 @Service
 public class OssServiceImpl implements OssService {
     private static Logger logger = LoggerFactory.getLogger(OssServiceImpl.class);
-    private final static String host = "http://superid-ali-oss.oss-cn-hangzhou.aliyuncs.com";
+    private final static String host = "http://warmtale-backend-bucket.oss-cn-beijing.aliyuncs.com";
     private final static String accessId = "LTAIQLXhrN5gIJlk";
 
     @Autowired
@@ -27,7 +27,7 @@ public class OssServiceImpl implements OssService {
     public Map<String, String> getToken() {
         try {
             String dir = "";
-            long expireTime = 30;
+            long expireTime = 50 * 365 * 24 * 60 * 60;
             long expireEndTime = System.currentTimeMillis() + expireTime * 1000;
             Date expiration = new Date(expireEndTime);
 
