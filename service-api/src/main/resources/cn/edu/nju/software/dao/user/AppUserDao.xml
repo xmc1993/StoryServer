@@ -342,7 +342,7 @@
 	</update>
 
     <update id="updateListenCountByUserId">
-		update USER
+		update user
 		SET
 		listenCount = listenCount+#{listenCount}
 		where
