@@ -1,5 +1,8 @@
 package cn.edu.nju.software.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -11,6 +14,7 @@ import java.net.URLConnection;
  * Created by xmc1993 on 2017/4/11.
  */
 public class DownloadUtil {
+    private static final Logger logger = LoggerFactory.getLogger(DownloadUtil.class);
 
 //    public static void main(String[] args) throws Exception {
 //        //test
@@ -47,5 +51,41 @@ public class DownloadUtil {
         // 完毕，关闭所有链接
         os.close();
         is.close();
+    }
+
+    /**
+     * 下载得到临时文件
+     *
+     * @param urlString
+     * @return
+     */
+    public static String getTempFile(String urlString) {
+        if (urlString == null) {
+            return null;
+        }
+        long currentTimeMillis = System.currentTimeMillis();
+        String fileName = getFileName(urlString);
+        fileName = currentTimeMillis + fileName;
+
+        try {
+            download(urlString, fileName, "/tmp/");
+        } catch (Exception e) {
+            logger.error("临时文件下载失败!");
+            e.printStackTrace();
+            return null;
+        }
+        return "/tmp/" + fileName;
+    }
+
+    /**
+     * 获得资源uri中的文件名
+     *
+     * @param uri
+     * @return
+     */
+    private static String getFileName(String uri) {
+        if (uri == null) return null;
+        String[] segments = uri.split("/");
+        return segments[segments.length - 1];
     }
 }

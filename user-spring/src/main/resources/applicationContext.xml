@@ -104,7 +104,7 @@
     <bean class="com.aliyun.oss.OSSClient">
         <constructor-arg name="accessKeyId" value="LTAIQLXhrN5gIJlk"></constructor-arg>
         <constructor-arg name="secretAccessKey" value="L7oz7G51B1o3mh7jTsXsI1oDoGxAuI"></constructor-arg>
-        <constructor-arg name="endpoint" value="oss-cn-hangzhou.aliyuncs.com"></constructor-arg>
+        <constructor-arg name="endpoint" value="oss-cn-beijing.aliyuncs.com"></constructor-arg>
     </bean>
 
 </beans>

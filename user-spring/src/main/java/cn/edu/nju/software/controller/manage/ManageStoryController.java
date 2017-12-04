@@ -4,10 +4,13 @@ import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.*;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
+import cn.edu.nju.software.util.AudioUtil;
 import cn.edu.nju.software.util.MyStringUtil;
 import cn.edu.nju.software.util.UploadFileUtil;
-import cn.edu.nju.software.vo.*;
-
+import cn.edu.nju.software.vo.StoryNewVo;
+import cn.edu.nju.software.vo.StoryNewVoWithIntroduction;
+import cn.edu.nju.software.vo.StoryTitleVo;
+import cn.edu.nju.software.vo.StoryWithRealTellCount;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -214,8 +217,8 @@ public class ManageStoryController {
         story.setCoverUrl(coverFile);
         story.setPreCoverUrl(preCoverFile);
         story.setBackgroundUrl(backgroundFile);
-        //TODO 计算时长
         story.setOriginSoundUrl(originSoundFile);
+        story.setDuration(AudioUtil.getAudioLengthFromUrl(originSoundFile));
 
         if (title != null)
             story.setTitle(title);
@@ -321,9 +324,9 @@ public class ManageStoryController {
         if (backgroundFile != null) {
             story.setBackgroundUrl(backgroundFile);
         }
-        //TODO 计算时长
         if (originSoundFile != null) {
             story.setOriginSoundUrl(originSoundFile);
+            story.setDuration(AudioUtil.getAudioLengthFromUrl(originSoundFile));
         }
 
         if (title != null)
