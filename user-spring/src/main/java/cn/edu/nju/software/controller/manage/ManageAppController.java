@@ -5,6 +5,7 @@ import cn.edu.nju.software.entity.App;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.AppService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
+import cn.edu.nju.software.util.DownloadUtil;
 import cn.edu.nju.software.util.UploadFileUtil;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -19,9 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Date;
-import java.util.Formatter;
 import java.util.List;
 
 /**
@@ -59,12 +60,96 @@ public class ManageAppController {
 		app.setCreateTime(date);
 		app.setUpdateTime(date);
 		app.setUrl(uploadFile(appFile));
-		Formatter formatter = new Formatter();
 		double size = (double) appFile.getSize() / (1024 * 1024);
 		DecimalFormat df = new DecimalFormat("#0.00");
 		String appSize = df.format(size);
 		app.setFileSize(appSize);
 		if (appService.saveApp(app) == false) {
+			result.jsonFill(2, "保存失败", false);
+		}
+		result.jsonFill(1, null, true);
+		return result;
+	}
+
+	@RequiredPermissions({ 1, 10 })
+	@ApiOperation(value = "发布App")
+	@RequestMapping(value = "/v3/publishApp", method = { RequestMethod.POST })
+	@ResponseBody
+	public ResponseData<Boolean> publishAppV3(@ApiParam("版本") @RequestParam("version") String version,
+											@ApiParam("更新信息") @RequestParam("updateHint") String updateHint,
+											@ApiParam("App") @RequestParam(value = "appFile") String appFile, HttpServletRequest request,
+											HttpServletResponse response) {
+		ResponseData<Boolean> result = new ResponseData<>();
+		if (appFile.isEmpty()) {
+			result.jsonFill(2, "请上传文件", false);
+			return result;
+		}
+		if (version.trim().equals("") || updateHint.trim().equals("")) {
+			result.jsonFill(2, "上传信息错误", false);
+			return result;
+		}
+		App app = new App();
+		app.setUpdateHint(updateHint.trim());
+		app.setVersion(version.trim());
+		Date date = new Date();
+		app.setCreateTime(date);
+		app.setUpdateTime(date);
+		app.setUrl(appFile);
+		String tempFilePath = DownloadUtil.getTempFile(appFile);
+		File tmpFile = new File(tempFilePath);
+		double size = (double) tmpFile.length() / (1024 * 1024);
+		tmpFile.delete();
+		DecimalFormat df = new DecimalFormat("#0.00");
+		String appSize = df.format(size);
+		app.setFileSize(appSize);
+		if (appService.saveApp(app) == false) {
+			result.jsonFill(2, "保存失败", false);
+		}
+		result.jsonFill(1, null, true);
+		return result;
+	}
+
+	@RequiredPermissions({ 3, 10 })
+	@ApiOperation(value = "修改已发布的App", notes = "除appId外都可为空")
+	@RequestMapping(value = "/v3/updateApp", method = { RequestMethod.POST })
+	@ResponseBody
+	public ResponseData<Boolean> updateAppV3(@ApiParam("appId") @RequestParam(value = "appId") int appId,
+										   @ApiParam("版本") @RequestParam(value = "version", required = false) String version,
+										   @ApiParam("更新信息") @RequestParam(value = "updateHint", required = false) String updateHint,
+										   @ApiParam("App") @RequestParam(value = "appFile", required = false) String appFile,
+										   HttpServletRequest request, HttpServletResponse response) {
+		ResponseData<Boolean> result = new ResponseData<>();
+		App app = appService.getAppById(appId);
+		if (app == null) {
+			result.jsonFill(2, "appId错误", false);
+			return result;
+		}
+		if (!appFile.isEmpty()) {
+			String tempFilePath = DownloadUtil.getTempFile(appFile);
+			File tmpFile = new File(tempFilePath);
+			double size = (double) tmpFile.length() / (1024 * 1024);
+			tmpFile.delete();
+			DecimalFormat df = new DecimalFormat("#0.00");
+			String appSize = df.format(size);
+			app.setFileSize(appSize);
+			app.setUrl(appFile);
+		}
+		if (version != null) {
+			if (version.trim().equals("")) {
+				result.jsonFill(2, "上传信息错误", false);
+				return result;
+			}
+			app.setVersion(version.trim());
+		}
+		if (updateHint != null) {
+			if (updateHint.trim().equals("")) {
+				result.jsonFill(2, "上传信息错误", false);
+				return result;
+			}
+			app.setUpdateHint(updateHint.trim());
+		}
+		app.setUpdateTime(new Date());
+		if (appService.updateApp(app) == false) {
 			result.jsonFill(2, "保存失败", false);
 		}
 		result.jsonFill(1, null, true);

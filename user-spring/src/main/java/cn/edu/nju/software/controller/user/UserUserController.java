@@ -221,18 +221,24 @@ public class UserUserController extends BaseController {
 			user.setCreateTime(new Date());
 			user.setCity(userInfo.getCity());
 
-			String realPath = UploadFileUtil.getBaseUrl() + IMAGE_ROOT;
-			String avatar = userInfo.getUnionId() + ".jpg";
+//			String realPath = UploadFileUtil.getBaseUrl() + IMAGE_ROOT;
+//			String avatar = userInfo.getUnionId() + ".jpg";
+//			try {
+//				DownloadUtil.download(userInfo.getHeadImgUrl(), avatar, realPath);
+//			} catch (Exception e) {
+//				logger.error("微信头像下载失败!");
+//				e.printStackTrace();
+//				// 如果微信头像下载失败那么就使用默认头像
+//				user.setHeadImgUrl(UploadFileUtil.SOURCE_BASE_URL + IMAGE_ROOT + default_avatar);
+//			}
+//			user.setHeadImgUrl(UploadFileUtil.SOURCE_BASE_URL + IMAGE_ROOT + avatar);
 
-			try {
-				DownloadUtil.download(userInfo.getHeadImgUrl(), avatar, realPath);
-			} catch (Exception e) {
-				logger.error("微信头像下载失败!");
-				e.printStackTrace();
-				// 如果微信头像下载失败那么就使用默认头像
-				user.setHeadImgUrl(UploadFileUtil.SOURCE_BASE_URL + IMAGE_ROOT + default_avatar);
+			//将微信上的头像转存至oss上
+			String imgUrl = OSSUtil.urlToOss(userInfo.getHeadImgUrl());
+			if (imgUrl == null){
+				imgUrl = UploadFileUtil.SOURCE_BASE_URL + IMAGE_ROOT + default_avatar;
 			}
-			user.setHeadImgUrl(UploadFileUtil.SOURCE_BASE_URL + IMAGE_ROOT + avatar);
+			user.setHeadImgUrl(imgUrl);
 			Util.setNewAccessToken(user);// 设置token
 			long currentTime = System.currentTimeMillis();
 			currentTime += 1000 * 60 * 60 * 24 * 30;// 设置为30天后失效
@@ -463,6 +469,20 @@ public class UserUserController extends BaseController {
 	@ResponseBody
 	public String testError() {
 		return UploadFileUtil.SOURCE_BASE_URL;
+	}
+
+	@RequestMapping(value = "/testGetAudioLength", method = { RequestMethod.GET, RequestMethod.POST })
+	@ResponseBody
+	public String testGetAudioLength() {
+		return AudioUtil.getAudioLengthFromUrl("http://www.warmtale.com/source/works/2727/lj4wJFXe52rQcBGF.mp3");
+	}
+
+	@RequestMapping(value = "/testOss", method = { RequestMethod.GET, RequestMethod.POST })
+	@ResponseBody
+	public String testOss() {
+
+		String result = OSSUtil.urlToOss("http://www.warmtale.com/source/cover/GLr5uNpdBkUDetcX.jpg");
+		return result;
 	}
 
 	@RequestMapping(value = "/test", method = { RequestMethod.GET, RequestMethod.POST })

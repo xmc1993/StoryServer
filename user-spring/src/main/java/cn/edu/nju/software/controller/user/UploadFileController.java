@@ -6,20 +6,15 @@ import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.service.WorksService;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
-import cn.edu.nju.software.util.JedisUtil;
-import cn.edu.nju.software.util.ObjectAndByte;
-import cn.edu.nju.software.util.TokenConfig;
-import cn.edu.nju.software.util.UploadFileUtil;
+import cn.edu.nju.software.util.*;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import redis.clients.jedis.Jedis;
@@ -95,7 +90,9 @@ public class UploadFileController extends BaseController {
             return responseData;
         }
 
-        String url = UploadFileUtil.SOURCE_BASE_URL + HEAD_ROOT + fileName;
+
+        String url = OSSUtil.localPathToOss(realPath + fileName);
+//        String url = UploadFileUtil.SOURCE_BASE_URL + HEAD_ROOT + fileName;
         User userInDB = userService.getUserByMobileOrId(String.valueOf(user.getId()));
         userInDB.setUpdateTime(new Date());
         String oldHeadImgUrl = userInDB.getHeadImgUrl();
@@ -111,40 +108,10 @@ public class UploadFileController extends BaseController {
 
         //删除旧的头像
         //如果是默认头像就不要删掉
-        if (oldHeadImgUrl != "http://www.warmtale.com/source/head/default_avatar.jpg" || oldHeadImgUrl.equals("http://www.warmtale.com/source/head/default_avatar.jpg")) {
-            UploadFileUtil.deleteFileByUrl(oldHeadImgUrl);
-        }
-        //更新Session中的用户信息
-        String AccessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
-        Jedis jedis = JedisUtil.getJedis();
-        jedis.set(AccessToken.getBytes(), ObjectAndByte.toByteArray(userInDB));
-        jedis.close();
-        responseData.jsonFill(1, null, "success");
-        return responseData;
-    }
-
-    @ApiOperation(value = "上传头像v3", notes = "上传头像")
-    @RequestMapping(value = "/v3/updateHeadImg", method = {RequestMethod.POST})
-    @ResponseBody
-    public ResponseData uploadFileV3(@ApiParam("头像url") @RequestParam(value = "url") String url,
-                                     HttpServletRequest request, HttpServletResponse response) throws Exception {
-        ResponseData responseData = new ResponseData();
-        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
-        if (user == null) {
-            responseData.jsonFill(2, "用户尚未登录。", false);
-            return responseData;
-        }
-
-        User userInDB = userService.getUserByMobileOrId(String.valueOf(user.getId()));
-        userInDB.setUpdateTime(new Date());
-        userInDB.setHeadImgUrl(url);
-        User result = userService.addOrUpdateUser(userInDB);
-        if (result == null) {
-            responseData.jsonFill(2, "更新失败", null);
-            return responseData;
-        }
-        //更新work数据库表中的HeadImgUrl字段
-        worksService.updateHeadImg(user.getId(), url);
+        //转存至oss先去除删除逻辑
+//        if (oldHeadImgUrl != "http://www.warmtale.com/source/head/default_avatar.jpg" || oldHeadImgUrl.equals("http://www.warmtale.com/source/head/default_avatar.jpg")) {
+//            UploadFileUtil.deleteFileByUrl(oldHeadImgUrl);
+//        }
         //更新Session中的用户信息
         String AccessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
         Jedis jedis = JedisUtil.getJedis();

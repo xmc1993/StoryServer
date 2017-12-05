@@ -1,23 +1,20 @@
 package cn.edu.nju.software.util;
 
-import it.sauronsoftware.jave.Encoder;
-import it.sauronsoftware.jave.EncoderException;
-import it.sauronsoftware.jave.MultimediaInfo;
+import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.mp3.MP3AudioHeader;
+import org.jaudiotagger.audio.mp3.MP3File;
 
 import java.io.File;
 
 public class AudioUtil {
     /**
-     * 获得一个音频文件的长度
-     * @param file
+     * 格式化语音时长
+     * @param path
      * @return
      */
-    public static String getAudioLength(File file) {
-        Encoder encoder = new Encoder();
-        MultimediaInfo multimediaInfo;
+    public static String getAudioLength(String path) {
         try {
-            multimediaInfo = encoder.getInfo(file);
-            long length = multimediaInfo.getDuration() / 1000;
+            long length = getDuration(path);
             int hours = (int) (length / 3600);
             int minutes = (int) ((length % 3600) / 60);
             int seconds = (int) (length % 60);
@@ -29,7 +26,7 @@ public class AudioUtil {
             stringBuilder.append(seconds == 0 ? "0" : String.valueOf(seconds));
             String timeInfo = stringBuilder.toString();
             return timeInfo;
-        } catch (EncoderException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -45,12 +42,37 @@ public class AudioUtil {
         if (tempFilePath == null){
             return null;
         }
-        File tempAudioFile = new File(url);
-        String audioLength = getAudioLength(tempAudioFile);
+        String audioLength = getAudioLength(tempFilePath);
         //删除临时文件
-        if (tempAudioFile != null){
-            tempAudioFile.delete();
+        try {
+            File tempAudioFile = new File(tempFilePath);
+            if (tempAudioFile != null) {
+                tempAudioFile.delete();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return audioLength;
     }
+
+    /**
+     * 获得一个本地语音文件的时长
+     * @param position
+     * @return
+     */
+    public static int getDuration(String position) {
+        int length = 0;
+        try {
+            MP3File mp3File = (MP3File) AudioFileIO.read(new File(position));
+            MP3AudioHeader audioHeader = (MP3AudioHeader) mp3File.getAudioHeader();
+            // 单位为秒
+            length = audioHeader.getTrackLength();
+
+            return length;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return length;
+    }
+
 }

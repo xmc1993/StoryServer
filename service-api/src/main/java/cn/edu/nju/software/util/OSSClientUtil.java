@@ -6,16 +6,17 @@ import com.aliyun.oss.model.PutObjectResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Date;
 import java.util.Random;
 
 public class OSSClientUtil {
     private static final Logger log = LoggerFactory.getLogger(OSSClientUtil.class);
+    private static final String WARM_TALE_ENDPOINT = "http://backend-bucket.warmtale.com/";
     // endpoint
     private String endpoint = "oss-cn-beijing.aliyuncs.com";
     // accessKey
@@ -42,33 +43,18 @@ public class OSSClientUtil {
     /**
      * 上传图片
      *
-     * @param url
+     * @param filePath
      */
-    public void uploadImg2Oss(String url) {
-        File fileOnServer = new File(url);
+    public String uploadFile2Oss(String filePath) {
+        File fileOnServer = new File(filePath);
         FileInputStream fin;
         try {
             fin = new FileInputStream(fileOnServer);
-            String[] split = url.split("/");
+            String[] split = filePath.split("/");
             this.uploadFile2OSS(fin, split[split.length - 1]);
+            return WARM_TALE_ENDPOINT + filedDir + split[split.length - 1];
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
-    }
-
-    public String uploadImg2Oss(MultipartFile file) {
-        if (file.getSize() > 1024 * 1024) {
-            return null;
-        }
-        String originalFilename = file.getOriginalFilename();
-        String substring = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
-        Random random = new Random();
-        String name = random.nextInt(10000) + System.currentTimeMillis() + substring;
-        try {
-            InputStream inputStream = file.getInputStream();
-            this.uploadFile2OSS(inputStream, name);
-            return name;
-        } catch (Exception e) {
             return null;
         }
     }
@@ -140,7 +126,7 @@ public class OSSClientUtil {
             objectMetadata.setContentLength(instream.available());
             objectMetadata.setCacheControl("no-cache");
             objectMetadata.setHeader("Pragma", "no-cache");
-            objectMetadata.setContentType(getContentType(fileName.substring(fileName.lastIndexOf("."))));
+            objectMetadata.setContentType(getContentTypeByFileName(fileName));
             objectMetadata.setContentDisposition("inline;filename=" + fileName);
             //上传文件
             PutObjectResult putResult = ossClient.putObject(bucketName, filedDir + fileName, instream, objectMetadata);
@@ -160,12 +146,26 @@ public class OSSClientUtil {
     }
 
     /**
+     * 根据文件名获得contentType
+     *
+     * @param fileName
+     * @return
+     */
+    public static String getContentTypeByFileName(String fileName) {
+        String type = URLConnection.guessContentTypeFromName(fileName);
+        if (type == null) {
+            return getContentTypeByExtension(fileName.substring(fileName.lastIndexOf(".")));
+        }
+        return type;
+    }
+
+    /**
      * Description: 判断OSS服务文件上传时文件的contentType
      *
      * @param FilenameExtension 文件后缀
      * @return String
      */
-    public static String getContentType(String FilenameExtension) {
+    public static String getContentTypeByExtension(String FilenameExtension) {
         if (FilenameExtension.equalsIgnoreCase(".bmp")) {
             return "image/bmp";
         }
@@ -196,6 +196,9 @@ public class OSSClientUtil {
         }
         if (FilenameExtension.equalsIgnoreCase(".xml")) {
             return "text/xml";
+        }
+        if (FilenameExtension.equalsIgnoreCase(".mp3")) {
+            return "audio/mpeg";
         }
         return "image/jpeg";
     }

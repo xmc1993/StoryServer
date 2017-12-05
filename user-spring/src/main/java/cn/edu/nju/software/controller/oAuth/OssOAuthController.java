@@ -4,12 +4,10 @@ import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.OssService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +25,6 @@ public class OssOAuthController {
     @RequestMapping(value = "/getOssSignature", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<Map<String, String>> getJsSdkSignature(
-            @ApiParam("需要生成签名的网页URL,由前端生成") @RequestParam("url") String url,
             HttpServletRequest request, HttpServletResponse response
     ) throws Exception {
         ResponseData<Map<String, String>> responseData = new ResponseData();

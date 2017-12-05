@@ -50,7 +50,7 @@ public class ManageDiscoveryController {
         if(zipFile.isEmpty()||pictureFile.isEmpty()){
             result.jsonFill(2,"请上传文件",false);
         }
-        /*if(zipFile.getContentType()!="application/x-zip-compressed") {
+        /*if(zipFile.getContentTypeByExtension()!="application/x-zip-compressed") {
             result.jsonFill(2,"错误的压缩格式",false);
             return result;
         }*/
@@ -91,7 +91,7 @@ public class ManageDiscoveryController {
         discovery.setPictureUrl(pictureUrl);
         }
         if(!zipFile.isEmpty()) {
-            /*if(zipFile.getContentType()!="application/x-zip-compressed") {
+            /*if(zipFile.getContentTypeByExtension()!="application/x-zip-compressed") {
                 result.jsonFill(2,"错误的压缩格式",false);
                 return result;
             }*/
