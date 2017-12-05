@@ -108,8 +108,6 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
             }
         }
 
-        //刷新下阅读天数
-        recordStatisticService.saveRecord(user.getId());
         // 最高连续阅读天数
         int maxDays = recordStatisticService.getHistoryMaxCount(user.getId());
 

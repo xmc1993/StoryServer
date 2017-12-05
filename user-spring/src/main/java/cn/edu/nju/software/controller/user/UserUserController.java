@@ -5,6 +5,7 @@ import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.enums.GrantType;
 import cn.edu.nju.software.service.BadgeService;
 import cn.edu.nju.software.service.user.AppUserService;
+import cn.edu.nju.software.service.user.LoginStatusStatisticsService;
 import cn.edu.nju.software.service.user.UserWeChatLoginService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.*;
@@ -45,6 +46,8 @@ public class UserUserController extends BaseController {
 	private Business business;
 	@Autowired
 	private BadgeService badgeService;
+	@Autowired
+	private LoginStatusStatisticsService loginStatusStatisticsService;
 
 	@ApiOperation(value = "获取用户信息", notes = "获取用户信息")
 	@RequestMapping(value = "/getUserBaseInfo", method = { RequestMethod.GET })
@@ -77,6 +80,12 @@ public class UserUserController extends BaseController {
 			jedis = JedisUtil.getJedis();
 			jedis.expire(accessToken.getBytes(), 60 * 60 * 24 * 30);
 			responseData.jsonFill(1, null, true);
+
+			//刷新成功后记录登录信息
+			//loginStatusStatisticsService.saveLoginStatusStatistics(user.getId());
+			// 用户连续登陆天数的处理
+			userService.addContinusLandDay(user.getId());
+
 		} catch (Exception e) {
 			responseData.jsonFill(2, "失败", null);
 		} finally {

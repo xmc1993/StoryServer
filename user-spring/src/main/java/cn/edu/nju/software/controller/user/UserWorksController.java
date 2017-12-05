@@ -399,6 +399,14 @@ public class UserWorksController extends BaseController {
             messageFeedService.feedFollowers(feed, user.getId(), true);
         }
 
+        /**
+         * 刷新下阅读记录，须在badgeCheckService.judgeAddBadgesWhenPublish(user, works);这句代码之前更新，
+         * 因为judgeAddBadgesWhenPublish方法中需要使用更新后的录制记录中的数据
+         */
+        if (res!=null){
+            recordStatisticService.saveRecord(user.getId());
+        }
+
         WorksVo worksVo = new WorksVo();
         if (res != null) {
             List<Badge> badges=null;
@@ -476,6 +484,14 @@ public class UserWorksController extends BaseController {
             messageFeedService.feedFollowers(feed, user.getId(), true);
         }
 
+        /**
+         * 刷新下阅读记录，须在badgeCheckService.judgeAddBadgesWhenPublish(user, works);这句代码之前更新，
+         * 因为judgeAddBadgesWhenPublish方法中需要使用更新后的录制记录中的数据
+         */
+        if (res!=null){
+            recordStatisticService.saveRecord(user.getId());
+        }
+
         WorksVo worksVo = new WorksVo();
         if (res != null) {
             List<Badge> badges = badgeCheckService.judgeAddBadgesWhenPublish(user, works);
@@ -486,9 +502,9 @@ public class UserWorksController extends BaseController {
             responseData.jsonFill(2, "发布失败", null);
         }
         return responseData;
-
     }
 
+/*  暂时不用
     @ApiOperation(value = "重新发布作品v3", notes = "需登录")
     @RequestMapping(value = "/v3/rePublishWorks", method = {RequestMethod.POST})
     @ResponseBody
@@ -570,7 +586,7 @@ public class UserWorksController extends BaseController {
             responseData.jsonFill(2, "发布失败", null);
         }
         return responseData;
-    }
+    }*/
 
     @ApiOperation(value = "收听作品", notes = "")
     @RequestMapping(value = "/listenWorks", method = {RequestMethod.POST})
