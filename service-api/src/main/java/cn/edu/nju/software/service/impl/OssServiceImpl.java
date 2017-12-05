@@ -27,9 +27,9 @@ public class OssServiceImpl implements OssService {
     public Map<String, String> getToken() {
         try {
             String dir = "backend/";
-            long gapTime = 1420070400;
+            long gapTime = 8;
             long expireEndTime = System.currentTimeMillis();
-            Date expiration = new Date(expireEndTime + 1420070400);
+            Date expiration = new Date(expireEndTime + 8*60*60*1000);
             //表单限制
             PolicyConditions policyConditions = new PolicyConditions();
             policyConditions.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, 500000000);
