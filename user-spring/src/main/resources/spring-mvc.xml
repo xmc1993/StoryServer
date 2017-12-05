@@ -176,7 +176,7 @@
 
             <mvc:mapping path="/user/addOpinionFeedback"/>
 
-            <mvc:mapping path="/user/continuousLoginPrompt/selectContinuousLoginPrompt"/>
+            <mvc:mapping path="/user/continuousLoginPrompt/selectPrompt"/>
 
             <!-- 不需要拦截的uri -->
             <!-- <mvc:exclude-mapping path="/user/getLandingPage"/> <mvc:exclude-mapping
@@ -203,8 +203,7 @@
             <mvc:exclude-mapping path="/manage/getLastApp"/>
 
             <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
-            <bean
-                    class="cn.edu.nju.software.filter.AdminAccessTokenValidationInterceptor"/>
+            <bean class="cn.edu.nju.software.filter.AdminAccessTokenValidationInterceptor"/>
         </mvc:interceptor>
 
         <mvc:interceptor>

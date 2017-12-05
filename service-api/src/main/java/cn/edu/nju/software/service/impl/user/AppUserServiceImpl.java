@@ -126,26 +126,30 @@ public class AppUserServiceImpl implements AppUserService {
      * @param id
      * @return 连续登陆次数
      */
-    public TwoTuple<Integer, Boolean> addContinusLandDay(Integer id) {
+    @Override
+    public TwoTuple<Integer, Boolean> addContinuousLandDay(Integer id) {
     	Jedis jedis = JedisUtil.getJedis();
     	String todayLoginKey = "login:" + DateUtil.dateToString(new Date(), "yyyyMMdd");
-		//创建今日登陆记录
+		//今天没有任何用户登录过，则创建今日登陆记录的key（todayLoginKey）
 		if(!jedis.exists(todayLoginKey)){
-			jedis.set(todayLoginKey, "");
+			jedis.set(todayLoginKey, "");//他的值不重要，只要将他存入redis并限制他的死亡时间。
 			jedis.expireAt(todayLoginKey, MyDateUtil.dateToUnix(0));
 		}
+		//根据用户id查看今天用户是否登录过
 		Boolean hasLogin = jedis.getbit(todayLoginKey, id);
 		
-		//今天未登陆过
+		//如果该用户今天未登陆过则设置他的登录记录：String continusDays = jedis.get("logincontinus:"+id);
 		if(!hasLogin){
 			jedis.setbit(todayLoginKey, id.longValue(), true);
 			String continusDays = jedis.get("logincontinus:"+id);
-			//用户没有连续登陆记录
+			//用户没有连续登陆记录或者昨天一整天都没登录，则将连续登录记录重置为1
 			if(continusDays == null){
 				jedis.set("logincontinus:"+id,"1");				
-			}else{
+			}else{//连续登录记录加一
 				jedis.incr("logincontinus:"+id);
 			}
+			//设置连续登录记录在明天23：59：59清除。所以如果明天一整天都没登录（刷新）过logincontinus
+            //则连续登录记录清空。下次登录时检验continusDays == null，然后将连续登录天数重置为1
 			jedis.expireAt("logincontinus:"+id, MyDateUtil.dateToUnix(1));		
 		}
 		jedis.close();

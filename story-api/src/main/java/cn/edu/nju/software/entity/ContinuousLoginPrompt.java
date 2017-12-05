@@ -1,17 +1,13 @@
 package cn.edu.nju.software.entity;
 
-import java.util.Date;
-
 public class ContinuousLoginPrompt {
     private Integer id;
 
-    private Integer userId;
-
     private String prompt;
 
-    private Date promptStartTime;
+    private Integer promptStartTime;
 
-    private Date promptEndTime;
+    private Integer promptEndTime;
 
     public Integer getId() {
         return id;
@@ -19,14 +15,6 @@ public class ContinuousLoginPrompt {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
     }
 
     public String getPrompt() {
@@ -37,19 +25,19 @@ public class ContinuousLoginPrompt {
         this.prompt = prompt == null ? null : prompt.trim();
     }
 
-    public Date getPromptStartTime() {
+    public Integer getPromptStartTime() {
         return promptStartTime;
     }
 
-    public void setPromptStartTime(Date promptStartTime) {
+    public void setPromptStartTime(Integer promptStartTime) {
         this.promptStartTime = promptStartTime;
     }
 
-    public Date getPromptEndTime() {
+    public Integer getPromptEndTime() {
         return promptEndTime;
     }
 
-    public void setPromptEndTime(Date promptEndTime) {
+    public void setPromptEndTime(Integer promptEndTime) {
         this.promptEndTime = promptEndTime;
     }
 }

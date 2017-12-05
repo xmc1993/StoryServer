@@ -1,7 +1,6 @@
 package cn.edu.nju.software.entity;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ContinuousLoginPromptExample {
@@ -165,66 +164,6 @@ public class ContinuousLoginPromptExample {
             return (Criteria) this;
         }
 
-        public Criteria andUserIdIsNull() {
-            addCriterion("user_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdIsNotNull() {
-            addCriterion("user_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdEqualTo(Integer value) {
-            addCriterion("user_id =", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdNotEqualTo(Integer value) {
-            addCriterion("user_id <>", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdGreaterThan(Integer value) {
-            addCriterion("user_id >", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("user_id >=", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdLessThan(Integer value) {
-            addCriterion("user_id <", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdLessThanOrEqualTo(Integer value) {
-            addCriterion("user_id <=", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdIn(List<Integer> values) {
-            addCriterion("user_id in", values, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdNotIn(List<Integer> values) {
-            addCriterion("user_id not in", values, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdBetween(Integer value1, Integer value2) {
-            addCriterion("user_id between", value1, value2, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("user_id not between", value1, value2, "userId");
-            return (Criteria) this;
-        }
-
         public Criteria andPromptIsNull() {
             addCriterion("prompt is null");
             return (Criteria) this;
@@ -305,52 +244,52 @@ public class ContinuousLoginPromptExample {
             return (Criteria) this;
         }
 
-        public Criteria andPromptStartTimeEqualTo(Date value) {
+        public Criteria andPromptStartTimeEqualTo(Integer value) {
             addCriterion("prompt_start_time =", value, "promptStartTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptStartTimeNotEqualTo(Date value) {
+        public Criteria andPromptStartTimeNotEqualTo(Integer value) {
             addCriterion("prompt_start_time <>", value, "promptStartTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptStartTimeGreaterThan(Date value) {
+        public Criteria andPromptStartTimeGreaterThan(Integer value) {
             addCriterion("prompt_start_time >", value, "promptStartTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptStartTimeGreaterThanOrEqualTo(Date value) {
+        public Criteria andPromptStartTimeGreaterThanOrEqualTo(Integer value) {
             addCriterion("prompt_start_time >=", value, "promptStartTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptStartTimeLessThan(Date value) {
+        public Criteria andPromptStartTimeLessThan(Integer value) {
             addCriterion("prompt_start_time <", value, "promptStartTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptStartTimeLessThanOrEqualTo(Date value) {
+        public Criteria andPromptStartTimeLessThanOrEqualTo(Integer value) {
             addCriterion("prompt_start_time <=", value, "promptStartTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptStartTimeIn(List<Date> values) {
+        public Criteria andPromptStartTimeIn(List<Integer> values) {
             addCriterion("prompt_start_time in", values, "promptStartTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptStartTimeNotIn(List<Date> values) {
+        public Criteria andPromptStartTimeNotIn(List<Integer> values) {
             addCriterion("prompt_start_time not in", values, "promptStartTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptStartTimeBetween(Date value1, Date value2) {
+        public Criteria andPromptStartTimeBetween(Integer value1, Integer value2) {
             addCriterion("prompt_start_time between", value1, value2, "promptStartTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptStartTimeNotBetween(Date value1, Date value2) {
+        public Criteria andPromptStartTimeNotBetween(Integer value1, Integer value2) {
             addCriterion("prompt_start_time not between", value1, value2, "promptStartTime");
             return (Criteria) this;
         }
@@ -365,52 +304,52 @@ public class ContinuousLoginPromptExample {
             return (Criteria) this;
         }
 
-        public Criteria andPromptEndTimeEqualTo(Date value) {
+        public Criteria andPromptEndTimeEqualTo(Integer value) {
             addCriterion("prompt_end_time =", value, "promptEndTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptEndTimeNotEqualTo(Date value) {
+        public Criteria andPromptEndTimeNotEqualTo(Integer value) {
             addCriterion("prompt_end_time <>", value, "promptEndTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptEndTimeGreaterThan(Date value) {
+        public Criteria andPromptEndTimeGreaterThan(Integer value) {
             addCriterion("prompt_end_time >", value, "promptEndTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptEndTimeGreaterThanOrEqualTo(Date value) {
+        public Criteria andPromptEndTimeGreaterThanOrEqualTo(Integer value) {
             addCriterion("prompt_end_time >=", value, "promptEndTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptEndTimeLessThan(Date value) {
+        public Criteria andPromptEndTimeLessThan(Integer value) {
             addCriterion("prompt_end_time <", value, "promptEndTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptEndTimeLessThanOrEqualTo(Date value) {
+        public Criteria andPromptEndTimeLessThanOrEqualTo(Integer value) {
             addCriterion("prompt_end_time <=", value, "promptEndTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptEndTimeIn(List<Date> values) {
+        public Criteria andPromptEndTimeIn(List<Integer> values) {
             addCriterion("prompt_end_time in", values, "promptEndTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptEndTimeNotIn(List<Date> values) {
+        public Criteria andPromptEndTimeNotIn(List<Integer> values) {
             addCriterion("prompt_end_time not in", values, "promptEndTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptEndTimeBetween(Date value1, Date value2) {
+        public Criteria andPromptEndTimeBetween(Integer value1, Integer value2) {
             addCriterion("prompt_end_time between", value1, value2, "promptEndTime");
             return (Criteria) this;
         }
 
-        public Criteria andPromptEndTimeNotBetween(Date value1, Date value2) {
+        public Criteria andPromptEndTimeNotBetween(Integer value1, Integer value2) {
             addCriterion("prompt_end_time not between", value1, value2, "promptEndTime");
             return (Criteria) this;
         }

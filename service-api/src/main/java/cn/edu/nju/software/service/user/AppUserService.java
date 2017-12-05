@@ -35,7 +35,7 @@ public interface AppUserService {
 
     User getUserByDeviceId(String deviceId);
     
-    TwoTuple<Integer,Boolean> addContinusLandDay(Integer id);
+    TwoTuple<Integer,Boolean> addContinuousLandDay(Integer id);
     
     boolean isLoginTodayFirst(Integer userId);
 

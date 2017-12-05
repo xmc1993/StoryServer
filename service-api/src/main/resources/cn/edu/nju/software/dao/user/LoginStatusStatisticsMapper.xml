@@ -230,6 +230,6 @@
     select
     <include refid="Base_Column_List" />
     from login_status_statistics
-    where id = #{userId,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=INTEGER}
   </select>
 </mapper>

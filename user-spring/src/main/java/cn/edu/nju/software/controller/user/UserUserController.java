@@ -82,9 +82,7 @@ public class UserUserController extends BaseController {
 			responseData.jsonFill(1, null, true);
 
 			//刷新成功后记录登录信息
-			//loginStatusStatisticsService.saveLoginStatusStatistics(user.getId());
-			// 用户连续登陆天数的处理
-			userService.addContinusLandDay(user.getId());
+			loginStatusStatisticsService.saveLoginStatusStatistics(user.getId());
 
 		} catch (Exception e) {
 			responseData.jsonFill(2, "失败", null);
@@ -283,8 +281,11 @@ public class UserUserController extends BaseController {
 			}
 		}
 
+		//统计连续登录信息
+		loginStatusStatisticsService.saveLoginStatusStatistics(user.getId());
+
 		// 对用户连续登陆天数处理
-		TwoTuple<Integer, Boolean> tt = userService.addContinusLandDay(user.getId());
+		TwoTuple<Integer, Boolean> tt = userService.addContinuousLandDay(user.getId());
 		int[] prizeDay = { 1, 3, 7, 15, 21, 30, 50, 100, 200, 365, 500, 1000 };
 		Badge badge = null;
 		// 今天的第一次登陆，获取badge对象
@@ -351,9 +352,11 @@ public class UserUserController extends BaseController {
 					}
 				}
 
+				//统计连续登录信息
+				loginStatusStatisticsService.saveLoginStatusStatistics(user.getId());
 
 				// 对用户连续登陆天数处理
-				TwoTuple<Integer, Boolean> tt = userService.addContinusLandDay(user.getId());
+				TwoTuple<Integer, Boolean> tt = userService.addContinuousLandDay(user.getId());
 				int[] prizeDay = { 1, 3, 7, 15, 21, 30, 50, 100, 200, 365, 500, 1000 };
 				Badge badge = null;
 				// 今天的第一次登陆，获取badge对象
@@ -447,9 +450,13 @@ public class UserUserController extends BaseController {
 			}
 		}
 
+		//统计连续登录信息
+		loginStatusStatisticsService.saveLoginStatusStatistics(user.getId());
+
+		userService.addContinuousLandDay(user.getId());
 
 		// 对用户连续登陆天数处理
-		TwoTuple<Integer, Boolean> tt = userService.addContinusLandDay(user.getId());
+		TwoTuple<Integer, Boolean> tt = userService.addContinuousLandDay(user.getId());
 		int[] prizeDay = { 1, 3, 7, 15, 21, 30, 50, 100, 200, 365, 500, 1000 };
 		Badge badge = null;
 		// 今天的第一次登陆，获取badge对象

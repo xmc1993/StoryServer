@@ -37,7 +37,7 @@ public class LoginStatusStatisticsServiceImpl implements LoginStatusStatisticsSe
             int continuousLoginDays=loginStatusStatistics.getContinuousLoginDays();
             // 只有相差一天以上的记录才需要更新
             if (days == 1) {
-                loginStatusStatistics.setContinuousLoginDays(++continuousLoginDays);
+                loginStatusStatistics.setContinuousLoginDays(continuousLoginDays+1);
             } else if (days >=2) {// 相差2天以上把连续登录天数改为1
                 loginStatusStatistics.setContinuousLoginDays(1);
             }
