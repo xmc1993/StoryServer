@@ -26,15 +26,14 @@ public class OssServiceImpl implements OssService {
     @Override
     public Map<String, String> getToken() {
         try {
-            String dir = "";
-            long expireTime = 7 * 60;//7分钟
-            long expireEndTime = System.currentTimeMillis() + expireTime * 1000;
+            String dir = "backend/";
+            long expireEndTime = System.currentTimeMillis();
             Date expiration = new Date(expireEndTime);
-
+            //表单限制
             PolicyConditions policyConditions = new PolicyConditions();
             policyConditions.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, 500000000);
             policyConditions.addConditionItem(MatchMode.StartWith, PolicyConditions.COND_KEY, dir);
-
+            //生成表单签名
             String postPolicy = client.generatePostPolicy(expiration, policyConditions);
             byte[] binaryData = postPolicy.getBytes("utf-8");
             String encodedPolicy = BinaryUtil.toBase64String(binaryData);
@@ -45,6 +44,7 @@ public class OssServiceImpl implements OssService {
             respMap.put("policy", encodedPolicy);
             respMap.put("signature", postSignature);
             respMap.put("host", host);
+            respMap.put("dir", dir);
             respMap.put("expire", String.valueOf(expireEndTime / 1000));
             return respMap;
         } catch (Exception e) {
