@@ -2,6 +2,7 @@ package cn.edu.nju.software.service.impl;
 
 import java.util.Date;
 
+import cn.edu.nju.software.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,7 @@ public class UsageStatisticServiceImpl implements UsageStatisticService {
 		} else {
 			// 否则更新记录
 			Date now = new Date();
-			int diff = differentDaysByMillisecond(now, statistic.getLastUsageTime());
+			int diff = DateUtil.differentDays(now, statistic.getLastUsageTime());
 			// 只有不是同一天的记录才需要更新
 			if (diff > 0) {
 				if (statistic.getCurCount() > statistic.getHistoryMaxCount()) {
@@ -56,7 +57,7 @@ public class UsageStatisticServiceImpl implements UsageStatisticService {
 		}
 		// 否则更新记录
 		Date now = new Date();
-		int diff = differentDaysByMillisecond(now, statistic.getLastUsageTime());
+		int diff = DateUtil.differentDays(now, statistic.getLastUsageTime());
 		// 只有不是同一天的记录才需要更新
 		if (diff > 0) {
 			if (statistic.getCurCount() > statistic.getHistoryMaxCount()) {
@@ -79,11 +80,6 @@ public class UsageStatisticServiceImpl implements UsageStatisticService {
 			return statistic.getHistoryMaxCount() > statistic.getCurCount() ? statistic.getHistoryMaxCount()
 					: statistic.getCurCount();
 		}
-	}
-
-	private static int differentDaysByMillisecond(Date date1, Date date2) {
-		int days = (int) ((date2.getTime() - date1.getTime()) / (1000 * 3600 * 24));
-		return days;
 	}
 
 }

@@ -133,7 +133,7 @@ public class AppUserServiceImpl implements AppUserService {
 		if(!jedis.exists(todayLoginKey)){
 			jedis.set(todayLoginKey, "");
 			jedis.expireAt(todayLoginKey, MyDateUtil.dateToUnix(0));
-		}			
+		}
 		Boolean hasLogin = jedis.getbit(todayLoginKey, id);
 		
 		//今天未登陆过

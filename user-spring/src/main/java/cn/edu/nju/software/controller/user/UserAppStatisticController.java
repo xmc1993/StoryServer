@@ -31,7 +31,6 @@ public class UserAppStatisticController extends BaseController{
 	@Autowired
     private UsageStatisticService usageStatisticService;
 
-
     @ApiOperation(value = "用户每次打开app时调用", notes = "")
     @RequestMapping(value = "/newUsage", method = {RequestMethod.POST})
     @ResponseBody
