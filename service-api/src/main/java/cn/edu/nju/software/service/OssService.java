@@ -6,4 +6,6 @@ import java.util.Map;
 public interface OssService {
 
     Map<String, String> getToken();
+
+    Map<String, String> getAppToken();
 }

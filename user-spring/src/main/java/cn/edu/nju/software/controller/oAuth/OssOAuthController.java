@@ -33,4 +33,16 @@ public class OssOAuthController {
         return responseData;
     }
 
+    @ApiOperation(value = "获取oss上传的signature")
+    @RequestMapping(value = "/getAppOssToken", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Map<String, String>> getAppOssToken(
+            HttpServletRequest request, HttpServletResponse response
+    ) throws Exception {
+        ResponseData<Map<String, String>> responseData = new ResponseData();
+        Map<String, String> signature = ossService.getAppToken();
+        responseData.jsonFill(1, null, signature);
+        return responseData;
+    }
+
 }

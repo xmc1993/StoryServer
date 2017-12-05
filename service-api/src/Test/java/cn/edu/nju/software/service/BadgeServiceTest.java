@@ -32,7 +32,8 @@ public class BadgeServiceTest {
 
     @Test
     public void testOss(){
-
+        Map<String, String> token = ossService.getAppToken();
+        System.out.println("");
     }
 
 }
