@@ -27,7 +27,7 @@ public class OssServiceImpl implements OssService {
     public Map<String, String> getToken() {
         try {
             String dir = "";
-            long expireTime = 50 * 365 * 24 * 60 * 60;
+            long expireTime = 7 * 60;//7分钟
             long expireEndTime = System.currentTimeMillis() + expireTime * 1000;
             Date expiration = new Date(expireEndTime);
 
@@ -40,7 +40,7 @@ public class OssServiceImpl implements OssService {
             String encodedPolicy = BinaryUtil.toBase64String(binaryData);
             String postSignature = client.calculatePostSignature(postPolicy);
 
-            Map<String, String> respMap = new LinkedHashMap<String, String>();
+            Map<String, String> respMap = new LinkedHashMap<>();
             respMap.put("accessid", accessId);
             respMap.put("policy", encodedPolicy);
             respMap.put("signature", postSignature);
