@@ -29,7 +29,8 @@ public class OssServiceImpl implements OssService {
             String dir = "backend/";
             long gapTime = 8;
             long expireEndTime = System.currentTimeMillis();
-            Date expiration = new Date(expireEndTime - 8*60*60*1000);
+            expireEndTime -= gapTime * 3600 * 1000;
+            Date expiration = new Date(expireEndTime);
             //表单限制
             PolicyConditions policyConditions = new PolicyConditions();
             policyConditions.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, 500000000);
