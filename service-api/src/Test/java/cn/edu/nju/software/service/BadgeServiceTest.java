@@ -30,4 +30,9 @@ public class BadgeServiceTest {
         System.out.println("");
     }
 
+    @Test
+    public void testOss(){
+
+    }
+
 }
