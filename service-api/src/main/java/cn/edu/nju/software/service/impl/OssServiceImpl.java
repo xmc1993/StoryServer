@@ -132,7 +132,9 @@ public class OssServiceImpl implements OssService {
     }
 
     public Map<String, String> getAppToken() {
-        String path = Thread.currentThread().getContextClassLoader().getResource("oss/config.json").getPath();
+        String webAppReourcePath = OssServiceImpl.class.getResource("/").getPath();
+//        String path = OssServiceImpl.class.getClassLoader().getResource("oss/config.json").getPath();
+        String path = webAppReourcePath + "oss/config.json";
         String data = ReadJson(path);
         System.out.println(data);
         JSONObject jsonObj = JSONObject.fromObject(data);
@@ -146,7 +148,7 @@ public class OssServiceImpl implements OssService {
         // RoleArn 需要在 RAM 控制台上获取
         String roleArn = jsonObj.getString("RoleArn");
         long durationSeconds = jsonObj.getLong("TokenExpireTime");
-        String policyPath = Thread.currentThread().getContextClassLoader().getResource(jsonObj.getString("PolicyFile")).getPath();
+        String policyPath = webAppReourcePath + jsonObj.getString("PolicyFile");
         String policy = ReadJson(policyPath);
         // RoleSessionName 是临时Token的会话名称，自己指定用于标识你的用户，主要用于审计，或者用于区分Token颁发给谁
         // 但是注意RoleSessionName的长度和规则，不要有空格，只能有'-' '_' 字母和数字等字符
