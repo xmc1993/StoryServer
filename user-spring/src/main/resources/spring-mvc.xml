@@ -177,6 +177,7 @@
             <mvc:mapping path="/user/addOpinionFeedback"/>
 
             <mvc:mapping path="/user/continuousLoginPrompt/selectPrompt"/>
+            <mvc:mapping path="/user/judgeAddFirstShareWorksBadge"/>
 
             <!-- 不需要拦截的uri -->
             <!-- <mvc:exclude-mapping path="/user/getLandingPage"/> <mvc:exclude-mapping

@@ -6,6 +6,7 @@ import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.entity.feed.MessageType;
 import cn.edu.nju.software.enums.Visibility;
 import cn.edu.nju.software.feed.service.MessageFeedService;
+import cn.edu.nju.software.service.BadgeCheckService;
 import cn.edu.nju.software.service.FollowService;
 import cn.edu.nju.software.service.TagRelationService;
 import cn.edu.nju.software.service.UserStoryService;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +45,8 @@ public class UserOriginalStoryController extends BaseController {
     private FollowService followService;
     @Autowired
     private MessageFeedService messageFeedService;
+    @Autowired
+    private BadgeCheckService badgeCheckService;
 
     @ApiOperation(value = "获得一个用户的所有原创故事", notes = "")
     @RequestMapping(value = "/getAllUserStoryByUserIdByPage", method = {RequestMethod.GET})
@@ -80,8 +84,9 @@ public class UserOriginalStoryController extends BaseController {
             responseData.jsonFill(2, "用户尚未登录。", null);
             return responseData;
         }
+        Integer userId=user.getId();
         UserStory userStory = new UserStory();
-        userStory.setUserId(user.getId());
+        userStory.setUserId(userId);
         userStory.setCreateTime(new Date());
         userStory.setUpdateTime(new Date());
         userStory.setAuthor(user.getNickname());
@@ -95,28 +100,34 @@ public class UserOriginalStoryController extends BaseController {
             return responseData;
         }
         MsgVo msgVo = new MsgVo();
-        msgVo.setUserId(user.getId());
+        msgVo.setUserId(userId);
         msgVo.setHeadImgUrl(user.getHeadImgUrl());
         msgVo.setUserName(user.getNickname());
         Feed feed = new Feed();
         feed.setCreateTime(new Date());
         feed.setUpdateTime(new Date());
-        feed.setFid(user.getId());
+        feed.setFid(userId);
         feed.setContent(new Gson().toJson(msgVo));
         feed.setMid(result.getId());
         feed.setType(MessageType.NEW_FRIEND_STORY);
         TagRelation tagRelation = new TagRelation();
         tagRelation.setStoryId(result.getId());
-        feed.setTid(user.getId());
+        feed.setTid(userId);
         messageFeedService.feed(feed);
         if ((userStory.getVisibility() & Visibility.FOLLOWER) > 0){
-            messageFeedService.feedFollowers(feed, user.getId(), false);
+            messageFeedService.feedFollowers(feed, userId, false);
         }
         //添加原创故事的标签
         tagRelation.setTagId(100124);
         tagRelation.setCreateTime(new Date());
         tagRelation.setUpdateTime(new Date());
         tagRelationService.saveTagRelation(tagRelation);
+
+        //添加第一次添加原创故事徽章
+        Badge badge =badgeCheckService.judgeAddFirstAddOriginalStoryBadge(userId);
+        List<Badge> list=new ArrayList<>();
+        list.add(badge);
+        responseData.setBadgeList(list);
 
         responseData.jsonFill(1, null, userStory);
         return responseData;
@@ -235,6 +246,17 @@ public class UserOriginalStoryController extends BaseController {
             return responseData;
         }
         responseData.jsonFill(1, null, userStory);
+        return responseData;
+    }
+
+    @ApiOperation(value = "判断是否需要添加第一次分享原创故事徽章", notes = "分享原创故事时调用")
+    @RequestMapping(value = "/judgeAddFirstShareOriginalStoryBadge", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Badge> judgeAddFirstShareOriginalStoryBadge(HttpServletRequest request){
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        Badge badge =badgeCheckService.judgeAddFirstShareOriginalStoryBadge(user.getId());
+        ResponseData<Badge> responseData=new ResponseData<>();
+        responseData.jsonFill(1,null,badge);
         return responseData;
     }
     
