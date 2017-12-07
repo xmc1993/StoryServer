@@ -569,13 +569,21 @@ public class DateUtil {
         }
     }
 
-/*    public static Date hourToDate(Integer hour){
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, hour);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-    }*/
+    public boolean judgeBirthDay(Date birthday){
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(birthday);
+        int monthOfBirth = calendar.get(Calendar.MONTH) + 1;//从0开始
+        int dayOfBirth = calendar.get(Calendar.DATE);
+
+        calendar.setTime(new Date());
+        int monthOfNow=calendar.get(Calendar.MONTH) + 1;
+        int dayOfNow= calendar.get(Calendar.DATE);
+        if (monthOfBirth==monthOfNow&&dayOfBirth==dayOfNow){
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public static void main(String[] args) {
         long time = 1758762L;//diffDateSecond(new Date(), getDateByString("2014-01-01 12:12:12","yyyy-MM-dd HH:mm:ss"))*1000;

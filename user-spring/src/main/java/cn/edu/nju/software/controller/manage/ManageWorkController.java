@@ -143,10 +143,11 @@ public class ManageWorkController {
             works.setReviewCount(reviewCount);
         int dValue = 0;
         if (listenCount != null) {
-            works.setListenCount(listenCount);
-            //修改作品的同时，修改用户表的作品收听量
             //记录差值
             dValue = listenCount - works.getListenCount();
+
+            works.setListenCount(listenCount);
+            //修改作品的同时，修改用户表的作品收听量
         }
 
         boolean res = worksService.updateWorks(works);
@@ -154,7 +155,7 @@ public class ManageWorkController {
         if (listenCount != null && res) {
             //直接传修改量进去就可以
             boolean success = appUserService.updateListenCountByUserId(dValue, works.getUserId());
-            if (success) {
+            if (!success) {
                 responseData.jsonFill(2, "修改收听量失败", null);
                 return responseData;
             }

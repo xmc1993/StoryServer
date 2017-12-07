@@ -11,6 +11,14 @@ public interface BadgeCheckService {
 
     List<Badge> judgeAddBadgesWhenPublish(User user, Works works);
 
+    Badge judgeAddFirstShareWorksBadge(Integer userId);
+
+    Badge judgeAddFirstShareOriginalStoryBadge(Integer userId);
+
+    Badge judgeAddFirstAddOriginalStoryBadge(Integer userId);
+
+    Badge judgeAddFirstFollowBadge(Integer userId);
+
     List<Badge> judgeAddBadgeWhenListen(User user);
 
     void judgeUserAddBadgeByListen(Integer authorId);
