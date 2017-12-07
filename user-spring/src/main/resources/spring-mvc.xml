@@ -181,6 +181,11 @@
             <mvc:mapping path="/user/continuousLoginPrompt/selectPrompt"/>
             <mvc:mapping path="/user/judgeAddFirstShareWorksBadge"/>
 
+            <mvc:mapping path="/user/workTag/insertWorkTagUserDefined"/>
+            <mvc:mapping path="/user/workTag/selectTagsRecommendedAndCustomized"/>
+            <mvc:mapping path="/user/workTag/selectById"/>
+            <mvc:mapping path="/user/workTag/deleteWorkTagUserDefined"/>
+
             <!-- 不需要拦截的uri -->
             <!-- <mvc:exclude-mapping path="/user/getLandingPage"/> <mvc:exclude-mapping
                 path="/**" /> -->
