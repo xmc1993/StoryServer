@@ -201,6 +201,7 @@
 
             <!--官网获取最新app的Url不需要拦截 -->
             <mvc:exclude-mapping path="/manage/getLastApp"/>
+            <mvc:exclude-mapping path="/manage/updateWorksById"/>
 
             <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
             <bean class="cn.edu.nju.software.filter.AdminAccessTokenValidationInterceptor"/>
@@ -220,6 +221,7 @@
             <mvc:exclude-mapping path="/manage/getLastApp"/>
             <mvc:exclude-mapping path="/manage/user/saveDummy"/>
             <mvc:exclude-mapping path="/manage/user/saveUser"/>
+            <mvc:exclude-mapping path="/manage/updateWorksById"/>
 
             <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
             <bean class="cn.edu.nju.software.filter.AuthInterceptor"/>

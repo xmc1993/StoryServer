@@ -199,6 +199,7 @@ public class UserUserController extends BaseController {
 	@RequestMapping(value = "/loginByWeChat", method = { RequestMethod.POST })
 	@ResponseBody
 	public ResponseData<LoginResponseVo> loginByWeChat(@ApiParam("code 授权码") @RequestParam("code") String code,
+
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ResponseData responseData = new ResponseData();
 		WeChatOAuthVo weChatOAuthVo = weChatLoginService.getAccessToken(business.getWxAppId(), business.getWxSecret(),
@@ -309,6 +310,7 @@ public class UserUserController extends BaseController {
 	@RequestMapping(value = "/loginByShortMessage", method = { RequestMethod.POST })
 	@ResponseBody
 	public ResponseData<LoginResponseVo> loginByShortMessage(@ApiParam("用户手机号") @RequestParam("mobile") String mobile,
+			@ApiParam("deviceToken") @RequestParam(value = "deviceToken",required = false) String deviceToken,
 			@ApiParam("短信验证码") @RequestParam("verifyCode") String verifyCode, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		ResponseData responseData = new ResponseData();
@@ -316,6 +318,9 @@ public class UserUserController extends BaseController {
 		if (user == null) {
 			responseData.jsonFill(2, "用户不存在", null);
 			return responseData;
+		}
+		if (deviceToken!=null){
+
 		}
 		String code = user.getVerifyCode();
 		LoginResponseVo loginResponseVo = new LoginResponseVo();
