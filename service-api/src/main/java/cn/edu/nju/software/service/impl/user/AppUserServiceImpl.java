@@ -223,4 +223,9 @@ public class AppUserServiceImpl implements AppUserService {
         return userDao.removeWork(userId);
     }
 
+    @Override
+    public boolean updateDeviceToken(String deviceToken, int userId) {
+        return userDao.updateDevcieToken(userId,deviceToken);
+    }
+
 }

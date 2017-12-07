@@ -381,5 +381,13 @@
         and nickname like CONCAT('%', #{0} ,'%')
     </select>
 
+	<update id="updateDevcieToken">
+		update user
+		SET
+		deviceToken = #{1}
+		where
+		id=#{0}
+	</update>
+
 
 </mapper>

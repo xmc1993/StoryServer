@@ -176,6 +176,8 @@
 
             <mvc:mapping path="/user/addOpinionFeedback"/>
 
+            <mvc:mapping path="/user/gleanDeviceToken"/>
+
             <mvc:mapping path="/user/continuousLoginPrompt/selectPrompt"/>
 
             <!-- 不需要拦截的uri -->
@@ -201,7 +203,6 @@
 
             <!--官网获取最新app的Url不需要拦截 -->
             <mvc:exclude-mapping path="/manage/getLastApp"/>
-            <mvc:exclude-mapping path="/manage/updateWorksById"/>
 
             <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
             <bean class="cn.edu.nju.software.filter.AdminAccessTokenValidationInterceptor"/>
@@ -214,14 +215,10 @@
             <mvc:exclude-mapping path="/api-docs/**"/>
             <!--只有登录接口不需要Auth验证 -->
             <mvc:exclude-mapping path="/manage/auth"/>
-            <mvc:exclude-mapping path="/manage/uploadUEditorImage"/>
-            <mvc:exclude-mapping path="/manage/uploadUEditorVideo"/>
+
 
             <!--官网获取最新app的Url不需要拦截 -->
             <mvc:exclude-mapping path="/manage/getLastApp"/>
-            <mvc:exclude-mapping path="/manage/user/saveDummy"/>
-            <mvc:exclude-mapping path="/manage/user/saveUser"/>
-            <mvc:exclude-mapping path="/manage/updateWorksById"/>
 
             <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
             <bean class="cn.edu.nju.software.filter.AuthInterceptor"/>

@@ -56,4 +56,6 @@ public interface AppUserService {
     Integer getListenCount(int userId);
 
     boolean decreaseWorkCountSafely(int userId);
+
+    boolean updateDeviceToken(String deviceToken,int userId);
 }
