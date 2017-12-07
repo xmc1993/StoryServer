@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author zj
@@ -20,7 +21,8 @@ public class LoginStatusStatisticsServiceImpl implements LoginStatusStatisticsSe
 
     @Override
     public void saveLoginStatusStatistics(Integer userId) {
-        LoginStatusStatistics loginStatusStatistics=loginStatusStatisticsMapper.getLoginStatusStatisticsByUserId(userId);
+        List<LoginStatusStatistics> statisticsList=loginStatusStatisticsMapper.getLoginStatusStatisticsByUserId(userId);
+        LoginStatusStatistics loginStatusStatistics=statisticsList.get(0);
         // 如果没有登录状态的记录，则新建一条来
         if (loginStatusStatistics==null){
             loginStatusStatistics=new LoginStatusStatistics();
@@ -49,6 +51,6 @@ public class LoginStatusStatisticsServiceImpl implements LoginStatusStatisticsSe
 
     @Override
     public Integer getContinuousLoginDays(Integer userId) {
-        return loginStatusStatisticsMapper.getLoginStatusStatisticsByUserId(userId).getContinuousLoginDays();
+        return loginStatusStatisticsMapper.getLoginStatusStatisticsByUserId(userId).get(0).getContinuousLoginDays();
     }
 }

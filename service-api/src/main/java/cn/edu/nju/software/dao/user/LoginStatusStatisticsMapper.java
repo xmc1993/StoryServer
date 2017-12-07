@@ -30,5 +30,5 @@ public interface LoginStatusStatisticsMapper {
 
     int updateByPrimaryKey(LoginStatusStatistics record);
 
-    LoginStatusStatistics getLoginStatusStatisticsByUserId(Integer userId);
+    List<LoginStatusStatistics> getLoginStatusStatisticsByUserId(Integer userId);
 }
