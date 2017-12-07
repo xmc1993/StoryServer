@@ -172,13 +172,14 @@
             <mvc:mapping path="/user/v3/rePublishWorks"/>
             <mvc:mapping path="/user/v3/publishWorks"/>
             <mvc:mapping path="/user/v3/updateHeadImg"/>
-            <mvc:mapping path="/auth/getAppOssToken"/>
+            <!--<mvc:mapping path="/auth/getAppOssToken"/>-->
 
             <mvc:mapping path="/user/addOpinionFeedback"/>
 
             <mvc:mapping path="/user/gleanDeviceToken"/>
 
             <mvc:mapping path="/user/continuousLoginPrompt/selectPrompt"/>
+            <mvc:mapping path="/user/judgeAddFirstShareWorksBadge"/>
 
             <!-- 不需要拦截的uri -->
             <!-- <mvc:exclude-mapping path="/user/getLandingPage"/> <mvc:exclude-mapping

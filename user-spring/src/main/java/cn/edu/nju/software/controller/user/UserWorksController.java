@@ -231,6 +231,17 @@ public class UserWorksController extends BaseController {
         return responseData;
     }
 
+    @ApiOperation(value = "判断是否需要添加第一次分享作品徽章", notes = "分享作品时调用")
+    @RequestMapping(value = "/judgeAddFirstShareWorksBadge", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Badge> judgeAddFirstShareWorksBadge(HttpServletRequest request){
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        Badge badge =badgeCheckService.judgeAddFirstShareWorksBadge(user.getId());
+        ResponseData<Badge> responseData=new ResponseData<>();
+        responseData.jsonFill(1,null,badge);
+        return responseData;
+    }
+
     @ApiOperation(value = "根据ID获得一个分享作品（无需登录）", notes = "")
     @RequestMapping(value = "/getShareWorksById", method = {RequestMethod.GET})
     @ResponseBody

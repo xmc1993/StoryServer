@@ -1,11 +1,8 @@
 package cn.edu.nju.software.controller.user;
 
-import cn.edu.nju.software.entity.Baby;
-import cn.edu.nju.software.entity.FollowRelation;
-import cn.edu.nju.software.entity.ResponseData;
-import cn.edu.nju.software.entity.User;
-import cn.edu.nju.software.entity.UserBase;
+import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.BabyService;
+import cn.edu.nju.software.service.BadgeCheckService;
 import cn.edu.nju.software.service.FollowService;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.util.TokenConfig;
@@ -43,6 +40,8 @@ public class UserFollowController {
 	private AppUserService appUserService;
 	@Autowired
 	private BabyService babyService;
+	@Autowired
+	private BadgeCheckService badgeCheckService;
 
 	@ApiOperation(value = "关注某人", notes = "需登录")
 	@RequestMapping(value = "/follow", method = { RequestMethod.POST })
@@ -56,23 +55,31 @@ public class UserFollowController {
 			response.setStatus(401);
 			return responseData;
 		}
+		Integer userId=user.getId();
 		if (appUserService.getUserByMobileOrId(String.valueOf(followeeId)) == null) {
 			responseData.jsonFill(2, "该用户不存在", null);
 			response.setStatus(404);
 			return responseData;
 		}
-		if (user.getId() == followeeId) {
+		if (userId == followeeId) {
 			responseData.jsonFill(2, "请勿关注自己", false);
 			return responseData;
 		}
 		FollowRelation followRelation = new FollowRelation();
 		followRelation.setFolloweeId(followeeId);
-		followRelation.setFollowerId(user.getId());
+		followRelation.setFollowerId(userId);
 		followRelation.setCreateTime(new Date());
 		followRelation.setUpdateTime(new Date());
 		boolean res = followService.saveFollowRelation(followRelation);
-
-		responseData.jsonFill(res ? 1 : 2, null, res);
+		if (!res){
+			responseData.jsonFill(2, null, false);
+			return responseData;
+		}
+		Badge badge=badgeCheckService.judgeAddFirstFollowBadge(userId);
+		List<Badge> list=new ArrayList<>();
+		list.add(badge);
+		responseData.setBadgeList(list);
+		responseData.jsonFill(1, null, true);
 		return responseData;
 	}
 
