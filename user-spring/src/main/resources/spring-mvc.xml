@@ -172,7 +172,7 @@
             <mvc:mapping path="/user/v3/rePublishWorks"/>
             <mvc:mapping path="/user/v3/publishWorks"/>
             <mvc:mapping path="/user/v3/updateHeadImg"/>
-            <mvc:mapping path="/auth/getAppOssToken"/>
+            <!--<mvc:mapping path="/auth/getAppOssToken"/>-->
 
             <mvc:mapping path="/user/addOpinionFeedback"/>
 
