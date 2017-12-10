@@ -199,7 +199,7 @@ public class UserUserController extends BaseController {
     @RequestMapping(value = "/loginByWeChat", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<LoginResponseVo> loginByWeChat(@ApiParam("code 授权码") @RequestParam("code") String code,
-                                                       @ApiParam("deviceToken") @RequestParam String deviceToken,
+                                                       @ApiParam("deviceToken") @RequestParam(value ="deviceToken",required = false) String deviceToken,
                                                        HttpServletRequest request, HttpServletResponse response) throws Exception {
         ResponseData responseData = new ResponseData();
         WeChatOAuthVo weChatOAuthVo = weChatLoginService.getAccessToken(business.getWxAppId(), business.getWxSecret(),

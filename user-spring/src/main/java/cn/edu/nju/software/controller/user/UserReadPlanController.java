@@ -140,6 +140,14 @@ public class UserReadPlanController extends BaseController {
             responseData.jsonFill(2, "作品不存在", null);
             return responseData;
         }
+        List<Works> list=worksService.getListByUserAndStory(user.getId(),works.getStoryId());
+
+        //如果超过一个作品的话就不需要弹
+        if (list.size()>1){
+            responseData.jsonFill(2,"该故事第二次读",null);
+            return  responseData;
+        }
+
         shareWorkWithreadPlan.setWorks(works);
         Baby baby = babyService.getUserOneBaby(user.getId());
         if (baby == null) {
