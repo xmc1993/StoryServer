@@ -8,6 +8,7 @@ import cn.edu.nju.software.entity.feed.MessageType;
 import cn.edu.nju.software.feed.service.MessageFeedService;
 import cn.edu.nju.software.service.*;
 import cn.edu.nju.software.service.user.AppUserService;
+import cn.edu.nju.software.service.user.WorkTagRelationService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UploadFileUtil;
@@ -70,6 +71,8 @@ public class UserWorksController extends BaseController {
     private BadgeCheckService badgeCheckService;
     @Autowired
     private FollowService followService;
+    @Autowired
+    private WorkTagRelationService workTagRelationService;
 
     @ApiOperation(value = "获得最新的作品列表", notes = "需要登录")
     @RequestMapping(value = "/getLatestWorksByPage", method = {RequestMethod.GET})
@@ -343,10 +346,12 @@ public class UserWorksController extends BaseController {
     @ApiOperation(value = "发布作品", notes = "需登录")
     @RequestMapping(value = "/publishWorks", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<WorksVo> publishWorks(@ApiParam("故事ID") @RequestParam("storyId") int storyId,
-                                              @ApiParam("音频长度") @RequestParam("duration") String duration,
-                                              @ApiParam("音频文件") @RequestParam(value = "uploadFile") MultipartFile uploadFile, HttpServletRequest request,
-                                              HttpServletResponse response) {
+    public ResponseData<WorksVo> publishWorks(
+            @ApiParam("故事ID") @RequestParam("storyId") int storyId,
+            @ApiParam("音频长度") @RequestParam("duration") String duration,
+            @ApiParam("音频文件") @RequestParam(value = "uploadFile") MultipartFile uploadFile,
+            @ApiParam("作品标签id列表(逗号隔开)") @RequestParam(value = "tagIdList",required = false) String tagIdList,
+            HttpServletRequest request, HttpServletResponse response) {
         ResponseData<WorksVo> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
@@ -410,6 +415,25 @@ public class UserWorksController extends BaseController {
             messageFeedService.feedFollowers(feed, user.getId(), true);
         }
 
+        //如果作品上传成功再绑定作品标签。——zj
+        if (res!=null){
+            if (tagIdList != null) {
+                String[] tagIds = tagIdList.split(",");
+                for (String tagId : tagIds) {
+                    WorkTagRelation workTagRelation=new WorkTagRelation();
+                    Integer tagIdInteger=Integer.parseInt(tagId);
+                    workTagRelation.setTagId(tagIdInteger);
+                    workTagRelation.setWorkId(works.getId());
+                    workTagRelation.setCreateTime(new Date());
+                    workTagRelation.setUpdateTime(new Date());
+                    int result=workTagRelationService.insert(workTagRelation);
+                    if (result!=1){
+                        throw new RuntimeException("作品标签添加失败，标签id："+tagId);
+                    }
+                }
+            }
+        }
+
         /**
          * 刷新下阅读记录，须在badgeCheckService.judgeAddBadgesWhenPublish(user, works);这句代码之前更新，
          * 因为judgeAddBadgesWhenPublish方法中需要使用更新后的录制记录中的数据
@@ -427,20 +451,22 @@ public class UserWorksController extends BaseController {
             BeanUtils.copyProperties(works, worksVo);
             responseData.jsonFill(1, null, worksVo);
             responseData.setBadgeList(badges);
+            return responseData;
         } else {
             responseData.jsonFill(2, "发布失败", null);
+            return responseData;
         }
-        return responseData;
-
     }
 
     @ApiOperation(value = "发布作品v3", notes = "需登录")
     @RequestMapping(value = "/v3/publishWorks", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<WorksVo> publishWorksV3(@ApiParam("故事ID") @RequestParam("storyId") int storyId,
-                                                @ApiParam("音频长度") @RequestParam("duration") String duration,
-                                                @ApiParam("作品url") @RequestParam(value = "url") String url, HttpServletRequest request,
-                                                HttpServletResponse response) {
+    public ResponseData<WorksVo> publishWorksV3(
+            @ApiParam("故事ID") @RequestParam("storyId") int storyId,
+            @ApiParam("音频长度") @RequestParam("duration") String duration,
+            @ApiParam("作品url") @RequestParam(value = "url") String url,
+            @ApiParam("作品标签id列表(逗号隔开)") @RequestParam(value = "tagIdList",required = false) String tagIdList,
+            HttpServletRequest request, HttpServletResponse response) {
         ResponseData<WorksVo> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
@@ -493,6 +519,25 @@ public class UserWorksController extends BaseController {
             feed.setMid(res.getId());
             feed.setType(MessageType.NEW_WORKS);
             messageFeedService.feedFollowers(feed, user.getId(), true);
+        }
+
+        //如果作品上传成功再绑定作品标签。——zj
+        if (res!=null){
+            if (tagIdList != null) {
+                String[] tagIds = tagIdList.split(",");
+                for (String tagId : tagIds) {
+                    WorkTagRelation workTagRelation=new WorkTagRelation();
+                    Integer tagIdInteger=Integer.parseInt(tagId);
+                    workTagRelation.setTagId(tagIdInteger);
+                    workTagRelation.setWorkId(works.getId());
+                    workTagRelation.setCreateTime(new Date());
+                    workTagRelation.setUpdateTime(new Date());
+                    int result=workTagRelationService.insert(workTagRelation);
+                    if (result!=1){
+                        throw new RuntimeException("作品标签添加失败，标签id："+tagId);
+                    }
+                }
+            }
         }
 
         /**

@@ -22,7 +22,11 @@ public class LoginStatusStatisticsServiceImpl implements LoginStatusStatisticsSe
     @Override
     public void saveLoginStatusStatistics(Integer userId) {
         List<LoginStatusStatistics> statisticsList=loginStatusStatisticsMapper.getLoginStatusStatisticsByUserId(userId);
-        LoginStatusStatistics loginStatusStatistics=statisticsList.get(0);
+        LoginStatusStatistics loginStatusStatistics=null;
+        //防止数组越界异常
+        if (statisticsList.size()>0){
+            loginStatusStatistics=statisticsList.get(0);
+        }
         // 如果没有登录状态的记录，则新建一条来
         if (loginStatusStatistics==null){
             loginStatusStatistics=new LoginStatusStatistics();

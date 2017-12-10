@@ -21,53 +21,57 @@ public class WorkTagServiceImpl implements WorkTagService {
     private WorkTagMapper workTagMapper;
 
     @Override
-    public boolean isExistSameContent(String content) {
+    public WorkTag selectByContent(String content) {
         List<WorkTag> list = selectAll();
         for (WorkTag workTag : list) {
             String con = workTag.getContent();
             if (con != null) {
                 if (con.equals(content)) {
-                    return true;
+                    return workTag;
                 }
             }
         }
-        return false;
+        return null;
     }
 
     @Override
-    public ResponseData<WorkTag> insertWorkTag(String content,Integer authorId) {
+    public ResponseData<WorkTag> insertWorkTag(String content, Integer authorId) {
         ResponseData<WorkTag> responseData = new ResponseData<>();
-        boolean isExist = isExistSameContent(content);
-        if (isExist) {
-            responseData.jsonFill(2, "已存在相同内容的作品标签", null);
+        WorkTag workTagInDb = selectByContent(content);
+        //不存在才添加
+        if (workTagInDb == null) {
+            WorkTag workTag = new WorkTag();
+            workTag.setAuthorId(authorId);
+            workTag.setContent(content);
+            workTag.setCreateTime(new Date());
+            workTag.setUpdateTime(new Date());
+            int res = workTagMapper.insert(workTag);
+            if (res != 1) {
+                responseData.jsonFill(2, "添加失败", null);
+                return responseData;
+            } else {
+                responseData.jsonFill(1, null, workTag);
+                return responseData;
+            }
+
+        } else {//已存在就从数据库取出
+            responseData.jsonFill(1, null, workTagInDb);
             return responseData;
         }
-        WorkTag workTag = new WorkTag();
-        workTag.setAuthorId(authorId);
-        workTag.setContent(content);
-        workTag.setCreateTime(new Date());
-        workTag.setUpdateTime(new Date());
-        int res = workTagMapper.insert(workTag);
-        if (res != 1) {
-            responseData.jsonFill(2, "添加失败", null);
-            return responseData;
-        }
-        responseData.jsonFill(1, null, workTag);
-        return responseData;
     }
 
     @Override
     public List<WorkTag> selectAll() {
-        WorkTagExample workTagExample=new WorkTagExample();
-        List<WorkTag> list =workTagMapper.selectByExample(workTagExample);
+        WorkTagExample workTagExample = new WorkTagExample();
+        List<WorkTag> list = workTagMapper.selectByExample(workTagExample);
         return list;
     }
 
     @Override
     public List<WorkTag> selectTagsRecommendedAndCustomized(Integer userId) {
-        WorkTagExample workTagExample=new WorkTagExample();
-        WorkTagExample.Criteria criteria=workTagExample.createCriteria();
-        List<Integer> authorIdList= new ArrayList<>();
+        WorkTagExample workTagExample = new WorkTagExample();
+        WorkTagExample.Criteria criteria = workTagExample.createCriteria();
+        List<Integer> authorIdList = new ArrayList<>();
         authorIdList.add(0);//后台上传作品标签的作者id为0
         authorIdList.add(userId);
         criteria.andAuthorIdIn(authorIdList);
@@ -99,8 +103,8 @@ public class WorkTagServiceImpl implements WorkTagService {
 
     @Override
     public int deleteByAuthorId(Integer authorId) {
-        WorkTagExample workTagExample=new WorkTagExample();
-        WorkTagExample.Criteria criteria=workTagExample.createCriteria();
+        WorkTagExample workTagExample = new WorkTagExample();
+        WorkTagExample.Criteria criteria = workTagExample.createCriteria();
         criteria.andAuthorIdEqualTo(authorId);
         return workTagMapper.deleteByExample(workTagExample);
     }
