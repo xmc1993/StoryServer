@@ -29,7 +29,7 @@ import java.util.Map;
 public class OssServiceImpl implements OssService {
     private static Logger logger = LoggerFactory.getLogger(OssServiceImpl.class);
     private final static String host = "http://warmtale-backend-bucket.oss-cn-beijing.aliyuncs.com";
-    private final static String accessId = "LTAI9RtjsTqUlw10";
+    private final static String accessId = "LTAIUT0Hkgh0auR8";
 //    private final static String accessId = "LTAIQLXhrN5gIJlk";
 
     @Autowired
