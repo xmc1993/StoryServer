@@ -107,9 +107,15 @@
         <!--<constructor-arg name="endpoint" value="oss-cn-beijing.aliyuncs.com"></constructor-arg>-->
     <!--</bean>-->
 
+    <!--<bean class="com.aliyun.oss.OSSClient">-->
+        <!--<constructor-arg name="accessKeyId" value="LTAIUT0Hkgh0auR8"></constructor-arg>-->
+        <!--<constructor-arg name="secretAccessKey" value="awaKK9jblpq8a9jmUhZIfu9sP1Ys61"></constructor-arg>-->
+        <!--<constructor-arg name="endpoint" value="oss-cn-beijing.aliyuncs.com"></constructor-arg>-->
+    <!--</bean>-->
+
     <bean class="com.aliyun.oss.OSSClient">
-        <constructor-arg name="accessKeyId" value="LTAIUT0Hkgh0auR8"></constructor-arg>
-        <constructor-arg name="secretAccessKey" value="awaKK9jblpq8a9jmUhZIfu9sP1Ys61"></constructor-arg>
+        <constructor-arg name="accessKeyId" value="LTAI9RtjsTqUlw10"></constructor-arg>
+        <constructor-arg name="secretAccessKey" value="HLQWHZiIdp39XL8Gwqa6KHD8EHzzJh"></constructor-arg>
         <constructor-arg name="endpoint" value="oss-cn-beijing.aliyuncs.com"></constructor-arg>
     </bean>
 
