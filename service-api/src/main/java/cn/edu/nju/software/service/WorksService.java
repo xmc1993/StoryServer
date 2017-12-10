@@ -59,6 +59,8 @@ public interface WorksService {
     String getOriginSoundLength(File file);
     
     boolean getWorksByUserAndStory(Integer userId,Integer storyId);
+
+    List<Works> getListByUserAndStory(Integer userId,Integer storyId);
     
     //此方法是为了在用户更新头像时，使work表中的HeadImgUrl字段也联动更新
     boolean updateHeadImg(int userId,String url);

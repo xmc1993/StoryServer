@@ -223,6 +223,11 @@ public class WorksServiceImpl implements WorksService {
 	}
 
 	@Override
+	public List<Works> getListByUserAndStory(Integer userId, Integer storyId) {
+		return worksDao.getWorksByUserAndStory(userId,storyId);
+	}
+
+	@Override
 	// 此方法是为了在用户更新头像时，使work表中的HeadImgUrl字段也联动更新
 	public boolean updateHeadImg(int userId, String url) {
 		return worksDao.updateHeadImg(userId, url);
