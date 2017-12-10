@@ -67,10 +67,6 @@ public class UserPlayListController extends BaseController {
         //获取专辑下的第一个Works对象
         List<TwoTuple<Integer, String>> workList = worksService.getFirstWorkByPlayIdList(playIdList);
 
-        for (TwoTuple<Integer, String> integerStringTwoTuple : workList) {
-            System.out.print("key"+integerStringTwoTuple.getId()+"********value:"+integerStringTwoTuple.getValue());
-        }
-
         for (PlayList playList : playLists) {
             for (TwoTuple<Integer, String> twoTuple : workList) {
                 if(twoTuple.getId().equals(playList.getId())){
