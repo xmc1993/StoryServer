@@ -10,7 +10,7 @@ import java.util.List;
  */
 
 public interface WorkTagService {
-    public boolean isExistSameContent(String content);
+    WorkTag selectByContent(String content);
     ResponseData<WorkTag> insertWorkTag(String content,Integer authorId);
     List<WorkTag> selectAll();
     List<WorkTag> selectTagsRecommendedAndCustomized(Integer authorId);

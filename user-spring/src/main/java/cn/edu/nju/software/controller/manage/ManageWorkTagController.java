@@ -70,8 +70,8 @@ public class ManageWorkTagController {
         workTag.setUpdateTime(new Date());
         workTag.setValid(valid);
 
-        boolean isExist = workTagService.isExistSameContent(content);
-        if (isExist) {
+        WorkTag workTagInDb = workTagService.selectByContent(content);
+        if (workTagInDb!=null) {
             responseData.jsonFill(2, "已存在相同内容的作品标签", false);
             return responseData;
         }
