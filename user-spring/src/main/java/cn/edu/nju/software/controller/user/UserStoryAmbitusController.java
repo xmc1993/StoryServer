@@ -48,4 +48,5 @@ public class UserStoryAmbitusController extends BaseController {
 		responseData.setCount(list.size());
 		return responseData;
 	}
+
 }

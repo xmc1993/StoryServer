@@ -14,6 +14,7 @@ import cn.edu.nju.software.vo.StoryWithRealTellCount;
 import it.sauronsoftware.jave.Encoder;
 import it.sauronsoftware.jave.EncoderException;
 import it.sauronsoftware.jave.MultimediaInfo;
+import org.apache.poi.util.SystemOutLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -465,11 +466,15 @@ public class StoryServiceImpl implements StoryService {
             // 移除本故事
             int index = storyIdList.indexOf(storyId);
             if (index == -1) {
-                list = storyDao.getSetStoryListByIdList(storyIdList, 0, 5);
+                list = storyDao.getStoryListByIdList(storyIdList, 0, 5);
                 storyList.addAll(list);
             } else {
                 storyIdList.remove(index);
-                list = storyDao.getSetStoryListByIdList(storyIdList, 0, 5);
+                //移除后还得判断下
+                if(storyIdList.isEmpty()){
+                    continue;
+                }
+                list = storyDao.getStoryListByIdList(storyIdList, 0, 5);
                 storyList.addAll(list);
             }
             if (storyList.size() >= 5) {

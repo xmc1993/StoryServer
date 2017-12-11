@@ -27,42 +27,55 @@ import cn.edu.nju.software.service.StoryService;
 import cn.edu.nju.software.service.StoryTopicServcie;
 
 /**
-* @author zs1996 E-mail:806949096@qq.com
-* @version 创建时间：2017年9月24日 
-*/
+ * @author zs1996 E-mail:806949096@qq.com
+ * @version 创建时间：2017年9月24日
+ */
 
 @Api("StoryTopic controller")
 @Controller
 @RequestMapping("/user")
-public class UserStoryTopicController extends BaseController{
-	@Autowired
-	StoryTopicServcie storyTopicServcie;
-	@Autowired
-	StoryService storyService;
-	
-	@ApiOperation(value = "根据故事专题获得故事列表", notes = "")
-	@RequestMapping(value = "/getStorysByStoryTopic", method = { RequestMethod.GET })
-	@ResponseBody
-	public ResponseData<List<StoryWithIntroduction>> getStorysByStoryTopic(@ApiParam("专题id") @RequestParam Integer id) {
-		ResponseData<List<StoryWithIntroduction>> responseData = new ResponseData<>();
-		List<StoryWithIntroduction> storyList = new ArrayList<>();
-		List<StoryTopicRelation> list = storyTopicServcie.getStoryListByTopicId(id);
-		for (StoryTopicRelation storyTopicRelation : list) {
-			storyList.add(storyService.getStoryByIdWithIntroduction(storyTopicRelation.getstoryId()));
-		}
-		responseData.jsonFill(1, null, storyList);
-		return responseData;
-	}
-	
-	@ApiOperation(value = "获取所有有效的故事专题", notes = "")
-	@RequestMapping(value = "/selectAllShowStoryTopic", method = { RequestMethod.GET })
-	@ResponseBody
-	public ResponseData<List<StoryTopic>> selectAllShowStoryTopic(HttpServletRequest request,
-			HttpServletResponse response) {
-		ResponseData<List<StoryTopic>> responseData = new ResponseData<>();
-		List<StoryTopic> list = storyTopicServcie.selectAllShowStoryTopic();
-		responseData.jsonFill(1, null, list);
-		return responseData;
-	}
-	
+public class UserStoryTopicController extends BaseController {
+    @Autowired
+    StoryTopicServcie storyTopicServcie;
+    @Autowired
+    StoryService storyService;
+
+    @ApiOperation(value = "根据故事专题获得故事列表", notes = "")
+    @RequestMapping(value = "/getStorysByStoryTopic", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<StoryWithIntroduction>> getStorysByStoryTopic(@ApiParam("专题id") @RequestParam Integer id) {
+        ResponseData<List<StoryWithIntroduction>> responseData = new ResponseData<>();
+        List<StoryWithIntroduction> storyList = new ArrayList<>();
+        List<StoryTopicRelation> list = storyTopicServcie.getStoryListByTopicId(id);
+        for (StoryTopicRelation storyTopicRelation : list) {
+            storyList.add(storyService.getStoryByIdWithIntroduction(storyTopicRelation.getstoryId()));
+        }
+        responseData.jsonFill(1, null, storyList);
+        return responseData;
+    }
+
+    @ApiOperation(value = "获取所有有效的故事专题", notes = "")
+    @RequestMapping(value = "/selectAllShowStoryTopic", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<StoryTopic>> selectAllShowStoryTopic(HttpServletRequest request,
+                                                                  HttpServletResponse response) {
+        ResponseData<List<StoryTopic>> responseData = new ResponseData<>();
+        List<StoryTopic> list = storyTopicServcie.selectAllShowStoryTopic();
+        responseData.jsonFill(1, null, list);
+        return responseData;
+    }
+
+    @ApiOperation(value = "根据专题的id获取故事专题", notes = "")
+    @RequestMapping(value = "/getStoryTopicById", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<StoryTopic> getStoryTopicById(
+            @ApiParam("专题id") @RequestParam Integer id,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        ResponseData<StoryTopic> responseData = new ResponseData<>();
+        StoryTopic storyTopic = storyTopicServcie.getStoryTopicById(id);
+        responseData.jsonFill(1, null, storyTopic);
+        return responseData;
+    }
+
 }
