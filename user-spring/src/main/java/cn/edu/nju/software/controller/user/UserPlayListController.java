@@ -71,7 +71,7 @@ public class UserPlayListController extends BaseController {
             PlayListVo plv = new PlayListVo();
             BeanUtils.copyProperties(p, plv);
             for (TwoTuple<Integer, String> tt : workList) {
-                if (tt.getId() == p.getId()) {
+                if (tt.getId().equals(p.getId())) {
                     plv.setCover(tt.getValue());
                     break;
                 }
@@ -175,7 +175,7 @@ public class UserPlayListController extends BaseController {
     @ApiOperation(value = "新增播放列表", notes = "")
     @RequestMapping(value = "/newPlayList", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<PlayList> newPlayList (
+    public ResponseData<PlayList> newPlayList(
             @ApiParam("播放列表的名字") @RequestParam String name,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<PlayList> responseData = new ResponseData<>();
@@ -213,9 +213,9 @@ public class UserPlayListController extends BaseController {
             responseData.jsonFill(2, "用户尚未登录。", null);
             return responseData;
         }
-        if(playListId==-1){
-            responseData.jsonFill(2,"不能向我的作品中添加作品",null);
-            return  responseData;
+        if (playListId == -1) {
+            responseData.jsonFill(2, "不能向我的作品中添加作品", null);
+            return responseData;
         }
         List<Integer> workIdList = worksService.getWorkIdListByUserId(userId);
         //先要查重播放列表原来的worksIdList
