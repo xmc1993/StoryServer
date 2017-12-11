@@ -49,6 +49,15 @@
         order by createTime DESC
         limit #{offset},#{limit}
     </select>
+
+    <select id="getForceUpdateVersionAfterCurrentVersion" resultType="cn.edu.nju.software.entity.App">
+        select
+        <include refid="fields"/>
+        from apps
+        where id > #{id} and ifUpdate=1
+    </select>
+
+
     <select id="getAppById" resultType="cn.edu.nju.software.entity.App">
         select
         <include refid="fields"/>

@@ -5,10 +5,12 @@ import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.AppService;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -23,10 +25,11 @@ public class UserAppController {
     @ApiOperation(value = "获取最新版本信息", notes = "")
     @RequestMapping(value = "/getNewApp", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<App> getNewApp(){
-        ResponseData<App> result = new ResponseData<>();
-        App app = appService.getNewApp();
-        result.jsonFill(1,null,app);
-        return result;
+    public ResponseData<App> getNewApp(
+            @ApiParam("用户app的ID") @RequestParam("id") Integer id){
+        ResponseData<App> responseData = new ResponseData<>();
+        App app = appService.getNewApp(id);
+        responseData.jsonFill(1,null,app);
+        return responseData;
     }
 }

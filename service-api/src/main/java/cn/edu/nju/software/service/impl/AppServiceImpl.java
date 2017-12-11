@@ -16,47 +16,60 @@ import java.util.List;
 public class AppServiceImpl implements AppService {
     @Autowired
     private AppDao appDao;
+
     @Override
-    public boolean saveApp(App app){
+    public boolean saveApp(App app) {
         return appDao.insertApp(app);
     }
+
     @Override
-    public boolean updateApp(App app){
+    public boolean updateApp(App app) {
         return appDao.updateApp(app);
     }
+
     @Override
-    public boolean deleteApp(int id){
+    public boolean deleteApp(int id) {
         return appDao.deleteAppById(id);
     }
+
     @Override
-    public boolean deleteAppByIdList(int[] idList){
-        if(appDao.deleteAppByIdList(idList)==idList.length) {
+    public boolean deleteAppByIdList(int[] idList) {
+        if (appDao.deleteAppByIdList(idList) == idList.length) {
             return true;
         } else {
             return false;
         }
     }
+
     @Override
-    public App getAppById(int id){
+    public App getAppById(int id) {
         return appDao.getAppById(id);
     }
+
     @Override
-    public App getNewApp(){
-        List<App> appList=appDao.getAppListByPageDesc(0,1);
-        return appList.get(0);
+    public App getNewApp(Integer id) {
+        App lastestApp = appDao.getLastApp();
+        List<App> list = appDao.getForceUpdateVersionAfterCurrentVersion(id);
+        if (list.size() > 0 && lastestApp != null) {
+            lastestApp.setIfUpdate(1);
+        }
+        return lastestApp;
     }
+
     @Override
-    public List<App> getAppListByIdList(int[] idList){
+    public List<App> getAppListByIdList(int[] idList) {
         return appDao.getAppListByIdList(idList);
     }
+
     @Override
-    public List<App> getAppListByPageDesc(int offset, int limit){
+    public List<App> getAppListByPageDesc(int offset, int limit) {
         offset = offset < 0 ? Const.DEFAULT_OFFSET : offset;
         limit = limit < 0 ? Const.DEFAULT_LIMIT : limit;
-        return appDao.getAppListByPageDesc(offset,limit);
+        return appDao.getAppListByPageDesc(offset, limit);
     }
+
     @Override
-    public Integer getAppCount(){
+    public Integer getAppCount() {
         return appDao.getAppCount();
     }
 
