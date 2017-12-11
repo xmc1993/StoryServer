@@ -30,8 +30,11 @@ public class AppServiceImpl implements AppService {
     }
     @Override
     public boolean deleteAppByIdList(int[] idList){
-        if(appDao.deleteAppByIdList(idList)==idList.length) return true;
-        else return false;
+        if(appDao.deleteAppByIdList(idList)==idList.length) {
+            return true;
+        } else {
+            return false;
+        }
     }
     @Override
     public App getAppById(int id){
