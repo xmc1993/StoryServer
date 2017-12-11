@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by xmc1993 on 2017/5/12.
@@ -48,11 +49,11 @@ public class UserPlayListController extends BaseController {
     @ApiOperation(value = "获得一个用户的文件夹列表（播放列表）", notes = "")
     @RequestMapping(value = "/getPlayListsByPage", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<PlayListVo>> getPlayListsByPage(
+    public ResponseData<List<PlayList>> getPlayListsByPage(
             @ApiParam("页") @RequestParam int page,
             @ApiParam("页大小") @RequestParam int pageSize,
             HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<List<PlayListVo>> responseData = new ResponseData<>();
+        ResponseData<List<PlayList>> responseData = new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "用户尚未登录。", null);
@@ -66,21 +67,17 @@ public class UserPlayListController extends BaseController {
         //获取专辑下的第一个Works对象
         List<TwoTuple<Integer, String>> workList = worksService.getFirstWorkByPlayIdList(playIdList);
 
-        List<PlayListVo> playListVos = new ArrayList<>();
-        for (PlayList p : playLists) {
-            PlayListVo plv = new PlayListVo();
-            BeanUtils.copyProperties(p, plv);
-            for (TwoTuple<Integer, String> tt : workList) {
-                if (tt.getId().equals(p.getId())) {
-                    plv.setCover(tt.getValue());
-                    break;
+        for (PlayList playList : playLists) {
+            for (TwoTuple<Integer, String> twoTuple : workList) {
+                if(twoTuple.getId().equals(playList.getId())){
+                    playList.setCover(twoTuple.getValue());
+                    continue;
                 }
             }
-            playListVos.add(plv);
         }
 
-        responseData.jsonFill(1, null, playListVos);
-        responseData.setCount(playListVos.size());
+        responseData.jsonFill(1, null, playLists);
+        responseData.setCount(playLists.size());
         return responseData;
     }
 
@@ -175,7 +172,7 @@ public class UserPlayListController extends BaseController {
     @ApiOperation(value = "新增播放列表", notes = "")
     @RequestMapping(value = "/newPlayList", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<PlayList> newPlayList(
+    public ResponseData<PlayList> newPlayList (
             @ApiParam("播放列表的名字") @RequestParam String name,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<PlayList> responseData = new ResponseData<>();
