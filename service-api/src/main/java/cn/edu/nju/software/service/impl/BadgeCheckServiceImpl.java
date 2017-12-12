@@ -204,30 +204,19 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
         return badges;
     }
 
-
-
-    //判断添加第一次分享作品徽章
+    //判断添加第一次分享徽章
     @Override
-    public List<Badge> judgeAddFirstShareWorksBadge(Integer userId){
+    public ResponseData<Boolean> judgeAddFirstShareBadge(Integer userId){
+        ResponseData<Boolean> responseData=new ResponseData<>();
         List<Badge> badges = new ArrayList<>();
-        if (userBadgeService.getUserBadge(Const.FIRST_SHARE_WORK_BADGE_ID, userId) == null){
-            packageBadgeLogic(badges,userId,Const.FIRST_SHARE_WORK_BADGE_ID);
-            return badges;
+        if (userBadgeService.getUserBadge(Const.FIRST_SHARE_BADGE_ID, userId) == null){
+            packageBadgeLogic(badges,userId,Const.FIRST_SHARE_BADGE_ID);
+            responseData.setBadgeList(badges);
+            responseData.jsonFill(1,null,true);
         }else{
-            return null;
+            responseData.jsonFill(1,null,false);
         }
-    }
-
-    //判断添加第一次分析原创故事徽章
-    @Override
-    public List<Badge> judgeAddFirstShareOriginalStoryBadge(Integer userId) {
-        List<Badge> badges = new ArrayList<>();
-        if (userBadgeService.getUserBadge(Const.FIRST_SHARE_ORIGINAL_STORY_BADGE_ID, userId) == null){
-            packageBadgeLogic(badges,userId,Const.FIRST_SHARE_ORIGINAL_STORY_BADGE_ID);
-            return badges;
-        }else{
-            return null;
-        }
+        return responseData;
     }
 
     //判断添加第一次添加原创故事徽章

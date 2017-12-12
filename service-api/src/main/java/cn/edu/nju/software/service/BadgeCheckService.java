@@ -1,6 +1,7 @@
 package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.entity.Badge;
+import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.entity.Works;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,7 @@ public interface BadgeCheckService {
 
     List<Badge> judgeAddBadgesWhenPublish(User user, Works works);
 
-    List<Badge> judgeAddFirstShareWorksBadge(Integer userId);
-
-    List<Badge> judgeAddFirstShareOriginalStoryBadge(Integer userId);
+    ResponseData<Boolean> judgeAddFirstShareBadge(Integer userId);
 
     Badge judgeAddFirstAddOriginalStoryBadge(Integer userId);
 

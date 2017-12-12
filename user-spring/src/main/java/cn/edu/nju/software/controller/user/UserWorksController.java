@@ -239,11 +239,7 @@ public class UserWorksController extends BaseController {
     @ResponseBody
     public ResponseData<Boolean> judgeAddFirstShareWorksBadge(HttpServletRequest request){
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
-        List<Badge> list =badgeCheckService.judgeAddFirstShareWorksBadge(user.getId());
-        ResponseData<Boolean> responseData=new ResponseData<>();
-        responseData.setBadgeList(list);
-        responseData.jsonFill(1,null,true);
-        return responseData;
+        return badgeCheckService.judgeAddFirstShareBadge(user.getId());
     }
 
     @ApiOperation(value = "根据ID获得一个分享作品（无需登录）", notes = "")

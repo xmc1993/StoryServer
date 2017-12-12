@@ -254,11 +254,7 @@ public class UserOriginalStoryController extends BaseController {
     @ResponseBody
     public ResponseData<Boolean> judgeAddFirstShareOriginalStoryBadge(HttpServletRequest request){
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
-        List<Badge> list =badgeCheckService.judgeAddFirstShareOriginalStoryBadge(user.getId());
-        ResponseData<Boolean> responseData=new ResponseData<>();
-        responseData.setBadgeList(list);
-        responseData.jsonFill(1,null,true);
-        return responseData;
+        return badgeCheckService.judgeAddFirstShareBadge(user.getId());
     }
     
 }
