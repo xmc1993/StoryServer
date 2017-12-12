@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +40,8 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
     private ReadPlanStoryGroupService readPlanStoryGroupService;
     @Autowired
     private StoryTopicServcie storyTopicServcie;
+    @Autowired
+    private FollowService followService;
 
     //抽取封装的逻辑代码
     public void packageBadgeLogic(List<Badge> badges,Integer userId,Integer badgeId){
@@ -242,7 +243,16 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
     }
 
     @Override
-    public Badge judgeAddFirstFollowBadge(Integer userId) {
+    public Badge judgeAddFirstFollowBadge(Integer userId, Integer followeeId) {
+        //第一次被关注
+        Integer followedCount=followService.getUserFollowerCountByUserId(followeeId);
+        if (followedCount==1){
+            UserBadge userBadge = new UserBadge();
+            userBadge.setUserId(followeeId);
+            userBadge.setBadgeId(Const.FIRST_FOLLOWED_BADGE_ID);
+            userBadgeService.saveUserBadge(userBadge);
+        }
+        //第一次关注别人
         List<Badge> badges = new ArrayList<>();
         if (userBadgeService.getUserBadge(Const.FIRST_FOLLOW_BADGE_ID, userId) == null){
             packageBadgeLogic(badges,userId,Const.FIRST_FOLLOW_BADGE_ID);

@@ -16,4 +16,5 @@ public class App {
     private String url;
     private Date createTime;
     private Date updateTime;
+    private Integer ifUpdate=0;
 }

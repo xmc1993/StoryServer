@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.nju.software.dao.AppDao">
-    <resultMap id="BaseResultMap" type="cn.edu.nju.software.entity.App" >
-        <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="version" property="version" jdbcType="VARCHAR" />
-        <result column="updateHint" property="updateHint" jdbcType="VARCHAR" />
-        <result column="fileSize" property="fileSize" jdbcType="VARCHAR" />
-        <result column="url" property="url" jdbcType="VARCHAR" />
-        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <resultMap id="BaseResultMap" type="cn.edu.nju.software.entity.App">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="version" property="version" jdbcType="VARCHAR"/>
+        <result column="updateHint" property="updateHint" jdbcType="VARCHAR"/>
+        <result column="fileSize" property="fileSize" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="ifUpdate" property="ifUpdate" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="fields">
-        id, version, updateHint,fileSize, url, createTime, updateTime
+        id, version, updateHint,fileSize, url, createTime, updateTime,ifUpdate
     </sql>
     <insert id="insertApp">
         insert into apps
         (<include refid="fields"/>)
         VALUES
-        (#{app.id},#{app.version},#{app.updateHint},#{app.fileSize},#{app.url},#{app.createTime},#{app.updateTime})
+        (#{app.id},#{app.version},#{app.updateHint},#{app.fileSize},
+        #{app.url},#{app.createTime},#{app.updateTime},#{app.ifUpdate})
     </insert>
     <update id="updateApp">
         update apps set
@@ -25,7 +27,8 @@
         updateHint = #{app.updateHint},
         fileSize = #{app.fileSize},
         url = #{app.url},
-        updateTime =#{app.updateTime}
+        updateTime = #{app.updateTime},
+        ifUpdate= #{app.ifUpdate}
         where id = #{app.id}
     </update>
     <delete id="deleteAppById">
@@ -46,14 +49,25 @@
         order by createTime DESC
         limit #{offset},#{limit}
     </select>
+
+    <select id="getForceUpdateVersionAfterCurrentVersion" resultType="cn.edu.nju.software.entity.App">
+        select
+        <include refid="fields"/>
+        from apps
+        where id > #{id} and ifUpdate=1
+    </select>
+
+
     <select id="getAppById" resultType="cn.edu.nju.software.entity.App">
-        select <include refid="fields"/>
+        select
+        <include refid="fields"/>
         from apps
         where id = #{id}
     </select>
 
     <select id="getLastApp" resultType="cn.edu.nju.software.entity.App">
-        select <include refid="fields"/>
+        select
+        <include refid="fields"/>
         from apps
         where id = (select max(id) from apps)
     </select>

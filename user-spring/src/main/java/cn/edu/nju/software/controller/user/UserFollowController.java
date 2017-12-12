@@ -75,7 +75,10 @@ public class UserFollowController {
 			responseData.jsonFill(2, null, false);
 			return responseData;
 		}
-		Badge badge=badgeCheckService.judgeAddFirstFollowBadge(userId);
+
+		Badge badge=badgeCheckService.judgeAddFirstFollowBadge(userId,followeeId);
+		System.out.println("userId:        !!!!!!!!!!!!!!!!!!"+userId);
+
 		List<Badge> list=new ArrayList<>();
 		list.add(badge);
 		responseData.setBadgeList(list);

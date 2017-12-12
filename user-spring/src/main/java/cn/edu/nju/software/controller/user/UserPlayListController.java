@@ -210,9 +210,9 @@ public class UserPlayListController extends BaseController {
             responseData.jsonFill(2, "用户尚未登录。", null);
             return responseData;
         }
-        if(playListId==-1){
-            responseData.jsonFill(2,"不能向我的作品中添加作品",null);
-            return  responseData;
+        if (playListId == -1) {
+            responseData.jsonFill(2, "不能向我的作品中添加作品", null);
+            return responseData;
         }
         List<Integer> workIdList = worksService.getWorkIdListByUserId(userId);
         //先要查重播放列表原来的worksIdList

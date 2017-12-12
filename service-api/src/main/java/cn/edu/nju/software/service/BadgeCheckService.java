@@ -17,7 +17,7 @@ public interface BadgeCheckService {
 
     Badge judgeAddFirstAddOriginalStoryBadge(Integer userId);
 
-    Badge judgeAddFirstFollowBadge(Integer userId);
+    Badge judgeAddFirstFollowBadge(Integer userId, Integer followeeId);
 
     List<Badge> judgeAddBadgeWhenListen(User user);
 
