@@ -108,4 +108,5 @@ public class WorkTagServiceImpl implements WorkTagService {
         criteria.andAuthorIdEqualTo(authorId);
         return workTagMapper.deleteByExample(workTagExample);
     }
+
 }

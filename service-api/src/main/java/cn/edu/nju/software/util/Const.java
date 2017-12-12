@@ -18,15 +18,15 @@ public class Const {
     public static final Integer PATRIOT_BADGE_ID = 18;//小小爱国者
     public static final Integer FANTASY_STORY_TAG_ID = 100051;//奇幻故事的标签ID
     public static final Integer Thinking_BADGE_ID = 61;//感谢有你
-    public static final Integer MONTH_READING_PLAN_BADGE_ID = 67;//月阅读计划徽章ID（21天）
+    public static final Integer BABY_BIRTHDAY_BADGE_ID=65;//宝宝生日录制作品徽章id
     public static final Integer WEEK_READING_PLAN_BADGE_ID = 66;//周阅读计划徽章ID（完成前7天）
+    public static final Integer MONTH_READING_PLAN_BADGE_ID = 67;//月阅读计划徽章ID（21天）
     public static final Integer DOUBLE_ELEVEN_BADGE_ID = 64;//理财小达人
     public static final Integer FIRST_READING_BY_PLAN_BADGE_ID=111;//第一次按照计划录制作品徽章
     public static final Integer FIRST_SHARE_BADGE_ID =70;//第一次分享徽章id
-    public static final Integer FIRST_ADD_ORIGINAL_STORY_BADGE_ID=555;//第一次添加原创故事徽章id
+    public static final Integer FIRST_ADD_ORIGINAL_STORY_BADGE_ID=73;//第一次添加原创故事徽章id
     public static final Integer FIRST_FOLLOW_BADGE_ID=68;//第一次添加关注徽章id
     public static final Integer FIRST_FOLLOWED_BADGE_ID=69;//第一次获得粉丝徽章id
-    public static final Integer BABY_BIRTHDAY_BADGE_ID=777;//宝宝生日录制作品徽章id
 
     //故事专题常量
     public static final Integer DOUBLE_ELEVEN_STORY_TOPIC = 18;//双十一故事专题
