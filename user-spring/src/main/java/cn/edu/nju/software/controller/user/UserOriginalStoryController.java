@@ -252,11 +252,12 @@ public class UserOriginalStoryController extends BaseController {
     @ApiOperation(value = "判断是否需要添加第一次分享原创故事徽章", notes = "分享原创故事时调用")
     @RequestMapping(value = "/judgeAddFirstShareOriginalStoryBadge", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<Badge> judgeAddFirstShareOriginalStoryBadge(HttpServletRequest request){
+    public ResponseData<Boolean> judgeAddFirstShareOriginalStoryBadge(HttpServletRequest request){
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
-        Badge badge =badgeCheckService.judgeAddFirstShareOriginalStoryBadge(user.getId());
-        ResponseData<Badge> responseData=new ResponseData<>();
-        responseData.jsonFill(1,null,badge);
+        List<Badge> list =badgeCheckService.judgeAddFirstShareOriginalStoryBadge(user.getId());
+        ResponseData<Boolean> responseData=new ResponseData<>();
+        responseData.setBadgeList(list);
+        responseData.jsonFill(1,null,true);
         return responseData;
     }
     

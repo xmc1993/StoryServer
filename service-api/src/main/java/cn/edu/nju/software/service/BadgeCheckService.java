@@ -11,9 +11,9 @@ public interface BadgeCheckService {
 
     List<Badge> judgeAddBadgesWhenPublish(User user, Works works);
 
-    Badge judgeAddFirstShareWorksBadge(Integer userId);
+    List<Badge> judgeAddFirstShareWorksBadge(Integer userId);
 
-    Badge judgeAddFirstShareOriginalStoryBadge(Integer userId);
+    List<Badge> judgeAddFirstShareOriginalStoryBadge(Integer userId);
 
     Badge judgeAddFirstAddOriginalStoryBadge(Integer userId);
 

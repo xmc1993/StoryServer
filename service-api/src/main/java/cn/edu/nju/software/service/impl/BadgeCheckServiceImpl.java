@@ -208,11 +208,11 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
 
     //判断添加第一次分享作品徽章
     @Override
-    public Badge judgeAddFirstShareWorksBadge(Integer userId){
+    public List<Badge> judgeAddFirstShareWorksBadge(Integer userId){
         List<Badge> badges = new ArrayList<>();
         if (userBadgeService.getUserBadge(Const.FIRST_SHARE_WORK_BADGE_ID, userId) == null){
             packageBadgeLogic(badges,userId,Const.FIRST_SHARE_WORK_BADGE_ID);
-            return badges.get(0);
+            return badges;
         }else{
             return null;
         }
@@ -220,11 +220,11 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
 
     //判断添加第一次分析原创故事徽章
     @Override
-    public Badge judgeAddFirstShareOriginalStoryBadge(Integer userId) {
+    public List<Badge> judgeAddFirstShareOriginalStoryBadge(Integer userId) {
         List<Badge> badges = new ArrayList<>();
         if (userBadgeService.getUserBadge(Const.FIRST_SHARE_ORIGINAL_STORY_BADGE_ID, userId) == null){
             packageBadgeLogic(badges,userId,Const.FIRST_SHARE_ORIGINAL_STORY_BADGE_ID);
-            return badges.get(0);
+            return badges;
         }else{
             return null;
         }
