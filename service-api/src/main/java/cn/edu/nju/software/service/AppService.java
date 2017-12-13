@@ -27,4 +27,12 @@ public interface AppService {
     Integer getAppCount();
 
     App getLastApp();
+
+    boolean updateMinLimitVersion(int versionId);
+
+    App getMinLimitVersionApp();
+
+    App getAppByVersion(String version);
+
+    String test();
 }

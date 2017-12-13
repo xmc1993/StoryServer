@@ -19,7 +19,7 @@
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
-
+    <cache:annotation-driven cache-manager="myCacheManager" />
     <task:annotation-driven />
     <aop:aspectj-autoproxy proxy-target-class="true"/>
     <context:property-placeholder location="classpath:datasource.properties"/>

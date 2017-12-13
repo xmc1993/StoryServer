@@ -11,11 +11,15 @@ import java.util.List;
  */
 @Repository
 public interface AppDao {
-    public boolean insertApp(@Param("app") App app);
-    public boolean updateApp(@Param("app") App app);
-    public boolean deleteAppById(@Param("id") int id);
-    public List<App> getAppListByPageDesc(@Param("offset") int offset, @Param("limit") int limit);
-    public Integer deleteAppByIdList(@Param("idList") int[] idList);
+    boolean insertApp(@Param("app") App app);
+
+    boolean updateApp(@Param("app") App app);
+
+    boolean deleteAppById(@Param("id") int id);
+
+    List<App> getAppListByPageDesc(@Param("offset") int offset, @Param("limit") int limit);
+
+    Integer deleteAppByIdList(@Param("idList") int[] idList);
 
     App getAppById(@Param("id") int id);
 
@@ -26,4 +30,12 @@ public interface AppDao {
 
     //获得最新的App
     App getLastApp();
+
+    boolean resetAllLimitFlags();
+
+    boolean setLimitFlag(int versionId);
+
+    App getLimitVersionApp();
+
+    App getAppByVersion(String version);
 }

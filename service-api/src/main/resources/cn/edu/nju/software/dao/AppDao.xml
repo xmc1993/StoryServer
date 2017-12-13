@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.nju.software.dao.AppDao">
-    <resultMap id="BaseResultMap" type="cn.edu.nju.software.entity.App" >
-        <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="version" property="version" jdbcType="VARCHAR" />
-        <result column="updateHint" property="updateHint" jdbcType="VARCHAR" />
-        <result column="fileSize" property="fileSize" jdbcType="VARCHAR" />
-        <result column="url" property="url" jdbcType="VARCHAR" />
-        <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <resultMap id="BaseResultMap" type="cn.edu.nju.software.entity.App">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="version" property="version" jdbcType="VARCHAR"/>
+        <result column="updateHint" property="updateHint" jdbcType="VARCHAR"/>
+        <result column="fileSize" property="fileSize" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="fields">
         id, version, updateHint,fileSize, url, createTime, updateTime
@@ -47,13 +47,15 @@
         limit #{offset},#{limit}
     </select>
     <select id="getAppById" resultType="cn.edu.nju.software.entity.App">
-        select <include refid="fields"/>
+        select
+        <include refid="fields"/>
         from apps
         where id = #{id}
     </select>
 
     <select id="getLastApp" resultType="cn.edu.nju.software.entity.App">
-        select <include refid="fields"/>
+        select
+        <include refid="fields"/>
         from apps
         where id = (select max(id) from apps)
     </select>
@@ -71,6 +73,28 @@
     <select id="getAppCount" resultType="java.lang.Integer">
         select count(DISTINCT id)
         from apps
+    </select>
+
+    <update id="resetAllLimitFlags">
+        update apps
+        set limitFlag = 0
+    </update>
+
+    <update id="setLimitFlag">
+        UPDATE apps
+        set limitFlag = 1
+        where id = #{0}
+    </update>
+
+    <select id="getLimitVersionApp" resultType="cn.edu.nju.software.entity.App">
+        select * from apps
+        where limitFlag = 1
+        order by updateTime DESC
+        limit 1;
+    </select>
+
+    <select id="getAppByVersion" resultType="cn.edu.nju.software.entity.App">
+        select * from apps where version = #{0};
     </select>
 
 </mapper>

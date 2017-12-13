@@ -2,11 +2,13 @@ package cn.edu.nju.software.filter;
 
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.exception.LoginException;
+import cn.edu.nju.software.service.AppService;
 import cn.edu.nju.software.util.JedisUtil;
 import cn.edu.nju.software.util.ObjectAndByte;
 import cn.edu.nju.software.util.TokenConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import redis.clients.jedis.Jedis;
 
@@ -32,10 +34,13 @@ import java.util.List;
  * @see
  */
 public class AccessTokenValidationInterceptor extends HandlerInterceptorAdapter {
-
     private static Logger logger = LoggerFactory.getLogger(AccessTokenValidationInterceptor.class);
+    @Autowired
+    private AppService appService;
+
     //白名单 TODO 改为配置 通用
     private static List<String> whileList = new ArrayList();
+
     static {
         whileList.add("/user/getStoryListByPage");
         whileList.add("/user/getStoryById");
@@ -49,22 +54,33 @@ public class AccessTokenValidationInterceptor extends HandlerInterceptorAdapter 
         whileList.add("/user/getMostPopularByPage");
         whileList.add("/user/getPopularOriginalStoryListByPage");
     }
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         logger.info("************:" + request.getRequestURI());
+        //检验app版本号
         //白名单的uri可以过滤
-        if(whileList.contains(request.getRequestURI())){
+        if (whileList.contains(request.getRequestURI())) {
             String AccessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
             if (AccessToken != null) {
                 this.checkLogin(request, response, handler);
             }
-        }else {
+        } else {
             this.checkLogin(request, response, handler);
         }
         return super.preHandle(request, response, handler);
     }
 
+    /**
+     * 检验请求的登录状态
+     *
+     * @param request
+     * @param response
+     * @param handler
+     * @return
+     * @throws Exception
+     */
     private boolean checkLogin(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         String AccessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
@@ -100,4 +116,6 @@ public class AccessTokenValidationInterceptor extends HandlerInterceptorAdapter 
 
         return true;
     }
+
+
 }
