@@ -118,6 +118,35 @@ public class UserReadPlanController extends BaseController {
         return responseData;
     }
 
+    @ApiOperation(value = "获取第一个未读阅读计划故事id")
+    @RequestMapping(value = "/getFirstUnreadStoryId", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Integer> getFirstUnreadStoryId(HttpServletRequest request, HttpServletResponse response){
+        ResponseData responseData=new ResponseData();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            response.setStatus(401);
+            return responseData;
+        }
+        Baby baby = babyService.getUserOneBaby(user.getId());
+        if (baby == null) {
+            responseData.jsonFill(2, "用户没有宝宝", null);
+            return responseData;
+        }
+        int readPlanId = babyReadPlanService.getBabyReadPlanByBabyId(baby.getId()).getReadPlanId();
+        List<ReadingPlanStoryGroup> list=readPlanStoryGroupService.getReadPlanStoryGroupByPlanId(readPlanId);
+        for (ReadingPlanStoryGroup storyGroup : list) {
+            boolean finish = worksService.getWorksByUserAndStory(user.getId(), storyGroup.getStoryid());
+            if (!finish){
+                responseData.jsonFill(1,null,storyGroup.getStoryid());
+                return  responseData;
+            }
+        }
+        responseData.jsonFill(1,null,storyService.getRecommendStoryListByPage(0,1).get(0).getId());
+        return responseData;
+    }
+
     @ApiOperation(value = "判断该作品是否是属于阅读计划里的")
     @RequestMapping(value = "/worksBeLongToReadPlan", method = {RequestMethod.GET})
     @ResponseBody

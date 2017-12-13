@@ -5,9 +5,12 @@ import cn.edu.nju.software.dao.CommentMapper;
 import cn.edu.nju.software.entity.Comment;
 import cn.edu.nju.software.entity.CommentLikeRelation;
 import cn.edu.nju.software.entity.CommentLikeRelationExample;
+import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by zhangsong on 2017/12/11.
@@ -56,6 +59,15 @@ public class CommentServiceImpl implements CommentService {
             return commentMapper.deleteLike(id);
         }
         return false;
+    }
+
+    @Override
+    public ResponseData<List<Comment>> getCommentsByAmbitusId(int ambitusId,int page, int pageSize) {
+        ResponseData<List<Comment>> responseData=new ResponseData<>();
+        int offset = page * pageSize;
+        int limit = pageSize;
+        responseData.jsonFill(1,null,commentMapper.getCommentsByAmbitusId(ambitusId,offset, limit));
+        return responseData;
     }
 
 

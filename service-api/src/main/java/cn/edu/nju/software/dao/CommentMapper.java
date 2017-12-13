@@ -34,4 +34,6 @@ public interface CommentMapper {
 
     boolean deleteLike(int id);
 
+    List<Comment> getCommentsByAmbitusId(int ambitusId,int offset, int limit);
+
 }

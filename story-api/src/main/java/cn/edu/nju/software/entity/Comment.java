@@ -14,7 +14,7 @@ public class Comment {
 
     private String content;
 
-    private Integer likeCount;
+    private Integer likeCount=0;
 
     private Integer cream;
 
