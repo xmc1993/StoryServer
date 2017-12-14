@@ -11,7 +11,6 @@
     <result column="expireTime" property="expireTime" jdbcType="TIMESTAMP" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="pushType" property="pushType" jdbcType="INTEGER" />
-    <result column="extraField" property="extraField" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -72,8 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, ticker, title, text, destinationId, startTime, expireTime, createTime, pushType, 
-    extraField
+    id, ticker, title, text, destinationId, startTime, expireTime, createTime, pushType
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.edu.nju.software.entity.MessagePushExample" >
     select
@@ -108,12 +106,12 @@
   <insert id="insert" parameterType="cn.edu.nju.software.entity.MessagePush" >
     insert into message_push (id, ticker, title, 
       text, destinationId, startTime, 
-      expireTime, createTime, pushType, 
-      extraField)
+      expireTime, createTime, pushType
+      )
     values (#{id,jdbcType=INTEGER}, #{ticker,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
       #{text,jdbcType=VARCHAR}, #{destinationId,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, 
-      #{expireTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{pushType,jdbcType=INTEGER}, 
-      #{extraField,jdbcType=VARCHAR})
+      #{expireTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{pushType,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.nju.software.entity.MessagePush" >
     insert into message_push
@@ -145,9 +143,6 @@
       <if test="pushType != null" >
         pushType,
       </if>
-      <if test="extraField != null" >
-        extraField,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -176,9 +171,6 @@
       </if>
       <if test="pushType != null" >
         #{pushType,jdbcType=INTEGER},
-      </if>
-      <if test="extraField != null" >
-        #{extraField,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -218,9 +210,6 @@
       <if test="record.pushType != null" >
         pushType = #{record.pushType,jdbcType=INTEGER},
       </if>
-      <if test="record.extraField != null" >
-        extraField = #{record.extraField,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -236,8 +225,7 @@
       startTime = #{record.startTime,jdbcType=TIMESTAMP},
       expireTime = #{record.expireTime,jdbcType=TIMESTAMP},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
-      pushType = #{record.pushType,jdbcType=INTEGER},
-      extraField = #{record.extraField,jdbcType=VARCHAR}
+      pushType = #{record.pushType,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -269,9 +257,6 @@
       <if test="pushType != null" >
         pushType = #{pushType,jdbcType=INTEGER},
       </if>
-      <if test="extraField != null" >
-        extraField = #{extraField,jdbcType=VARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -284,8 +269,7 @@
       startTime = #{startTime,jdbcType=TIMESTAMP},
       expireTime = #{expireTime,jdbcType=TIMESTAMP},
       createTime = #{createTime,jdbcType=TIMESTAMP},
-      pushType = #{pushType,jdbcType=INTEGER},
-      extraField = #{extraField,jdbcType=VARCHAR}
+      pushType = #{pushType,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

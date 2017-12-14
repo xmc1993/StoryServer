@@ -8,6 +8,7 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="extraField" property="extraField" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, content, destinationType, createTime, updateTime, description
+    id, content, destinationType, createTime, updateTime, description, extraField
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.edu.nju.software.entity.DestinationExample" >
     select
@@ -102,11 +103,11 @@
   </delete>
   <insert id="insert" parameterType="cn.edu.nju.software.entity.Destination" >
     insert into destination (id, content, destinationType, 
-      createTime, updateTime, description
-      )
+      createTime, updateTime, description, 
+      extraField)
     values (#{id,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{destinationType,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{description,jdbcType=VARCHAR}
-      )
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{description,jdbcType=VARCHAR}, 
+      #{extraField,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.nju.software.entity.Destination" >
     insert into destination
@@ -129,6 +130,9 @@
       <if test="description != null" >
         description,
       </if>
+      <if test="extraField != null" >
+        extraField,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -148,6 +152,9 @@
       </if>
       <if test="description != null" >
         #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="extraField != null" >
+        #{extraField,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -178,6 +185,9 @@
       <if test="record.description != null" >
         description = #{record.description,jdbcType=VARCHAR},
       </if>
+      <if test="record.extraField != null" >
+        extraField = #{record.extraField,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -190,7 +200,8 @@
       destinationType = #{record.destinationType,jdbcType=INTEGER},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
-      description = #{record.description,jdbcType=VARCHAR}
+      description = #{record.description,jdbcType=VARCHAR},
+      extraField = #{record.extraField,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -213,6 +224,9 @@
       <if test="description != null" >
         description = #{description,jdbcType=VARCHAR},
       </if>
+      <if test="extraField != null" >
+        extraField = #{extraField,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -222,15 +236,12 @@
       destinationType = #{destinationType,jdbcType=INTEGER},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       updateTime = #{updateTime,jdbcType=TIMESTAMP},
-      description = #{description,jdbcType=VARCHAR}
+      description = #{description,jdbcType=VARCHAR},
+      extraField = #{extraField,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
   <select id="getAllDestinationDescription" resultType="cn.edu.nju.software.dto.DestinationVo">
-    SELECT
-    id,
-    description
-    FROM
-    destination
+    SELECT id,description FROM destination
   </select>
 </mapper>

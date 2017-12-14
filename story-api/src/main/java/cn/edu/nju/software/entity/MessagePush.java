@@ -21,8 +21,6 @@ public class MessagePush {
 
     private Integer pushType;
 
-    private String extraField;
-
     public Integer getId() {
         return id;
     }
@@ -93,13 +91,5 @@ public class MessagePush {
 
     public void setPushtype(Integer pushType) {
         this.pushType = pushType;
-    }
-
-    public String getExtrafield() {
-        return extraField;
-    }
-
-    public void setExtrafield(String extraField) {
-        this.extraField = extraField == null ? null : extraField.trim();
     }
 }

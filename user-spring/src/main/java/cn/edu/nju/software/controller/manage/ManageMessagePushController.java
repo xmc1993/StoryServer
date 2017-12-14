@@ -10,7 +10,6 @@ import cn.edu.nju.software.util.AndroidPush.AndroidNotification;
 import cn.edu.nju.software.util.AndroidPush.PushClient;
 import cn.edu.nju.software.util.MessagePushUtil;
 import com.alibaba.fastjson.JSON;
-import com.google.gson.Gson;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -63,8 +62,7 @@ public class ManageMessagePushController {
                                                  @ApiParam("跳转地id") @RequestParam int destinationId,
                                                  @ApiParam("定时发送时间（可选，如为空则表示立刻发送）(时间格式：YYYY-MM-DD HH:mm:ss)") @RequestParam(value = "startTime", required = false) String startTime,
                                                  @ApiParam("推送的过期时间") @RequestParam String expireTime,
-                                                 @ApiParam("推送的类型") @RequestParam Integer pushType,
-                                                 @ApiParam("额外的参数") @RequestParam(value ="extraField",required = false) String extraField)throws ParseException {
+                                                 @ApiParam("推送的类型") @RequestParam Integer pushType) throws ParseException {
         ResponseData<Boolean> responseData = new ResponseData<>();
         MessagePush messagePush = new MessagePush();
         messagePush.setTicker(ticker);
@@ -72,8 +70,7 @@ public class ManageMessagePushController {
         messagePush.setTitle(title);
         messagePush.setText(text);
         messagePush.setCreatetime(new Date());
-        if (extraField!=null)
-            messagePush.setExtrafield(extraField);
+
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         messagePush.setExpiretime(dateFormat.parse(expireTime));
         messagePush.setPushtype(pushType);
@@ -110,7 +107,8 @@ public class ManageMessagePushController {
     @ResponseBody
     public ResponseData<Boolean> saveDestination(@ApiParam("跳转地内容") @RequestParam(value = "content", required = false) String content,
                                                  @ApiParam("跳转类型") @RequestParam Integer destinationType,
-                                                 @ApiParam("描述内容") @RequestParam String description
+                                                 @ApiParam("描述内容") @RequestParam String description,
+                                                 @ApiParam("额外的参数") @RequestParam(value = "extraField", required = false) String extraField
     ) {
         ResponseData<Boolean> responseData = new ResponseData<>();
         Destination destination = new Destination();
@@ -125,6 +123,11 @@ public class ManageMessagePushController {
                 destination.setDestinationtype(destinationType);
                 break;
             case 2:
+                if (extraField == null) {
+                    responseData.jsonFill(2, "该跳转类型需要额外参数", null);
+                    return responseData;
+                }
+                destination.setExtrafield(extraField);
             case 3:
                 if (content == null) {
                     responseData.jsonFill(2, "该跳转类型需要跳转内容", null);
@@ -198,10 +201,10 @@ public class ManageMessagePushController {
                     //2表示跳转到app里面activity
                     case 2:
                         androidBroadcast.goActivityAfterOpen(destination.getContent());
-                        if(messagePush.getExtrafield()!=null){
-                            Map maps=  JSON.parseObject(messagePush.getExtrafield(),Map.class);
-                            for (Object map : maps.entrySet()){
-                                androidBroadcast.setExtraField((String) map,(String) maps.get(map));
+                        if (destination.getExtrafield() != null) {
+                            Map maps = JSON.parseObject(destination.getExtrafield(), Map.class);
+                            for (Object map : maps.entrySet()) {
+                                androidBroadcast.setExtraField((String) map, (String) maps.get(map));
                             }
                         }
                         break;
