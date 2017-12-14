@@ -92,11 +92,12 @@ public class AppServiceImpl implements AppService {
         return appDao.getAppByVersion(version);
     }
 
-    @Override
-    @Cacheable(value = "appVersion", key = "'minAppVersion'")
-    public String test() {
-        return "测试 啊啊啊啊啊啊啊啊啊";
-    }
+//    @Override
+//    @Cacheable(value = "appVersion")
+//    public String test() {
+//        System.out.println("方法被调用了");
+//        return "测试 啊啊啊啊啊啊啊啊啊";
+//    }
 
 
 }

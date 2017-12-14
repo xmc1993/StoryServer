@@ -535,8 +535,9 @@ public class UserUserController extends BaseController {
 
     @RequestMapping(value = "/test", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public String test() {
-        return appService.test();
+    public App test() {
+//        return appService.getMinLimitVersionApp();
+        return null;
     }
 
     private String parse(int gendar) {
