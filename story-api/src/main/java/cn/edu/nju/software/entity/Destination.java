@@ -15,6 +15,8 @@ public class Destination {
 
     private String description;
 
+    private String extraField;
+
     public Integer getId() {
         return id;
     }
@@ -61,5 +63,13 @@ public class Destination {
 
     public void setDescription(String description) {
         this.description = description == null ? null : description.trim();
+    }
+
+    public String getExtrafield() {
+        return extraField;
+    }
+
+    public void setExtrafield(String extraField) {
+        this.extraField = extraField == null ? null : extraField.trim();
     }
 }

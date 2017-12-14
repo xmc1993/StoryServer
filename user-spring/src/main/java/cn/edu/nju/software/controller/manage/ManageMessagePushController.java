@@ -12,6 +12,7 @@ import cn.edu.nju.software.util.MessagePushUtil;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhangsong on 2017/12/4.
@@ -68,6 +71,7 @@ public class ManageMessagePushController {
         messagePush.setTitle(title);
         messagePush.setText(text);
         messagePush.setCreatetime(new Date());
+
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         messagePush.setExpiretime(dateFormat.parse(expireTime));
         messagePush.setPushtype(pushType);
@@ -104,7 +108,8 @@ public class ManageMessagePushController {
     @ResponseBody
     public ResponseData<Boolean> saveDestination(@ApiParam("跳转地内容") @RequestParam(value = "content", required = false) String content,
                                                  @ApiParam("跳转类型") @RequestParam Integer destinationType,
-                                                 @ApiParam("描述内容") @RequestParam String description
+                                                 @ApiParam("描述内容") @RequestParam String description,
+                                                 @ApiParam("额外的参数") @RequestParam(value = "extraField", required = false) String extraField
     ) {
         ResponseData<Boolean> responseData = new ResponseData<>();
         Destination destination = new Destination();
@@ -119,6 +124,11 @@ public class ManageMessagePushController {
                 destination.setDestinationtype(destinationType);
                 break;
             case 2:
+                if (extraField == null) {
+                    responseData.jsonFill(2, "该跳转类型需要额外参数", null);
+                    return responseData;
+                }
+                destination.setExtrafield(extraField);
             case 3:
                 if (content == null) {
                     responseData.jsonFill(2, "该跳转类型需要跳转内容", null);
@@ -192,6 +202,15 @@ public class ManageMessagePushController {
                     //2表示跳转到app里面activity
                     case 2:
                         androidBroadcast.goActivityAfterOpen(destination.getContent());
+                        if (destination.getExtrafield() != null) {
+                            JSONObject jsonObject =new JSONObject(destination.getExtrafield());
+                            Iterator iterator = jsonObject.keys();
+                            while(iterator.hasNext()){
+                                String key = (String) iterator.next();
+                                String value = jsonObject.getString(key);
+                                androidBroadcast.setExtraField(key,value);
+                            }
+                        }
                         break;
                     case 3:
                         androidBroadcast.goUrlAfterOpen(destination.getContent());

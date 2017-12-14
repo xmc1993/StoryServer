@@ -30,4 +30,6 @@ public interface CommentLikeRelationMapper {
     int updateByPrimaryKeySelective(CommentLikeRelation record);
 
     int updateByPrimaryKey(CommentLikeRelation record);
+
+    List<Integer> getAllLikeByUserId(Integer userId);
 }

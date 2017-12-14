@@ -293,7 +293,7 @@
     SELECT
 	`comment`.*,
 	`user`.nickname AS userName,
-	`user`.headImgUrl AS userHeadImg
+	`user`.headImgUrl AS userHeadImgUrl
     FROM
 	`comment`
 	INNER JOIN `user` ON `comment`.userId = `user`.id
@@ -306,4 +306,41 @@
 	createTime
 	limit #{1},#{2}
   </select>
+
+    <select id="getCommentsWithSensitiveByAmbitusId" resultType="cn.edu.nju.software.entity.Comment"
+            parameterType="java.lang.Integer">
+        SELECT
+        `comment`.*,
+        `user`.nickname AS userName,
+        `user`.headImgUrl AS userHeadImgUrl
+        FROM
+        `comment`
+        INNER JOIN `user` ON `comment`.userId = `user`.id
+        WHERE
+        state in (1,2)
+        AND ambitusId = #{0}
+        ORDER BY
+        cream DESC,
+        likeCount DESC,
+        createTime
+        limit #{1},#{2}
+    </select>
+
+    <update id="addCream">
+        update comment
+        set cream=1
+        where id=#{0}
+    </update>
+
+    <update id="deleteCream">
+        update comment
+        set cream=0
+        where id=#{0}
+    </update>
+
+    <update id="releaseComment">
+        update comment
+        set state=1
+        where id=#{0} AND state=2
+    </update>
 </mapper>

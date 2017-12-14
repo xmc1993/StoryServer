@@ -35,7 +35,7 @@ public class MessagePushServiceImpl implements MessagePushService {
 
     @Override
     public MessagePush getMessagePushById(Integer id) {
-        return  messagePushMapper.selectByPrimaryKey(id);
+        return messagePushMapper.selectByPrimaryKey(id);
     }
 
     @Override

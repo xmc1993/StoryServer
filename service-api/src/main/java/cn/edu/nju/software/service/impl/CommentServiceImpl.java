@@ -22,6 +22,17 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     CommentLikeRelationMapper commentLikeRelationMapper;
 
+
+    @Override
+    public boolean addCream(int id) {
+        return commentMapper.addCream(id);
+    }
+
+    @Override
+    public boolean deleteCream(int id) {
+        return commentMapper.deleteCream(id);
+    }
+
     @Override
     public Integer saveComment(Comment comment) {
         return commentMapper.insert(comment);
@@ -70,5 +81,22 @@ public class CommentServiceImpl implements CommentService {
         return responseData;
     }
 
+    @Override
+    public ResponseData<List<Comment>> getCommentsWithSensitiveByAmbitusId(int ambitusId, int page, int pageSize) {
+        ResponseData<List<Comment>> responseData=new ResponseData<>();
+        int offset = page * pageSize;
+        int limit = pageSize;
+        responseData.jsonFill(1,null,commentMapper.getCommentsWithSensitiveByAmbitusId(ambitusId,offset, limit));
+        return responseData;
+    }
 
+    @Override
+    public List<Integer> getAllLikeByUserId(Integer userId) {
+        return commentLikeRelationMapper.getAllLikeByUserId(userId);
+    }
+
+    @Override
+    public Boolean releaseComment(int id) {
+        return commentMapper.releaseComment(id);
+    }
 }

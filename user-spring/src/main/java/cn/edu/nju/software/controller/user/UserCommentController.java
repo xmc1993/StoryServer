@@ -1,9 +1,6 @@
 package cn.edu.nju.software.controller.user;
 
-import cn.edu.nju.software.entity.Comment;
-import cn.edu.nju.software.entity.ResponseData;
-import cn.edu.nju.software.entity.User;
-import cn.edu.nju.software.entity.UserBase;
+import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.CommentService;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.util.SensitiveWordsUtil;
@@ -47,9 +44,8 @@ public class UserCommentController {
             responseData.jsonFill(2, "请先登录", null);
             return responseData;
         }
-        //判断内容是否有敏感词
-        SensitiveWordsUtil.initKeyWord();
-        boolean res = SensitiveWordsUtil.isContaintSensitiveWord(content, 1);
+
+        boolean res = SensitiveWordsUtil.isContaintSensitiveWord(content, 2);
         Comment comment = new Comment();
         if (res) {
             comment.setState(2);
@@ -81,9 +77,63 @@ public class UserCommentController {
     @ResponseBody
     public ResponseData<List<Comment>> getCommentsByAmbitusId(@ApiParam("故事周边的Id") @RequestParam(value = "ambitusId") Integer ambitusId,
                                                               @ApiParam("page") @RequestParam int page,
-                                                              @ApiParam("pageSize") @RequestParam int pageSize) {
+                                                              @ApiParam("pageSize") @RequestParam int pageSize,
+                                                              HttpServletRequest request) {
+        ResponseData<List<Comment>> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        List<Comment> list = commentService.getCommentsByAmbitusId(ambitusId, page, pageSize).getObj();
+        if (user != null) {
+            List<Integer> idList = commentService.getAllLikeByUserId(user.getId());
+            for (Comment comment : list) {
+                for (Integer commentId : idList) {
+                    if (commentId.equals(comment.getId())) {
+                        comment.setLike(true);
+                        break;
+                    }
+                }
+            }
+            responseData.jsonFill(1, null, list);
+        }
+        return responseData;
+    }
 
-        ResponseData<List<Comment>> responseData = commentService.getCommentsByAmbitusId(ambitusId, page, pageSize);
+    @ApiOperation("用户评论点赞")
+    @RequestMapping(value = "/newLikeToComment", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Boolean> newLikeToComment(@ApiParam("评论id") @RequestParam(value = "commentId") Integer commentId,
+                                                  HttpServletRequest request) {
+        ResponseData<Boolean> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            return responseData;
+        }
+        boolean res = commentService.newLike(commentId, user.getId());
+        if (res) {
+            responseData.jsonFill(1, null, res);
+            return responseData;
+        }
+        responseData.jsonFill(2, "点赞失败", null);
+        return responseData;
+    }
+
+    @ApiOperation("用户取消点赞")
+    @RequestMapping(value = "/deleteLikeToComment", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Boolean> deleteLikeToComment(@ApiParam("评论id") @RequestParam(value = "commentId") Integer commentId,
+                                                     HttpServletRequest request) {
+        ResponseData<Boolean> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            return responseData;
+        }
+        boolean res = commentService.deleteLike(commentId, user.getId());
+        if (res) {
+            responseData.jsonFill(1, null, res);
+            return responseData;
+        }
+        responseData.jsonFill(2, "取消点赞失败", null);
         return responseData;
     }
 
