@@ -306,4 +306,26 @@ public class ManageAppController {
         result.jsonFill(1, null, appService.getLastApp().getUrl());
         return result;
     }
+
+	@ApiOperation(value = "获得限制的最低版本app")
+	@RequestMapping(value = "/getMinLimitVersionApp", method = {RequestMethod.GET})
+	@ResponseBody
+	public ResponseData<App> getMinLimitVersionApp () {
+		ResponseData<App> result = new ResponseData<>();
+		result.jsonFill(1, null, appService.getMinLimitVersionApp());
+		return result;
+	}
+
+	@ApiOperation(value = "设置app的最低版本")
+	@RequestMapping(value = "/updateMinLimitVersion", method = {RequestMethod.POST})
+	@ResponseBody
+	public ResponseData<Boolean> updateMinLimitVersion (
+			@ApiParam("id") @RequestParam(value = "id") Integer id
+	) {
+		ResponseData<Boolean> result = new ResponseData<>();
+		boolean res = appService.updateMinLimitVersion(id);
+		result.jsonFill(res ? 1 : 2, null, res);
+		return result;
+	}
+
 }

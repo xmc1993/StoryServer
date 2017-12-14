@@ -28,6 +28,12 @@
                     <!-- 用户的徽章信息默认两小时失效 -->
                     <property name="expiredDuration" value="7200"/>
                 </bean>
+                <!-- 保存徽章信息的接口 -->
+                <bean class="cn.edu.nju.software.util.cache.JedisSpringCache" id="appVersionJedisSpringCache">
+                    <property name="name" value="appVersion"/>
+                    <!-- 最低限制版本的失效时间为1天 -->
+                    <property name="expiredDuration" value="86400"/>
+                </bean>
             </set>
         </property>
     </bean>

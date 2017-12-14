@@ -3,6 +3,7 @@ package cn.edu.nju.software.controller;
 import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.exception.BusinessException;
 import cn.edu.nju.software.exception.LoginException;
+import cn.edu.nju.software.exception.VersionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -28,139 +29,143 @@ import java.util.Locale;
  * 异常响应处理。将异常包装为固定的格式并返回。
  * 指定格式为{@link ResponseEntity}。
  * </pre>
- * 
+ *
  * @author fenggang
  */
 @ControllerAdvice
 public class ControllerAssist {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
-	/**
-	 * 注册全局数据编辑器，若传递的数据为空字串 转成 null
-	 * 
-	 * @param binder
-	 *          数据绑定
-	 * @param request
-	 *          web请求
-	 */
-	@InitBinder
-	public void registerCustomEditors(WebDataBinder binder, WebRequest request) {
-		binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-	}
+    /**
+     * 注册全局数据编辑器，若传递的数据为空字串 转成 null
+     *
+     * @param binder  数据绑定
+     * @param request web请求
+     */
+    @InitBinder
+    public void registerCustomEditors(WebDataBinder binder, WebRequest request) {
+        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    }
 
-	/**
-	 * 处理请求参数验证异常
-	 * 
-	 * @param exception
-	 * @param request
-	 * @return
-	 */
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	@ResponseBody
-	public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception,
-			HttpServletRequest request) {
-		logger.info("", exception);
-		String message = "methoe error";
-		BindingResult bindingResult = exception.getBindingResult();
-		if (bindingResult != null && bindingResult.hasErrors()) {
-			List<ObjectError> objectErrorList = bindingResult.getAllErrors();
-			if (!objectErrorList.isEmpty()) {
-				message = objectErrorList.get(0).getDefaultMessage();
-			}
-		}
-		ResponseData<?> result = new ResponseData<>();
-		result.jsonFill(2, message, null);
-		return ResponseEntity.ok(result);
-	}
+    /**
+     * 处理请求参数验证异常
+     *
+     * @param exception
+     * @param request
+     * @return
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception,
+                                                                   HttpServletRequest request) {
+        logger.info("", exception);
+        String message = "methoe error";
+        BindingResult bindingResult = exception.getBindingResult();
+        if (bindingResult != null && bindingResult.hasErrors()) {
+            List<ObjectError> objectErrorList = bindingResult.getAllErrors();
+            if (!objectErrorList.isEmpty()) {
+                message = objectErrorList.get(0).getDefaultMessage();
+            }
+        }
+        ResponseData<?> result = new ResponseData<>();
+        result.jsonFill(2, message, null);
+        return ResponseEntity.ok(result);
+    }
 
-	/**
-	 * 处理服务器端数据访问错误
-	 * 
-	 * @param request
-	 *          请求对象
-	 * @param exception
-	 *          异常对象
-	 * @param locale
-	 *          地理信息
-	 * @return
-	 */
-	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-	@ExceptionHandler({ SQLException.class, DataAccessException.class, DataAccessResourceFailureException.class,
-		 DataIntegrityViolationException.class })
-	@ResponseBody
-	public ResponseEntity<?> handleSQLException(HttpServletRequest request, Exception exception, Locale locale) {
-		logger.info("", exception);
-		ResponseData<?> result = new ResponseData<>();
-		result.jsonFill(2, exception.getMessage(), null);
-		return ResponseEntity.ok(result);
-	}
+    /**
+     * 处理服务器端数据访问错误
+     *
+     * @param request   请求对象
+     * @param exception 异常对象
+     * @param locale    地理信息
+     * @return
+     */
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({SQLException.class, DataAccessException.class, DataAccessResourceFailureException.class,
+            DataIntegrityViolationException.class})
+    @ResponseBody
+    public ResponseEntity<?> handleSQLException(HttpServletRequest request, Exception exception, Locale locale) {
+        logger.info("", exception);
+        ResponseData<?> result = new ResponseData<>();
+        result.jsonFill(2, exception.getMessage(), null);
+        return ResponseEntity.ok(result);
+    }
 
-	/**
-	 * 处理服务器端RuntimeException
-	 * 
-	 * @param request
-	 *          请求对象
-	 * @param exception
-	 *          异常对象
-	 * @param locale
-	 *          地理信息
-	 * @return
-	 */
-	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-	@ExceptionHandler({ Exception.class })
-	@ResponseBody
-	public ResponseEntity<?> handleAllException(HttpServletRequest request, Exception exception, Locale locale) {
-		logger.info("", exception);
-		ResponseData<?> result = new ResponseData<>();
-		//将Exception中的信息打印出来方便查日志
-		exception.printStackTrace();
-		result.jsonFill(2, exception.getMessage(), null);
-		return ResponseEntity.status(400).body(result);
-	}
-	
-	/**
-	 * 处理登录验证异常
-	 * 
-	 * @param exception
-	 * @param request
-	 * @return
-	 */
-	@ExceptionHandler({LoginException.class})
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	public ResponseEntity<?> handleLoginException(LoginException exception,
-			HttpServletRequest request) {
-		logger.info("", exception);
-		String message = exception.getMessage();
-//		BindingResult bindingResult = exception.getBindingResult();
-//		if (bindingResult != null && bindingResult.hasErrors()) {
-//			List<ObjectError> objectErrorList = bindingResult.getAllErrors();
-//			if (!objectErrorList.isEmpty()) {
-//				message = objectErrorList.get(0).getDefaultMessage();
-//			}
-//		}
-		ResponseData<?> result = new ResponseData<>();
-		result.jsonFill(0, message, null);
-		return ResponseEntity.status(401).body(result);
-	}
+    /**
+     * 处理服务器端RuntimeException
+     *
+     * @param request   请求对象
+     * @param exception 异常对象
+     * @param locale    地理信息
+     * @return
+     */
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({Exception.class})
+    @ResponseBody
+    public ResponseEntity<?> handleAllException(HttpServletRequest request, Exception exception, Locale locale) {
+        logger.info("", exception);
+        ResponseData<?> result = new ResponseData<>();
+        //将Exception中的信息打印出来方便查日志
+        exception.printStackTrace();
+        result.jsonFill(2, exception.getMessage(), null);
+        return ResponseEntity.status(400).body(result);
+    }
 
-	/**
-	 * 处理business验证异常
-	 * 
-	 * @param exception
-	 * @param request
-	 * @return
-	 */
-	@ExceptionHandler({BusinessException.class})
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	@ResponseBody
-	public ResponseEntity<?> handleBusinessException(BusinessException exception,
-			HttpServletRequest request) {
-		logger.info("", exception);
-		ResponseData<?> result = new ResponseData<>();
-		result.jsonFill(2, exception.getMessage(), null);
-		return ResponseEntity.ok(result);
-	}
+    /**
+     * 处理登录验证异常
+     *
+     * @param exception
+     * @param request
+     * @return
+     */
+    @ExceptionHandler({LoginException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ResponseEntity<?> handleLoginException(LoginException exception,
+                                                  HttpServletRequest request) {
+        logger.info("", exception);
+        String message = exception.getMessage();
+        ResponseData<?> result = new ResponseData<>();
+        result.jsonFill(0, message, null);
+        return ResponseEntity.status(401).body(result);
+    }
+
+    /**
+     * 处理版本验证异常
+     *
+     * @param exception
+     * @param request
+     * @return
+     */
+    @ExceptionHandler({VersionException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ResponseEntity<?> handleVersionException(VersionException exception,
+                                                    HttpServletRequest request) {
+        logger.info("", exception);
+        String message = exception.getMessage();
+
+        ResponseData<?> result = new ResponseData<>();
+        result.jsonFill(9, message, null);
+        return ResponseEntity.status(400).body(result);
+    }
+
+    /**
+     * 处理business验证异常
+     *
+     * @param exception
+     * @param request
+     * @return
+     */
+    @ExceptionHandler({BusinessException.class})
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ResponseEntity<?> handleBusinessException(BusinessException exception,
+                                                     HttpServletRequest request) {
+        logger.info("", exception);
+        ResponseData<?> result = new ResponseData<>();
+        result.jsonFill(2, exception.getMessage(), null);
+        return ResponseEntity.ok(result);
+    }
 
 }

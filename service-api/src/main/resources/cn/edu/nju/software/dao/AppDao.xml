@@ -10,6 +10,7 @@
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
         <result column="ifUpdate" property="ifUpdate" jdbcType="INTEGER"/>
+
     </resultMap>
     <sql id="fields">
         id, version, updateHint,fileSize, url, createTime, updateTime,ifUpdate
@@ -85,6 +86,28 @@
     <select id="getAppCount" resultType="java.lang.Integer">
         select count(DISTINCT id)
         from apps
+    </select>
+
+    <update id="resetAllLimitFlags">
+        update apps
+        set limitFlag = 0
+    </update>
+
+    <update id="setLimitFlag">
+        UPDATE apps
+        set limitFlag = 1
+        where id = #{0}
+    </update>
+
+    <select id="getLimitVersionApp" resultType="cn.edu.nju.software.entity.App">
+        select * from apps
+        where limitFlag = 1
+        order by updateTime DESC
+        limit 1;
+    </select>
+
+    <select id="getAppByVersion" resultType="cn.edu.nju.software.entity.App">
+        select * from apps where version = #{0};
     </select>
 
 </mapper>

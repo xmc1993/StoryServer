@@ -55,7 +55,7 @@
 		<logger name="org.mybatis" level="info" />
 		<logger name="cn.edu" level="debug" />
 		<logger name="com.mangofactory" level="warn" />
-		<logger name="com.apache" level="warn" />
+		<!--<logger name="com.apache" level="warn" />-->
 		<!--<logger name="cn.edu" level="error" additivity="false">
 			<appender-ref ref="errorRollingFile"/>
 			<appender-ref ref="Console"/>

@@ -3,6 +3,7 @@ package cn.edu.nju.software.controller.user;
 import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.enums.GrantType;
+import cn.edu.nju.software.service.AppService;
 import cn.edu.nju.software.service.BadgeService;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.service.user.LoginStatusStatisticsService;
@@ -48,6 +49,8 @@ public class UserUserController extends BaseController {
     private BadgeService badgeService;
     @Autowired
     private LoginStatusStatisticsService loginStatusStatisticsService;
+    @Autowired
+    private AppService appService;
 
     @ApiOperation(value = "获取用户信息", notes = "获取用户信息")
     @RequestMapping(value = "/getUserBaseInfo", method = {RequestMethod.GET})
@@ -532,12 +535,9 @@ public class UserUserController extends BaseController {
 
     @RequestMapping(value = "/test", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public User test() {
-        User user = new User();
-        user.setNickname("xmc");
-        user.setCity("南京");
-        user.setAccessToken(UploadFileUtil.SOURCE_BASE_URL);
-        return user;
+    public App test() {
+//        return appService.getMinLimitVersionApp();
+        return null;
     }
 
     private String parse(int gendar) {
