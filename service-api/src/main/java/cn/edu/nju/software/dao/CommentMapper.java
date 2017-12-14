@@ -34,4 +34,13 @@ public interface CommentMapper {
 
     boolean deleteLike(int id);
 
+    List<Comment> getCommentsByAmbitusId(int ambitusId,int offset, int limit);
+
+    List<Comment> getCommentsWithSensitiveByAmbitusId(int ambitusId,int offset, int limit);
+
+    boolean addCream(int id);
+
+    boolean deleteCream(int id);
+
+    boolean releaseComment(int id);
 }

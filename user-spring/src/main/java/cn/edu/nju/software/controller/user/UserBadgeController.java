@@ -111,8 +111,8 @@ public class UserBadgeController {
             List<UserBadge> userBadgeList = userBadgeService.getUserBadgeByUserId(user.getId());
             for (UserBadge userBadge : userBadgeList) {
                 for (BadgeVo badgeVo : badgeVoList) {
-                    if (userBadge.getBadgeId() == badgeVo.getId()) {
-                        badgeVo.setHasGet(true);
+                    if (userBadge.getBadgeId().equals(badgeVo.getId())) {
+                        badgeVo.setHasGet(true); break;
                     }
                 }
             }

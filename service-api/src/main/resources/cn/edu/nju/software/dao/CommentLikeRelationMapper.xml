@@ -193,4 +193,13 @@
       like = #{like,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="getAllLikeByUserId" resultType="java.lang.Integer"
+          parameterType="java.lang.Integer">
+    SELECT
+    commentId
+    FROM
+    comment_like_relation
+    WHERE userId=#{userId}
+  </select>
 </mapper>

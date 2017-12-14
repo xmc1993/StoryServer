@@ -55,7 +55,7 @@
         <include refid="fields"></include>
         from badge
         where badgeTypeId = #{0}
-        ORDER by measure ASC
+        ORDER by measure
     </select>
 
     <select id="getAllBadgeByPage" resultType="cn.edu.nju.software.entity.Badge">
@@ -73,8 +73,8 @@
     </select>
 	
 	<select id="getBadgeOfUser" resultType="cn.edu.nju.software.entity.Badge">
-		select b.id,b.badgeTypeId,b.name,b.description,b.icon,b.measure,b.extra,b.createTime,b.updateTime from badge as b
-			left join user_badge_mappings as ubm on b.id = ubm.badgeId
+		select b.id,b.badgeTypeId,b.name,b.description,b.icon,b.measure,b.extra,b.createTime,b.updateTime
+		from badge as b left join user_badge_mappings as ubm on b.id = ubm.badgeId
 		where ubm.userId = #{userId}
 	</select>
 	

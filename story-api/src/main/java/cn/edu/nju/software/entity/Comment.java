@@ -14,9 +14,9 @@ public class Comment {
 
     private String content;
 
-    private Integer likeCount;
+    private Integer likeCount=0;
 
-    private Integer cream;
+    private Integer cream=0;
 
     private String picUrls;
 
@@ -27,5 +27,7 @@ public class Comment {
     private String userHeadImgUrl;
 
     private String userName;
+
+    private boolean like=false;
 
 }

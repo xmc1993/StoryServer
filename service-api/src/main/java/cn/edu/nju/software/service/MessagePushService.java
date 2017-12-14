@@ -6,7 +6,6 @@ import cn.edu.nju.software.entity.MessagePush;
 import cn.edu.nju.software.entity.ResponseData;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by zhangsong on 2017/12/5.

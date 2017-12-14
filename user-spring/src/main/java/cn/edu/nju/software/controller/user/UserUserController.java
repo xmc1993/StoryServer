@@ -7,6 +7,7 @@ import cn.edu.nju.software.service.AppService;
 import cn.edu.nju.software.service.BadgeService;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.service.user.LoginStatusStatisticsService;
+import cn.edu.nju.software.service.user.UserGoldAccountService;
 import cn.edu.nju.software.service.user.UserWeChatLoginService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.*;
@@ -50,7 +51,7 @@ public class UserUserController extends BaseController {
     @Autowired
     private LoginStatusStatisticsService loginStatusStatisticsService;
     @Autowired
-    private AppService appService;
+    private UserGoldAccountService userGoldAccountService;
 
     @ApiOperation(value = "获取用户信息", notes = "获取用户信息")
     @RequestMapping(value = "/getUserBaseInfo", method = {RequestMethod.GET})
@@ -148,14 +149,18 @@ public class UserUserController extends BaseController {
             responseData.jsonFill(2, "用户尚未登录。", false);
             return responseData;
         }
-        if (nickname != null)
+        if (nickname != null) {
             user.setNickname(nickname);
-        if (sex != null)
+        }
+        if (sex != null) {
             user.setSex(sex);
-        if (company != null)
+        }
+        if (company != null) {
             user.setCompany(company);
-        if (city != null)
+        }
+        if (city != null) {
             user.setCity(city);
+        }
         user.setUpdateTime(new Date());
         userService.updateUser(user);
         String AccessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
@@ -264,15 +269,17 @@ public class UserUserController extends BaseController {
             return responseData;
         }
 
+        Integer userId=user.getId();
+
         //搜集用户token信息
         if (deviceToken != null) {
-            userService.updateDeviceToken(deviceToken, user.getId());
+            userService.updateDeviceToken(deviceToken, userId);
         }
 
         // 获取到用户信息
         LoginResponseVo loginResponseVo = new LoginResponseVo();
         loginResponseVo.setAccessToken(user.getAccessToken());
-        loginResponseVo.setId(user.getId());
+        loginResponseVo.setId(userId);
         loginResponseVo.setIsNewUser(isNewUser);
 
         // 登录信息写入缓存
@@ -292,10 +299,13 @@ public class UserUserController extends BaseController {
         }
 
         //统计连续登录信息
-        loginStatusStatisticsService.saveLoginStatusStatistics(user.getId());
+        loginStatusStatisticsService.saveLoginStatusStatistics(userId);
+
+        //创建用户金币账户
+        userGoldAccountService.addUserGoldAccount(userId);
 
         // 对用户连续登陆天数处理
-        TwoTuple<Integer, Boolean> tt = userService.addContinuousLandDay(user.getId());
+        TwoTuple<Integer, Boolean> tt = userService.addContinuousLandDay(userId);
         int[] prizeDay = {1, 3, 7, 15, 21, 30, 50, 100, 200, 365, 500, 1000};
         Badge badge = null;
         // 今天的第一次登陆，获取badge对象
@@ -328,9 +338,12 @@ public class UserUserController extends BaseController {
             responseData.jsonFill(2, "用户不存在", null);
             return responseData;
         }
+
+        Integer userId=user.getId();
+
         //搜集用户deviceToken信息
         if (deviceToken != null) {
-            userService.updateDeviceToken(deviceToken, user.getId());
+            userService.updateDeviceToken(deviceToken, userId);
         }
         String code = user.getVerifyCode();
         LoginResponseVo loginResponseVo = new LoginResponseVo();
@@ -344,11 +357,11 @@ public class UserUserController extends BaseController {
                     user.setValid(1);
                 }
                 //验证成功恢复身份
-                userService.recoverUserById(user.getId());
+                userService.recoverUserById(userId);
 
                 // 获取到用户信息
                 loginResponseVo.setAccessToken(user.getAccessToken());
-                loginResponseVo.setId(user.getId());
+                loginResponseVo.setId(userId);
 
 
                 // 登录信息写入缓存
@@ -368,10 +381,12 @@ public class UserUserController extends BaseController {
                 }
 
                 //统计连续登录信息
-                loginStatusStatisticsService.saveLoginStatusStatistics(user.getId());
+                loginStatusStatisticsService.saveLoginStatusStatistics(userId);
+                //创建用户金币账户
+                userGoldAccountService.addUserGoldAccount(userId);
 
                 // 对用户连续登陆天数处理
-                TwoTuple<Integer, Boolean> tt = userService.addContinuousLandDay(user.getId());
+                TwoTuple<Integer, Boolean> tt = userService.addContinuousLandDay(userId);
                 int[] prizeDay = {1, 3, 7, 15, 21, 30, 50, 100, 200, 365, 500, 1000};
                 Badge badge = null;
                 // 今天的第一次登陆，获取badge对象
@@ -481,14 +496,15 @@ public class UserUserController extends BaseController {
                 jedis.close();
             }
         }
-
+        Integer userId=user.getId();
         //统计连续登录信息
-        loginStatusStatisticsService.saveLoginStatusStatistics(user.getId());
-
-        userService.addContinuousLandDay(user.getId());
+        loginStatusStatisticsService.saveLoginStatusStatistics(userId);
+        userService.addContinuousLandDay(userId);
+        //创建用户金币账户
+        userGoldAccountService.addUserGoldAccount(userId);
 
         // 对用户连续登陆天数处理
-        TwoTuple<Integer, Boolean> tt = userService.addContinuousLandDay(user.getId());
+        TwoTuple<Integer, Boolean> tt = userService.addContinuousLandDay(userId);
         int[] prizeDay = {1, 3, 7, 15, 21, 30, 50, 100, 200, 365, 500, 1000};
         Badge badge = null;
         // 今天的第一次登陆，获取badge对象
@@ -507,7 +523,7 @@ public class UserUserController extends BaseController {
         loginResponseVo.setContinuousLoginCount(tt.getId());
 
         loginResponseVo.setAccessToken(user.getAccessToken());
-        loginResponseVo.setId(user.getId());
+        loginResponseVo.setId(userId);
         responseData.jsonFill(1, null, loginResponseVo);
 
         return responseData;

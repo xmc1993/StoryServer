@@ -35,7 +35,7 @@ public class MessagePushServiceImpl implements MessagePushService {
 
     @Override
     public MessagePush getMessagePushById(Integer id) {
-        return  messagePushMapper.selectByPrimaryKey(id);
+        return messagePushMapper.selectByPrimaryKey(id);
     }
 
     @Override
@@ -68,10 +68,10 @@ public class MessagePushServiceImpl implements MessagePushService {
         ResponseData<List<Destination>> responseData=new ResponseData<>();
         PageHelper.startPage(page,pageSize);
         DestinationExample destinationExample=new DestinationExample();
-
         List<Destination> list=destinationMapper.selectByExample(destinationExample);
         PageInfo<Destination> pageInfo=new PageInfo<>(list);
         int count=(int)pageInfo.getTotal();
+        responseData.jsonFill(1,null,list);
         responseData.setCount(count);
         return responseData;
     }

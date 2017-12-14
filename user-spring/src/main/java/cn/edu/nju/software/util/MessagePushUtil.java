@@ -10,8 +10,8 @@ import org.json.JSONObject;
  */
 public class MessagePushUtil {
     private static AndroidBroadcast androidBroadcast;
-    private String appkey = "5a24efc2b27b0a18c900004c";
-    private String appMasterSecret = "dppnxbo8lpmwyywi5eq5uimvehapclpe";
+    private String appkey = "59c331505312dd4060000031";
+    private String appMasterSecret = "5maxiqhmrj13m3suwnhauiq9etoosytu";
     private static PushClient client = new PushClient();
 
 
@@ -19,7 +19,7 @@ public class MessagePushUtil {
 //懒汉模式，不知道会不会出现死锁的问题，埋个坑
     public static AndroidBroadcast getAndroidBroadcast() throws Exception {
         if (androidBroadcast == null)
-            androidBroadcast = new AndroidBroadcast("5a24efc2b27b0a18c900004c", "dppnxbo8lpmwyywi5eq5uimvehapclpe");
+            androidBroadcast = new AndroidBroadcast("59c331505312dd4060000031", "5maxiqhmrj13m3suwnhauiq9etoosytu");
         return androidBroadcast;
     }
 
