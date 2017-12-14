@@ -189,6 +189,10 @@
 
             <mvc:mapping path="/user/publishComment"/>
 
+            <!--金币系统-->
+            <mvc:mapping path="/user/userGoldAccount/addUserGoldAccount"/>
+            <mvc:mapping path="/user/userGoldAccount/getGoldAmount"/>
+
             <!-- 不需要拦截的uri -->
             <!-- <mvc:exclude-mapping path="/user/getLandingPage"/> <mvc:exclude-mapping
                 path="/**" /> -->
