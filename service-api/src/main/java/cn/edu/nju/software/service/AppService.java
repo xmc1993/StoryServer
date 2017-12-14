@@ -34,5 +34,5 @@ public interface AppService {
 
     App getAppByVersion(String version);
 
-    String test();
+//    String test();
 }
