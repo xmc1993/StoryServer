@@ -42,7 +42,7 @@ public class MessagePushServiceImpl implements MessagePushService {
     public ResponseData getAllMessagePush(int page, int pageSize) {
         ResponseData<List<MessagePush>> responseData=new ResponseData<>();
 
-        PageHelper.startPage(page, pageSize);
+        PageHelper.startPage(page+1, pageSize);
         MessagePushExample messagePushExample = new MessagePushExample();
         //通过criteria构造查询条件
         List<MessagePush> list = messagePushMapper.selectByExample(messagePushExample);
@@ -66,7 +66,7 @@ public class MessagePushServiceImpl implements MessagePushService {
     @Override
     public ResponseData getAllDestination(int page, int pageSize) {
         ResponseData<List<Destination>> responseData=new ResponseData<>();
-        PageHelper.startPage(page,pageSize);
+        PageHelper.startPage(page+1,pageSize);
         DestinationExample destinationExample=new DestinationExample();
         List<Destination> list=destinationMapper.selectByExample(destinationExample);
         PageInfo<Destination> pageInfo=new PageInfo<>(list);

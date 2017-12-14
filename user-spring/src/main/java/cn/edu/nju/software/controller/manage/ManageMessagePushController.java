@@ -23,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import static cn.edu.nju.software.util.AndroidPush.AndroidNotification.AfterOpenAction.go_activity;
 import static cn.edu.nju.software.util.AndroidPush.AndroidNotification.AfterOpenAction.go_app;
