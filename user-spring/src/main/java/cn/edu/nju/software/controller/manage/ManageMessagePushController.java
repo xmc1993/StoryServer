@@ -9,10 +9,10 @@ import cn.edu.nju.software.util.AndroidPush.AndroidBroadcast;
 import cn.edu.nju.software.util.AndroidPush.AndroidNotification;
 import cn.edu.nju.software.util.AndroidPush.PushClient;
 import cn.edu.nju.software.util.MessagePushUtil;
-import com.alibaba.fastjson.JSON;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +21,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -202,9 +203,12 @@ public class ManageMessagePushController {
                     case 2:
                         androidBroadcast.goActivityAfterOpen(destination.getContent());
                         if (destination.getExtrafield() != null) {
-                            Map maps = JSON.parseObject(destination.getExtrafield(), Map.class);
-                            for (Object map : maps.entrySet()) {
-                                androidBroadcast.setExtraField((String) map, (String) maps.get(map));
+                            JSONObject jsonObject =new JSONObject(destination.getExtrafield());
+                            Iterator iterator = jsonObject.keys();
+                            while(iterator.hasNext()){
+                                String key = (String) iterator.next();
+                                String value = jsonObject.getString(key);
+                                androidBroadcast.setExtraField(key,value);
                             }
                         }
                         break;
