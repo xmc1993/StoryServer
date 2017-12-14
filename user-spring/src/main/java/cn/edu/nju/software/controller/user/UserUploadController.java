@@ -32,6 +32,8 @@ public class UserUploadController {
     private static final String AUDIO_ROOT = "/audios/";
     //意见反馈的图片
     private static final String OPINION_ROOT = "/opinion/";
+    //评论的图片
+    private static final String COMMENT_ROOT="/comment/";
 
     @ApiOperation(value = "上传icon", notes = "")
     @RequestMapping(value = "/uploadIcon", method = {RequestMethod.POST})
@@ -93,6 +95,27 @@ public class UserUploadController {
         return responseData;
     }
 
+    @ApiOperation(value = "上传多个评论的图片", notes = "")
+    @RequestMapping(value = "/uploadCommentPics", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<UploadResVo> uploadCommentPics(
+            @ApiParam("commentPics") @RequestParam(value = "commentPics") MultipartFile[] commentPics) {
+        ResponseData<UploadResVo> responseData = new ResponseData<>();
+        List<String> list = new ArrayList<>();
+        for (MultipartFile commentPic : commentPics) {
+            String url = uploadFile(commentPic, OPINION_ROOT);
+            if (url == null) {
+                responseData.jsonFill(2, "上传失败", null);
+                return responseData;
+            }
+            list.add(url);
+        }
+        UploadResVo uploadResVo = new UploadResVo();
+        uploadResVo.setMultiUrls(list);
+        responseData.jsonFill(1, null, uploadResVo);
+        return responseData;
+    }
+
 
     @ApiOperation(value = "批量上传文件", notes = "")
     @RequestMapping(value = "/uploadMulti", method = {RequestMethod.POST})
@@ -115,6 +138,7 @@ public class UserUploadController {
 
         return responseData;
     }
+
 
     @ApiOperation(value = "上传音频", notes = "")
     @RequestMapping(value = "/uploadAudio", method = {RequestMethod.POST})

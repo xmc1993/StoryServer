@@ -9,6 +9,8 @@ import cn.edu.nju.software.util.AndroidPush.AndroidBroadcast;
 import cn.edu.nju.software.util.AndroidPush.AndroidNotification;
 import cn.edu.nju.software.util.AndroidPush.PushClient;
 import cn.edu.nju.software.util.MessagePushUtil;
+import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -21,6 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhangsong on 2017/12/4.
@@ -60,7 +63,8 @@ public class ManageMessagePushController {
                                                  @ApiParam("跳转地id") @RequestParam int destinationId,
                                                  @ApiParam("定时发送时间（可选，如为空则表示立刻发送）(时间格式：YYYY-MM-DD HH:mm:ss)") @RequestParam(value = "startTime", required = false) String startTime,
                                                  @ApiParam("推送的过期时间") @RequestParam String expireTime,
-                                                 @ApiParam("推送的类型") @RequestParam Integer pushType) throws ParseException {
+                                                 @ApiParam("推送的类型") @RequestParam Integer pushType,
+                                                 @ApiParam("额外的参数") @RequestParam(value ="extraField",required = false) String extraField)throws ParseException {
         ResponseData<Boolean> responseData = new ResponseData<>();
         MessagePush messagePush = new MessagePush();
         messagePush.setTicker(ticker);
@@ -68,6 +72,8 @@ public class ManageMessagePushController {
         messagePush.setTitle(title);
         messagePush.setText(text);
         messagePush.setCreatetime(new Date());
+        if (extraField!=null)
+            messagePush.setExtrafield(extraField);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         messagePush.setExpiretime(dateFormat.parse(expireTime));
         messagePush.setPushtype(pushType);
@@ -192,6 +198,12 @@ public class ManageMessagePushController {
                     //2表示跳转到app里面activity
                     case 2:
                         androidBroadcast.goActivityAfterOpen(destination.getContent());
+                        if(messagePush.getExtrafield()!=null){
+                            Map maps=  JSON.parseObject(messagePush.getExtrafield(),Map.class);
+                            for (Object map : maps.entrySet()){
+                                androidBroadcast.setExtraField((String) map,(String) maps.get(map));
+                            }
+                        }
                         break;
                     case 3:
                         androidBroadcast.goUrlAfterOpen(destination.getContent());

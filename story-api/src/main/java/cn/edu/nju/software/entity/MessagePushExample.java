@@ -674,6 +674,76 @@ public class MessagePushExample {
             addCriterion("pushType not between", value1, value2, "pushtype");
             return (Criteria) this;
         }
+
+        public Criteria andExtrafieldIsNull() {
+            addCriterion("extraField is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtrafieldIsNotNull() {
+            addCriterion("extraField is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtrafieldEqualTo(String value) {
+            addCriterion("extraField =", value, "extrafield");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtrafieldNotEqualTo(String value) {
+            addCriterion("extraField <>", value, "extrafield");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtrafieldGreaterThan(String value) {
+            addCriterion("extraField >", value, "extrafield");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtrafieldGreaterThanOrEqualTo(String value) {
+            addCriterion("extraField >=", value, "extrafield");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtrafieldLessThan(String value) {
+            addCriterion("extraField <", value, "extrafield");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtrafieldLessThanOrEqualTo(String value) {
+            addCriterion("extraField <=", value, "extrafield");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtrafieldLike(String value) {
+            addCriterion("extraField like", value, "extrafield");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtrafieldNotLike(String value) {
+            addCriterion("extraField not like", value, "extrafield");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtrafieldIn(List<String> values) {
+            addCriterion("extraField in", values, "extrafield");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtrafieldNotIn(List<String> values) {
+            addCriterion("extraField not in", values, "extrafield");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtrafieldBetween(String value1, String value2) {
+            addCriterion("extraField between", value1, value2, "extrafield");
+            return (Criteria) this;
+        }
+
+        public Criteria andExtrafieldNotBetween(String value1, String value2) {
+            addCriterion("extraField not between", value1, value2, "extrafield");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

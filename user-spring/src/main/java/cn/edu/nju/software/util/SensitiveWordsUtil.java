@@ -10,7 +10,7 @@ import java.util.*;
  * Created by zhangsong on 2017/12/12.
  */
 public class SensitiveWordsUtil {
-    private static String ENCODING = "GBK";    //字符编码
+    private static String ENCODING = "UTF-8";    //字符编码
 
     private static HashMap sensitiveWordMap;
 
@@ -21,15 +21,33 @@ public class SensitiveWordsUtil {
     private static int maxMatchType = 2;      //最大匹配规则
 
 
+    private static Map initKeyWord() {
+
+            try {
+                //读取敏感词库
+                Set<String> keyWordSet = readSensitiveWordFile();
+                //将敏感词库加入到HashMap中
+                addSensitiveWordToHashMap(keyWordSet);
+                //spring获取application，然后application.setAttribute("sensitiveWordMap",sensitiveWordMap);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        return sensitiveWordMap;
+    }
+
     /**
      * 判断文字是否包含敏感字符
      * 匹配规则&nbsp;1：最小匹配规则，2：最大匹配规则
      */
-    public static boolean isContaintSensitiveWord(String txt,int matchType){
+    public static boolean isContaintSensitiveWord(String txt, int matchType) {
+        if (sensitiveWordMap==null||sensitiveWordMap.isEmpty()){
+            initKeyWord();
+        }
         boolean flag = false;
-        for(int i = 0 ; i < txt.length() ; i++){
+        for (int i = 0; i < txt.length(); i++) {
             int matchFlag = CheckSensitiveWord(txt, i, matchType); //判断是否包含敏感字符
-            if(matchFlag > 0){    //大于0存在，返回true
+            if (matchFlag > 0) {    //大于0存在，返回true
                 flag = true;
             }
         }
@@ -40,13 +58,18 @@ public class SensitiveWordsUtil {
      * 获取文字中的敏感词
      * 匹配规则&nbsp;1：最小匹配规则，2：最大匹配规则
      */
-    public Set<String> getSensitiveWord(String txt , int matchType){
+    public Set<String> getSensitiveWord(String txt, int matchType) {
+
+        if (sensitiveWordMap==null||sensitiveWordMap.isEmpty()){
+            initKeyWord();
+        }
+
         Set<String> sensitiveWordList = new HashSet<String>();
 
-        for(int i = 0 ; i < txt.length() ; i++){
+        for (int i = 0; i < txt.length(); i++) {
             int length = CheckSensitiveWord(txt, i, matchType);    //判断是否包含敏感字符
-            if(length > 0){    //存在,加入list中
-                sensitiveWordList.add(txt.substring(i, i+length));
+            if (length > 0) {    //存在,加入list中
+                sensitiveWordList.add(txt.substring(i, i + length));
                 i = i + length - 1;    //减1的原因，是因为for会自增
             }
         }
@@ -58,7 +81,12 @@ public class SensitiveWordsUtil {
      * 替换敏感字字符
      * 匹配规则&nbsp;1：最小匹配规则，2：最大匹配规则
      */
-    public String replaceSensitiveWord(String txt,int matchType,String replaceChar){
+    public String replaceSensitiveWord(String txt, int matchType, String replaceChar) {
+
+        if (sensitiveWordMap==null||sensitiveWordMap.isEmpty()){
+            initKeyWord();
+        }
+
         String resultTxt = txt;
         Set<String> set = getSensitiveWord(txt, matchType);     //获取所有的敏感词
         Iterator<String> iterator = set.iterator();
@@ -77,9 +105,9 @@ public class SensitiveWordsUtil {
      * 获取替换字符串
      * 匹配规则&nbsp;1：最小匹配规则，2：最大匹配规则
      */
-    private String getReplaceChars(String replaceChar,int length){
+    private String getReplaceChars(String replaceChar, int length) {
         String resultReplace = replaceChar;
-        for(int i = 1 ; i < length ; i++){
+        for (int i = 1; i < length; i++) {
             resultReplace += replaceChar;
         }
 
@@ -90,45 +118,32 @@ public class SensitiveWordsUtil {
      * 检查文字中是否包含敏感字符，检查规则如下：<br>
      * 匹配规则&nbsp;1：最小匹配规则，2：最大匹配规则
      */
-    public static int CheckSensitiveWord(String txt,int beginIndex,int matchType){
-        boolean  flag = false;    //敏感词结束标识位：用于敏感词只有1位的情况
+    private static int CheckSensitiveWord(String txt, int beginIndex, int matchType) {
+        boolean flag = false;    //敏感词结束标识位：用于敏感词只有1位的情况
         int matchFlag = 0;     //匹配标识数默认为0
         char word = 0;
         Map nowMap = sensitiveWordMap;
-        for(int i = beginIndex; i < txt.length() ; i++){
+        for (int i = beginIndex; i < txt.length(); i++) {
             word = txt.charAt(i);
             nowMap = (Map) nowMap.get(word);     //获取指定key
-            if(nowMap != null){     //存在，则判断是否为最后一个
+            if (nowMap != null) {     //存在，则判断是否为最后一个
                 matchFlag++;     //找到相应key，匹配标识+1
-                if("1".equals(nowMap.get("isEnd"))){       //如果为最后一个匹配规则,结束循环，返回匹配标识数
+                if ("1".equals(nowMap.get("isEnd"))) {       //如果为最后一个匹配规则,结束循环，返回匹配标识数
                     flag = true;       //结束标志位为true
-                    if(minMatchTYpe == matchType){    //最小规则，直接返回,最大规则还需继续查找
+                    if (minMatchTYpe == matchType) {    //最小规则，直接返回,最大规则还需继续查找
                         break;
                     }
                 }
-            }
-            else{     //不存在，直接返回
+            } else {     //不存在，直接返回
                 break;
             }
         }
-        if(matchFlag < 2 || !flag){        //长度必须大于等于1，为词
+        if (matchFlag < 2 || !flag) {        //长度必须大于等于1，为词
             matchFlag = 0;
         }
         return matchFlag;
     }
 
-    public static Map initKeyWord() {
-        try {
-            //读取敏感词库
-            Set<String> keyWordSet = readSensitiveWordFile();
-            //将敏感词库加入到HashMap中
-            addSensitiveWordToHashMap(keyWordSet);
-            //spring获取application，然后application.setAttribute("sensitiveWordMap",sensitiveWordMap);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return sensitiveWordMap;
-    }
 
     /**
      * 读取敏感词库，将敏感词放入HashSet中，构建一个DFA算法模型：
@@ -172,7 +187,7 @@ public class SensitiveWordsUtil {
         Set<String> set = null;
         String webAppReourcePath = SensitiveWordsUtil.class.getResource("/").getPath();
 
-        File file = new File(webAppReourcePath+"sensitivelexicon/lexicon.txt");    //读取文件
+        File file = new File(webAppReourcePath + "sensitivelexicon/lexicon.txt");    //读取文件
         InputStreamReader read = new InputStreamReader(new FileInputStream(file), ENCODING);
         try {
             if (file.isFile() && file.exists()) {      //文件流是否存在

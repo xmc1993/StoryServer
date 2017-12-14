@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by zhangsong on 2017/12/11.
@@ -31,42 +32,58 @@ public class ManageCommentController {
     CommentService commentService;
 
 
-    @ApiOperation("根据故事周边id")
-    @RequestMapping(value = "/", method = {RequestMethod.POST})
+    @ApiOperation("根据故事周边id获取评论")
+    @RequestMapping(value = "/getCommentsByAmbitusId", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<Boolean> publishComment(@ApiParam("故事周边的Id") @RequestParam(value = "ambitusId") Integer ambitusId,
-                                                @ApiParam("评论的内容") @RequestParam(value = "content") String content,
-                                                @ApiParam("图片的Urls") @RequestParam(value = "picUrls",required = false) String picUrls,
-                                                HttpServletRequest request) {
-        ResponseData<Boolean> responseData = new ResponseData<>();
-        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
-        if (user == null) {
-            responseData.jsonFill(2, "请先登录", null);
-            return responseData;
-        }
-        //判断内容是否有敏感词
-        SensitiveWordsUtil.initKeyWord();
-        //使用最小匹配的办法
-        boolean res=SensitiveWordsUtil.isContaintSensitiveWord(content,1);
-        Comment comment=new Comment();
-        if (res){
-            comment.setState(2);
-        }else {
-            comment.setState(1);
-        }
-        comment.setAmbitusId(ambitusId);
-        comment.setContent(content);
-        comment.setCreateTime(new Date());
-        comment.setUserId(user.getId());
-        if (picUrls!=null)
-            comment.setPicUrls(picUrls);
+    public ResponseData<List<Comment>> getCommentsByAmbitusId(@ApiParam("故事周边的Id") @RequestParam(value = "ambitusId") Integer ambitusId,
+                                                @ApiParam("page") @RequestParam(value = "page") Integer page,
+                                                @ApiParam("pageSize") @RequestParam(value = "pageSize") Integer pageSize) {
+        ResponseData<List<Comment>> responseData=commentService.getCommentsWithSensitiveByAmbitusId(ambitusId,page,pageSize);
+        return responseData;
+    }
 
-        int success=commentService.saveComment(comment);
-        if (success==1){
+    @ApiOperation("评论加精")
+    @RequestMapping(value = "/commentAddCream", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> commentAddCream(@ApiParam("评论id") @RequestParam(value = "commentId") Integer commentId) {
+        ResponseData<Boolean> responseData=new ResponseData<>();
+        boolean res=commentService.addCream(commentId);
+        responseData.jsonFill(1,null,res);
+        return responseData;
+    }
+
+    @ApiOperation("评论取消加精")
+    @RequestMapping(value = "/cancelCream", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> cancelCream(@ApiParam("评论id") @RequestParam(value = "commentId") Integer commentId) {
+        ResponseData<Boolean> responseData=new ResponseData<>();
+        boolean res=commentService.deleteCream(commentId);
+        responseData.jsonFill(1,null,res);
+        return responseData;
+    }
+
+    @ApiOperation("非法评论放出小黑屋")
+    @RequestMapping(value = "/releaseComment", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> releaseComment(@ApiParam("评论id") @RequestParam(value = "commentId") Integer commentId) {
+        ResponseData<Boolean> responseData=new ResponseData<>();
+        boolean res=commentService.releaseComment(commentId);
+        responseData.jsonFill(1,null,res);
+        return responseData;
+    }
+
+    @ApiOperation("删除评论")
+    @RequestMapping(value = "/deleteComment", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> deleteComment(@ApiParam("评论id") @RequestParam(value = "commentId") Integer commentId,
+                                                 HttpServletRequest request) {
+        ResponseData<Boolean> responseData=new ResponseData<>();
+        Integer res=commentService.deleteComment(commentId);
+        if(res==1){
             responseData.jsonFill(1,null,true);
-            return responseData;
+        }else {
+            responseData.jsonFill(2,"删除失败",false);
         }
-        responseData.jsonFill(2,"评论失败",false);
-        return  responseData;
+        return responseData;
     }
 }
