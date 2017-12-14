@@ -25,6 +25,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import static cn.edu.nju.software.util.AndroidPush.AndroidNotification.AfterOpenAction.go_activity;
+import static cn.edu.nju.software.util.AndroidPush.AndroidNotification.AfterOpenAction.go_app;
+import static cn.edu.nju.software.util.AndroidPush.AndroidNotification.AfterOpenAction.go_url;
+
 /**
  * Created by zhangsong on 2017/12/4.
  */
@@ -197,10 +201,12 @@ public class ManageMessagePushController {
                 switch (destination.getDestinationtype()) {
                     //1表示直接打开APP
                     case 1:
+                        androidBroadcast.setAfterOpenAction(go_app);
                         androidBroadcast.goAppAfterOpen();
                         break;
                     //2表示跳转到app里面activity
                     case 2:
+                        androidBroadcast.setAfterOpenAction(go_activity);
                         androidBroadcast.goActivityAfterOpen(destination.getContent());
                         if (destination.getExtrafield() != null) {
                             JSONObject jsonObject =new JSONObject(destination.getExtrafield());
@@ -213,6 +219,7 @@ public class ManageMessagePushController {
                         }
                         break;
                     case 3:
+                        androidBroadcast.setAfterOpenAction(go_url);
                         androidBroadcast.goUrlAfterOpen(destination.getContent());
                         break;
                 }
