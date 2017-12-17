@@ -9,18 +9,17 @@
         <result column="url" property="url" jdbcType="VARCHAR"/>
         <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="ifUpdate" property="ifUpdate" jdbcType="INTEGER"/>
 
     </resultMap>
     <sql id="fields">
-        id, version, updateHint,fileSize, url, createTime, updateTime,ifUpdate
+        id, version, updateHint,fileSize, url, createTime, updateTime
     </sql>
     <insert id="insertApp">
         insert into apps
         (<include refid="fields"/>)
         VALUES
         (#{app.id},#{app.version},#{app.updateHint},#{app.fileSize},
-        #{app.url},#{app.createTime},#{app.updateTime},#{app.ifUpdate})
+        #{app.url},#{app.createTime},#{app.updateTime})
     </insert>
     <update id="updateApp">
         update apps set
@@ -28,8 +27,7 @@
         updateHint = #{app.updateHint},
         fileSize = #{app.fileSize},
         url = #{app.url},
-        updateTime = #{app.updateTime},
-        ifUpdate= #{app.ifUpdate}
+        updateTime = #{app.updateTime}
         where id = #{app.id}
     </update>
     <delete id="deleteAppById">
