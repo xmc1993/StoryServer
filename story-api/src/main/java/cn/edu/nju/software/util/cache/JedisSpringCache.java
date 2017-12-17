@@ -146,6 +146,7 @@ public class JedisSpringCache implements Cache, InitializingBean {
 
     @Override
     public ValueWrapper putIfAbsent(Object key, Object value) {
+
         if (get(key) != null) {
             return null;
         }
@@ -157,7 +158,7 @@ public class JedisSpringCache implements Cache, InitializingBean {
     public void evict(Object key) {
         setLocalJedis();
         try {
-            jedis.del(key.toString());
+            jedis.del(this.name + key.toString());
         } catch (Exception e) {
             logger.error("jedis执行flush出现异常", e);
         }finally {
