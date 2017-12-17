@@ -20,6 +20,8 @@ public class TokenConfig {
    * 默认的访问Token的HTTP请求头的名字
    */
   public static final String DEFAULT_ACCESS_TOKEN_HEADER_NAME = "Story-Access-Token";
+
+  public static final String DEFAULT_ANDROID_VERSION_HEADER_NAME = "Story-Android-Version";
   /**
    * 默认的访问token的有效期，默认为15天
    */

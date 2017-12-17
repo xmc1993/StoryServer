@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+	    http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+    <!-- 加载properties文件 -->
+
+    <!-- 定义连接管理器 -->
+    <bean id="httpClientConnectionManager"
+          class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager"
+          destroy-method="close">
+        <!-- 最大连接数 -->
+        <property name="maxTotal" value="${http.maxTotal}"/>
+
+        <!-- 设置每个主机地址的并发数 -->
+        <property name="defaultMaxPerRoute" value="${http.defaultMaxPerRoute}"/>
+    </bean>
+
+    <!-- httpclient对象构建器 -->
+    <bean id="httpClientBuilder" class="org.apache.http.impl.client.HttpClientBuilder">
+        <!-- 设置连接管理器 -->
+        <property name="connectionManager" ref="httpClientConnectionManager"/>
+    </bean>
+
+    <!-- 定义Httpclient对象 -->
+    <bean id="httpClient" class="org.apache.http.impl.client.CloseableHttpClient"
+          factory-bean="httpClientBuilder" factory-method="build" scope="prototype">
+    </bean>
+
+    <!-- 定义清理无效连接 -->
+    <bean class="cn.edu.nju.software.util.IdleConnectionEvictor"
+          destroy-method="shutdown">
+        <constructor-arg index="0" ref="httpClientConnectionManager"/>
+    </bean>
+
+    <bean id="requestConfigBuilder" class="org.apache.http.client.config.RequestConfig.Builder">
+        <!-- 创建连接的最长时间 -->
+        <property name="connectTimeout" value="${http.connectTimeout}"/>
+        <!-- 从连接池中获取到连接的最长时间 -->
+        <property name="connectionRequestTimeout" value="${http.connectionRequestTimeout}"/>
+        <!-- 数据传输的最长时间 -->
+        <property name="socketTimeout" value="${http.socketTimeout}"/>
+    </bean>
+    <!-- 定义请求参数 -->
+    <bean id="requestConfig" class="org.apache.http.client.config.RequestConfig" factory-bean="requestConfigBuilder"
+          factory-method="build">
+    </bean>
+
+    <bean class="cn.edu.nju.software.entity.Business">
+        <property name="wxAppId" value="wxfa4e5826ea6b4b24"></property>
+        <property name="wxSecret" value="36ac964dd6f2fe408e14b5383e649257"></property>
+        <property name="wxPublicAccountAppId" value="wxdd57892cf267701b"></property>
+        <property name="wxPublicAccountSecret" value="6b116b9e0fd5ca49bd457c35f4b40790"></property>
+    </bean>
+
+    <bean class="com.aliyun.oss.OSSClient">
+        <constructor-arg name="accessKeyId" value="LTAIQLXhrN5gIJlk"></constructor-arg>
+        <constructor-arg name="secretAccessKey" value="L7oz7G51B1o3mh7jTsXsI1oDoGxAuI"></constructor-arg>
+        <constructor-arg name="endpoint" value="oss-cn-beijing.aliyuncs.com"></constructor-arg>
+    </bean>
+
+</beans>
