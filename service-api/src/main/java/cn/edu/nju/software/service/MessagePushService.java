@@ -20,4 +20,5 @@ public interface MessagePushService {
     ResponseData getAllDestination(int page,int pageSize);
     Destination getDestinationById(Integer id);
     List<DestinationVo> getAllDestinationDescription();
+    int updateMessagePush(MessagePush messagePush);
 }

@@ -57,16 +57,38 @@ public class ManageMessagePushController {
         return responseData;
     }
 
+    @ApiOperation(value = "根据跳转地id获取跳转地详情", notes = "")
+    @RequestMapping(value = "/getDestinationById", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<Destination> getDestinationById(@ApiParam("destinationId") @RequestParam Integer destinationId) {
+        ResponseData<Destination> responseData = new ResponseData<>();
+        Destination destination = messagePushService.getDestinationById(destinationId);
+        responseData.jsonFill(1, null, destination);
+        return responseData;
+    }
+
+    @ApiOperation(value = "根据推送消息id获取推送消息详情", notes = "")
+    @RequestMapping(value = "/getMessagePushById", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<MessagePush> getMessagePushById(@ApiParam("推送消息的id") @RequestParam Integer messageId) {
+        ResponseData<MessagePush> responseData = new ResponseData<>();
+        MessagePush messagePush = messagePushService.getMessagePushById(messageId);
+        responseData.jsonFill(1, null, messagePush);
+        return responseData;
+    }
+
+
     @ApiOperation(value = "新建消息推送", notes = "")
     @RequestMapping(value = "/saveMessagePush", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<Boolean> saveMessagePush(@ApiParam("通知栏提示文字") @RequestParam String ticker,
-                                                 @ApiParam("通知标题") @RequestParam String title,
-                                                 @ApiParam("通知文字描述") @RequestParam String text,
-                                                 @ApiParam("跳转地id") @RequestParam int destinationId,
-                                                 @ApiParam("定时发送时间（可选，如为空则表示立刻发送）(时间格式：YYYY-MM-DD HH:mm:ss)") @RequestParam(value = "startTime", required = false) String startTime,
-                                                 @ApiParam("推送的过期时间") @RequestParam String expireTime,
-                                                 @ApiParam("推送的类型") @RequestParam Integer pushType) throws ParseException {
+    public ResponseData<Boolean> saveMessagePush(
+            @ApiParam("通知栏提示文字") @RequestParam String ticker,
+            @ApiParam("通知标题") @RequestParam String title,
+            @ApiParam("通知文字描述") @RequestParam String text,
+            @ApiParam("跳转地id") @RequestParam int destinationId,
+            @ApiParam("定时发送时间（可选，如为空则表示立刻发送）(时间格式：YYYY-MM-DD HH:mm:ss)") @RequestParam(value = "startTime", required = false) String startTime,
+            @ApiParam("推送的过期时间") @RequestParam String expireTime,
+            @ApiParam("推送的类型") @RequestParam Integer pushType) throws ParseException {
         ResponseData<Boolean> responseData = new ResponseData<>();
         MessagePush messagePush = new MessagePush();
         messagePush.setTicker(ticker);
@@ -82,6 +104,47 @@ public class ManageMessagePushController {
             messagePush.setStarttime(dateFormat.parse(startTime));
         }
         int res = messagePushService.saveMessagePush(messagePush);
+        if (res == 1) {
+            responseData.jsonFill(1, null, true);
+            return responseData;
+        }
+        responseData.jsonFill(2, "保存失败", null);
+        return responseData;
+    }
+
+    @ApiOperation(value = "更新消息推送", notes = "")
+    @RequestMapping(value = "/updateMessagePush", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> updateMessagePush(
+            @ApiParam("消息推送id") @RequestParam Integer messageId,
+            @ApiParam("通知栏提示文字") @RequestParam(value = "ticker",required = false) String ticker,
+            @ApiParam("通知标题") @RequestParam (value = "title",required = false) String title,
+            @ApiParam("通知文字描述") @RequestParam (value = "text",required = false) String text,
+            @ApiParam("跳转地id") @RequestParam (value = "text",required = false) Integer destinationId,
+            @ApiParam("定时发送时间（可选，如为空则表示立刻发送）(时间格式：YYYY-MM-DD HH:mm:ss)") @RequestParam String startTime,
+            @ApiParam("推送的过期时间") @RequestParam (value = "expireTime",required = false)String expireTime,
+            @ApiParam("推送的类型") @RequestParam (value = "pushType",required = false) Integer pushType) throws ParseException {
+        ResponseData<Boolean> responseData = new ResponseData<>();
+        MessagePush messagePush = messagePushService.getMessagePushById(messageId);
+        if (ticker!=null)
+        messagePush.setTicker(ticker);
+        if (destinationId!=null)
+        messagePush.setDestinationid(destinationId);
+        if (title!=null)
+        messagePush.setTitle(title);
+        if (text!=null)
+        messagePush.setText(text);
+        messagePush.setCreatetime(new Date());
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (expireTime!=null)
+        messagePush.setExpiretime(dateFormat.parse(expireTime));
+        if (pushType!=null)
+        messagePush.setPushtype(pushType);
+        if (startTime != null) {
+            messagePush.setStarttime(dateFormat.parse(startTime));
+        }
+        int res = messagePushService.updateMessagePush(messagePush);
         if (res == 1) {
             responseData.jsonFill(1, null, true);
             return responseData;
@@ -208,12 +271,12 @@ public class ManageMessagePushController {
                         androidBroadcast.setAfterOpenAction(go_activity);
                         androidBroadcast.goActivityAfterOpen(destination.getContent());
                         if (destination.getExtrafield() != null) {
-                            JSONObject jsonObject =new JSONObject(destination.getExtrafield());
+                            JSONObject jsonObject = new JSONObject(destination.getExtrafield());
                             Iterator iterator = jsonObject.keys();
-                            while(iterator.hasNext()){
+                            while (iterator.hasNext()) {
                                 String key = (String) iterator.next();
                                 String value = jsonObject.getString(key);
-                                androidBroadcast.setExtraField(key,value);
+                                androidBroadcast.setExtraField(key, value);
                             }
                         }
                         break;
