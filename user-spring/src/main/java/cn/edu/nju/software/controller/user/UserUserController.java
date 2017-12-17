@@ -302,7 +302,7 @@ public class UserUserController extends BaseController {
         loginStatusStatisticsService.saveLoginStatusStatistics(userId);
 
         //创建用户金币账户
-        userGoldAccountService.addUserGoldAccount(userId);
+        //userGoldAccountService.addUserGoldAccount(userId);
 
         // 对用户连续登陆天数处理
         TwoTuple<Integer, Boolean> tt = userService.addContinuousLandDay(userId);
@@ -383,7 +383,7 @@ public class UserUserController extends BaseController {
                 //统计连续登录信息
                 loginStatusStatisticsService.saveLoginStatusStatistics(userId);
                 //创建用户金币账户
-                userGoldAccountService.addUserGoldAccount(userId);
+                //userGoldAccountService.addUserGoldAccount(userId);
 
                 // 对用户连续登陆天数处理
                 TwoTuple<Integer, Boolean> tt = userService.addContinuousLandDay(userId);
@@ -501,7 +501,7 @@ public class UserUserController extends BaseController {
         loginStatusStatisticsService.saveLoginStatusStatistics(userId);
         userService.addContinuousLandDay(userId);
         //创建用户金币账户
-        userGoldAccountService.addUserGoldAccount(userId);
+        //userGoldAccountService.addUserGoldAccount(userId);
 
         // 对用户连续登陆天数处理
         TwoTuple<Integer, Boolean> tt = userService.addContinuousLandDay(userId);
