@@ -158,7 +158,7 @@ public class JedisSpringCache implements Cache, InitializingBean {
     public void evict(Object key) {
         setLocalJedis();
         try {
-            jedis.del(this.name + key.toString());
+            jedis.del(getCacheKey(key));
         } catch (Exception e) {
             logger.error("jedis执行flush出现异常", e);
         }finally {
@@ -198,7 +198,7 @@ public class JedisSpringCache implements Cache, InitializingBean {
     }
 
     private String getCacheKey(Object key) {
-        return this.name + key.toString();
+        return this.name + "-" + key.toString();
     }
 
     public Jedis getJedis() {
