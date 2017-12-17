@@ -100,6 +100,11 @@ public class AppServiceImpl implements AppService {
         return appDao.getAppByVersion(version);
     }
 
+    @Override
+    public String test() {
+        return null;
+    }
+
 //    @Override
 //    @Cacheable(value = "appVersion")
 //    public String test() {
