@@ -84,7 +84,6 @@ public class UserCommentController {
         List<Comment> list = commentService.getCommentsByAmbitusId(ambitusId, page, pageSize).getObj();
         if (user != null) {
             List<Integer> idList = commentService.getAllLikeByUserId(user.getId());
-            if (idList!=null||!idList.isEmpty()){
                 for (Comment comment : list) {
                     for (Integer commentId : idList) {
                         if (commentId.equals(comment.getId())) {
@@ -94,7 +93,6 @@ public class UserCommentController {
                     }
                 }
             }
-        }
         responseData.jsonFill(1, null, list);
         return responseData;
     }
