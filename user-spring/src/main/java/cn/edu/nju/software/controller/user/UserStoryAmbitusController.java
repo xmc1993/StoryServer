@@ -44,6 +44,11 @@ public class UserStoryAmbitusController extends BaseController {
 			responseData.jsonFill(2, "该故事没有周边", null);
 			return responseData;
 		}
+		for (StoryAmbitus storyAmbitus : list) {
+			if (storyAmbitus.getObligate().equals("1")){
+				storyAmbitus.setAllowComment(true);
+			}
+		}
 		responseData.jsonFill(1, null, list);
 		responseData.setCount(list.size());
 		return responseData;

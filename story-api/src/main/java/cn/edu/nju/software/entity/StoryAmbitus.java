@@ -23,6 +23,8 @@ public class StoryAmbitus {
 
     private String content;
 
+    private Boolean allowComment=false;
+
     public Integer getId() {
         return id;
     }
@@ -101,5 +103,13 @@ public class StoryAmbitus {
 
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
+    }
+
+    public Boolean getAllowComment() {
+        return allowComment;
+    }
+
+    public void setAllowComment(Boolean allowComment) {
+        this.allowComment = allowComment;
     }
 }
