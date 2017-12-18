@@ -159,4 +159,6 @@ public interface StoryDao {
     List<StoryWithRealTellCount> getMostPopularStoryByPageWithRealTellCount(int offset, int limit);
 
     List<StoryTitleVo> getAllStoryTitle();
+
+    List<Story> getStoryListByIdListWithoutUserStory(@Param("idList") List<Integer> idList);
 }
