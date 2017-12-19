@@ -12,7 +12,7 @@ import java.util.List;
 public interface WorkTagService {
     WorkTag selectByContent(String content);
     ResponseData<WorkTag> insertWorkTag(String content,Integer authorId);
-    List<WorkTag> selectAll();
+    ResponseData<List<WorkTag>> selectAll();
     List<WorkTag> selectTagsRecommendedAndCustomized(Integer authorId);
     ResponseData<WorkTag> selectWorkTagById(Integer id);
     int update(WorkTag workTag);

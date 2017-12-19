@@ -22,7 +22,7 @@ public class WorkTagServiceImpl implements WorkTagService {
 
     @Override
     public WorkTag selectByContent(String content) {
-        List<WorkTag> list = selectAll();
+        List<WorkTag> list = selectAll().getObj();
         for (WorkTag workTag : list) {
             String con = workTag.getContent();
             if (con != null) {
@@ -61,13 +61,16 @@ public class WorkTagServiceImpl implements WorkTagService {
     }
 
     @Override
-    public List<WorkTag> selectAll() {
+    public ResponseData<List<WorkTag>> selectAll() {
         WorkTagExample workTagExample = new WorkTagExample();
         List<WorkTag> list = workTagMapper.selectByExample(workTagExample);
-        return list;
+        ResponseData<List<WorkTag>> responseData = new ResponseData<>();
+        responseData.jsonFill(1, null, list);
+        responseData.setCount(list.size());
+        return responseData;
     }
 
-    @Override
+/*    @Override
     public List<WorkTag> selectTagsRecommendedAndCustomized(Integer userId) {
         WorkTagExample workTagExample = new WorkTagExample();
         WorkTagExample.Criteria criteria = workTagExample.createCriteria();
@@ -77,6 +80,31 @@ public class WorkTagServiceImpl implements WorkTagService {
         criteria.andAuthorIdIn(authorIdList);
         criteria.andValidEqualTo(1);
         return workTagMapper.selectByExample(workTagExample);
+    }*/
+
+    @Override
+    public List<WorkTag> selectTagsRecommendedAndCustomized(Integer userId) {
+        List<WorkTag> workTagList=new ArrayList<>();
+        WorkTagExample workTagExample = new WorkTagExample();
+        WorkTagExample.Criteria criteria1 = workTagExample.createCriteria();
+        workTagExample.setOrderByClause("update_time desc");
+        criteria1.andValidEqualTo(1);
+        criteria1.andAuthorIdEqualTo(0);
+        List<WorkTag> list=workTagMapper.selectByExample(workTagExample);
+        workTagList.addAll(list.subList(0,3));
+
+        workTagExample = new WorkTagExample();
+        WorkTagExample.Criteria criteria2 = workTagExample.createCriteria();
+        workTagExample.setOrderByClause("update_time desc");
+        criteria2.andValidEqualTo(1);
+        criteria2.andAuthorIdEqualTo(userId);
+        list=workTagMapper.selectByExample(workTagExample);
+        if (list.size()<= 2){
+            workTagList.addAll(list);
+        } else{
+            workTagList.addAll(list.subList(0,2));
+        }
+        return workTagList;
     }
 
     @Override

@@ -42,11 +42,7 @@ public class ManageWorkTagController {
     @RequestMapping(value = "selectAllWorkTag", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<WorkTag>> selectAllWorkTag() {
-        List<WorkTag> workTagList = workTagService.selectAll();
-        ResponseData<List<WorkTag>> responseData = new ResponseData<>();
-        responseData.jsonFill(1, null, workTagList);
-        responseData.setCount(workTagList.size());
-        return responseData;
+        return workTagService.selectAll();
     }
 
     @ApiOperation(value = "通过ID获取作品标签", notes = "")
