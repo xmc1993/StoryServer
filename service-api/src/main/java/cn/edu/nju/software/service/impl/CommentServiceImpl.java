@@ -49,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
         CommentLikeRelation commentLikeRelation = new CommentLikeRelation();
         commentLikeRelation.setCommentId(id);
         commentLikeRelation.setUserId(userId);
-        commentLikeRelation.setLike(true);
+        commentLikeRelation.setAgree(true);
         int res = commentLikeRelationMapper.insert(commentLikeRelation);
         if (res == 1) {
             return commentMapper.newLike(id);

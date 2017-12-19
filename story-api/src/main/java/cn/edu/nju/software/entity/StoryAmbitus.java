@@ -19,7 +19,8 @@ public class StoryAmbitus {
 
     private Date updatetime;
 
-    private String obligate;
+    //故事周边的可评论字段，1表示可以评论，0表示不可评论
+    private String obligate="0";
 
     private String content;
 
