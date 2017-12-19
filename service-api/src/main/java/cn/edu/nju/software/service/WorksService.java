@@ -64,4 +64,7 @@ public interface WorksService {
     
     //此方法是为了在用户更新头像时，使work表中的HeadImgUrl字段也联动更新
     boolean updateHeadImg(int userId,String url);
+
+    //按某种规则排序
+    List<Works> getWorksListByOrderRule(String fieldName,Integer orderRule,int page,int pageSize);
 }

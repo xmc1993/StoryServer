@@ -209,13 +209,16 @@ public class ManageWorkController {
     }
 
 
-    @ApiOperation(value = "获得最新的作品列表", notes = "需要登录")
+    @ApiOperation(value = "获得最新的作品列表(按条件进行排序)", notes = "需要登录")
     @RequestMapping(value = "/getLatestWorksByPage", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<Works>> getLatestWorksByPage(@ApiParam("页") @RequestParam int page,
-                                                          @ApiParam("页大小") @RequestParam int pageSize, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseData<List<Works>> getLatestWorksByPage(
+            @ApiParam("排序字段") @RequestParam String fieldName,
+            @ApiParam("排序规则(0代表正序，1代表逆序)") @RequestParam Integer orderRule,
+            @ApiParam("页") @RequestParam int page,
+            @ApiParam("页大小") @RequestParam int pageSize, HttpServletRequest request, HttpServletResponse response) {
         ResponseData<List<Works>> responseData = new ResponseData<>();
-        List<Works> worksList = worksService.getLatestWorksByPage(page, pageSize);
+        List<Works> worksList = worksService.getWorksListByOrderRule(fieldName,orderRule,page, pageSize);
         responseData.jsonFill(1, null, worksList);
         responseData.setCount(worksService.getWorksCount());
         return responseData;

@@ -847,4 +847,17 @@
 		limit #{0},#{1}
 	</select>
 
+	<select id="getStoryListByIdListWithoutUserStory" resultType="cn.edu.nju.software.entity.Story">
+		select
+		<include refid="fields"></include>
+		from story
+		where valid = 1 and draft = 0 and isSet=0 id in
+		<foreach collection="idList" item="id" index="index" open="("
+				 separator="," close=")">
+			#{id}
+		</foreach>
+		order by createTime desc
+		limit 5
+	</select>
+
 </mapper>

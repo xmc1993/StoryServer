@@ -323,4 +323,12 @@
       where id=#{0} and valid=1
     </update>
 
+    <select id="getWorksListByOrderRule" resultType="cn.edu.nju.software.entity.Works">
+        select
+        <include refid="fields"></include>
+        from works
+        where valid = 1
+        ORDER By ${fieldName} ${orderRule}
+        limit #{0},#{1}
+    </select>
 </mapper>
