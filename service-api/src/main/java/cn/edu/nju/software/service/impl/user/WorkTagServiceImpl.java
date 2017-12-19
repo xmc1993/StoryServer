@@ -120,6 +120,17 @@ public class WorkTagServiceImpl implements WorkTagService {
     }
 
     @Override
+    public List<WorkTag> getWorkTagByIdList(List<Integer> idList) {
+        WorkTagExample workTagExample = new WorkTagExample();
+        WorkTagExample.Criteria criteria = workTagExample.createCriteria();
+        criteria.andIdIn(idList);
+        if (idList==null||idList.size()==0){
+            System.out.println("为空");
+        }
+        return workTagMapper.selectByExample(workTagExample);
+    }
+
+    @Override
     public int update(WorkTag workTag) {
         return workTagMapper.updateByPrimaryKeySelective(workTag);
     }

@@ -1,5 +1,6 @@
 package cn.edu.nju.software.dao.user;
 
+import cn.edu.nju.software.entity.WorkTag;
 import cn.edu.nju.software.entity.WorkTagRelation;
 import cn.edu.nju.software.entity.WorkTagRelationExample;
 import org.apache.ibatis.annotations.Param;
@@ -29,4 +30,6 @@ public interface WorkTagRelationMapper {
     int updateByPrimaryKeySelective(WorkTagRelation record);
 
     int updateByPrimaryKey(WorkTagRelation record);
+
+    List<Integer> getWorkTagIdListByWorkId(Integer workId);
 }

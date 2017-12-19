@@ -10,7 +10,7 @@ import java.util.List;
 public class ResponseData<T> implements Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 8960296554212928922L;
 	@ApiModelProperty(value="返回状态")

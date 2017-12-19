@@ -208,4 +208,11 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="getWorkTagIdListByWorkId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    tag_id
+    from work_tag_relation
+    where work_id = #{0}
+  </select>
 </mapper>
