@@ -3,12 +3,14 @@ package cn.edu.nju.software.service.impl;
 import cn.edu.nju.software.dao.AgreeDao;
 import cn.edu.nju.software.dao.PlayListRelationDao;
 import cn.edu.nju.software.entity.PlayListRelation;
+import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.service.AgreeService;
 import cn.edu.nju.software.service.PlayListRelationService;
 import cn.edu.nju.software.service.WorksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -59,5 +61,18 @@ public class PlayListRelationServiceImpl implements PlayListRelationService {
             return agreeDao.getAgreeWorksListByUserId(userId, offset, limit);
         }
         return playListRelationDao.getWorksIdListByPlayListIdAndUserIdByPage(playListId, userId, offset, limit);
+    }
+
+    @Override
+    public boolean updateOrderTimeByStorySetId(Integer storySetId, Date orderTime) {
+        if (storySetId == null ||  storySetId.compareTo(0) == 0) {
+            return true;
+        }
+        return playListRelationDao.updateOrderTimeByStorySetId(storySetId, orderTime);
+    }
+
+    @Override
+    public List<Works> getWorksListByPlayListIdByPage(int playListId, int userId, int limit, int offset) {
+        return playListRelationDao.getWorksListByPlayListIdByPage(playListId, userId, limit, offset);
     }
 }

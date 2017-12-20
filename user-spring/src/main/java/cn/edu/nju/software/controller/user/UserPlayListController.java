@@ -5,7 +5,6 @@ import cn.edu.nju.software.dto.WorksVo;
 import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.*;
 import cn.edu.nju.software.util.TokenConfig;
-import cn.edu.nju.software.vo.PlayListVo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -19,11 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Created by xmc1993 on 2017/5/12.
@@ -69,7 +66,7 @@ public class UserPlayListController extends BaseController {
 
         for (PlayList playList : playLists) {
             for (TwoTuple<Integer, String> twoTuple : workList) {
-                if(twoTuple.getId().equals(playList.getId())){
+                if (twoTuple.getId().equals(playList.getId())) {
                     playList.setCover(twoTuple.getValue());
                     continue;
                 }
@@ -100,8 +97,9 @@ public class UserPlayListController extends BaseController {
             responseData.jsonFill(1, null, worksList2VoList(worksService.getWorksListByUserId(user.getId(), page * pageSize, pageSize), user.getId()));
             return responseData;
         }
-        List<Integer> idList = playListRelationService.getWorksIdListByPlayListIdAndUserIdByPage(playListId, user.getId(), page, pageSize);
-        List<Works> worksList = worksService.getWorksListByIdList(idList);
+//        List<Integer> idList = playListRelationService.getWorksIdListByPlayListIdAndUserIdByPage(playListId, user.getId(), page, pageSize);
+//        List<Works> worksList = worksService.getWorksListByIdList(idList);
+        List<Works> worksList = playListRelationService.getWorksListByPlayListIdByPage(playListId, user.getId(), page, pageSize);
         responseData.jsonFill(1, null, worksList2VoList(worksList, user.getId()));
         return responseData;
     }
@@ -172,7 +170,7 @@ public class UserPlayListController extends BaseController {
     @ApiOperation(value = "新增播放列表", notes = "")
     @RequestMapping(value = "/newPlayList", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<PlayList> newPlayList (
+    public ResponseData<PlayList> newPlayList(
             @ApiParam("播放列表的名字") @RequestParam String name,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<PlayList> responseData = new ResponseData<>();

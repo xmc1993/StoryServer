@@ -8,7 +8,26 @@
         playListId,
         userId,
         createTime,
-        updateTime
+        updateTime,
+        orderTime
+    </sql>
+
+    <sql id="works">
+    	works.id,
+        works.storyId,
+        works.storyTitle,
+        works.userId,
+        works.username,
+        works.url,
+        works.likeCount,
+        works.createTime,
+        works.updateTime,
+        works.valid,
+        works.headImgUrl,
+        works.coverUrl,
+        works.duration,
+        works.reviewCount,
+        works.listenCount
     </sql>
 
     <insert id="savePlayListRelation" parameterType="cn.edu.nju.software.entity.PlayList" keyProperty="id"
@@ -23,7 +42,8 @@
         #{playListId},
         #{userId},
         #{createTime},
-        #{updateTime}
+        #{updateTime},
+        #{orderTime}
         )
     </insert>
 
@@ -45,5 +65,19 @@
         limit #{2},#{3}
     </select>
 
+    <select id="getWorksListByPlayListIdByPage" resultType="cn.edu.nju.software.entity.Works">
+        select
+        <include refid="works"></include>
+        from play_list_relation left join works on play_list_relation.worksId = works.id
+        where works.valid = 1 and play_list_relation.playListId = #{0} and play_list_relation.userId = #{1}
+        order by play_list_relation.orderTime DESC, storyId ASC
+        limit #{2},#{3}
+    </select>
+
+    <update id="updateOrderTimeByStorySetId">
+        UPDATE
+        play_list_relation plr left join works w on plr.worksId = w.id
+        set plr.orderTime = #{1} where w.storySetId = #{0} and w.valid = 1
+    </update>
 
 </mapper>

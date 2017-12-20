@@ -1,11 +1,10 @@
 package cn.edu.nju.software.entity;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
-
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiModelProperty;
 
 /**
  * Created by xmc1993 on 2017/5/14.
@@ -42,4 +41,8 @@ public class Works {
     private Integer reviewCount;
     @ApiModelProperty(value="收听数")
     private Integer listenCount = 0;//收听数
+    @ApiModelProperty(value="排序时间")
+    private Integer orderTime;
+    @ApiModelProperty(value="故事集Id")
+    private Integer storySetId;
 }
