@@ -70,7 +70,7 @@
         <include refid="works"></include>
         from play_list_relation left join works on play_list_relation.worksId = works.id
         where works.valid = 1 and play_list_relation.playListId = #{0} and play_list_relation.userId = #{1}
-        order by play_list_relation.orderTime DESC, storyId ASC
+        order by play_list_relation.orderTime DESC, works.storyTitle ASC
         limit #{2},#{3}
     </select>
 
