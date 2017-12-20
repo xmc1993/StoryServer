@@ -53,6 +53,20 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
         badges.add(badge);
     }
 
+    //触发专题故事阅读徽章的复用方法
+/*    private void topicStoryReadingBadge(Integer badgeId,Integer userId,Integer storyTopicId){
+        if (userBadgeService.getUserBadge(Const.DOUBLE_ELEVEN_BADGE_ID, userId) == null) {
+            List<StoryTopicRelation> list = storyTopicServcie.getStoryListByTopicId(Const.DOUBLE_ELEVEN_STORY_TOPIC);
+            for (StoryTopicRelation storyTopicRelation : list) {
+                Integer storyId = storyTopicRelation.getstoryId();
+                if (works.getStoryId().equals(storyId)) {
+                    packageBadgeLogic(badges,userId,Const.DOUBLE_ELEVEN_BADGE_ID);
+                    break;
+                }
+            }
+        }
+    }*/
+
     @Override
     public List<Badge> judgeAddBadgesWhenPublish(User user, Works works) {
         List<Badge> badges = new ArrayList<>();
@@ -178,7 +192,7 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
             }
         }
 
-        //专题徽章
+        //专题故事徽章-双十一专题徽章
         if (userBadgeService.getUserBadge(Const.DOUBLE_ELEVEN_BADGE_ID, userId) == null) {
             List<StoryTopicRelation> list = storyTopicServcie.getStoryListByTopicId(Const.DOUBLE_ELEVEN_STORY_TOPIC);
             for (StoryTopicRelation storyTopicRelation : list) {
@@ -190,6 +204,19 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
             }
         }
 
+        //专题故事徽章-孕期专题徽章
+        if (userBadgeService.getUserBadge(Const.PREGNANCY_READING_BADGE_ID, userId) == null) {
+            List<StoryTopicRelation> list = storyTopicServcie.getStoryListByTopicId(Const.PREGNANCY_STORY_TOPIC);
+            for (StoryTopicRelation storyTopicRelation : list) {
+                Integer storyId = storyTopicRelation.getstoryId();
+                if (works.getStoryId().equals(storyId)) {
+                    packageBadgeLogic(badges,userId,Const.PREGNANCY_READING_BADGE_ID);
+                    break;
+                }
+            }
+        }
+
+        //生日徽章
         if (baby!=null){
             Date birthday=baby.getBirthday();
             boolean res= new DateUtil().judgeBirthDay(birthday);
@@ -200,7 +227,6 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
                 }
             }
         }
-
         return badges;
     }
 

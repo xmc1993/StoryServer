@@ -27,9 +27,11 @@ public class Const {
     public static final Integer FIRST_SHARE_BADGE_ID =70;//第一次分享徽章id
     public static final Integer FIRST_ADD_ORIGINAL_STORY_BADGE_ID=73;//第一次添加原创故事徽章id
     public static final Integer FIRST_READING_BY_PLAN_BADGE_ID=74;//第一次按照计划录制作品徽章
+    public static final Integer PREGNANCY_READING_BADGE_ID=75;//第一次按照计划录制作品徽章
 
     //故事专题常量
     public static final Integer DOUBLE_ELEVEN_STORY_TOPIC = 18;//双十一故事专题
+    public static final Integer PREGNANCY_STORY_TOPIC = 25;//孕期故事专题
 
     public static void main(String[] args) {
         Date now = new Date();
