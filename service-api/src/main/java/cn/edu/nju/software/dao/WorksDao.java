@@ -76,4 +76,6 @@ public interface WorksDao {
     boolean newLike(int id);
 
     boolean cancelLike(int id);
+
+    List<Works> getWorksListByOrderRule(int offset, int limit,@Param("fieldName") String fieldName,@Param("orderRule") String orderRule);
 }

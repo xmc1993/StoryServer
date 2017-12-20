@@ -217,9 +217,7 @@ public class WorksServiceImpl implements WorksService {
 	@Override
 	public boolean getWorksByUserAndStory(Integer userId, Integer storyId) {
 		List<Works> worksList=worksDao.getWorksByUserAndStory(userId,storyId);
-		if (worksList==null||worksList.isEmpty())
-			return false;
-		return true;
+		return !(worksList == null || worksList.isEmpty());
 	}
 
 	@Override
@@ -231,5 +229,14 @@ public class WorksServiceImpl implements WorksService {
 	// 此方法是为了在用户更新头像时，使work表中的HeadImgUrl字段也联动更新
 	public boolean updateHeadImg(int userId, String url) {
 		return worksDao.updateHeadImg(userId, url);
+	}
+
+	@Override
+	public List<Works> getWorksListByOrderRule(String fieldName, Integer orderRule, int page, int pageSize) {
+		if (orderRule.equals(0)){
+			return worksDao.getWorksListByOrderRule(page*pageSize,pageSize,fieldName,"asc");
+		}else {
+			return worksDao.getWorksListByOrderRule(page*pageSize,pageSize,fieldName,"desc");
+		}
 	}
 }

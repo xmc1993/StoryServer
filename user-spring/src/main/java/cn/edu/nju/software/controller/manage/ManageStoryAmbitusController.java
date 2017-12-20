@@ -112,6 +112,9 @@ public class ManageStoryAmbitusController {
 		storyAmbitus.setCreatetime(new Date());
 		storyAmbitus.setUpdatetime(new Date());
 		storyAmbitus.setTitle(title);
+		if (!title.equals("阅读指导")){
+			storyAmbitus.setObligate("1");
+		}
 		if (videoUrl != null) {
 			storyAmbitus.setVideourl(videoUrl);
 		}

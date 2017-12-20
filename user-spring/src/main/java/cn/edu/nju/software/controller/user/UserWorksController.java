@@ -9,6 +9,7 @@ import cn.edu.nju.software.feed.service.MessageFeedService;
 import cn.edu.nju.software.service.*;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.service.user.WorkTagRelationService;
+import cn.edu.nju.software.service.user.WorkTagService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UploadFileUtil;
@@ -73,6 +74,8 @@ public class UserWorksController extends BaseController {
     private FollowService followService;
     @Autowired
     private WorkTagRelationService workTagRelationService;
+    @Autowired
+    private WorkTagService workTagService;
 
     @ApiOperation(value = "获得最新的作品列表", notes = "需要登录")
     @RequestMapping(value = "/getLatestWorksByPage", method = {RequestMethod.GET})
@@ -145,6 +148,13 @@ public class UserWorksController extends BaseController {
     private WorksVo works2Vo(Works works, int userId) {
         WorksVo worksVo = new WorksVo();
         BeanUtils.copyProperties(works, worksVo);
+
+        List<Integer> workTagIdList= workTagRelationService.getWorkTagIdListByWorkId(works.getId());
+        if (workTagIdList.size()!=0){
+            List<WorkTag> workTagList=workTagService.getWorkTagByIdList(workTagIdList);
+            worksVo.setWorkTagList(workTagList);
+        }
+
         if (agreeService.getAgree(userId, works.getId()) != null) {
             worksVo.setLike(true);
         }
@@ -415,7 +425,7 @@ public class UserWorksController extends BaseController {
         //如果作品上传成功再绑定作品标签。——zj
         if (res!=null){
             if (tagIdList != null) {
-                String[] tagIds = tagIdList.split(",");
+                String[] tagIds = tagIdList.substring(1,tagIdList.length()-1).split(",");
                 for (String tagId : tagIds) {
                     WorkTagRelation workTagRelation=new WorkTagRelation();
                     Integer tagIdInteger=Integer.parseInt(tagId);
@@ -521,7 +531,7 @@ public class UserWorksController extends BaseController {
         //如果作品上传成功再绑定作品标签。——zj
         if (res!=null){
             if (tagIdList != null) {
-                String[] tagIds = tagIdList.split(",");
+                String[] tagIds = tagIdList.substring(1,tagIdList.length()-1).split(",");
                 for (String tagId : tagIds) {
                     WorkTagRelation workTagRelation=new WorkTagRelation();
                     Integer tagIdInteger=Integer.parseInt(tagId);

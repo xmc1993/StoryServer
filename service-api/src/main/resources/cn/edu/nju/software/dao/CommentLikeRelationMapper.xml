@@ -5,7 +5,7 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="userId" property="userId" jdbcType="INTEGER" />
     <result column="commentId" property="commentId" jdbcType="INTEGER" />
-    <result column="like" property="like" jdbcType="BIT" />
+    <result column="agree" property="agree" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -66,7 +66,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, userId, commentId, like
+    id, userId, commentId, agree
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.edu.nju.software.entity.CommentLikeRelationExample" >
     select
@@ -100,9 +100,9 @@
   </delete>
   <insert id="insert" parameterType="cn.edu.nju.software.entity.CommentLikeRelation" >
     insert into comment_like_relation (id, userId, commentId, 
-      like)
+      agree)
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{commentId,jdbcType=INTEGER}, 
-      #{like,jdbcType=BIT})
+      #{agree,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.nju.software.entity.CommentLikeRelation" >
     insert into comment_like_relation
@@ -116,8 +116,8 @@
       <if test="commentId != null" >
         commentId,
       </if>
-      <if test="like != null" >
-        like,
+      <if test="agree != null" >
+        agree,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -130,8 +130,8 @@
       <if test="commentId != null" >
         #{commentId,jdbcType=INTEGER},
       </if>
-      <if test="like != null" >
-        #{like,jdbcType=BIT},
+      <if test="agree != null" >
+        #{agree,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -153,8 +153,8 @@
       <if test="record.commentId != null" >
         commentId = #{record.commentId,jdbcType=INTEGER},
       </if>
-      <if test="record.like != null" >
-        like = #{record.like,jdbcType=BIT},
+      <if test="record.agree != null" >
+        agree = #{record.agree,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -166,7 +166,7 @@
     set id = #{record.id,jdbcType=INTEGER},
       userId = #{record.userId,jdbcType=INTEGER},
       commentId = #{record.commentId,jdbcType=INTEGER},
-      like = #{record.like,jdbcType=BIT}
+      agree = #{record.agree,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -180,8 +180,8 @@
       <if test="commentId != null" >
         commentId = #{commentId,jdbcType=INTEGER},
       </if>
-      <if test="like != null" >
-        like = #{like,jdbcType=BIT},
+      <if test="agree != null" >
+        agree = #{agree,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -190,7 +190,7 @@
     update comment_like_relation
     set userId = #{userId,jdbcType=INTEGER},
       commentId = #{commentId,jdbcType=INTEGER},
-      like = #{like,jdbcType=BIT}
+      agree = #{agree,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 

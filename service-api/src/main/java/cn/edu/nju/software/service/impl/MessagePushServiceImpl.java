@@ -85,4 +85,9 @@ public class MessagePushServiceImpl implements MessagePushService {
     public List<DestinationVo> getAllDestinationDescription() {
         return destinationMapper.getAllDestinationDescription();
     }
+
+    @Override
+    public int updateMessagePush(MessagePush messagePush) {
+        return messagePushMapper.updateByPrimaryKey(messagePush);
+    }
 }

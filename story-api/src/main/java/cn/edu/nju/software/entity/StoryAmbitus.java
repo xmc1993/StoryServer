@@ -19,9 +19,12 @@ public class StoryAmbitus {
 
     private Date updatetime;
 
-    private String obligate;
+    //故事周边的可评论字段，1表示可以评论，0表示不可评论
+    private String obligate="0";
 
     private String content;
+
+    private Boolean allowComment=false;
 
     public Integer getId() {
         return id;
@@ -101,5 +104,13 @@ public class StoryAmbitus {
 
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
+    }
+
+    public Boolean getAllowComment() {
+        return allowComment;
+    }
+
+    public void setAllowComment(Boolean allowComment) {
+        this.allowComment = allowComment;
     }
 }

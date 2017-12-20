@@ -191,7 +191,9 @@
             <mvc:mapping path="/user/workTag/deleteWorkTagUserDefined"/>
 
             <mvc:mapping path="/user/publishComment"/>
-
+            <mvc:mapping path="/user/getCommentsByAmbitusId"/>
+            <mvc:mapping path="/user/newLikeToComment"/>
+            <mvc:mapping path="/user/deleteLikeToComment"/>
             <!--金币系统-->
             <mvc:mapping path="/user/userGoldAccount/addUserGoldAccount"/>
             <mvc:mapping path="/user/userGoldAccount/getGoldAmount"/>

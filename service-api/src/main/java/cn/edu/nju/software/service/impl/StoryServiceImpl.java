@@ -466,7 +466,7 @@ public class StoryServiceImpl implements StoryService {
             // 移除本故事
             int index = storyIdList.indexOf(storyId);
             if (index == -1) {
-                list = storyDao.getStoryListByIdList(storyIdList, 0, 5);
+                list = storyDao.getStoryListByIdListWithoutUserStory(storyIdList);
                 storyList.addAll(list);
             } else {
                 storyIdList.remove(index);
@@ -474,7 +474,7 @@ public class StoryServiceImpl implements StoryService {
                 if(storyIdList.isEmpty()){
                     continue;
                 }
-                list = storyDao.getStoryListByIdList(storyIdList, 0, 5);
+                list = storyDao.getStoryListByIdListWithoutUserStory(storyIdList);
                 storyList.addAll(list);
             }
             if (storyList.size() >= 5) {

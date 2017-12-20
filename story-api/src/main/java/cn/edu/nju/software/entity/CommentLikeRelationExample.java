@@ -284,63 +284,63 @@ public class CommentLikeRelationExample {
             return (Criteria) this;
         }
 
-        public Criteria andLikeIsNull() {
-            addCriterion("like is null");
+        public Criteria andAgreeIsNull() {
+            addCriterion("agree is null");
             return (Criteria) this;
         }
 
-        public Criteria andLikeIsNotNull() {
-            addCriterion("like is not null");
+        public Criteria andAgreeIsNotNull() {
+            addCriterion("agree is not null");
             return (Criteria) this;
         }
 
-        public Criteria andLikeEqualTo(Boolean value) {
-            addCriterion("like =", value, "like");
+        public Criteria andAgreeEqualTo(Boolean value) {
+            addCriterion("agree =", value, "agree");
             return (Criteria) this;
         }
 
-        public Criteria andLikeNotEqualTo(Boolean value) {
-            addCriterion("like <>", value, "like");
+        public Criteria andAgreeNotEqualTo(Boolean value) {
+            addCriterion("agree <>", value, "agree");
             return (Criteria) this;
         }
 
-        public Criteria andLikeGreaterThan(Boolean value) {
-            addCriterion("like >", value, "like");
+        public Criteria andAgreeGreaterThan(Boolean value) {
+            addCriterion("agree >", value, "agree");
             return (Criteria) this;
         }
 
-        public Criteria andLikeGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("like >=", value, "like");
+        public Criteria andAgreeGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("agree >=", value, "agree");
             return (Criteria) this;
         }
 
-        public Criteria andLikeLessThan(Boolean value) {
-            addCriterion("like <", value, "like");
+        public Criteria andAgreeLessThan(Boolean value) {
+            addCriterion("agree <", value, "agree");
             return (Criteria) this;
         }
 
-        public Criteria andLikeLessThanOrEqualTo(Boolean value) {
-            addCriterion("like <=", value, "like");
+        public Criteria andAgreeLessThanOrEqualTo(Boolean value) {
+            addCriterion("agree <=", value, "agree");
             return (Criteria) this;
         }
 
-        public Criteria andLikeIn(List<Boolean> values) {
-            addCriterion("like in", values, "like");
+        public Criteria andAgreeIn(List<Boolean> values) {
+            addCriterion("agree in", values, "agree");
             return (Criteria) this;
         }
 
-        public Criteria andLikeNotIn(List<Boolean> values) {
-            addCriterion("like not in", values, "like");
+        public Criteria andAgreeNotIn(List<Boolean> values) {
+            addCriterion("agree not in", values, "agree");
             return (Criteria) this;
         }
 
-        public Criteria andLikeBetween(Boolean value1, Boolean value2) {
-            addCriterion("like between", value1, value2, "like");
+        public Criteria andAgreeBetween(Boolean value1, Boolean value2) {
+            addCriterion("agree between", value1, value2, "agree");
             return (Criteria) this;
         }
 
-        public Criteria andLikeNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("like not between", value1, value2, "like");
+        public Criteria andAgreeNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("agree not between", value1, value2, "agree");
             return (Criteria) this;
         }
     }
