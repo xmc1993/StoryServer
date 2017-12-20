@@ -100,7 +100,7 @@ public class UserPlayListController extends BaseController {
 //        List<Integer> idList = playListRelationService.getWorksIdListByPlayListIdAndUserIdByPage(playListId, user.getId(), page, pageSize);
 //        List<Works> worksList = worksService.getWorksListByIdList(idList);
         List<Works> worksList = playListRelationService.getWorksListByPlayListIdByPage(playListId, user.getId(), page, pageSize);
-        responseData.jsonFill(1, null, worksList2VoList(worksList, user.getId()));
+        responseData.jsonFill(1, null, worksList2VoListJustLike(worksList, user.getId()));
         return responseData;
     }
 
@@ -128,13 +128,20 @@ public class UserPlayListController extends BaseController {
             return responseData;
         }
         //TODO 做一些校验
+        Date now = new Date();
         PlayListRelation playListRelation = new PlayListRelation();
         playListRelation.setCreateTime(new Date());
         playListRelation.setUpdateTime(new Date());
         playListRelation.setPlayListId(playListId);
         playListRelation.setWorksId(worksId);
         playListRelation.setUserId(user.getId());
+        playListRelation.setOrderTime(now);
         boolean res = playListRelationService.savePlayListRelation(playListRelation);
+        //TODO 优化 聚合代码....
+        Works works = worksService.getWorksById(worksId);
+        if (works != null) {
+            playListRelationService.updateOrderTimeByStorySetId(works.getStorySetId(), now);
+        }
         responseData.jsonFill(res ? 1 : 2, null, res);
         return responseData;
     }
@@ -320,5 +327,24 @@ public class UserPlayListController extends BaseController {
         worksVo.setTagList(tagList);
         return worksVo;
     }
+
+    //TODO 功能优先 再优化 .......
+    private List<WorksVo> worksList2VoListJustLike(List<Works> worksList, int userId) {
+        List<WorksVo> worksVoList = new ArrayList<>();
+        for (Works works : worksList) {
+            worksVoList.add(works2VoJustLike(works, userId));
+        }
+        return worksVoList;
+    }
+
+    private WorksVo works2VoJustLike(Works works, int userId) {
+        WorksVo worksVo = new WorksVo();
+        BeanUtils.copyProperties(works, worksVo);
+        if (agreeService.getAgree(userId, works.getId()) != null) {
+            worksVo.setLike(true);
+        }
+        return worksVo;
+    }
+
 
 }
