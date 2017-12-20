@@ -425,7 +425,7 @@ public class UserWorksController extends BaseController {
         //如果作品上传成功再绑定作品标签。——zj
         if (res!=null){
             if (tagIdList != null) {
-                String[] tagIds = tagIdList.split(",");
+                String[] tagIds = tagIdList.substring(1,tagIdList.length()-1).split(",");
                 for (String tagId : tagIds) {
                     WorkTagRelation workTagRelation=new WorkTagRelation();
                     Integer tagIdInteger=Integer.parseInt(tagId);

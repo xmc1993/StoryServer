@@ -209,7 +209,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
 
-  <select id="getWorkTagIdListByWorkId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="getWorkTagIdListByWorkId" resultType="java.lang.Integer" parameterType="java.lang.Integer" >
     select
     tag_id
     from work_tag_relation

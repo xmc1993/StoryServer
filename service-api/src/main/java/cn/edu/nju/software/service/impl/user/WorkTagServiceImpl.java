@@ -124,9 +124,6 @@ public class WorkTagServiceImpl implements WorkTagService {
         WorkTagExample workTagExample = new WorkTagExample();
         WorkTagExample.Criteria criteria = workTagExample.createCriteria();
         criteria.andIdIn(idList);
-        if (idList==null||idList.size()==0){
-            System.out.println("为空");
-        }
         return workTagMapper.selectByExample(workTagExample);
     }
 
