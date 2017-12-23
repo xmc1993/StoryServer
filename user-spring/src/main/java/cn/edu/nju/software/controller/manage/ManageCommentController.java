@@ -33,7 +33,7 @@ public class ManageCommentController {
 
 
     @ApiOperation("根据故事周边id获取评论")
-    @RequestMapping(value = "/getCommentsByAmbitusId", method = {RequestMethod.POST})
+    @RequestMapping(value = "/getCommentsByAmbitusId", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<List<Comment>> getCommentsByAmbitusId(@ApiParam("故事周边的Id") @RequestParam(value = "ambitusId") Integer ambitusId,
                                                 @ApiParam("page") @RequestParam(value = "page") Integer page,
