@@ -60,6 +60,8 @@ public class ReadPlanStoryGroupServiceImpl implements ReadPlanStoryGroupService 
 		return responseData;
 	}
 
+	//上下两个方法为重载关系
+
 	@Override
 	public List<ReadingPlanStoryGroup> getReadPlanStoryGroupByPlanId(Integer readPlanId) {
 		ReadingPlanStoryGroupExample readingPlanStoryGroupExample=new ReadingPlanStoryGroupExample();
