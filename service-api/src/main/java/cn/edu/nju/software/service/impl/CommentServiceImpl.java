@@ -2,10 +2,7 @@ package cn.edu.nju.software.service.impl;
 
 import cn.edu.nju.software.dao.CommentLikeRelationMapper;
 import cn.edu.nju.software.dao.CommentMapper;
-import cn.edu.nju.software.entity.Comment;
-import cn.edu.nju.software.entity.CommentLikeRelation;
-import cn.edu.nju.software.entity.CommentLikeRelationExample;
-import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -98,5 +95,19 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Boolean releaseComment(int id) {
         return commentMapper.releaseComment(id);
+    }
+
+    @Override
+    public Boolean deleteCommentByUser(int commentId, int userId) {
+        CommentExample commentExample = new CommentExample();
+        //通过criteria构造查询条件
+        CommentExample.Criteria criteria = commentExample.createCriteria();
+        criteria.andIdEqualTo(commentId);
+        criteria.andUseridEqualTo(userId);
+        int res = commentMapper.deleteByExample(commentExample);
+        if (res==1){
+            return true;
+        }
+        return false;
     }
 }

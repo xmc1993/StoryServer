@@ -19,4 +19,5 @@ public interface CommentService {
     ResponseData<List<Comment>> getCommentsWithSensitiveByAmbitusId(int ambitusId,int page, int pageSize);
     List<Integer> getAllLikeByUserId(Integer userId);
     Boolean releaseComment(int id);
+    Boolean deleteCommentByUser(int commentId,int userId);
 }

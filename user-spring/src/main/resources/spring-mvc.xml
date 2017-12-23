@@ -194,6 +194,7 @@
             <mvc:mapping path="/user/getCommentsByAmbitusId"/>
             <mvc:mapping path="/user/newLikeToComment"/>
             <mvc:mapping path="/user/deleteLikeToComment"/>
+            <mvc:mapping path="/user/deleteComment"/>
             <!--金币系统-->
             <mvc:mapping path="/user/userGoldAccount/addUserGoldAccount"/>
             <mvc:mapping path="/user/userGoldAccount/getGoldAmount"/>
