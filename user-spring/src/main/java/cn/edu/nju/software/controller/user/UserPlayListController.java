@@ -5,7 +5,6 @@ import cn.edu.nju.software.dto.WorksVo;
 import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.*;
 import cn.edu.nju.software.util.TokenConfig;
-import cn.edu.nju.software.vo.PlayListVo;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -19,11 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Created by xmc1993 on 2017/5/12.
