@@ -87,7 +87,7 @@ public class UserCommentController {
                 for (Comment comment : list) {
                     for (Integer commentId : idList) {
                         if (commentId.equals(comment.getId())) {
-                            comment.setLike(true);
+                            comment.setAgree(true);
                             break;
                         }
                     }
