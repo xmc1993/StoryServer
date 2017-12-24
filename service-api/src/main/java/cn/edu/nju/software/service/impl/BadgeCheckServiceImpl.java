@@ -141,7 +141,6 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
                 userBadge.setBadgeId(badge.getId());
                 userBadgeService.saveUserBadge(userBadge);
                 badges.add(badge);
-                return badges;
             }
         }
 
