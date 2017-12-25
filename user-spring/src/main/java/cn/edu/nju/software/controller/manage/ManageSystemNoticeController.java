@@ -2,12 +2,10 @@ package cn.edu.nju.software.controller.manage;
 
 import cn.edu.nju.software.annotation.RequiredPermissions;
 import cn.edu.nju.software.dto.MsgVo;
-import cn.edu.nju.software.entity.Admin;
-import cn.edu.nju.software.entity.Feed;
-import cn.edu.nju.software.entity.SystemNotice;
-import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.entity.feed.MessageType;
 import cn.edu.nju.software.feed.service.MessageFeedService;
+import cn.edu.nju.software.service.FeedbackTempletService;
 import cn.edu.nju.software.service.SystemNoticeService;
 import cn.edu.nju.software.service.user.UserMessageService;
 import cn.edu.nju.software.util.TokenConfig;
@@ -42,6 +40,8 @@ public class ManageSystemNoticeController {
     private UserMessageService userMessageService;
     @Autowired
     private MessageFeedService messageFeedService;
+    @Autowired
+    private FeedbackTempletService feedbackTempletService;
 
     @RequiredPermissions({1, 20})
     @ApiOperation(value = "新增系统通知项", notes = "")
@@ -76,6 +76,44 @@ public class ManageSystemNoticeController {
         }
 
         return systemNotice;
+    }
+
+    @RequiredPermissions({1, 20})
+    @ApiOperation(value = "给某个用户单独发系统通知", notes = "")
+    @RequestMapping(value = "/sendSystemNoticeToUser", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> sendSystemNoticeToUser(
+            @ApiParam("用户Id") @RequestParam Integer userId,
+            @ApiParam("反馈模板Id") @RequestParam Integer feedbackTempletId,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Boolean> responseData=new ResponseData<>();
+        FeedbackTemplet feedbackTemplet=feedbackTempletService.getFeedbackTempletById(feedbackTempletId);
+
+        Admin user = (Admin) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+
+        MsgVo msgVo = new MsgVo();
+        msgVo.setUserId(user.getId());
+
+        //msgVo.setUserName(user.getUsername());
+        msgVo.setUserName("小P和小I");
+        //暖音小助手 头像URL
+        msgVo.setHeadImgUrl("http://47.93.242.215/source/head/4DYCFUt6eHA7TTvx.jpg");
+        msgVo.setData(feedbackTemplet.getContent());
+        Feed feed = new Feed();
+        feed.setCreateTime(new Date());
+        feed.setUpdateTime(new Date());
+        feed.setFid(user.getId());
+        feed.setContent(new Gson().toJson(msgVo));
+        feed.setMid(feedbackTempletId);
+        feed.setType(MessageType.SYSTEM_NOTICE);
+        feed.setTid(userId);
+        Feed res=messageFeedService.feed(feed);
+        if (res!=null){
+            responseData.jsonFill(1,null,true);
+            return  responseData;
+        }
+        responseData.jsonFill(2,"发送失败",false);
+        return  responseData;
     }
 
     @RequiredPermissions({3, 20})
