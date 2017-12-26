@@ -81,10 +81,10 @@
 
     <mvc:interceptors>
         <!-- token拦截器 -->
-        <mvc:interceptor>
-            <mvc:mapping path="/user/**"/>
-            <bean class="cn.edu.nju.software.filter.VersionCheckInterceptor"/>
-        </mvc:interceptor>
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/user/**"/>-->
+            <!--<bean class="cn.edu.nju.software.filter.VersionCheckInterceptor"/>-->
+        <!--</mvc:interceptor>-->
         <mvc:interceptor>
             <mvc:mapping path="/user/setDislikeStory"/>
             <mvc:mapping path="/user/setLikeStory"/>
