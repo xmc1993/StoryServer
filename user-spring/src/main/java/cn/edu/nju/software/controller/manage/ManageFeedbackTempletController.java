@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -64,6 +65,27 @@ public class ManageFeedbackTempletController {
             return responseData;
         }
         responseData.jsonFill(2, "删除失败", false);
+        return responseData;
+    }
+
+
+    @ApiOperation(value = "保存反馈模板")
+    @RequestMapping(value = "/saveFeedbackTempletById", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> saveFeedbackTempletById(@ApiParam("content") @RequestParam(value = "content") String content,
+                                                           @ApiParam("description") @RequestParam(value = "description") String description) {
+        ResponseData<Boolean> responseData = new ResponseData<>();
+        FeedbackTemplet feedbackTemplet=new FeedbackTemplet();
+        feedbackTemplet.setCreateTime(new Date());
+        feedbackTemplet.setUpdateTime(new Date());
+        feedbackTemplet.setContent(content);
+        feedbackTemplet.setDescription(description);
+        int res=feedbackTempletService.saveFeedbackTemplet(feedbackTemplet);
+        if (res == 1) {
+            responseData.jsonFill(1, null, true);
+            return responseData;
+        }
+        responseData.jsonFill(2, "保存失败", false);
         return responseData;
     }
 
