@@ -154,7 +154,11 @@ public class OSSClientUtil {
     public static String getContentTypeByFileName(String fileName) {
         String type = URLConnection.guessContentTypeFromName(fileName);
         if (type == null) {
-            return getContentTypeByExtension(fileName.substring(fileName.lastIndexOf(".")));
+            int beginIndex = fileName.lastIndexOf(".");
+            if (-1 == beginIndex) {
+                return "image/jpeg";
+            }
+            return getContentTypeByExtension(fileName.substring(beginIndex));
         }
         return type;
     }
