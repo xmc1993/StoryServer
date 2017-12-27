@@ -279,7 +279,9 @@ public class UserWorksController extends BaseController {
             response.setStatus(401);
             return responseData;
         }
-        if (!checkValidService.isWorksExist(worksId)) {
+
+        Works works=worksService.getWorksById(worksId);
+        if (works==null) {
             responseData.jsonFill(2, "作品不存在", null);
             response.setStatus(404);
             return responseData;
@@ -291,6 +293,9 @@ public class UserWorksController extends BaseController {
         agree.setWorksId(worksId);
         agree.setUserId(user.getId());
         boolean res = agreeService.addAgree(agree);
+        if (res){
+            agreeService.updateOrderTimeByStorySetId(works.getStorySetId(), new Date(), works.getUserId());
+        }
         responseData.jsonFill(res ? 1 : 2, null, res);
         return responseData;
     }

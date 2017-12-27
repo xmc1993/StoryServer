@@ -47,7 +47,7 @@ public class WorksServiceImpl implements WorksService {
 	public Works saveWorks(Works works) {
 		boolean res = worksDao.saveWorks(works);
 		if (res) {
-			//成功的话，在我的作品的playlist加一条记录
+			//成功的话，在我的作品的playlist加一条记录,并更新orderTime
 			Date now=new Date();
 			PlayListRelation playListRelation=new PlayListRelation();
 			playListRelation.setOrderTime(now);
@@ -56,7 +56,12 @@ public class WorksServiceImpl implements WorksService {
 			playListRelation.setWorksId(works.getId());
 			playListRelation.setUserId(works.getUserId());
 			playListRelation.setPlayListId(-1);
-			playListRelationDao.savePlayListRelation(playListRelation);
+			boolean success=playListRelationDao.savePlayListRelation(playListRelation);
+			if (success){
+				if (works.getStorySetId() != null && works.getStorySetId().compareTo(0) != 0) {
+					playListRelationDao.updateOrderTimeByStorySetId(works.getStorySetId(),new Date(), works.getUserId());
+				}
+			}
 
 			storyDao.newTell(works.getStoryId());
 			Story story=storyDao.getStoryById(works.getStoryId());
