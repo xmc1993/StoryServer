@@ -35,7 +35,7 @@ public class ManageFeedbackTempletController {
     @ApiOperation(value = "分页获取所有的反馈模板")
     @RequestMapping(value = "/selectFeedbackTemplet", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<List<FeedbackTemplet>> selectAllReadPlan(@ApiParam("page") @RequestParam Integer page,
+    public ResponseData<List<FeedbackTemplet>> selectFeedbackTemplet(@ApiParam("page") @RequestParam Integer page,
                                                                  @ApiParam("pageSize") @RequestParam Integer pageSize, HttpServletRequest request,
                                                                  HttpServletResponse response) {
         ResponseData<List<FeedbackTemplet>> responseData = new ResponseData<>();
