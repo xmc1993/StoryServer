@@ -22,7 +22,7 @@ public interface PlayListRelationDao {
 
     List<Integer> getWorksIdListByPlayListIdAndUserIdByPage(int playListId, int userId, int limit, int offset);
 
-    boolean updateOrderTimeByStorySetId(int storySetId, Date orderTime);
+    boolean updateOrderTimeByStorySetId(int storySetId, Date orderTime,int userId);
 
     List<Works> getWorksListByPlayListIdByPage(int playListId, int userId, int limit, int offset);
 

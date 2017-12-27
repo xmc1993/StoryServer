@@ -4,6 +4,7 @@ import cn.edu.nju.software.dao.AgreeDao;
 import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.dao.user.AppUserDao;
 import cn.edu.nju.software.entity.Agree;
+import cn.edu.nju.software.entity.Works;
 import cn.edu.nju.software.service.AgreeService;
 import cn.edu.nju.software.util.Const;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,5 +83,20 @@ public class AgreeServiceImpl implements AgreeService {
     @Override
     public List<Agree> extractNewRecords(Date lastExtractTime) {
         return agreeDao.extractNewRecords(lastExtractTime);
+    }
+
+    @Override
+    public List<Works> getWorksListByUserIdByPage(int userId, int page, int pageSize) {
+        int offset = page * pageSize;
+        int limit = pageSize;
+        return agreeDao.getWorksListByUserIdByPage(userId, limit, offset);
+    }
+
+    @Override
+    public boolean updateOrderTimeByStorySetId(Integer storySetId, Date orderTime, Integer userId) {
+        if (storySetId == null ||  storySetId.compareTo(0) == 0) {
+            return true;
+        }
+        return agreeDao.updateOrderTimeByStorySetId(storySetId, orderTime,userId);
     }
 }

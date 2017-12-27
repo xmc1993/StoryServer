@@ -40,7 +40,11 @@ public class PlayListRelationServiceImpl implements PlayListRelationService {
         }
         //如果是我的作品
         if (playListId == -1) {
-            return worksService.deleteWorksById(worksId);
+            boolean res = worksService.deleteWorksById(worksId);
+            if (res) {
+                return playListRelationDao.deletePlayListRelationByPrimaryKey(worksId, playListId, userId);
+            }
+            return false;
         }
 
         return playListRelationDao.deletePlayListRelationByPrimaryKey(worksId, playListId, userId);
@@ -64,15 +68,17 @@ public class PlayListRelationServiceImpl implements PlayListRelationService {
     }
 
     @Override
-    public boolean updateOrderTimeByStorySetId(Integer storySetId, Date orderTime) {
-        if (storySetId == null ||  storySetId.compareTo(0) == 0) {
+    public boolean updateOrderTimeByStorySetId(Integer storySetId, Date orderTime, Integer userId) {
+        if (storySetId == null || storySetId.compareTo(0) == 0) {
             return true;
         }
-        return playListRelationDao.updateOrderTimeByStorySetId(storySetId, orderTime);
+        return playListRelationDao.updateOrderTimeByStorySetId(storySetId, orderTime, userId);
     }
 
     @Override
-    public List<Works> getWorksListByPlayListIdByPage(int playListId, int userId, int limit, int offset) {
+    public List<Works> getWorksListByPlayListIdByPage(int playListId, int userId, int page, int pageSize) {
+        int offset = page * pageSize;
+        int limit = pageSize;
         return playListRelationDao.getWorksListByPlayListIdByPage(playListId, userId, limit, offset);
     }
 }

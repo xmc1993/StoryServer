@@ -77,7 +77,7 @@
     <update id="updateOrderTimeByStorySetId">
         UPDATE
         play_list_relation plr left join works w on plr.worksId = w.id
-        set plr.orderTime = #{1} where w.storySetId = #{0} and w.valid = 1
+        set plr.orderTime = #{1} where w.storySetId = #{0} and w.userId = #{2} and w.valid = 1
     </update>
 
 </mapper>

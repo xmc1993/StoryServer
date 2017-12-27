@@ -61,7 +61,7 @@ public class UserPlayListController extends BaseController {
         for (PlayList p : playLists) {
             playIdList.add(p.getId());
         }
-        //获取专辑下的第一个Works对象
+        //获取专辑下的第一个Works对象,这个的Intger的类型代表的数值是指playListId
         List<TwoTuple<Integer, String>> workList = worksService.getFirstWorkByPlayIdList(playIdList);
 
         for (PlayList playList : playLists) {
@@ -92,9 +92,9 @@ public class UserPlayListController extends BaseController {
             responseData.jsonFill(2, "用户尚未登录。", null);
             return responseData;
         }
-        //如果是我的作品这个播放列表 TODO 抽取出来
-        if (playListId == -1) {
-            responseData.jsonFill(1, null, worksList2VoList(worksService.getWorksListByUserId(user.getId(), page * pageSize, pageSize), user.getId()));
+        //如果是我的作品列表是我的最爱这个播放列表 TODO 抽取出来
+        if (playListId == 0) {
+            responseData.jsonFill(1, null, worksList2VoListJustLike(agreeService.getWorksListByUserIdByPage(user.getId(), page, pageSize), user.getId()));
             return responseData;
         }
 //        List<Integer> idList = playListRelationService.getWorksIdListByPlayListIdAndUserIdByPage(playListId, user.getId(), page, pageSize);
@@ -117,36 +117,121 @@ public class UserPlayListController extends BaseController {
             responseData.jsonFill(2, "用户尚未登录。", null);
             return responseData;
         }
+        Date now = new Date();
         if (playListId == 0) {
-            Agree agree = new Agree();
-            agree.setCreateTime(new Date());
-            agree.setUpdateTime(new Date());
-            agree.setWorksId(worksId);
-            agree.setUserId(user.getId());
-            boolean res = agreeService.addAgree(agree);
-            responseData.jsonFill(res ? 1 : 2, null, res);
+            responseData.jsonFill(2, "不能向我的作品播放列表添加作品", false);
             return responseData;
         }
+        Works works = worksService.getWorksById(worksId);
+        //向我最爱的列表添加作品
+        if (playListId == -1) {
+            Agree agree = new Agree();
+            agree.setCreateTime(now);
+            agree.setUpdateTime(now);
+            agree.setOrderTime(now);
+            agree.setWorksId(worksId);
+            agree.setUserId(user.getId());
+            boolean success = agreeService.addAgree(agree);
+            if (success) {
+                if (works != null) {
+                    agreeService.updateOrderTimeByStorySetId(works.getStorySetId(), now, works.getUserId());
+                }
+                responseData.jsonFill(1, null, true);
+                return responseData;
+            }
+            responseData.jsonFill(2, "添加失败", false);
+            return responseData;
+        }
+
         //TODO 做一些校验
-        Date now = new Date();
         PlayListRelation playListRelation = new PlayListRelation();
-        playListRelation.setCreateTime(new Date());
-        playListRelation.setUpdateTime(new Date());
+        playListRelation.setCreateTime(now);
+        playListRelation.setUpdateTime(now);
         playListRelation.setPlayListId(playListId);
         playListRelation.setWorksId(worksId);
         playListRelation.setUserId(user.getId());
         playListRelation.setOrderTime(now);
         boolean res = playListRelationService.savePlayListRelation(playListRelation);
         //TODO 优化 聚合代码....
-        Works works = worksService.getWorksById(worksId);
         if (works != null) {
-            playListRelationService.updateOrderTimeByStorySetId(works.getStorySetId(), now);
+            playListRelationService.updateOrderTimeByStorySetId(works.getStorySetId(), now, works.getUserId());
         }
         responseData.jsonFill(res ? 1 : 2, null, res);
         return responseData;
     }
 
-    @ApiOperation(value = "从一个作品中删除作品", notes = "")
+    @ApiOperation(value = "一键添加别人的作品到播放列表", notes = "")
+    @RequestMapping(value = "/getUserWorksToPlayList", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> getUserWorksToPlayList(
+            @ApiParam("播放列表的Id") @RequestParam int playListId,
+            @ApiParam("对方的用户Id") @RequestParam int userId,
+            HttpServletRequest request, HttpServletResponse response) {
+        ResponseData<Boolean> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "用户尚未登录。", null);
+            return responseData;
+        }
+        if (playListId == -1) {
+            responseData.jsonFill(2, "不能向我的作品中添加作品", null);
+            return responseData;
+        }
+        List<Integer> workIdList = worksService.getWorkIdListByUserId(userId);
+        //先要查重播放列表原来的worksIdList
+        List<Integer> idList = playListRelationService.getWorksIdListByPlayListIdAndUserIdByPage(playListId, user.getId(), 0, 1000);
+
+        //播放列表为我的喜爱的故事
+        if (playListId == 0) {
+            Agree agree = new Agree();
+            agree.setCreateTime(new Date());
+            agree.setUpdateTime(new Date());
+            agree.setOrderTime(new Date());
+            agree.setUserId(user.getId());
+            for (Integer id : workIdList) {
+                //如果包含的话，就跳出此次循环
+                if (idList.contains(id)) {
+                    continue;
+                }
+                agree.setWorksId(id);
+                boolean res = agreeService.addAgree(agree);
+                if (!res) {
+                    responseData.jsonFill(2, "添加出错", null);
+                    return responseData;
+                }
+                Works works=worksService.getWorksById(id);
+                agreeService.updateOrderTimeByStorySetId(works.getStorySetId(), new Date(), works.getUserId());
+            }
+        } else {
+            PlayListRelation playListRelation = new PlayListRelation();
+            playListRelation.setCreateTime(new Date());
+            playListRelation.setUpdateTime(new Date());
+            playListRelation.setOrderTime(new Date());
+            playListRelation.setPlayListId(playListId);
+            playListRelation.setUserId(user.getId());
+            for (Integer id : workIdList) {
+                //如果包含的话，就跳出此次循环
+                if (idList.contains(id)) {
+                    continue;
+                }
+                playListRelation.setWorksId(id);
+                boolean res = playListRelationService.savePlayListRelation(playListRelation);
+                //由于会返回自增主键，所有把id置null
+                playListRelation.setId(null);
+                if (!res) {
+                    responseData.jsonFill(2, "添加出错", null);
+                    return responseData;
+                }
+                Works works=worksService.getWorksById(id);
+                playListRelationService.updateOrderTimeByStorySetId(works.getStorySetId(), new Date(), works.getUserId());
+            }
+        }
+        responseData.jsonFill(1, null, true);
+        return responseData;
+    }
+
+
+    @ApiOperation(value = "从一个作品列表中删除作品", notes = "")
     @RequestMapping(value = "/removeWorksFromPlayList", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> removeWorksFromPlayList(
@@ -159,15 +244,7 @@ public class UserPlayListController extends BaseController {
             responseData.jsonFill(2, "用户尚未登录。", null);
             return responseData;
         }
-        //我喜欢列表
-        if (playListId == 0) {
-            agreeService.deleteAgree(worksId, user.getId());
-        }
-        //我的作品列表
-        if (playListId == -1) {
-            worksService.deleteWorksById(worksId);
-        }
-        //TODO 简单的校验
+
         boolean res = playListRelationService.deletePlayListRelationByPrimaryKey(worksId, playListId, user.getId());
         responseData.jsonFill(res ? 1 : 2, null, res);
         return responseData;
@@ -199,50 +276,6 @@ public class UserPlayListController extends BaseController {
         } else {
             responseData.jsonFill(1, null, res);
         }
-        return responseData;
-    }
-
-    @ApiOperation(value = "一键添加别人的作品到播放列表", notes = "")
-    @RequestMapping(value = "/getUserWorksToPlayList", method = {RequestMethod.POST})
-    @ResponseBody
-    public ResponseData<Boolean> getUserWorksToPlayList(
-            @ApiParam("播放列表的Id") @RequestParam int playListId,
-            @ApiParam("对方的用户Id") @RequestParam int userId,
-            HttpServletRequest request, HttpServletResponse response) {
-        ResponseData<Boolean> responseData = new ResponseData<>();
-        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
-        if (user == null) {
-            responseData.jsonFill(2, "用户尚未登录。", null);
-            return responseData;
-        }
-        if (playListId == -1) {
-            responseData.jsonFill(2, "不能向我的作品中添加作品", null);
-            return responseData;
-        }
-        List<Integer> workIdList = worksService.getWorkIdListByUserId(userId);
-        //先要查重播放列表原来的worksIdList
-        List<Integer> idList = playListRelationService.getWorksIdListByPlayListIdAndUserIdByPage(playListId, user.getId(), 0, 1000);
-
-        PlayListRelation playListRelation = new PlayListRelation();
-        playListRelation.setCreateTime(new Date());
-        playListRelation.setUpdateTime(new Date());
-        playListRelation.setPlayListId(playListId);
-        playListRelation.setUserId(user.getId());
-        for (Integer id : workIdList) {
-            //如果包含的话，就跳出此次循环
-            if (idList.contains(id)) {
-                continue;
-            }
-            playListRelation.setWorksId(id);
-            boolean res = playListRelationService.savePlayListRelation(playListRelation);
-            //由于会返回自增主键，所有把id置null
-            playListRelation.setId(null);
-            if (res == false) {
-                responseData.jsonFill(2, "添加出错", null);
-                return responseData;
-            }
-        }
-        responseData.jsonFill(1, null, true);
         return responseData;
     }
 

@@ -7,7 +7,26 @@
         worksId,
         userId,
         createTime,
-        updateTime
+        updateTime,
+        orderTime
+    </sql>
+
+    <sql id="works">
+        works.id,
+        works.storyId,
+        works.storyTitle,
+        works.userId,
+        works.username,
+        works.url,
+        works.likeCount,
+        works.createTime,
+        works.updateTime,
+        works.valid,
+        works.headImgUrl,
+        works.coverUrl,
+        works.duration,
+        works.reviewCount,
+        works.listenCount
     </sql>
 
     <resultMap id="agree" type="cn.edu.nju.software.entity.Agree">
@@ -16,6 +35,7 @@
         <id column="userId" property="userId"/>
         <id column="createTime" property="createTime"/>
         <id column="updateTime" property="updateTime"/>
+        <id column="orderTime" property="orderTime"/>
     </resultMap>
 
     <insert id="saveAgree" parameterType="cn.edu.nju.software.entity.Agree">
@@ -28,7 +48,8 @@
         #{worksId},
         #{userId},
         #{createTime},
-        #{updateTime}
+        #{updateTime},
+        #{orderTime}
         )
     </insert>
 
@@ -72,4 +93,19 @@
         from agree
         where createTime &gt; #{0}
     </select>
+
+    <select id="getWorksListByUserIdByPage" resultType="cn.edu.nju.software.entity.Works">
+        select
+        <include refid="works"></include>
+        from agree left join works on agree.worksId = works.id
+        where works.valid = 1  and agree.userId = #{0}
+        order by agree.orderTime DESC, works.storyTitle ASC
+        limit #{1},#{2}
+    </select>
+
+    <update id="updateOrderTimeByStorySetId">
+        UPDATE
+        agree left join works on agree.worksId = works.id
+        set agree.orderTime = #{1} where works.storySetId = #{0} and works.userId = #{2} and works.valid = 1
+    </update>
 </mapper>

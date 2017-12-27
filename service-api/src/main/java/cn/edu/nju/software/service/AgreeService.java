@@ -1,6 +1,7 @@
 package cn.edu.nju.software.service;
 
 import cn.edu.nju.software.entity.Agree;
+import cn.edu.nju.software.entity.Works;
 
 import java.util.Date;
 import java.util.List;
@@ -23,5 +24,10 @@ public interface AgreeService {
     Agree getAgree(int userId, int worksId);
 
     List<Agree> extractNewRecords(Date lastExtractTime);
+
+    //特殊排序
+    List<Works> getWorksListByUserIdByPage(int userId,int page,int pageSize);
+
+    boolean updateOrderTimeByStorySetId(Integer storySetId, Date orderTime,Integer userId);
 
 }

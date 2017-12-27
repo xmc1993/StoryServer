@@ -1,8 +1,11 @@
 package cn.edu.nju.software.service.impl;
 
+import cn.edu.nju.software.dao.PlayListDao;
+import cn.edu.nju.software.dao.PlayListRelationDao;
 import cn.edu.nju.software.dao.StoryDao;
 import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.dao.user.AppUserDao;
+import cn.edu.nju.software.entity.PlayListRelation;
 import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.entity.TwoTuple;
 import cn.edu.nju.software.entity.Works;
@@ -37,11 +40,24 @@ public class WorksServiceImpl implements WorksService {
 	private AppUserDao appUserDao;
 	@Autowired
 	private AppUserService appUserService;
+	@Autowired
+	private PlayListRelationDao playListRelationDao;
 
 	@Override
 	public Works saveWorks(Works works) {
 		boolean res = worksDao.saveWorks(works);
 		if (res) {
+			//成功的话，在我的作品的playlist加一条记录
+			Date now=new Date();
+			PlayListRelation playListRelation=new PlayListRelation();
+			playListRelation.setOrderTime(now);
+			playListRelation.setUpdateTime(now);
+			playListRelation.setCreateTime(now);
+			playListRelation.setWorksId(works.getId());
+			playListRelation.setUserId(works.getUserId());
+			playListRelation.setPlayListId(-1);
+			playListRelationDao.savePlayListRelation(playListRelation);
+
 			storyDao.newTell(works.getStoryId());
 			Story story=storyDao.getStoryById(works.getStoryId());
 			if(story.getSetId()!=0){

@@ -19,8 +19,8 @@ public interface PlayListRelationService {
 
     List<Integer> getWorksIdListByPlayListIdAndUserIdByPage(int playListId, int userId, int page, int pageSize);
 
-    boolean updateOrderTimeByStorySetId(Integer storySetId, Date orderTime);
+    boolean updateOrderTimeByStorySetId(Integer storySetId, Date orderTime,Integer userId);
 
-    List<Works> getWorksListByPlayListIdByPage(int playListId, int userId, int limit, int offset);
+    List<Works> getWorksListByPlayListIdByPage(int playListId, int userId,  int page, int pageSize);
 
 }
