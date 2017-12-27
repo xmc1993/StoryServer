@@ -89,7 +89,7 @@ public class AgreeServiceImpl implements AgreeService {
     public List<Works> getWorksListByUserIdByPage(int userId, int page, int pageSize) {
         int offset = page * pageSize;
         int limit = pageSize;
-        return agreeDao.getWorksListByUserIdByPage(userId, limit, offset);
+        return agreeDao.getWorksListByUserIdByPage(userId, offset, limit);
     }
 
     @Override

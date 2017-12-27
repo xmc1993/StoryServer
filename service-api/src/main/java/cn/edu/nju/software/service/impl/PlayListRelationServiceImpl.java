@@ -79,6 +79,6 @@ public class PlayListRelationServiceImpl implements PlayListRelationService {
     public List<Works> getWorksListByPlayListIdByPage(int playListId, int userId, int page, int pageSize) {
         int offset = page * pageSize;
         int limit = pageSize;
-        return playListRelationDao.getWorksListByPlayListIdByPage(playListId, userId, limit, offset);
+        return playListRelationDao.getWorksListByPlayListIdByPage(playListId, userId, offset, limit);
     }
 }
