@@ -70,7 +70,7 @@ public class ManageFeedbackTempletController {
 
 
     @ApiOperation(value = "保存反馈模板")
-    @RequestMapping(value = "/saveFeedbackTempletById", method = {RequestMethod.POST})
+    @RequestMapping(value = "/saveFeedbackTemplet", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> saveFeedbackTempletById(@ApiParam("content") @RequestParam(value = "content") String content,
                                                            @ApiParam("description") @RequestParam(value = "description") String description) {
