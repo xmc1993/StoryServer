@@ -287,6 +287,7 @@ public class UserWorksController extends BaseController {
         Agree agree = new Agree();
         agree.setCreateTime(new Date());
         agree.setUpdateTime(new Date());
+        agree.setOrderTime(new Date());
         agree.setWorksId(worksId);
         agree.setUserId(user.getId());
         boolean res = agreeService.addAgree(agree);
