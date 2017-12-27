@@ -124,7 +124,9 @@ public class ControllerAssist {
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public ResponseEntity<?> handleLoginException(LoginException exception,
                                                   HttpServletRequest request) {
-        logger.info("", exception);
+        //没必要打印LoginException的错误栈 影响日志阅读效率
+        logger.info("---------- catch LoginException -----------");
+        logger.info(exception.getMessage());
         String message = exception.getMessage();
         ResponseData<?> result = new ResponseData<>();
         result.jsonFill(0, message, null);
