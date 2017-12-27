@@ -15,6 +15,7 @@ import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.util.UploadFileUtil;
 import cn.edu.nju.software.util.UserChecker;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -149,9 +150,9 @@ public class UserWorksController extends BaseController {
         WorksVo worksVo = new WorksVo();
         BeanUtils.copyProperties(works, worksVo);
 
-        List<Integer> workTagIdList= workTagRelationService.getWorkTagIdListByWorkId(works.getId());
-        if (workTagIdList.size()!=0){
-            List<WorkTag> workTagList=workTagService.getWorkTagByIdList(workTagIdList);
+        List<Integer> workTagIdList = workTagRelationService.getWorkTagIdListByWorkId(works.getId());
+        if (workTagIdList.size() != 0) {
+            List<WorkTag> workTagList = workTagService.getWorkTagByIdList(workTagIdList);
             worksVo.setWorkTagList(workTagList);
         }
 
@@ -247,7 +248,7 @@ public class UserWorksController extends BaseController {
     @ApiOperation(value = "判断是否需要添加第一次分享作品徽章", notes = "分享作品时调用")
     @RequestMapping(value = "/judgeAddFirstShareWorksBadge", method = {RequestMethod.GET})
     @ResponseBody
-    public ResponseData<Boolean> judgeAddFirstShareWorksBadge(HttpServletRequest request){
+    public ResponseData<Boolean> judgeAddFirstShareWorksBadge(HttpServletRequest request) {
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         return badgeCheckService.judgeAddFirstShareBadge(user.getId());
     }
@@ -357,7 +358,7 @@ public class UserWorksController extends BaseController {
             @ApiParam("故事ID") @RequestParam("storyId") int storyId,
             @ApiParam("音频长度") @RequestParam("duration") String duration,
             @ApiParam("音频文件") @RequestParam(value = "uploadFile") MultipartFile uploadFile,
-            @ApiParam("作品标签id列表(逗号隔开)") @RequestParam(value = "tagIdList",required = false) String tagIdList,
+            @ApiParam("作品标签id列表(逗号隔开)") @RequestParam(value = "tagIdList", required = false) String tagIdList,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<WorksVo> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
@@ -386,9 +387,9 @@ public class UserWorksController extends BaseController {
         //这里不能拿缓存
         //用户的作品数和缓存的作品数可能不对应，说以这里要从数据库拿用户的workCount,也就是刷新下workCount数
         user = appUserService.getUserById(user.getId());
-            if (user.getWorkCount()==0){
-                followService.dummyFollowRelation(user.getId());
-            }
+        if (user.getWorkCount() == 0) {
+            followService.dummyFollowRelation(user.getId());
+        }
 
         Works works = new Works();
         works.setDuration(duration);
@@ -423,19 +424,19 @@ public class UserWorksController extends BaseController {
         }
 
         //如果作品上传成功再绑定作品标签。——zj
-        if (res!=null){
+        if (res != null) {
             if (tagIdList != null) {
-                String[] tagIds = tagIdList.substring(1,tagIdList.length()-1).split(",");
+                String[] tagIds = tagIdList.substring(1, tagIdList.length() - 1).split(",");
                 for (String tagId : tagIds) {
-                    WorkTagRelation workTagRelation=new WorkTagRelation();
-                    Integer tagIdInteger=Integer.parseInt(tagId);
+                    WorkTagRelation workTagRelation = new WorkTagRelation();
+                    Integer tagIdInteger = Integer.parseInt(tagId);
                     workTagRelation.setTagId(tagIdInteger);
                     workTagRelation.setWorkId(works.getId());
                     workTagRelation.setCreateTime(new Date());
                     workTagRelation.setUpdateTime(new Date());
-                    int result=workTagRelationService.insert(workTagRelation);
-                    if (result!=1){
-                        throw new RuntimeException("作品标签添加失败，标签id："+tagId);
+                    int result = workTagRelationService.insert(workTagRelation);
+                    if (result != 1) {
+                        throw new RuntimeException("作品标签添加失败，标签id：" + tagId);
                     }
                 }
             }
@@ -445,15 +446,15 @@ public class UserWorksController extends BaseController {
          * 刷新下阅读记录，须在badgeCheckService.judgeAddBadgesWhenPublish(user, works);这句代码之前更新，
          * 因为judgeAddBadgesWhenPublish方法中需要使用更新后的录制记录中的数据
          */
-        if (res!=null){
+        if (res != null) {
             recordStatisticService.saveRecord(user.getId());
         }
 
         WorksVo worksVo = new WorksVo();
         if (res != null) {
-            List<Badge> badges=null;
+            List<Badge> badges = null;
             if (user.getId() > 0) {
-                badges=badgeCheckService.judgeAddBadgesWhenPublish(user, works);
+                badges = badgeCheckService.judgeAddBadgesWhenPublish(user, works);
             }
             BeanUtils.copyProperties(works, worksVo);
             responseData.jsonFill(1, null, worksVo);
@@ -472,7 +473,7 @@ public class UserWorksController extends BaseController {
             @ApiParam("故事ID") @RequestParam("storyId") int storyId,
             @ApiParam("音频长度") @RequestParam("duration") String duration,
             @ApiParam("作品url") @RequestParam(value = "url") String url,
-            @ApiParam("作品标签id列表(逗号隔开)") @RequestParam(value = "tagIdList",required = false) String tagIdList,
+            @ApiParam("作品标签id列表(逗号隔开)") @RequestParam(value = "tagIdList", required = false) String tagIdList,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<WorksVo> responseData = new ResponseData();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
@@ -529,19 +530,25 @@ public class UserWorksController extends BaseController {
         }
 
         //如果作品上传成功再绑定作品标签。——zj
-        if (res!=null){
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1tagIdList: " + tagIdList);
+        if (res != null) {
             if (tagIdList != null) {
-                String[] tagIds = tagIdList.substring(1,tagIdList.length()-1).split(",");
+                List<String> tagIds = new Gson().fromJson(tagIdList, new TypeToken<List<String>>() {
+                }.getType());
+
+                //String[] tagIds = tagIdList.substring(1,tagIdList.length()-1).split(",");
                 for (String tagId : tagIds) {
-                    WorkTagRelation workTagRelation=new WorkTagRelation();
-                    Integer tagIdInteger=Integer.parseInt(tagId);
+                    System.out.println("tagId: " + tagId);
+
+                    WorkTagRelation workTagRelation = new WorkTagRelation();
+                    Integer tagIdInteger = Integer.parseInt(tagId);
                     workTagRelation.setTagId(tagIdInteger);
                     workTagRelation.setWorkId(works.getId());
                     workTagRelation.setCreateTime(new Date());
                     workTagRelation.setUpdateTime(new Date());
-                    int result=workTagRelationService.insert(workTagRelation);
-                    if (result!=1){
-                        throw new RuntimeException("作品标签添加失败，标签id："+tagId);
+                    int result = workTagRelationService.insert(workTagRelation);
+                    if (result != 1) {
+                        throw new RuntimeException("作品标签添加失败，标签id：" + tagId);
                     }
                 }
             }
@@ -551,7 +558,7 @@ public class UserWorksController extends BaseController {
          * 刷新下阅读记录，须在badgeCheckService.judgeAddBadgesWhenPublish(user, works);这句代码之前更新，
          * 因为judgeAddBadgesWhenPublish方法中需要使用更新后的录制记录中的数据
          */
-        if (res!=null){
+        if (res != null) {
             recordStatisticService.saveRecord(user.getId());
         }
 
