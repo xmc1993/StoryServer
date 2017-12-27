@@ -155,7 +155,7 @@ public class OSSClientUtil {
         String type = URLConnection.guessContentTypeFromName(fileName);
         if (type == null) {
             int beginIndex = fileName.lastIndexOf(".");
-            if (-1 == beginIndex) {
+            if (beginIndex < 0) {
                 return "image/jpeg";
             }
             return getContentTypeByExtension(fileName.substring(beginIndex));
