@@ -88,6 +88,9 @@ public class WorksServiceImpl implements WorksService {
 		boolean res = worksDao.deleteWorksById(id);
 		if (res) {
 			Works works = worksDao.getWorksByIdHard(id);
+			//如果删除成功的话，从我的作品的playlist里面的记录删除
+			playListRelationDao.deletePlayListRelationByPrimaryKey(id,-1,works.getUserId());
+			
 			//这里如果是该故事所属故事集，要给故事集的tellCount还有realTellCount减一
 			Story story=storyDao.getStoryById(works.getStoryId());
 			if(story.getSetId()!=0){
