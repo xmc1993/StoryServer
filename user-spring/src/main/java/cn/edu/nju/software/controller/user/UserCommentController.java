@@ -87,7 +87,7 @@ public class UserCommentController {
                 for (Comment comment : list) {
                     for (Integer commentId : idList) {
                         if (commentId.equals(comment.getId())) {
-                            comment.setLike(true);
+                            comment.setAgree(true);
                             break;
                         }
                     }
@@ -137,4 +137,24 @@ public class UserCommentController {
         return responseData;
     }
 
+    @ApiOperation("用户删除自己的评论")
+    @RequestMapping(value = "/deleteComment", method = {RequestMethod.POST})
+    @ResponseBody
+    public ResponseData<Boolean> deleteComment(@ApiParam("评论id") @RequestParam(value = "commentId") Integer commentId,
+                                                     HttpServletRequest request) {
+        ResponseData<Boolean> responseData = new ResponseData<>();
+        User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
+        if (user == null) {
+            responseData.jsonFill(2, "请先登录", null);
+            return responseData;
+        }
+
+        boolean res = commentService.deleteCommentByUser(commentId,user.getId());
+        if (res) {
+            responseData.jsonFill(1, null, res);
+            return responseData;
+        }
+        responseData.jsonFill(2, "删除失败", null);
+        return responseData;
+    }
 }

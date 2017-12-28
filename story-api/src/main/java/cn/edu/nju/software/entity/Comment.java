@@ -28,6 +28,6 @@ public class Comment {
 
     private String userName;
 
-    private boolean like=false;
+    private boolean agree=false;
 
 }
