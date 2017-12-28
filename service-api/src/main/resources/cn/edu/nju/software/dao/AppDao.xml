@@ -55,7 +55,7 @@
         select
         <include refid="fields"/>
         from apps
-        where id > #{id} and ifUpdate=1
+        where version > #{version} and ifUpdate=1
     </select>
 
 
@@ -70,7 +70,7 @@
         select
         <include refid="fields"/>
         from apps
-        where id = (select max(id) from apps)
+        where version = (select max(version) from apps)
     </select>
 
     <select id="getAppListByIdList" resultType="cn.edu.nju.software.entity.App">

@@ -50,11 +50,15 @@ public class AppServiceImpl implements AppService {
     }
 
     @Override
-    public App getNewApp(Integer id) {
+    public App getNewApp(Integer version) {
         App lastestApp = appDao.getLastApp();
-        List<App> list = appDao.getForceUpdateVersionAfterCurrentVersion(id);
+        System.out.println(lastestApp.getVersion());
+        List<App> list = appDao.getForceUpdateVersionAfterCurrentVersion(version);
+        System.out.println(list.size());
         if (list.size() > 0 && lastestApp != null) {
             lastestApp.setIfUpdate(1);
+        }else{
+            lastestApp.setIfUpdate(0);
         }
         return lastestApp;
     }
