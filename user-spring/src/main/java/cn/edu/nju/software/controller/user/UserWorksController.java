@@ -279,7 +279,9 @@ public class UserWorksController extends BaseController {
             response.setStatus(401);
             return responseData;
         }
-        if (!checkValidService.isWorksExist(worksId)) {
+
+        Works works=worksService.getWorksById(worksId);
+        if (works==null) {
             responseData.jsonFill(2, "作品不存在", null);
             response.setStatus(404);
             return responseData;
@@ -287,9 +289,13 @@ public class UserWorksController extends BaseController {
         Agree agree = new Agree();
         agree.setCreateTime(new Date());
         agree.setUpdateTime(new Date());
+        agree.setOrderTime(new Date());
         agree.setWorksId(worksId);
         agree.setUserId(user.getId());
         boolean res = agreeService.addAgree(agree);
+        if (res){
+            agreeService.updateOrderTimeByStorySetId(works.getStorySetId(), new Date(), works.getUserId());
+        }
         responseData.jsonFill(res ? 1 : 2, null, res);
         return responseData;
     }
@@ -401,6 +407,7 @@ public class UserWorksController extends BaseController {
         works.setUsername(user.getNickname());
         works.setUrl(url);
         works.setHeadImgUrl(user.getHeadImgUrl());
+        works.setStorySetId(story.getSetId());
         Works res = worksService.saveWorks(works);
         //还得判断该故事是否有故事集，如果有故事集给故事集的tellCount，realTellCount加一
         if (story.getSetId() != 0) {
@@ -507,6 +514,7 @@ public class UserWorksController extends BaseController {
         works.setUsername(user.getNickname());
         works.setUrl(url);
         works.setHeadImgUrl(user.getHeadImgUrl());
+        works.setStorySetId(story.getSetId());
         Works res = worksService.saveWorks(works);
         //还得判断该故事是否有故事集，如果有故事集给故事集的tellCount，realTellCount加一
         if (story.getSetId() != 0) {

@@ -1,6 +1,7 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.Agree;
+import cn.edu.nju.software.entity.Works;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -26,4 +27,7 @@ public interface AgreeDao {
 
     List<Agree> extractNewRecords(Date lastExtractTime);
 
+    List<Works> getWorksListByUserIdByPage(int userId, int offset, int limit);
+
+    boolean updateOrderTimeByStorySetId(int storySetId, Date orderTime,int userId);
 }

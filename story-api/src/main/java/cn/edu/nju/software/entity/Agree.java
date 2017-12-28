@@ -11,6 +11,7 @@ public class Agree {
     private Integer userId;
     private Date createTime;
     private Date updateTime;
+    private Date orderTime;
 
     public Integer getId() {
         return id;
@@ -50,5 +51,13 @@ public class Agree {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Date getOrderTime() {
+        return orderTime;
+    }
+
+    public void setOrderTime(Date orderTime) {
+        this.orderTime = orderTime;
     }
 }

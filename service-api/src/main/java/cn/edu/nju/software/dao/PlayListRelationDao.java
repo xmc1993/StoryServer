@@ -1,8 +1,10 @@
 package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.PlayListRelation;
+import cn.edu.nju.software.entity.Works;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,5 +21,9 @@ public interface PlayListRelationDao {
     boolean deletePlayListRelationById(int id);
 
     List<Integer> getWorksIdListByPlayListIdAndUserIdByPage(int playListId, int userId, int limit, int offset);
+
+    boolean updateOrderTimeByStorySetId(int storySetId, Date orderTime,int userId);
+
+    List<Works> getWorksListByPlayListIdByPage(int playListId, int userId, int limit, int offset);
 
 }

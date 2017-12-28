@@ -15,5 +15,5 @@ public class PlayListRelation {
     private Integer userId;//外键
     private Date createTime;
     private Date updateTime;
-
+    private Date orderTime;
 }

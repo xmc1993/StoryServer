@@ -1,8 +1,11 @@
 package cn.edu.nju.software.service.impl;
 
+import cn.edu.nju.software.dao.PlayListDao;
+import cn.edu.nju.software.dao.PlayListRelationDao;
 import cn.edu.nju.software.dao.StoryDao;
 import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.dao.user.AppUserDao;
+import cn.edu.nju.software.entity.PlayListRelation;
 import cn.edu.nju.software.entity.Story;
 import cn.edu.nju.software.entity.TwoTuple;
 import cn.edu.nju.software.entity.Works;
@@ -37,11 +40,29 @@ public class WorksServiceImpl implements WorksService {
 	private AppUserDao appUserDao;
 	@Autowired
 	private AppUserService appUserService;
+	@Autowired
+	private PlayListRelationDao playListRelationDao;
 
 	@Override
 	public Works saveWorks(Works works) {
 		boolean res = worksDao.saveWorks(works);
 		if (res) {
+			//成功的话，在我的作品的playlist加一条记录,并更新orderTime
+			Date now=new Date();
+			PlayListRelation playListRelation=new PlayListRelation();
+			playListRelation.setOrderTime(now);
+			playListRelation.setUpdateTime(now);
+			playListRelation.setCreateTime(now);
+			playListRelation.setWorksId(works.getId());
+			playListRelation.setUserId(works.getUserId());
+			playListRelation.setPlayListId(-1);
+			boolean success=playListRelationDao.savePlayListRelation(playListRelation);
+			if (success){
+				if (works.getStorySetId() != null && works.getStorySetId().compareTo(0) != 0) {
+					playListRelationDao.updateOrderTimeByStorySetId(works.getStorySetId(),new Date(), works.getUserId());
+				}
+			}
+
 			storyDao.newTell(works.getStoryId());
 			Story story=storyDao.getStoryById(works.getStoryId());
 			if(story.getSetId()!=0){
@@ -72,6 +93,9 @@ public class WorksServiceImpl implements WorksService {
 		boolean res = worksDao.deleteWorksById(id);
 		if (res) {
 			Works works = worksDao.getWorksByIdHard(id);
+			//如果删除成功的话，从我的作品的playlist里面的记录删除
+			playListRelationDao.deletePlayListRelationByPrimaryKey(id,-1,works.getUserId());
+			
 			//这里如果是该故事所属故事集，要给故事集的tellCount还有realTellCount减一
 			Story story=storyDao.getStoryById(works.getStoryId());
 			if(story.getSetId()!=0){
