@@ -95,11 +95,6 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 					<webAppConfig>
 						<contextPath>/</contextPath>
 					</webAppConfig>
-					<connectors>
-						<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-							<port>8080</port>
-						</connector>
-					</connectors>
 				</configuration>
 			</plugin>
 		</plugins>
