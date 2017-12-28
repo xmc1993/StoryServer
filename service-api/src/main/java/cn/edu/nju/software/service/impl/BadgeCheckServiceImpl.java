@@ -117,16 +117,18 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
 
         // 最高连续阅读天数
         int maxDays = recordStatisticService.getHistoryMaxCount(userId);
-
         // 49的id是连续阅读一天的ID,后面依次类推
         for (int i = 0; i < readDayCountBadgeArr.length; i++) {
             if (maxDays == readDayCountBadgeArr[i]) {
-                UserBadge userBadge = new UserBadge();
-                userBadge.setUserId(userId);
                 Badge badge = badgeService.getBadgeByMeasureAndType(readDayCountBadgeArr[i], 6);
-                userBadge.setBadgeId(badge.getId());
-                userBadgeService.saveUserBadge(userBadge);
-                badges.add(badge);
+                Integer badgeId=badge.getId();
+                if (userBadgeService.getUserBadge(badgeId, userId) == null) {
+                    UserBadge userBadge = new UserBadge();
+                    userBadge.setUserId(userId);
+                    userBadge.setBadgeId(badgeId);
+                    userBadgeService.saveUserBadge(userBadge);
+                    badges.add(badge);
+                }
             }
         }
 
@@ -141,7 +143,6 @@ public class BadgeCheckServiceImpl implements BadgeCheckService {
                 userBadge.setBadgeId(badge.getId());
                 userBadgeService.saveUserBadge(userBadge);
                 badges.add(badge);
-                return badges;
             }
         }
 
