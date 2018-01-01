@@ -585,6 +585,27 @@ public class DateUtil {
         }
     }
 
+    public int dayOfYear(){
+        Date date=new Date();
+        Calendar ca=Calendar.getInstance();
+        ca.setTime(date);
+        return ca.get(Calendar.DAY_OF_YEAR);
+    }
+
+    public int monthOfYear(){
+        Date date=new Date();
+        Calendar ca=Calendar.getInstance();
+        ca.setTime(date);
+        return ca.get(Calendar.MONTH)+1;
+    }
+
+    public int dayOfMonth(){
+        Date date=new Date();
+        Calendar ca=Calendar.getInstance();
+        ca.setTime(date);
+        return ca.get(Calendar.DAY_OF_MONTH);
+    }
+
     public static void main(String[] args) {
         long time = 1758762L;//diffDateSecond(new Date(), getDateByString("2014-01-01 12:12:12","yyyy-MM-dd HH:mm:ss"))*1000;
         long day = time / (24 * 60 * 60 * 1000);
@@ -605,6 +626,8 @@ public class DateUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //System.out.println(monthOfYear()+"/"+dayOfMonth());
 
     }
 }
