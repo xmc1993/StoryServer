@@ -53,7 +53,7 @@
 		</root>
 		<logger name="org.springframework" level="warn" />
 		<logger name="org.mybatis" level="info" />
-		<logger name="cn.edu" level="debug" />
+		<logger name="cn.edu" level="info" />
 		<logger name="com.mangofactory" level="warn" />
 		<logger name="tk.mybatis.simple.mapper" level="warn" />
 		<logger name="org.apache.http.impl.conn.PoolingHttpClientConnectionManager" level="warn" />
