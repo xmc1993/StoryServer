@@ -55,7 +55,7 @@
 		<logger name="org.mybatis" level="info" />
 		<logger name="cn.edu" level="info" />
 		<logger name="com.mangofactory" level="warn" />
-		<logger name="tk.mybatis.simple.mapper" level="warn" />
+		<logger name="cn.edu.nju.software.dao" level="warn" />
 		<!--<logger name="org.apache.http.impl.conn.PoolingHttpClientConnectionManager" level="warn" />-->
 		<logger name="org.apache" level="warn" />
 		<!--<logger name="cn.edu" level="error" additivity="false">
