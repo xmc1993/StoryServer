@@ -25,9 +25,11 @@ public class Const {
     public static final Integer FIRST_FOLLOW_BADGE_ID=68;//第一次添加关注徽章id
     public static final Integer FIRST_FOLLOWED_BADGE_ID=69;//第一次获得粉丝徽章id
     public static final Integer FIRST_SHARE_BADGE_ID =70;//第一次分享徽章id
+    public static final Integer NEW_YEAR_BADGE_ID =71;//2018新年徽章
+    public static final Integer CHRISTMAS_BADGE_ID =72;//圣诞徽章
     public static final Integer FIRST_ADD_ORIGINAL_STORY_BADGE_ID=73;//第一次添加原创故事徽章id
     public static final Integer FIRST_READING_BY_PLAN_BADGE_ID=74;//第一次按照计划录制作品徽章
-    public static final Integer PREGNANCY_READING_BADGE_ID=75;//第一次按照计划录制作品徽章
+    public static final Integer PREGNANCY_READING_BADGE_ID=75;//读孕期专题故事获得徽章ID
 
     //故事专题常量
     public static final Integer DOUBLE_ELEVEN_STORY_TOPIC = 18;//双十一故事专题

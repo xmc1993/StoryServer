@@ -26,7 +26,7 @@ public class UserAppController {
     @RequestMapping(value = "/getNewApp", method = {RequestMethod.GET})
     @ResponseBody
     public ResponseData<App> getNewApp(
-            @ApiParam("用户app的ID") @RequestParam(value = "id",required = false) Integer id){
+            @ApiParam("用户app的版本号，不是id") @RequestParam(value = "id",required = false) Integer id){
         ResponseData<App> responseData = new ResponseData<>();
         App app = appService.getNewApp(id);
         responseData.jsonFill(1,null,app);

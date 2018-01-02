@@ -105,7 +105,9 @@ public class ManageAppController {
         DecimalFormat df = new DecimalFormat("#0.00");
         String appSize = df.format(size);
         app.setFileSize(appSize);
-        app.setIfUpdate(ifUpdate);
+        if (ifUpdate==1||ifUpdate==0){
+            app.setIfUpdate(ifUpdate);
+        }
         if (appService.saveApp(app) == false) {
             result.jsonFill(2, "保存失败", false);
         }
@@ -156,7 +158,7 @@ public class ManageAppController {
         }
         app.setUpdateTime(new Date());
 
-        if (ifUpdate != null) {
+        if (ifUpdate==1||ifUpdate==0){
             app.setIfUpdate(ifUpdate);
         }
 

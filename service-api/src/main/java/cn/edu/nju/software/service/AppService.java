@@ -18,7 +18,7 @@ public interface AppService {
 
     App getAppById(int id);
 
-    App getNewApp(Integer id);
+    App getNewApp(Integer version);
 
     List<App> getAppListByIdList(int[] idList);
 

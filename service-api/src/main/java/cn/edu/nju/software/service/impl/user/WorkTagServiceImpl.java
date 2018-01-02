@@ -91,7 +91,11 @@ public class WorkTagServiceImpl implements WorkTagService {
         criteria1.andValidEqualTo(1);
         criteria1.andAuthorIdEqualTo(0);
         List<WorkTag> list=workTagMapper.selectByExample(workTagExample);
-        workTagList.addAll(list.subList(0,3));
+        if (list.size()<3){
+            workTagList.addAll(list);
+        }else {
+            workTagList.addAll(list.subList(0,3));
+        }
 
         workTagExample = new WorkTagExample();
         WorkTagExample.Criteria criteria2 = workTagExample.createCriteria();
