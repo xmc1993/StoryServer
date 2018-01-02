@@ -187,7 +187,8 @@ public class UserBabyController extends BaseController {
         		responseData.jsonFill(2, "用户没有宝宝或者用户不存在", null);
         		return responseData;
         	}
-        	responseData.jsonFill(1, "不存在选中的宝宝，返回用户的第一个宝宝", babyList.get(0));
+        	Baby selectedBaby = babyList.size() > 0 ? babyList.get(0) : null;
+        	responseData.jsonFill(1, "不存在选中的宝宝，返回用户的第一个宝宝", selectedBaby);
         	return responseData;
         }
         responseData.jsonFill(1, null, baby);
