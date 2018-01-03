@@ -483,22 +483,7 @@ public class UserUserController extends BaseController {
         }
 
         Util.setNewAccessToken(user);
-        // TODO 更新数据库
-        // 登录信息写入缓存
-        Jedis jedis = null;
-//        try {
-//            jedis = JedisUtil.getJedis();
-//            jedis.set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
-//            jedis.expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            responseData.jsonFill(2, "信息插入缓存失败", null);
-//            return responseData;
-//        } finally {
-//            if (jedis != null) {
-//                jedis.close();
-//            }
-//        }
+        //TODO 如果要限制登录端数的话在此将accessToken写入数据库
         redisTemplate.opsForValue().set(user.getAccessToken(), user);
         redisTemplate.expire(user.getAccessToken(), 60 * 60 * 24 * 30, TimeUnit.SECONDS);//过期时间为30天
         Integer userId=user.getId();
