@@ -11,6 +11,7 @@ import redis.clients.jedis.Jedis;
 
 import javax.annotation.PreDestroy;
 import java.io.Serializable;
+import java.util.concurrent.Callable;
 
 public class JedisSpringCache implements Cache, InitializingBean {
 
@@ -111,6 +112,11 @@ public class JedisSpringCache implements Cache, InitializingBean {
             throw new IllegalStateException("缓存的值类型指定错误 [" + type.getName() + "]: " + value);
         }
         return (T) value;
+    }
+
+    @Override
+    public <T> T get(Object o, Callable<T> callable) {
+        return null;
     }
 
     @Override

@@ -3,7 +3,6 @@ package cn.edu.nju.software.controller.user;
 import cn.edu.nju.software.controller.BaseController;
 import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.enums.GrantType;
-import cn.edu.nju.software.service.AppService;
 import cn.edu.nju.software.service.BadgeService;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.service.user.LoginStatusStatisticsService;
@@ -21,6 +20,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,6 +31,7 @@ import redis.clients.jedis.Jedis;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Api("user controller")
 @Controller
@@ -52,6 +53,8 @@ public class UserUserController extends BaseController {
     private LoginStatusStatisticsService loginStatusStatisticsService;
     @Autowired
     private UserGoldAccountService userGoldAccountService;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     @ApiOperation(value = "获取用户信息", notes = "获取用户信息")
     @RequestMapping(value = "/getUserBaseInfo", method = {RequestMethod.GET})
@@ -483,19 +486,21 @@ public class UserUserController extends BaseController {
         // TODO 更新数据库
         // 登录信息写入缓存
         Jedis jedis = null;
-        try {
-            jedis = JedisUtil.getJedis();
-            jedis.set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
-            jedis.expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseData.jsonFill(2, "信息插入缓存失败", null);
-            return responseData;
-        } finally {
-            if (jedis != null) {
-                jedis.close();
-            }
-        }
+//        try {
+//            jedis = JedisUtil.getJedis();
+//            jedis.set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
+//            jedis.expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            responseData.jsonFill(2, "信息插入缓存失败", null);
+//            return responseData;
+//        } finally {
+//            if (jedis != null) {
+//                jedis.close();
+//            }
+//        }
+        redisTemplate.opsForValue().set(user.getAccessToken(), user);
+        redisTemplate.expire(user.getAccessToken(), 60 * 60 * 24 * 30, TimeUnit.SECONDS);//过期时间为30天
         Integer userId=user.getId();
         //统计连续登录信息
         loginStatusStatisticsService.saveLoginStatusStatistics(userId);
