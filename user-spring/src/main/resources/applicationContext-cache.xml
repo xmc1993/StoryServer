@@ -9,23 +9,34 @@
         <property name="caches">
             <set>
                 <!-- 用微信js-sdk相关的accessToken以及ticket信息 -->
-                <bean class="cn.edu.nju.software.util.cache.JedisSpringCache" id="wxJedisSpringCache">
+                <bean class="cn.edu.nju.software.util.cache.RedisSpringCache" id="wxRedisSpringCache">
                     <property name="name" value="wxAccessToken"/>
                     <!-- 默认是2个小时 7200s但是考虑到sdk通信的时间差减少30s来保证缓存始终有效 -->
                     <property name="expiredDuration" value="7170"/>
+                    <property name="redisTemplate" ref="redisTemplate"></property>
                 </bean>
                 <!-- 保存徽章信息的接口 -->
-                <bean class="cn.edu.nju.software.util.cache.JedisSpringCache" id="badgeJedisSpringCache">
+                <bean class="cn.edu.nju.software.util.cache.RedisSpringCache" id="badgeRedisSpringCache">
                     <property name="name" value="badge"/>
                     <!-- 用户的徽章信息默认两小时失效 -->
                     <property name="expiredDuration" value="7200"/>
+                    <property name="redisTemplate" ref="redisTemplate"></property>
                 </bean>
                 <!-- 保存徽章信息的接口 -->
-                <bean class="cn.edu.nju.software.util.cache.JedisSpringCache" id="appVersionJedisSpringCache">
+                <bean class="cn.edu.nju.software.util.cache.RedisSpringCache" id="appVersionRedisSpringCache">
                     <property name="name" value="appVersion"/>
                     <!-- 最低限制版本的失效时间为1天 -->
                     <property name="expiredDuration" value="86400"/>
+                    <property name="redisTemplate" ref="redisTemplate"></property>
                 </bean>
+                <!-- 保存徽章信息的接口 -->
+                <bean class="cn.edu.nju.software.util.cache.RedisSpringCache" id="adminRedisSpringCache">
+                    <property name="name" value="powerCode"/>
+                    <!-- 后台用户的授权码信息2小时过期 -->
+                    <property name="expiredDuration" value="7200"/>
+                    <property name="redisTemplate" ref="redisTemplate"></property>
+                </bean>
+
             </set>
         </property>
     </bean>

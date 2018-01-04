@@ -85,13 +85,14 @@
           p:pool-config-ref="jedisPoolConfig"/>
 
     <!-- 序列化 -->
-    <bean id="stringRedisSerializer"  class="org.springframework.data.redis.serializer.StringRedisSerializer" />
-    <bean id="jdkSerializationRedisSerializer"  class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+    <bean id="stringRedisSerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+    <bean id="jdkSerializationRedisSerializer"
+          class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
 
     <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
-        <property name="connectionFactory" ref="connectionFactory" />
-        <property name="keySerializer" ref="stringRedisSerializer" />
-        <property name="hashKeySerializer" ref="stringRedisSerializer" />
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="keySerializer" ref="stringRedisSerializer"/>
+        <property name="hashKeySerializer" ref="stringRedisSerializer"/>
         <property name="valueSerializer" ref="jdkSerializationRedisSerializer"/>
         <property name="hashValueSerializer" ref="jdkSerializationRedisSerializer"/>
     </bean>

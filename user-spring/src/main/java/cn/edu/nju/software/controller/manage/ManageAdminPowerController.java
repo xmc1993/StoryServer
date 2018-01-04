@@ -53,7 +53,11 @@ public class ManageAdminPowerController {
             @ApiParam("ID") @PathVariable int id,
             HttpServletRequest request, HttpServletResponse response) {
         ResponseData<Boolean> responseData = new ResponseData<>();
-        boolean success = adminPowerService.deleteAdminPower(id);
+        AdminPower adminPower = adminPowerService.getAdminPowerById(id);
+        if (adminPower == null) {
+            throw new RuntimeException("删除失败");
+        }
+        boolean success = adminPowerService.deleteAdminPower(id, adminPower.getAdminId());
         if (!success) {
             throw new RuntimeException("删除失败");
         }

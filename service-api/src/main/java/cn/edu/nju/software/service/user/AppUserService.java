@@ -34,17 +34,17 @@ public interface AppUserService {
     List<UserBase> getUserBaseListByIdList(List<Integer> idList);
 
     User getUserByDeviceId(String deviceId);
-    
-    TwoTuple<Integer,Boolean> addContinuousLandDay(Integer id);
-    
+
+    TwoTuple<Integer, Boolean> addContinuousLandDay(Integer id);
+
     boolean isLoginTodayFirst(Integer userId);
 
-    boolean updateUserWorkCount(Integer workCount,Integer userId);
+    boolean updateUserWorkCount(Integer workCount, Integer userId);
 
-    boolean updateListenCountByUserId(Integer listenCount,Integer userId);
-    
+    boolean updateListenCountByUserId(Integer listenCount, Integer userId);
+
     boolean deleteUserById(int id);
-    
+
     boolean recoverUserById(int id);
 
     String getTotalRecordTime(int id);
@@ -57,5 +57,5 @@ public interface AppUserService {
 
     boolean decreaseWorkCountSafely(int userId);
 
-    boolean updateDeviceToken(String deviceToken,int userId);
+    boolean updateDeviceToken(String deviceToken, int userId);
 }

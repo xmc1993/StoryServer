@@ -2,11 +2,10 @@ package cn.edu.nju.software.dao;
 
 import cn.edu.nju.software.entity.ReadingPlanStoryGroup;
 import cn.edu.nju.software.entity.ReadingPlanStoryGroupExample;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
+import java.util.List;
 
 @Repository
 public interface ReadingPlanStoryGroupMapper {

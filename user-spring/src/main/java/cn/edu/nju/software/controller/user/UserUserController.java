@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,7 +36,6 @@ import java.util.concurrent.TimeUnit;
 @Controller
 @RequestMapping("/user")
 public class UserUserController extends BaseController {
-
     private static final Logger logger = LoggerFactory.getLogger(UserUserController.class);
     private static final String IMAGE_ROOT = "/head/";
     private final String default_avatar = "default_avatar.jpg";
@@ -82,22 +80,9 @@ public class UserUserController extends BaseController {
             responseData.jsonFill(2, "用户尚未登录。", false);
             return responseData;
         }
-        Jedis jedis = null;
-        try {
-            jedis = JedisUtil.getJedis();
-            jedis.expire(accessToken.getBytes(), 60 * 60 * 24 * 30);
-            responseData.jsonFill(1, null, true);
-
-            //刷新成功后记录登录信息
-            loginStatusStatisticsService.saveLoginStatusStatistics(user.getId());
-
-        } catch (Exception e) {
-            responseData.jsonFill(2, "失败", null);
-        } finally {
-            if (jedis != null) {
-                jedis.close();
-            }
-        }
+        redisTemplate.expire(accessToken, 60 * 60 * 24 * 30, TimeUnit.SECONDS);
+        responseData.jsonFill(1, null, true);
+        loginStatusStatisticsService.saveLoginStatusStatistics(user.getId());
         return responseData;
     }
 
@@ -112,29 +97,15 @@ public class UserUserController extends BaseController {
             responseData.jsonFill(2, "用户尚未登录。", false);
             return responseData;
         }
-        user = userService.getUserById(user.getId());
+        User userInDB = userService.getUserById(user.getId());
+        //更新缓存信息
+        redisTemplate.opsForValue().set(user.getAccessToken(), userInDB);
+        userInDB.setVerifyCode(null);
+        userInDB.setExpireTime(null);
+        userInDB.setWxUnionId(null);
+        userInDB.setPassword(null);
 
-        // 登录信息写入缓存
-        Jedis jedis = null;
-        try {
-            jedis = JedisUtil.getJedis();
-            jedis.set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseData.jsonFill(2, "用户信息插入缓存失败", null);
-            return responseData;
-        } finally {
-            if (jedis != null) {
-                jedis.close();
-            }
-        }
-
-        user.setVerifyCode(null);
-        user.setExpireTime(null);
-        user.setWxUnionId(null);
-        user.setPassword(null);
-
-        responseData.jsonFill(1, null, user);
+        responseData.jsonFill(1, null, userInDB);
         return responseData;
     }
 
@@ -166,10 +137,9 @@ public class UserUserController extends BaseController {
         }
         user.setUpdateTime(new Date());
         userService.updateUser(user);
+        //更新缓存信息
         String AccessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
-        Jedis jedis = JedisUtil.getJedis();
-        jedis.set(AccessToken.getBytes(), ObjectAndByte.toByteArray(user));
-        jedis.close();
+        redisTemplate.opsForValue().set(AccessToken, user);
         responseData.jsonFill(1, null, true);
         return responseData;
     }
@@ -210,7 +180,7 @@ public class UserUserController extends BaseController {
     @RequestMapping(value = "/loginByWeChat", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<LoginResponseVo> loginByWeChat(@ApiParam("code 授权码") @RequestParam("code") String code,
-                                                       @ApiParam("deviceToken") @RequestParam(value ="deviceToken",required = false) String deviceToken,
+                                                       @ApiParam("deviceToken") @RequestParam(value = "deviceToken", required = false) String deviceToken,
                                                        HttpServletRequest request, HttpServletResponse response) throws Exception {
         ResponseData responseData = new ResponseData();
         WeChatOAuthVo weChatOAuthVo = weChatLoginService.getAccessToken(business.getWxAppId(), business.getWxSecret(),
@@ -240,20 +210,16 @@ public class UserUserController extends BaseController {
             user.setCreateTime(new Date());
             user.setCity(userInfo.getCity());
 
-//			String realPath = UploadFileUtil.getBaseUrl() + IMAGE_ROOT;
-//			String avatar = userInfo.getUnionId() + ".jpg";
-//			try {
-//				DownloadUtil.download(userInfo.getHeadImgUrl(), avatar, realPath);
-//			} catch (Exception e) {
-//				logger.error("微信头像下载失败!");
-//				e.printStackTrace();
-//				// 如果微信头像下载失败那么就使用默认头像
-//				user.setHeadImgUrl(UploadFileUtil.SOURCE_BASE_URL + IMAGE_ROOT + default_avatar);
-//			}
-//			user.setHeadImgUrl(UploadFileUtil.SOURCE_BASE_URL + IMAGE_ROOT + avatar);
 
             //将微信上的头像转存至oss上
-            String imgUrl = OSSUtil.urlToOss(userInfo.getHeadImgUrl());
+            String imgUrl;
+            try {
+                imgUrl = OSSUtil.urlToOss(userInfo.getHeadImgUrl());
+            } catch (Exception e) {
+                logger.error("微信登录头像转oss失败，使用默认头像!");
+                e.printStackTrace();
+                imgUrl = null;
+            }
             if (imgUrl == null) {
                 imgUrl = UploadFileUtil.SOURCE_BASE_URL + IMAGE_ROOT + default_avatar;
             }
@@ -272,7 +238,7 @@ public class UserUserController extends BaseController {
             return responseData;
         }
 
-        Integer userId=user.getId();
+        Integer userId = user.getId();
 
         //搜集用户token信息
         if (deviceToken != null) {
@@ -285,28 +251,16 @@ public class UserUserController extends BaseController {
         loginResponseVo.setId(userId);
         loginResponseVo.setIsNewUser(isNewUser);
 
-        // 登录信息写入缓存
-        Jedis jedis = null;
-        try {
-            jedis = JedisUtil.getJedis();
-            jedis.set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
-            jedis.expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);// 缓存用户信息30天
-        } catch (Exception e) {
-            e.printStackTrace();
-            responseData.jsonFill(2, "用户信息插入缓存失败", null);
-            return responseData;
-        } finally {
-            if (jedis != null) {
-                jedis.close();
-            }
-        }
-
+        //TODO 如果要限制登录端数的话在此将accessToken写入数据库
+        redisTemplate.opsForValue().set(user.getAccessToken(), user);
+        redisTemplate.expire(user.getAccessToken(), 60 * 60 * 24 * 30, TimeUnit.SECONDS);//过期时间为30天
         //统计连续登录信息
         loginStatusStatisticsService.saveLoginStatusStatistics(userId);
 
         //创建用户金币账户
         //userGoldAccountService.addUserGoldAccount(userId);
 
+        //TODO 重构LY代码
         // 对用户连续登陆天数处理
         TwoTuple<Integer, Boolean> tt = userService.addContinuousLandDay(userId);
         int[] prizeDay = {1, 3, 7, 15, 21, 30, 50, 100, 200, 365, 500, 1000};
@@ -342,7 +296,7 @@ public class UserUserController extends BaseController {
             return responseData;
         }
 
-        Integer userId=user.getId();
+        Integer userId = user.getId();
 
         //搜集用户deviceToken信息
         if (deviceToken != null) {
@@ -365,23 +319,10 @@ public class UserUserController extends BaseController {
                 // 获取到用户信息
                 loginResponseVo.setAccessToken(user.getAccessToken());
                 loginResponseVo.setId(userId);
-
-
-                // 登录信息写入缓存
-                Jedis jedis = null;
-                try {
-                    jedis = JedisUtil.getJedis();
-                    jedis.set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
-                    jedis.expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    responseData.jsonFill(2, "信息插入缓存失败", null);
-                    return responseData;
-                } finally {
-                    if (jedis != null) {
-                        jedis.close();
-                    }
-                }
+                //登录信息写入session中
+                //TODO 如果要限制登录端数的话在此将accessToken写入数据库
+                redisTemplate.opsForValue().set(user.getAccessToken(), user);
+                redisTemplate.expire(user.getAccessToken(), 60 * 60 * 24 * 30, TimeUnit.SECONDS);//过期时间为30天
 
                 //统计连续登录信息
                 loginStatusStatisticsService.saveLoginStatusStatistics(userId);
@@ -419,17 +360,17 @@ public class UserUserController extends BaseController {
     @RequestMapping(value = "/gleanDeviceToken", method = {RequestMethod.POST})
     @ResponseBody
     public ResponseData<Boolean> gleanDeviceToken(@ApiParam("deviceToken") @RequestParam(value = "deviceToken") String deviceToken,
-                                                          HttpServletRequest request,
-                                                          HttpServletResponse response) {
-        ResponseData<Boolean> responseData=new ResponseData<>();
+                                                  HttpServletRequest request,
+                                                  HttpServletResponse response) {
+        ResponseData<Boolean> responseData = new ResponseData<>();
         User user = (User) request.getAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME);
         if (user == null) {
             responseData.jsonFill(2, "请先登录", false);
             return responseData;
         }
-        userService.updateDeviceToken(deviceToken,user.getId());
-        responseData.jsonFill(1,null,true);
-        return  responseData;
+        userService.updateDeviceToken(deviceToken, user.getId());
+        responseData.jsonFill(1, null, true);
+        return responseData;
     }
 
     @ApiOperation(value = "游客登录", notes = "")
@@ -458,12 +399,10 @@ public class UserUserController extends BaseController {
             responseData.jsonFill(2, "获取用户信息失败", null);
             return responseData;
         }
-        // 登录信息写入缓存
-        Jedis jedis = JedisUtil.getJedis();
-        jedis.set(user.getAccessToken().getBytes(), ObjectAndByte.toByteArray(user));
-        jedis.expire(user.getAccessToken().getBytes(), 60 * 60 * 24 * 30);// 缓存用户信息30天
-        jedis.close();
 
+        //TODO 如果要限制登录端数的话在此将accessToken写入数据库
+        redisTemplate.opsForValue().set(user.getAccessToken(), user);
+        redisTemplate.expire(user.getAccessToken(), 60 * 60 * 24 * 30, TimeUnit.SECONDS);//过期时间为30天
         LoginResponseVo loginResponseVo = new LoginResponseVo();
         loginResponseVo.setAccessToken(user.getAccessToken());
         loginResponseVo.setId(user.getId());
@@ -486,7 +425,7 @@ public class UserUserController extends BaseController {
         //TODO 如果要限制登录端数的话在此将accessToken写入数据库
         redisTemplate.opsForValue().set(user.getAccessToken(), user);
         redisTemplate.expire(user.getAccessToken(), 60 * 60 * 24 * 30, TimeUnit.SECONDS);//过期时间为30天
-        Integer userId=user.getId();
+        Integer userId = user.getId();
         //统计连续登录信息
         loginStatusStatisticsService.saveLoginStatusStatistics(userId);
         userService.addContinuousLandDay(userId);
