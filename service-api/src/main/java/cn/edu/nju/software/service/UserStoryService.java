@@ -23,4 +23,6 @@ public interface UserStoryService {
     
     boolean roseUserStoryTellCount(Integer id);
 
+    boolean updateUserStoryAuthor(int userId,String author);
+
 }

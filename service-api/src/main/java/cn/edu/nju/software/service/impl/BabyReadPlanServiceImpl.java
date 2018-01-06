@@ -153,7 +153,9 @@ public class BabyReadPlanServiceImpl implements BabyReadPlanService {
             List<ReadingPlan> list = readPlanService.getReadingPlanByTime("5-6岁", timePoint);
             return list;
         }
-        return null;
+        //超过6岁的时候给他6岁的阅读计划
+        List<ReadingPlan> list = readPlanService.getReadingPlanByTime("5-6岁", timePoint);
+        return list;
     }
 
 

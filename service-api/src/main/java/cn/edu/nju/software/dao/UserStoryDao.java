@@ -25,4 +25,6 @@ public interface UserStoryDao {
     List<UserStory> getAllUserStoryByUserIdByPage(int userId, int visibility, int offset, int limit);
 
     int getUserStoryCountByUserId(int userId, int visibility);
+
+    boolean updateUserStoryAuthor(int userId,String author);
 }

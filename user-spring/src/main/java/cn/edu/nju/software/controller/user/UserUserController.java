@@ -5,6 +5,7 @@ import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.enums.GrantType;
 import cn.edu.nju.software.service.AppService;
 import cn.edu.nju.software.service.BadgeService;
+import cn.edu.nju.software.service.UserStoryService;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.service.user.LoginStatusStatisticsService;
 import cn.edu.nju.software.service.user.UserGoldAccountService;
@@ -52,6 +53,8 @@ public class UserUserController extends BaseController {
     private LoginStatusStatisticsService loginStatusStatisticsService;
     @Autowired
     private UserGoldAccountService userGoldAccountService;
+    @Autowired
+    private UserStoryService userStoryService;
 
     @ApiOperation(value = "获取用户信息", notes = "获取用户信息")
     @RequestMapping(value = "/getUserBaseInfo", method = {RequestMethod.GET})
@@ -151,6 +154,8 @@ public class UserUserController extends BaseController {
         }
         if (nickname != null) {
             user.setNickname(nickname);
+            //当修改了用户名时原创故事的故事作者名也要修改
+            userStoryService.updateUserStoryAuthor(user.getId(),nickname);
         }
         if (sex != null) {
             user.setSex(sex);

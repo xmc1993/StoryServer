@@ -58,4 +58,10 @@ public class UserStoryServiceImpl implements UserStoryService {
 		
 	}
 
+    @Override
+    public boolean updateUserStoryAuthor(int userId, String author) {
+        return userStoryDao.updateUserStoryAuthor(userId,author);
+    }
+
+
 }

@@ -85,4 +85,10 @@
 		where id=#{id} and valid = 1 and isSet = 2
 	</update>
 
+    <update id="updateUserStoryAuthor">
+        update story
+        set author=#{1}
+        where userId=#{0} and valid = 1 and isSet = 2
+    </update>
+
 </mapper>
