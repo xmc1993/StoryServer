@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 public interface WorkTagRelationService {
-    int insert(WorkTagRelation workTagRelation);
+    int save(WorkTagRelation workTagRelation);
     List<Integer> getWorkTagIdListByWorkId(Integer workId);
 
 }

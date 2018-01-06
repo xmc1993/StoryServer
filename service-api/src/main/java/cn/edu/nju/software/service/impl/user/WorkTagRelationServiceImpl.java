@@ -21,7 +21,7 @@ public class WorkTagRelationServiceImpl implements WorkTagRelationService {
     private WorkTagRelationMapper workTagRelationMapper;
 
     @Override
-    public int insert(WorkTagRelation workTagRelation) {
+    public int save(WorkTagRelation workTagRelation) {
         return workTagRelationMapper.insert(workTagRelation);
     }
 
