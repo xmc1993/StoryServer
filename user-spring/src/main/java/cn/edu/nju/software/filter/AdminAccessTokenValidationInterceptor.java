@@ -93,6 +93,10 @@ public class AdminAccessTokenValidationInterceptor extends HandlerInterceptorAda
             jedis.set(key.getBytes(), ObjectAndByte.toByteArray(powerCodeList));
         }else {
             powerCodeList = (List<Integer>) ObjectAndByte.toObject(bytes);
+            for (Integer codeId:powerCodeList) {
+                System.out.print(codeId+" ");
+            }
+            System.out.println("");
         }
         request.setAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_POWERCODES, powerCodeList);
         jedis.close();

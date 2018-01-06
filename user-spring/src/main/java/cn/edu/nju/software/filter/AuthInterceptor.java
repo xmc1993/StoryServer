@@ -192,10 +192,10 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             System.out.print(permission + "-");
         }
         System.out.println("");
+        System.out.println("curPermissions");
         for (Integer curPermission : curPermissions) {
             System.out.print(curPermission + "-");
         }
-        System.out.println("");
         for (int permission : permissions) {
             if (!curPermissions.contains(permission)) {
                 return false;

@@ -38,6 +38,22 @@ public class ManageWorkController {
     private AppUserService appUserService;
 
     @RequiredPermissions({4, 18})
+    @ApiOperation(value = "根据标签id获取故事列表", notes = "")
+    @RequestMapping(value = "/getWorksListByTagId", method = {RequestMethod.GET})
+    @ResponseBody
+    public ResponseData<List<Works>> getWorksListByTagId(
+            @ApiParam("故事标签id") @RequestParam(value = "tagId") Integer tagId){
+
+        List<Works> worksList=worksService.getWorksListByTagId(tagId);
+        ResponseData<List<Works>> responseData = new ResponseData<>();
+        responseData.jsonFill(1,null,worksList);
+        if (worksList!=null){
+            responseData.setCount(worksList.size());
+        }
+        return responseData;
+    }
+
+    @RequiredPermissions({4, 18})
     @ApiOperation(value = "根据id获取故事", notes = "")
     @RequestMapping(value = "/getWorkById", method = {RequestMethod.GET})
     @ResponseBody

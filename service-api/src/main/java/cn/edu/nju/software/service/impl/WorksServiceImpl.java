@@ -5,10 +5,8 @@ import cn.edu.nju.software.dao.PlayListRelationDao;
 import cn.edu.nju.software.dao.StoryDao;
 import cn.edu.nju.software.dao.WorksDao;
 import cn.edu.nju.software.dao.user.AppUserDao;
-import cn.edu.nju.software.entity.PlayListRelation;
-import cn.edu.nju.software.entity.Story;
-import cn.edu.nju.software.entity.TwoTuple;
-import cn.edu.nju.software.entity.Works;
+import cn.edu.nju.software.dao.user.WorkTagRelationMapper;
+import cn.edu.nju.software.entity.*;
 import cn.edu.nju.software.service.WorksService;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.util.Const;
@@ -23,6 +21,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +41,8 @@ public class WorksServiceImpl implements WorksService {
 	private AppUserService appUserService;
 	@Autowired
 	private PlayListRelationDao playListRelationDao;
+	@Autowired
+	private WorkTagRelationMapper workTagRelationMapper;
 
 	@Override
 	public Works saveWorks(Works works) {
@@ -148,6 +149,22 @@ public class WorksServiceImpl implements WorksService {
 	public List<Works> getWorksListByIdList(List<Integer> idList) {
 		idList.add(-1);// 防止mybatis查询出错
 		return worksDao.getWorksListByIdList(idList);
+	}
+
+	@Override
+	public List<Works> getWorksListByTagId(Integer tagId) {
+		WorkTagRelationExample workTagRelationExample = new WorkTagRelationExample();
+		WorkTagRelationExample.Criteria criteria = workTagRelationExample.createCriteria();
+		criteria.andTagIdEqualTo(tagId);
+		List<WorkTagRelation> workTagRelationList = workTagRelationMapper.selectByExample(workTagRelationExample);
+		List<Integer> worksIdList=new ArrayList<>();
+		for (WorkTagRelation workTagRelation : workTagRelationList) {
+			worksIdList.add(workTagRelation.getWorkId());
+		}
+		if (worksIdList.size()==0){
+			return null;
+		}
+		return getWorksListByIdList(worksIdList);
 	}
 
 	@Override

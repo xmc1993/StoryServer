@@ -34,6 +34,8 @@ public interface WorksService {
 
     List<Works> getWorksListByIdList(List<Integer> idList);
 
+    List<Works> getWorksListByTagId(Integer tagId);
+
     Integer getWorksCount();
 
     Integer getWorksCountByUserId(Integer userId);
