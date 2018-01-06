@@ -441,7 +441,7 @@ public class UserWorksController extends BaseController {
                     workTagRelation.setWorkId(works.getId());
                     workTagRelation.setCreateTime(new Date());
                     workTagRelation.setUpdateTime(new Date());
-                    int result = workTagRelationService.insert(workTagRelation);
+                    int result = workTagRelationService.save(workTagRelation);
                     if (result != 1) {
                         throw new RuntimeException("作品标签添加失败，标签id：" + tagId);
                     }
@@ -554,7 +554,7 @@ public class UserWorksController extends BaseController {
                     workTagRelation.setWorkId(works.getId());
                     workTagRelation.setCreateTime(new Date());
                     workTagRelation.setUpdateTime(new Date());
-                    int result = workTagRelationService.insert(workTagRelation);
+                    int result = workTagRelationService.save(workTagRelation);
                     if (result != 1) {
                         throw new RuntimeException("作品标签添加失败，标签id：" + tagId);
                     }
