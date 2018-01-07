@@ -104,7 +104,8 @@ public class ManageSystemNoticeController {
         feed.setUpdateTime(new Date());
         feed.setFid(user.getId());
         feed.setContent(new Gson().toJson(msgVo));
-        feed.setMid(feedbackTempletId);
+        //消息id内容标记为0
+        feed.setMid(0);
         feed.setType(MessageType.SYSTEM_NOTICE);
         feed.setTid(userId);
         Feed res=messageFeedService.feed(feed);

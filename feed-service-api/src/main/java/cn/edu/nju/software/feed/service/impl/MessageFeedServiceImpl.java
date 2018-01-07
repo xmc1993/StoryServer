@@ -59,6 +59,11 @@ public class MessageFeedServiceImpl implements MessageFeedService{
                 msgVo.setData(works);
                 break;
             case SYSTEM_NOTICE:
+                //为了老版本也能适用反馈模板的功能，也就是单独给用户发系统消息的功能，在feed中加了一个标记，当mid为0时，就是给用户单独发送反馈模板
+                if (feed.getMid().equals(0)){
+                    //feed中的数据已经存好了
+                    return feed;
+                }
                 SystemNotice systemNotice = systemNoticeService.getSystemNoticeById(feed.getMid());
                 msgVo.setData(systemNotice.getContent());
                 break;
