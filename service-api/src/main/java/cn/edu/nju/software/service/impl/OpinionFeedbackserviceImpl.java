@@ -31,9 +31,8 @@ public class OpinionFeedbackserviceImpl implements OpinionFeedbackservice {
     public ResponseData<List<OpinionFeedback>> getOpinionsByPage(Integer page, Integer pageSize) {
         ResponseData<List<OpinionFeedback>> responseData = new ResponseData<>();
         PageHelper.startPage(page+1, pageSize);
-        OpinionFeedbackExample opinionFeedbackExample = new OpinionFeedbackExample();
-        //通过criteria构造查询条件
-        List<OpinionFeedback> list = opinionFeedbackMapper.selectByExample(opinionFeedbackExample);
+
+        List<OpinionFeedback> list = opinionFeedbackMapper.getOpinionsWithUserName();
         PageInfo<OpinionFeedback> pageInfo = new PageInfo<>(list);
         int count = (int) pageInfo.getTotal();
         responseData.setCount(count);

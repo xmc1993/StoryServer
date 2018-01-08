@@ -10,10 +10,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,9 +51,9 @@ public class ManageFeedbackTempletController {
     }
 
     @ApiOperation(value = "根据id删除反馈模板")
-    @RequestMapping(value = "/deleteFeedbackTempletById", method = {RequestMethod.POST})
+    @RequestMapping(value = "/deleteFeedbackTempletById/{id}", method = {RequestMethod.DELETE})
     @ResponseBody
-    public ResponseData<Boolean> deleteFeedbackTempletById(@ApiParam("id") @RequestParam Integer id, HttpServletRequest request,
+    public ResponseData<Boolean> deleteFeedbackTempletById(@ApiParam("id") @PathVariable Integer id, HttpServletRequest request,
                                                            HttpServletResponse response) {
         ResponseData<Boolean> responseData = new ResponseData<>();
         int res = feedbackTempletService.deleteFeedbackTemplet(id);

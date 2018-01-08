@@ -22,7 +22,8 @@
 		weChatAccessToken,
 		weChatRefreshToken,
 		likeCount,
-		listenCount
+		listenCount,
+		deviceToken
 	</sql>
 
 	<update id="addLikeStoryCount">

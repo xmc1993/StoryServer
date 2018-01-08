@@ -10,6 +10,7 @@ import org.json.JSONObject;
  */
 public class MessagePushUtil {
     private static AndroidBroadcast androidBroadcast;
+    private static AndroidUnicast androidUnicast;
     private String appkey = "59c331505312dd4060000031";
     private String appMasterSecret = "5maxiqhmrj13m3suwnhauiq9etoosytu";
     private static PushClient client = new PushClient();
@@ -21,6 +22,12 @@ public class MessagePushUtil {
         if (androidBroadcast == null)
             androidBroadcast = new AndroidBroadcast("59c331505312dd4060000031", "5maxiqhmrj13m3suwnhauiq9etoosytu");
         return androidBroadcast;
+    }
+
+    public  static  AndroidUnicast getAndroidUnicast() throws Exception {
+        if (androidUnicast == null)
+            androidUnicast = new AndroidUnicast("59c331505312dd4060000031", "5maxiqhmrj13m3suwnhauiq9etoosytu");
+        return androidUnicast;
     }
 
 

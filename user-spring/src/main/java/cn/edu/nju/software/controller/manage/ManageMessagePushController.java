@@ -4,9 +4,12 @@ import cn.edu.nju.software.dto.DestinationVo;
 import cn.edu.nju.software.entity.Destination;
 import cn.edu.nju.software.entity.MessagePush;
 import cn.edu.nju.software.entity.ResponseData;
+import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.service.MessagePushService;
+import cn.edu.nju.software.service.UserService;
 import cn.edu.nju.software.util.AndroidPush.AndroidBroadcast;
 import cn.edu.nju.software.util.AndroidPush.AndroidNotification;
+import cn.edu.nju.software.util.AndroidPush.AndroidUnicast;
 import cn.edu.nju.software.util.AndroidPush.PushClient;
 import cn.edu.nju.software.util.MessagePushUtil;
 import com.wordnik.swagger.annotations.Api;
@@ -38,6 +41,8 @@ import static cn.edu.nju.software.util.AndroidPush.AndroidNotification.AfterOpen
 public class ManageMessagePushController {
     @Autowired
     MessagePushService messagePushService;
+    @Autowired
+    UserService userService;
 
     @ApiOperation(value = "分页获取所有的消息推送记录", notes = "")
     @RequestMapping(value = "/getAllMessagePush", method = {RequestMethod.GET})
@@ -117,30 +122,30 @@ public class ManageMessagePushController {
     @ResponseBody
     public ResponseData<Boolean> updateMessagePush(
             @ApiParam("消息推送id") @RequestParam Integer messageId,
-            @ApiParam("通知栏提示文字") @RequestParam(value = "ticker",required = false) String ticker,
-            @ApiParam("通知标题") @RequestParam (value = "title",required = false) String title,
-            @ApiParam("通知文字描述") @RequestParam (value = "text",required = false) String text,
-            @ApiParam("跳转地id") @RequestParam (value = "text",required = false) Integer destinationId,
+            @ApiParam("通知栏提示文字") @RequestParam(value = "ticker", required = false) String ticker,
+            @ApiParam("通知标题") @RequestParam(value = "title", required = false) String title,
+            @ApiParam("通知文字描述") @RequestParam(value = "text", required = false) String text,
+            @ApiParam("跳转地id") @RequestParam(value = "text", required = false) Integer destinationId,
             @ApiParam("定时发送时间（可选，如为空则表示立刻发送）(时间格式：YYYY-MM-DD HH:mm:ss)") @RequestParam String startTime,
-            @ApiParam("推送的过期时间") @RequestParam (value = "expireTime",required = false)String expireTime,
-            @ApiParam("推送的类型") @RequestParam (value = "pushType",required = false) Integer pushType) throws ParseException {
+            @ApiParam("推送的过期时间") @RequestParam(value = "expireTime", required = false) String expireTime,
+            @ApiParam("推送的类型") @RequestParam(value = "pushType", required = false) Integer pushType) throws ParseException {
         ResponseData<Boolean> responseData = new ResponseData<>();
         MessagePush messagePush = messagePushService.getMessagePushById(messageId);
-        if (ticker!=null)
-        messagePush.setTicker(ticker);
-        if (destinationId!=null)
-        messagePush.setDestinationid(destinationId);
-        if (title!=null)
-        messagePush.setTitle(title);
-        if (text!=null)
-        messagePush.setText(text);
+        if (ticker != null)
+            messagePush.setTicker(ticker);
+        if (destinationId != null)
+            messagePush.setDestinationid(destinationId);
+        if (title != null)
+            messagePush.setTitle(title);
+        if (text != null)
+            messagePush.setText(text);
         messagePush.setCreatetime(new Date());
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (expireTime!=null)
-        messagePush.setExpiretime(dateFormat.parse(expireTime));
-        if (pushType!=null)
-        messagePush.setPushtype(pushType);
+        if (expireTime != null)
+            messagePush.setExpiretime(dateFormat.parse(expireTime));
+        if (pushType != null)
+            messagePush.setPushtype(pushType);
         if (startTime != null) {
             messagePush.setStarttime(dateFormat.parse(startTime));
         }
@@ -245,9 +250,13 @@ public class ManageMessagePushController {
     @ApiOperation(value = "发送推送", notes = "")
     @RequestMapping(value = "/messagePush", method = {RequestMethod.POST})
     @ResponseBody
-    public ResponseData<Boolean> messagePush(@ApiParam("推送消息的id") @RequestParam Integer id) throws Exception {
+    public ResponseData<Boolean> messagePush(@ApiParam("推送消息的id") @RequestParam Integer id,
+                                             @ApiParam("单独推送的用户id") @RequestParam(value = "userId", required = false) Integer userId) throws Exception {
         ResponseData<Boolean> responseData = new ResponseData<>();
         MessagePush messagePush = messagePushService.getMessagePushById(id);
+        //创建发送的客户端
+        PushClient client = new PushClient();
+        Boolean res = false;
 
         Destination destination = messagePushService.getDestinationById(messagePush.getDestinationid());
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -291,16 +300,68 @@ public class ManageMessagePushController {
                 if (messagePush.getStarttime() != null) {
                     androidBroadcast.setStartTime(dateFormat.format(messagePush.getStarttime()));
                 }
-                PushClient client = new PushClient();
-                Boolean res = client.send(androidBroadcast);
-                if (res) {
-                    responseData.jsonFill(1, null, true);
+                res = client.send(androidBroadcast);
+                break;
+            //表示单独播放
+            case 2:
+                if (userId == null) {
+                    responseData.jsonFill(2, "如需单播请先输入用户id", false);
                     return responseData;
                 }
-                responseData.jsonFill(1, null, false);
-                return responseData;
+                User user = userService.getUserById(userId);
+                if (user.getDeviceToken() == null) {
+                    responseData.jsonFill(2, "该用户不支持单独发送推送", false);
+                    return responseData;
+                }
+                AndroidUnicast androidUnicast = MessagePushUtil.getAndroidUnicast();
+                androidUnicast.setDeviceToken(user.getDeviceToken());
+                androidUnicast.setTicker(messagePush.getTicker());
+                androidUnicast.setTitle(messagePush.getTitle());
+                androidUnicast.setText(messagePush.getText());
+                androidUnicast.setDisplayType(AndroidNotification.DisplayType.NOTIFICATION);
+
+                switch (destination.getDestinationtype()) {
+                    //1表示直接打开APP
+                    case 1:
+                        androidUnicast.setAfterOpenAction(go_app);
+                        androidUnicast.goAppAfterOpen();
+                        break;
+                    //2表示跳转到app里面activity
+                    case 2:
+                        androidUnicast.setAfterOpenAction(go_activity);
+                        androidUnicast.goActivityAfterOpen(destination.getContent());
+                        if (destination.getExtrafield() != null) {
+                            JSONObject jsonObject = new JSONObject(destination.getExtrafield());
+                            Iterator iterator = jsonObject.keys();
+                            while (iterator.hasNext()) {
+                                String key = (String) iterator.next();
+                                String value = jsonObject.getString(key);
+                                androidUnicast.setExtraField(key, value);
+                            }
+                        }
+                        break;
+                    case 3:
+                        androidUnicast.setAfterOpenAction(go_url);
+                        androidUnicast.goUrlAfterOpen(destination.getContent());
+                        break;
+                }
+                androidUnicast.setProductionMode();
+                androidUnicast.setExpireTime(dateFormat.format(messagePush.getExpiretime()));
+                if (messagePush.getStarttime() != null) {
+                    androidUnicast.setStartTime(dateFormat.format(messagePush.getStarttime()));
+                }
+                res = client.send(androidUnicast);
+                break;
+
+                default:
+                    responseData.jsonFill(2,"该功能还没有上线",false);
+                    return  responseData;
         }
-        responseData.jsonFill(2, "该功能还没上线", null);
+        if (res) {
+            responseData.jsonFill(1, null, true);
+            return responseData;
+        }
+        responseData.jsonFill(2, "发送失败", false);
         return responseData;
     }
 }

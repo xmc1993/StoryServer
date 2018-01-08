@@ -303,4 +303,10 @@
       createTime = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="getOpinionsWithUserName" resultType="cn.edu.nju.software.entity.OpinionFeedback">
+    SELECT user.nickname as userName,opinion_feedback.*
+    FROM user INNER JOIN opinion_feedback on user.id=opinion_feedback.userId
+  </select>
+
 </mapper>

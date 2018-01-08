@@ -17,6 +17,8 @@ public class OpinionFeedback {
 
     private Integer userId;
 
+    private String userName;
+
     private String description;
 
     private String picUrls;
@@ -111,5 +113,13 @@ public class OpinionFeedback {
 
     public void setcreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

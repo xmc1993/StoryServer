@@ -44,4 +44,6 @@ public class User implements Serializable {
 	private Integer valid = 1;//用于软删除
 	//总的录用时间
 	private String totalRecordTime = "0'0\"";
+	//消息推送的deviceToken
+	private String deviceToken;
 }

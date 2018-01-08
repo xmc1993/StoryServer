@@ -30,4 +30,6 @@ public interface OpinionFeedbackMapper {
     int updateByPrimaryKeySelective(OpinionFeedback record);
 
     int updateByPrimaryKey(OpinionFeedback record);
+
+    List<OpinionFeedback> getOpinionsWithUserName();
 }
