@@ -125,7 +125,7 @@ public class ManageMessagePushController {
             @ApiParam("通知栏提示文字") @RequestParam(value = "ticker", required = false) String ticker,
             @ApiParam("通知标题") @RequestParam(value = "title", required = false) String title,
             @ApiParam("通知文字描述") @RequestParam(value = "text", required = false) String text,
-            @ApiParam("跳转地id") @RequestParam(value = "text", required = false) Integer destinationId,
+            @ApiParam("跳转地id") @RequestParam(value = "destinationId", required = false) Integer destinationId,
             @ApiParam("定时发送时间（可选，如为空则表示立刻发送）(时间格式：YYYY-MM-DD HH:mm:ss)") @RequestParam String startTime,
             @ApiParam("推送的过期时间") @RequestParam(value = "expireTime", required = false) String expireTime,
             @ApiParam("推送的类型") @RequestParam(value = "pushType", required = false) Integer pushType) throws ParseException {
