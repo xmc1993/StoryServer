@@ -73,6 +73,7 @@ public class UserFeedController extends BaseController {
         //以feed的形式返回给APP
         ResponseData<List<Feed>> responseData = new ResponseData<>();
         List<SystemNotice> systemNoticeList = systemNoticeService.getAllSystemNoticeByPage(page, pageSize);
+        System.out.print("*************************************"+systemNoticeList);
         List<Feed> list = new ArrayList<>();
         MsgVo msgVo = new MsgVo();
         //这些数据是写死的，系统通知员的Id是2
@@ -80,12 +81,11 @@ public class UserFeedController extends BaseController {
         msgVo.setUserName("小P和小I");
         //暖音小助手 头像URL
         msgVo.setHeadImgUrl("http://47.93.242.215/source/head/4DYCFUt6eHA7TTvx.jpg");
-        Feed feed = new Feed();
-
         Gson gson = new Gson();
-        feed.setFid(2);
-        feed.setType(MessageType.SYSTEM_NOTICE);
         for (SystemNotice notice : systemNoticeList) {
+            Feed feed = new Feed();
+            feed.setFid(2);
+            feed.setType(MessageType.SYSTEM_NOTICE);
             feed.setMid(notice.getId());
             feed.setUpdateTime(notice.getCreateTime());
             msgVo.setData(notice.getContent());
