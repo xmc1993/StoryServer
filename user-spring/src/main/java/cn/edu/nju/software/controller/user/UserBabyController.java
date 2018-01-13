@@ -9,6 +9,8 @@ import cn.edu.nju.software.util.TokenConfig;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +34,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/user")
 public class UserBabyController extends BaseController {
+    private static final Logger logger = LoggerFactory.getLogger(UserBabyController.class);
     @Autowired
     private BabyService babyService;
 
@@ -78,7 +81,17 @@ public class UserBabyController extends BaseController {
         baby.setBabyName(babyName);
         baby.setSelected(0);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        baby.setBirthday(dateFormat.parse(birthday));
+
+        Date birthday1;
+        try {
+            birthday1 = dateFormat.parse(birthday);
+        } catch (ParseException e) {
+            logger.error("宝宝生日日期格式有\n");
+            e.printStackTrace();
+            birthday1 = null;
+        }
+        baby.setBirthday(birthday1);
+
         Baby result = babyService.saveBaby(baby);
         if (result == null) {
             responseData.jsonFill(2, "添加失败", null);
