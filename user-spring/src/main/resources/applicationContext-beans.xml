@@ -73,7 +73,7 @@
 
     <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
         <constructor-arg index="0" ref="jedisPoolConfig"/>
-        <constructor-arg index="1" value="${redis.host}"/>
+        <constructor-arg index="1" type="java.lang.String" value="${redis.host}"/>
         <constructor-arg index="2" value="${redis.port}" type="int"/>
         <constructor-arg index="3" value="${redis.timeout}" type="int"/>
     </bean>

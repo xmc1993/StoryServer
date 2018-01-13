@@ -4,7 +4,8 @@
 	<Properties>
 		<!-- 服务器日志地址 -->
 		 <!--<Property name="LOG_DIR">/usr/share/apache-tomcat-8.5.9/logs/log4j</Property>-->
-		 <Property name="LOG_DIR">/usr/local/storyServer/logs/log4j</Property>
+		 <!--<Property name="LOG_DIR">/usr/local/storyServer/logs/log4j</Property>-->
+		 <Property name="LOG_DIR">/usr/local/yufaServer/logs/log4j</Property>
 		 <!--本机日志地址 -->
 		<!--<Property name="LOG_DIR">/Library/Tomcat/logs/log4j</Property>-->
 		<Property name="ARCHIVE">${LOG_DIR}/archive</Property>
