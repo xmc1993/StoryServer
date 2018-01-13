@@ -6,18 +6,20 @@ import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.service.WorksService;
 import cn.edu.nju.software.service.user.AppUserService;
 import cn.edu.nju.software.service.wxpay.util.RandCharsUtils;
-import cn.edu.nju.software.util.*;
+import cn.edu.nju.software.util.OSSUtil;
+import cn.edu.nju.software.util.TokenConfig;
+import cn.edu.nju.software.util.UploadFileUtil;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,10 +32,11 @@ import java.util.List;
 @RequestMapping("/user")
 public class UploadFileController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(UploadFileController.class);
-    private final String default_avatar = "default_avatar.jpg";
     private static final String SUFFIX = ".jpg";
     private static final String HEAD_ROOT = "/head/"; // 头像的基础路径
     private static final List<String> VALID_SUFFIX = new ArrayList<>();
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     // 初始化支持的头像类型
     static {
@@ -83,19 +86,21 @@ public class UploadFileController extends BaseController {
             return responseData;
         }
 
+        String url;
         boolean success = UploadFileUtil.mvFile(uploadFile, realPath, fileName);
         if (!success) {
-            logger.error("上传头像失败!");
-            responseData.jsonFill(2, "上传头像失败", null);
-            return responseData;
+            logger.error("头像处理失败,采用默认头像");
+            url = "http://www.warmtale.com/source/head/default_avatar.jpg";
+        } else {
+            url = OSSUtil.localPathToOss(realPath + fileName);
+        }
+        if (url == null) {
+            logger.error("上传头像失败,采用默认头像");
+            url = "http://www.warmtale.com/source/head/default_avatar.jpg";
         }
 
-
-        String url = OSSUtil.localPathToOss(realPath + fileName);
-//        String url = UploadFileUtil.SOURCE_BASE_URL + HEAD_ROOT + fileName;
         User userInDB = userService.getUserByMobileOrId(String.valueOf(user.getId()));
         userInDB.setUpdateTime(new Date());
-        String oldHeadImgUrl = userInDB.getHeadImgUrl();
         userInDB.setHeadImgUrl(url);
         User result = userService.addOrUpdateUser(userInDB);
         if (result == null) {
@@ -106,17 +111,9 @@ public class UploadFileController extends BaseController {
         //更新work数据库表中的HeadImgUrl字段
         worksService.updateHeadImg(user.getId(), url);
 
-        //删除旧的头像
-        //如果是默认头像就不要删掉
-        //转存至oss先去除删除逻辑
-//        if (oldHeadImgUrl != "http://www.warmtale.com/source/head/default_avatar.jpg" || oldHeadImgUrl.equals("http://www.warmtale.com/source/head/default_avatar.jpg")) {
-//            UploadFileUtil.deleteFileByUrl(oldHeadImgUrl);
-//        }
         //更新Session中的用户信息
         String AccessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
-        Jedis jedis = JedisUtil.getJedis();
-        jedis.set(AccessToken.getBytes(), ObjectAndByte.toByteArray(userInDB));
-        jedis.close();
+        redisTemplate.opsForValue().set(AccessToken, userInDB);
         responseData.jsonFill(1, null, "success");
         return responseData;
     }

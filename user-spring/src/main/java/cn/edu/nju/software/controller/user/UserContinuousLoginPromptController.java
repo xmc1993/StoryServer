@@ -4,7 +4,6 @@ import cn.edu.nju.software.entity.ResponseData;
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.service.user.ContinuousLoginPromptService;
 import cn.edu.nju.software.service.user.LoginStatusStatisticsService;
-import cn.edu.nju.software.util.JedisUtil;
 import cn.edu.nju.software.util.TokenConfig;
 import cn.edu.nju.software.vo.ContinuousLoginPromptVo;
 import com.wordnik.swagger.annotations.Api;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 

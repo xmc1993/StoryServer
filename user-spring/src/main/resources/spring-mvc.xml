@@ -5,6 +5,7 @@
        xmlns:task="http://www.springframework.org/schema/task"
        xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
         http://www.springframework.org/schema/context
@@ -17,7 +18,7 @@
         http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
-
+    <context:property-placeholder location="classpath:datasource.properties"/>
     <context:component-scan base-package="cn.edu.nju.software.controller">
         <context:include-filter type="annotation"
                                 expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
@@ -80,11 +81,11 @@
     <mvc:resources mapping="/**" location="/WEB-INF/home/"/>
 
     <mvc:interceptors>
-        <!-- token拦截器 -->
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/user/**"/>-->
-            <!--<bean class="cn.edu.nju.software.filter.VersionCheckInterceptor"/>-->
-        <!--</mvc:interceptor>-->
+         <!--version拦截器 -->
+        <mvc:interceptor>
+        <mvc:mapping path="/user/**"/>
+        <bean class="cn.edu.nju.software.filter.VersionCheckInterceptor"/>
+        </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/user/setDislikeStory"/>
             <mvc:mapping path="/user/setLikeStory"/>
@@ -308,7 +309,5 @@
         </property>
     </bean>
     <cache:annotation-driven/>
-    <!--<bean class="cn.edu.nju.software.config.CachingConfig"></bean>-->
-
 
 </beans>

@@ -3,10 +3,10 @@ package cn.edu.nju.software.service.impl;
 import cn.edu.nju.software.dao.AdminPowerDao;
 import cn.edu.nju.software.entity.AdminPower;
 import cn.edu.nju.software.service.AdminPowerService;
-import cn.edu.nju.software.util.JedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,27 +20,26 @@ public class AdminPowerServiceImpl implements AdminPowerService {
     @Autowired
     private AdminPowerDao adminPowerDao;
 
+
+    @CacheEvict(value = "powerCode", key = "#adminPower.adminId")
     @Override
     public AdminPower saveAdminPower(AdminPower adminPower) {
-        clearCache(adminPower.getAdminId());
         if (adminPowerDao.saveAdminPower(adminPower)) {
             return adminPower;
         }
         return null;
     }
 
+    //TODO 为了清除缓存强行传了一个adminId进来不知道有没有办法优化一下
+    @CacheEvict(value = "powerCode", key = "#adminId")
     @Override
-    public boolean deleteAdminPower(int id) {
-        AdminPower adminPower = adminPowerDao.getAdminPowerById(id);
-        if (adminPower != null) {
-            clearCache(adminPower.getAdminId());
-        }
+    public boolean deleteAdminPower(int id, int adminId) {
         return adminPowerDao.deleteAdminPower(id);
     }
 
+    @CacheEvict(value = "powerCode", key = "#adminId")
     @Override
     public boolean deleteAdminPowerWithPrimaryKey(int adminId, int code) {
-        clearCache(adminId);
         return adminPowerDao.deleteAdminPowerWithPrimaryKey(adminId, code);
     }
 
@@ -54,6 +53,8 @@ public class AdminPowerServiceImpl implements AdminPowerService {
         return adminPowerDao.getAdminPowerListAdminId(id);
     }
 
+
+    @Cacheable(value = "powerCode", key = "#id")
     @Override
     public List<Integer> getAdminPowerCodeListByAdminId(int id) {
         List<AdminPower> list = getAdminPowerListByAdminId(id);
@@ -62,24 +63,6 @@ public class AdminPowerServiceImpl implements AdminPowerService {
             res.add(adminPower.getCodeId());
         }
         return res;
-    }
-
-    /**
-     * 清除权限缓存
-     * @param id
-     */
-    private void clearCache(int id) {
-        Jedis jedis = JedisUtil.getJedis();
-        try {
-            jedis.del("PowerCodes-" + id);
-        } catch (Exception e) {
-
-        } finally {
-            if (jedis != null) {
-                jedis.close();
-            }
-        }
-
     }
 
     @Override

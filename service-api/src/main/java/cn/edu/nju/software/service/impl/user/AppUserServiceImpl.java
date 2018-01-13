@@ -120,7 +120,8 @@ public class AppUserServiceImpl implements AppUserService {
     public User getUserByDeviceId(String deviceId) {
         return userDao.getUserByDeviceId(deviceId);
     }
-    
+
+    //TODO review Ly's code 这一块用redis做好么？
     /**
      * 
      * @param id

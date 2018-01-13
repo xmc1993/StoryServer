@@ -2,15 +2,12 @@ package cn.edu.nju.software.filter;
 
 import cn.edu.nju.software.entity.User;
 import cn.edu.nju.software.exception.LoginException;
-import cn.edu.nju.software.service.AppService;
-import cn.edu.nju.software.util.JedisUtil;
-import cn.edu.nju.software.util.ObjectAndByte;
 import cn.edu.nju.software.util.TokenConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,7 +33,7 @@ import java.util.List;
 public class AccessTokenValidationInterceptor extends HandlerInterceptorAdapter {
     private static Logger logger = LoggerFactory.getLogger(AccessTokenValidationInterceptor.class);
     @Autowired
-    private AppService appService;
+    private RedisTemplate<String, User> redisTemplate;
 
     //白名单 TODO 改为配置 通用
     private static List<String> whileList = new ArrayList();
@@ -84,34 +81,13 @@ public class AccessTokenValidationInterceptor extends HandlerInterceptorAdapter 
     private boolean checkLogin(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
         String AccessToken = request.getHeader(TokenConfig.DEFAULT_ACCESS_TOKEN_HEADER_NAME);
-        Jedis jedis = null;
-        try {
-            jedis = JedisUtil.getJedis();
-            byte[] bytes = jedis.get(AccessToken.getBytes());
-            if (bytes == null) {
-                response.setStatus(401);
-                throw new LoginException("登录失效");
-            } else {
-                User user = (User) ObjectAndByte.toObject(bytes);
-                user.setAccessToken(AccessToken);
-                if (user == null) {
-                    response.setStatus(401);
-                    throw new LoginException("登录失效");
-                } else {
-                    request.setAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME, user);
-                    //刷新token的时间
-//                    jedis.set(AccessToken.getBytes(), bytes);
-//                    jedis.expire(AccessToken.getBytes(), 60 * 60 * 24 * 30);//缓存用户信息30天
-                }
-            }
-
-        } catch (Exception e) {
+        User user = redisTemplate.opsForValue().get(AccessToken);
+        if (null == user) {
             response.setStatus(401);
             throw new LoginException("登录失效");
-        } finally {
-            if (jedis != null) {
-                jedis.close();
-            }
+        } else {
+            user.setAccessToken(AccessToken);
+            request.setAttribute(TokenConfig.DEFAULT_USERID_REQUEST_ATTRIBUTE_NAME, user);
         }
 
         return true;

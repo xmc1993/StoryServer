@@ -11,7 +11,7 @@ public interface AdminPowerService {
 
     AdminPower saveAdminPower(AdminPower adminPower);
 
-    boolean deleteAdminPower(int id);
+    boolean deleteAdminPower(int id, int adminId);
 
     boolean deleteAdminPowerWithPrimaryKey(int adminId, int code);
 
