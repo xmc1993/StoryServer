@@ -48,6 +48,10 @@ public class AdminAccessTokenValidationInterceptor extends HandlerInterceptorAda
             throws Exception {
 
         String AccessToken = request.getHeader("Authorization");
+        if(null == AccessToken){
+            response.setStatus(401);
+            throw new LoginException("session invalid");
+        }
         Object obj = redisTemplate.opsForValue().get(AccessToken);
         if (null == obj) {
             response.setStatus(401);
